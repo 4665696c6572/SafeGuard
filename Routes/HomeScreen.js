@@ -2,13 +2,15 @@ import { StyleSheet, Text, View} from 'react-native';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
 
 const HomeScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
-	const [userData, setUserData] = useState( [ ] );
-	const [errorMessage, setErrorMessage] = useState();
 
+	const [errorMessage, setErrorMessage] = useState();
+	const [location, setLocation] = useState();
+	const [userData, setUserData] = useState( [ ] );
 
 	////// Load Database \\\\\\
 	useEffect( ( ) =>
@@ -18,6 +20,27 @@ const HomeScreen = ({ navigation }) =>
 			selectEntityData( db, setUserData );
 		}
 	}, [ db ] );
+
+
+
+	////// Load Location \\\\\\
+	useEffect(() => 
+	{
+		async function getLocation() 
+		{
+			let { status } = await Location.requestForegroundPermissionsAsync();
+			if (status !== 'granted') 
+			{
+				setErrorMsg('Permission to access location was denied');
+				return;
+			}
+
+			let location_data = await Location.getCurrentPositionAsync({});
+			console.log('location loaded')
+			setLocation(location_data);
+		}
+		getLocation();
+	}, []);
 
 
 	return (
