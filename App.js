@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import initializeDatabase from './Database/initializeDatabase.js';
 
 import HomeScreen from './Routes/HomeScreen.js';
+import EmergencyDataScreen from './Routes/EmergencyDataScreen.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +19,7 @@ const Stack = createNativeStackNavigator();
 ////// Setup Notifications \\\\\\
 Notifications.setNotificationHandler (
 {
-	handleNotification: async () => 
+	handleNotification: async () =>
 	({
 		shouldShowBanner: true,
 		shouldPlaySound: false,
@@ -41,20 +42,20 @@ const requestNotificationPermission = async () =>
 
 const setNotificationChannel = async () =>
 {
-	if (Platform.OS === 'android') 
+	if (Platform.OS === 'android')
 	{
-		await Notifications.setNotificationChannelAsync('hazard_alert', 
+		await Notifications.setNotificationChannelAsync('hazard_alert',
 		{
 			name: 'Hazard Alert',
 			importance: Notifications.AndroidImportance.HIGH
 		});
-    }
+	}
 }
 
 
 
 
-export default function App() 
+export default function App()
 {
 	useEffect( () => 
 	{
@@ -67,20 +68,9 @@ export default function App()
 			<NavigationContainer>
 				<Stack.Navigator>
 					<Stack.Screen name="Home" component={HomeScreen}/>
+					<Stack.Screen name="EmergencyDataScreen" component={EmergencyDataScreen}/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SQLiteProvider>
 	);
 }
-
-
-const styles = StyleSheet.create(
-{
-	container: 
-	{
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});

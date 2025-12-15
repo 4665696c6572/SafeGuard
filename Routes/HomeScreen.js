@@ -11,8 +11,8 @@ const HomeScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
 
-	const [alertTitle, setAlertTitle] = useState();
 	const [alertData, setAlertData] = useState();
+	const [alertTitle, setAlertTitle] = useState();
 	const [errorMessage, setErrorMessage] = useState();
 	const [location, setLocation] = useState();
 	const [userData, setUserData] = useState( [ ] );
@@ -44,9 +44,9 @@ const HomeScreen = ({ navigation }) =>
 	const fetchAlertData = async () => 
 	{
 		// If phone in US, use location data
-		// const lat =  location.coords.latitude;
+		// const lat = location.coords.latitude;
 		// const lon = location.coords.longitude;
-		const lat =  28.078072; // Palm Harbor, Florida
+		const lat = 28.078072; // Palm Harbor, Florida
 		const lon = -82.763710;
 
 		const url_zone = `https://api.weather.gov/points/${lat},${lon}`;
@@ -60,12 +60,12 @@ const HomeScreen = ({ navigation }) =>
 		const zone = 'FLZ124';
 
 
-		// const url_alert =`https://api.weather.gov/alerts/active/area/FL`;  // State
+		// const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State
 		const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`; 	
 		const result_alert = await fetch(url_alert);
 		const alert_data = await result_alert.json();
 
-		const severity =  {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
+		const severity = {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
 		let priority_alert_number = 0;
 		let max_severity = 5;
 
@@ -138,7 +138,7 @@ const HomeScreen = ({ navigation }) =>
 	}, []);
 
 
-	//////  Load Alert Data \\\\\\
+	////// Load Alert Data \\\\\\
 	useEffect(() => 
 	{
 		if(location)
@@ -155,17 +155,23 @@ const HomeScreen = ({ navigation }) =>
 				{   alertData && 
 					<TouchableOpacity 
 						onPress={scheduleAlertNotification}
-						style={[styles.button, styles.button_chrome_grey]}
+						style={styles.button_chrome_grey}
 					>
-						<Text>Load Alert</Text>
+						<Text style={styles.text_button}>Load Demo Alert</Text>
 					</TouchableOpacity> 
 				}
+				<TouchableOpacity
+					onPress={ ( ) =>  {navigation.navigate("EmergencyDataScreen"); } }
+					style={styles.button_chrome_grey}
+				>
+					<Text style={styles.text_button}>Emergency Data</Text>
+				</TouchableOpacity>
 				<Section>
 					{userData.map(( user ) => (
 						<Cell
 							key={ user.Entity_ID }
 								cellContentView={
-								<View  >
+								<View>
 									<Text>Name: { user.Entity_Name } </Text>
 									<Text>DOB: {user.DOB} </Text>
 									{user?.Sex != null ? <Text>Sex: {user.Sex} </Text> : null}
@@ -208,13 +214,15 @@ const styles = StyleSheet.create(
 {
 	text_button:
 	{
-		color: 'white',
-		fontSize: 30,
+		color: 'black',
+		fontSize: 20,
 		textAlign: 'center'
 	},
 	button_chrome_grey:
 	{
-		backgroundColor: '#DBE2E9'
+		backgroundColor: '#DBE2E9',
+		marginTop: 10,
+		marginBottom: 10
 	},
 });
 
