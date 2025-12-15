@@ -7,6 +7,13 @@ import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
 
 
+// Weather
+const weather_URL = 'https://api.openweathermap.org/data/2.5/weather';
+const API_Key = 'a7d2d44c1023b2f2fc9dec96f12b617d';
+const units = 'imperial';
+
+
+
 const HomeScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
@@ -16,6 +23,7 @@ const HomeScreen = ({ navigation }) =>
 	const [errorMessage, setErrorMessage] = useState();
 	const [location, setLocation] = useState();
 	const [userData, setUserData] = useState( [ ] );
+	const [weatherData, setWeatherData] = useState();
 
 
 
@@ -73,17 +81,9 @@ const HomeScreen = ({ navigation }) =>
 		{
 			if (Number(severity[alert_data.features[i].properties.severity]) < Number(max_severity))
 			{	
-				// console.log('i ' + i )
-				// console.log('max_severity before ' + max_severity )
-				// console.log('priority_alert_number before ' + priority_alert_number )
-				// console.log(alert_data.features[i].properties.severity)
-
 				max_severity = severity[alert_data.features[i].properties.severity];
 				priority_alert_number = i;
-
-				// console.log('max_severity after ' + max_severity )
-				// console.log('priority_alert_number after ' + priority_alert_number )
-			}	
+	}	
 		}
 
 		if (alert_data.features.length != 0 || priority_alert_number != null)
@@ -137,12 +137,29 @@ const HomeScreen = ({ navigation }) =>
 		getLocation();
 	}, []);
 
+	// Loads current weather data
+	const fetchWeatherData = async () => 
+	{
+		if (!location)
+		{
+			console.log('location failed');
+			return;
+		}
+
+		const lat = location.coords.latitude;
+		const lon = location.coords.longitude;
+		const url = `${weather_URL}?lat=${lat}&lon=${lon}&appid=${API_Key}&units=${units}`;
+		const result = await fetch(url);
+		const weather_data = await result.json();
+		setWeatherData(weather_data);
+	};
 
 	////// Load Alert Data \\\\\\
 	useEffect(() => 
 	{
 		if(location)
 		{
+			fetchWeatherData();
 			fetchAlertData();
 		}
 	}, [location]);
@@ -150,15 +167,16 @@ const HomeScreen = ({ navigation }) =>
 
 	return (
 		<View>
-			{errorMessage && <Text>{errorMessage}</Text>}
+			{errorMessage != null ? <Text>{errorMessage}</Text> : null }
 			<TableView style={{ marginTop : '12%' }}>
-				{   alertData && 
+				{   alertData != null ? 
 					<TouchableOpacity 
 						onPress={scheduleAlertNotification}
 						style={styles.button_chrome_grey}
 					>
 						<Text style={styles.text_button}>Load Demo Alert</Text>
-					</TouchableOpacity> 
+					</TouchableOpacity>  
+					: null
 				}
 				<TouchableOpacity
 					onPress={ ( ) =>  {navigation.navigate("EmergencyDataScreen"); } }
@@ -167,7 +185,9 @@ const HomeScreen = ({ navigation }) =>
 					<Text style={styles.text_button}>Emergency Data</Text>
 				</TouchableOpacity>
 				<Section>
-					{userData.map(( user ) => (
+					{ 
+						Array.isArray(userData) &&
+						userData.map(( user ) => (
 						<Cell
 							key={ user.Entity_ID }
 								cellContentView={
@@ -185,6 +205,16 @@ const HomeScreen = ({ navigation }) =>
 				</Section>
 				
 			</TableView>
+			{ weatherData && 
+			
+				<View>  
+					{ weatherData?.weather[0].main != null ? <Text>Weather condition: {weatherData.weather[0].description.slice(0,1).toUpperCase() + weatherData.weather[0].description.slice(1)}.</Text> : null }
+					{ weatherData?.main.humidity != null ? <Text>Humidity: {weatherData.main.humidity}%</Text> : null }
+					{ weatherData?.main.temp_max != null ? <Text>High temperature: {Math.round(weatherData.main.temp_max)}°</Text> : null }
+					{ weatherData?.main.temp_min != null ? <Text>Low temperature: {Math.round(weatherData.main.temp_min)}°</Text> : null }
+					{ weatherData?.main.temp != null ? <Text>Current temperature: {Math.round(weatherData.main.temp)}°</Text> : null }
+				</View>
+			}
 		</View>
 	)
 }
@@ -198,8 +228,10 @@ const selectEntityData = async ( db, setUserData ) =>
 	{
 		const result = await db.getAllAsync(
 		`
-			SELECT * FROM Entity, Person WHERE Person_ID = 1 AND Entity_ID = 1;
-		`);
+			SELECT * FROM Entity, Person 
+			WHERE Person_ID = ? AND Entity_ID = ?;`, 
+			[1,1]
+		);
 
 		setUserData( result );
 	}	

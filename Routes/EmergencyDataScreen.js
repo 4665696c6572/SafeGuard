@@ -23,18 +23,18 @@ const EmergencyDataScreen = ({  }) =>
 
 	return (
 		<SafeAreaProvider>
-			<ScrollView style={{ flex: 1, paddingTop : 10 }}>
+			<ScrollView style={{ flex: 1, paddingTop : 10, paddingLeft: 10 }}>
 				<View key={emergencyData.id} >
 
 				{/* Person's info */}
 				{ emergencyData.person?.name != null ? 
 					<Fragment> 
-						{ emergencyData.person.name && <Text>Name: {emergencyData.person.name}</Text> }
-						{ emergencyData.person.dob && <Text>Date of birth: {emergencyData.person.dob}</Text> }
-						{ emergencyData.person.sex && <Text>Sex: {emergencyData.person.sex}</Text> }
-						{ emergencyData.person.height && <Text>Height: {emergencyData.person.height}</Text> }
-						{ emergencyData.person.weight && <Text>Weight: {emergencyData.person.weight}</Text> }
-						{ emergencyData.person.blood_type && <Text>Blood Type: {emergencyData.person.blood_type}</Text> }
+						{ emergencyData?.person.name != null ? <Text>Name: {emergencyData.person.name}</Text> : null }
+						{ emergencyData?.person.dob != null ? <Text>Date of birth: {emergencyData.person.dob}</Text> : null }
+						{ emergencyData?.person.sex != null ? <Text>Sex: {emergencyData.person.sex}</Text> : null }
+						{ emergencyData?.person.height != null ? <Text>Height: {emergencyData.person.height}</Text> : null }
+						{ emergencyData?.person.weight != null ? <Text>Weight: {emergencyData.person.weight}</Text> : null }
+						{ emergencyData?.person.blood_type != null ? <Text>Blood Type: {emergencyData.person.blood_type}</Text> : null }
 					</Fragment> : null
 				}
 
@@ -48,8 +48,8 @@ const EmergencyDataScreen = ({  }) =>
 							emergencyData.medical_condition.map((condition) => 
 							(
 								<View key={condition.id} style={{ marginBottom: 10 }}>
-									{ condition.condition_name && <Text>Condition: {condition.condition_name}</Text>}
-									{ condition.diagnosis_date && <Text>Diagnosed on: {condition.diagnosis_date}</Text>}
+									{ condition?.condition_name != null ? <Text>Condition: {condition.condition_name}</Text> : null }
+									{ condition?.diagnosis_date != null ? <Text>Diagnosed on: {condition.diagnosis_date}</Text> : null }
 								</View>
 							))
 						}
@@ -65,12 +65,12 @@ const EmergencyDataScreen = ({  }) =>
 							emergencyData.medication.map((medication) => 
 							(
 								<View key={medication.id} style={{ marginBottom: 10 }}>
-									{ medication.medication_name && <Text>Medication: {medication.medication_name}</Text> }
-									{ medication.strength && <Text>Strength: {medication.strength}</Text> }
-									{ medication.frequency && <Text>Frequency: {medication.frequency}</Text> }
-									{ medication.start_date && <Text>Start date: {medication.start_date}</Text> }
-									{ medication.doctor && <Text>Doctor: {medication.doctor}</Text> }
-									{ medication.note && <Text>Notes: {medication.note}</Text> }
+									{ medication?.medication_name != null ? <Text>Medication: {medication.medication_name}</Text> : null}
+									{ medication?.strength != null ? <Text>Strength: {medication.strength}</Text> : null}
+									{ medication?.frequency != null ? <Text>Frequency: {medication.frequency}</Text> : null}
+									{ medication?.start_date != null ? <Text>Start date: {medication.start_date}</Text> : null}
+									{ medication?.doctor != null ? <Text>Doctor: {medication.doctor}</Text> : null}
+									{ medication?.note != null ? <Text>Notes: {medication.note}</Text> : null}
 								</View>
 							)
 						)}
@@ -86,9 +86,9 @@ const EmergencyDataScreen = ({  }) =>
 							emergencyData.allergy.map((allergy) => 
 							(
 								<View key={allergy.id} style={{ marginBottom: 10 }}>
-									{ allergy.allergen && <Text>Allergen: {allergy.allergen}</Text> } 							
-									{ allergy.severity && <Text>Severity: {allergy.severity}</Text> }
-									{ allergy.note && <Text>Notes: {allergy.note}</Text> }
+									{ allergy?.allergen != null ? <Text>Allergen: {allergy.allergen}</Text> : null }	
+									{ allergy?.severity != null ? <Text>Severity: {allergy.severity}</Text> : null }
+									{ allergy?.note != null ? <Text>Notes: {allergy.note}</Text> : null }
 								</View>
 							)
 						)}
@@ -104,8 +104,8 @@ const EmergencyDataScreen = ({  }) =>
 							emergencyData.health_insurance.map((insurance) => 
 							(
 								<View key={insurance.id} style={{ marginBottom: 8 }}>
-									{ insurance.company && <Text>{insurance.company}</Text>}
-									{ insurance.policy_number && <Text>{insurance.policy_number}</Text>}
+									{ insurance?.company != null ? <Text>{insurance.company}</Text> : null }
+									{ insurance?.policy_number != null ? <Text>{insurance.policy_number}</Text> : null }
 								</View> 
 							)
 						)}
@@ -149,8 +149,9 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 			FROM Medical_Condition
 			JOIN Entity
 			ON Entity.Entity_ID = Medical_Condition.Doctor_ID
-			WHERE Condition_Name NOT LIKE '%Allergy%';
-		`);
+			WHERE Condition_Name NOT LIKE ?;`, 
+			['%Allergy%']
+		);
 
 		const result_medication = await db.getAllAsync(
 		`
@@ -175,8 +176,9 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 		const result_insurance = await db.getAllAsync(
 		`
 			SELECT * FROM Insurance 
-			WHERE Insurance_Type = 'Health';
-		`);
+			WHERE Insurance_Type = ?;`, 
+			['Health']
+		);
 
 		setEmergencyData
 		({
