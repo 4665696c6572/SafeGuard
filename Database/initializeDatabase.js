@@ -98,14 +98,21 @@ export default async function initializeDatabase(db)
 		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['Michael S. Baker', 'Person'] );
 		await db.runAsync('INSERT OR IGNORE INTO Person (Person_ID, DOB, Sex, Height, Weight, Blood_Type) VALUES (?, ?, ?, ?, ?, ?)', [1, '1995-12-13', 'Male', '181 cm', '83 kg', 'A+'] );
 
-		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['Doctor 1', 'Doctor'] );
+		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['Dr. Smith', 'Doctor'] );
 		await db.runAsync('INSERT OR IGNORE INTO Doctor (Doctor_ID, Specialty) VALUES (?,?)', [2, 'Pulmonologist'] );
+
+		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['Dr. Parker', 'Doctor'] );
+		await db.runAsync('INSERT OR IGNORE INTO Doctor (Doctor_ID, Specialty) VALUES (?,?)', [3, 'Allergist'] );
 
 		await db.runAsync('INSERT OR IGNORE INTO Medical_Condition (Doctor_ID, Condition_Name, Diagnosis_Date) VALUES (?, ?, ?)', [2, 'Chronic obstructive pulmonary disease', '2021-11-15'] );
 		await db.runAsync('INSERT OR IGNORE INTO Medication (Doctor_ID, Medical_Condition_ID, Medication_Name, Strength, Frequency, Start_Date) VALUES (?, ?, ?, ?, ?, ?)', [2, 1, 'Salbutamol', '20 mg', '2 puffs (200 mcg) every 4-6 hours', '2020-11-15' ] );
 
 		await db.runAsync('INSERT OR IGNORE INTO Medical_Condition (Condition_Name, Diagnosis_Date) VALUES (?, ?)', ['Allergy', '2022-06-06'] );
-		await db.runAsync('INSERT OR IGNORE INTO Allergy (Allergy_ID, Allergen, Severity) VALUES (?, ?, ?)', [2, 'Nickel', 'Mild'] );
+		await db.runAsync('INSERT OR IGNORE INTO Allergy (Allergy_ID, Allergen, Severity) VALUES (?, ?, ?)', [2, 'Nickel', 'Moderate'] );
+
+		await db.runAsync('INSERT OR IGNORE INTO Medical_Condition (Condition_Name) VALUES (?)', ['Allergy'] );
+		await db.runAsync('INSERT OR IGNORE INTO Allergy (Allergy_ID, Allergen, Severity) VALUES (?, ?, ?)', [3, 'Pollen', 'Mild'] );
+		await db.runAsync('INSERT OR IGNORE INTO Medication (Doctor_ID, Medical_Condition_ID, Medication_Name, Strength, Frequency, Start_Date) VALUES (?, ?, ?, ?, ?, ?)', [3, 3, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03'] );
 
 		await db.runAsync('INSERT OR IGNORE INTO Insurance (Company_Name, Policy_Number, Phone_Number, Insurance_Type) VALUES (?, ?, ?, ?)', ['Insurance Group', '1789', '555-123-6789', 'Health'] );
 

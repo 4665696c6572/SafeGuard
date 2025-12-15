@@ -21,6 +21,7 @@ const EmergencyDataScreen = ({  }) =>
 		return <ActivityIndicator/>;
 	}
 
+
 	return (
 		<SafeAreaProvider>
 			<ScrollView style={{ flex: 1, paddingTop : 10, paddingLeft: 10 }}>
@@ -88,6 +89,8 @@ const EmergencyDataScreen = ({  }) =>
 								<View key={allergy.id} style={{ marginBottom: 10 }}>
 									{ allergy?.allergen != null ? <Text>Allergen: {allergy.allergen}</Text> : null }	
 									{ allergy?.severity != null ? <Text>Severity: {allergy.severity}</Text> : null }
+									{ allergy?.medication_name != null ? <Text>Medication: {allergy.medication_name}</Text> : null }
+									{ allergy?.diagnosis_date != null ? <Text>Diagnosis date: {allergy.diagnosis_date}</Text> : null }
 									{ allergy?.note != null ? <Text>Notes: {allergy.note}</Text> : null }
 								</View>
 							)
@@ -170,7 +173,18 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 
 		const result_allergy = await db.getAllAsync(
 		`
-			SELECT * FROM Allergy;
+			SELECT
+				Allergy_ID,
+				Allergen,
+				Severity,
+				Medication_Name,
+				Diagnosis_Date,
+				Medical_Condition.Note
+			FROM Allergy
+			LEFT JOIN Medical_Condition
+			ON Medical_Condition.Medical_Condition_ID = Allergy.Allergy_ID
+			LEFT JOIN Medication 
+			ON Medical_Condition.Medical_Condition_ID = Medication.Medical_Condition_ID;
 		`);
 
 		const result_insurance = await db.getAllAsync(
@@ -224,6 +238,8 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 					id: allergy.Allergy_ID,
 					allergen: allergy.Allergen,
 					severity: allergy.Severity,
+					medication_name: allergy.Medication_Name,
+					diagnosis_date: allergy.Diagnosis_Date,
 					note: allergy.Note
 				})
 			),
