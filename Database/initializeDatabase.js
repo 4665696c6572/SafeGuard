@@ -23,7 +23,7 @@ export default async function initializeDatabase(db)
 			(
 				Entity_ID    INTEGER    PRIMARY KEY,
 				Entity_Name    TEXT    NOT NULL    UNIQUE,
-				Entity_Type    TEXT    NOT NULL    CHECK (Entity_Type IN ('Person', 'Doctor', 'Pharmacy'))
+				Entity_Type    TEXT    NOT NULL    CHECK (Entity_Type IN ('Person', 'Doctor', 'Business'))
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
@@ -75,20 +75,18 @@ export default async function initializeDatabase(db)
 			(
 				Allergy_ID    INTEGER    PRIMARY KEY,
 				Allergen    TEXT,
-				Note    TEXT,
 				Severity    TEXT    CHECK (Severity IN ('Mild','Moderate','Severe', 'Life Threatening')),
 				FOREIGN KEY (Allergy_ID)    REFERENCES Medical_Condition(Medical_Condition_ID)
 			);
 
 			CREATE TABLE IF NOT EXISTS    Insurance
 			(
-				Insurance_ID    INTEGER    PRIMARY KEY,
-				Company_Name    TEXT    NOT NULL,
-				Policy_Number    TEXT,
-				Phone_Number    TEXT,
+				Policy_Number    TEXT    PRIMARY KEY,
+				Insurance_ID    INTEGER,
 				Start_Date    TEXT,
 				Note    TEXT,
-				Insurance_Type    TEXT    CHECK (Insurance_Type IN ('Health', 'Home', 'Auto', 'Life', 'Other'))
+				Insurance_Type    TEXT    CHECK (Insurance_Type IN ('Health', 'Home', 'Auto', 'Life', 'Other')),
+				FOREIGN KEY (Insurance_ID)    REFERENCES Entity(Entity_ID)
 			);
 
 
@@ -114,7 +112,8 @@ export default async function initializeDatabase(db)
 		await db.runAsync('INSERT OR IGNORE INTO Allergy (Allergy_ID, Allergen, Severity) VALUES (?, ?, ?)', [3, 'Pollen', 'Mild'] );
 		await db.runAsync('INSERT OR IGNORE INTO Medication (Doctor_ID, Medical_Condition_ID, Medication_Name, Strength, Frequency, Start_Date) VALUES (?, ?, ?, ?, ?, ?)', [3, 3, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03'] );
 
-		await db.runAsync('INSERT OR IGNORE INTO Insurance (Company_Name, Policy_Number, Phone_Number, Insurance_Type) VALUES (?, ?, ?, ?)', ['Insurance Group', '1789', '555-123-6789', 'Health'] );
+		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['ABC Insurance', 'Business'] );
+		await db.runAsync('INSERT OR IGNORE INTO Insurance (Insurance_ID, Policy_Number, Insurance_Type) VALUES (?, ?, ?)', [4, '1789', 'Health'] );
 
 		
 		console.log("Database initialized");

@@ -107,8 +107,10 @@ const EmergencyDataScreen = ({  }) =>
 							emergencyData.health_insurance.map((insurance) => 
 							(
 								<View key={insurance.id} style={{ marginBottom: 8 }}>
-									{ insurance?.company != null ? <Text>{insurance.company}</Text> : null }
-									{ insurance?.policy_number != null ? <Text>{insurance.policy_number}</Text> : null }
+									{ insurance?.company != null ? <Text>Company Name: {insurance.company}</Text> : null }
+									{ insurance?.policy_number != null ? <Text>Policy Number: {insurance.policy_number}</Text> : null }
+									{ insurance?.start_date != null ? <Text>Start Date: {insurance.start_date}</Text> : null }
+									{ insurance?.note != null ? <Text>Note: {insurance.note}</Text> : null }
 								</View> 
 							)
 						)}
@@ -189,8 +191,15 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 
 		const result_insurance = await db.getAllAsync(
 		`
-			SELECT * FROM Insurance 
-			WHERE Insurance_Type = ?;`, 
+			SELECT 
+				Insurance_ID,
+				Entity.Entity_Name AS Company_Name, 
+				Policy_Number,
+				Start_Date,
+				Note
+				FROM Insurance
+				JOIN Entity on Entity.Entity_ID = Insurance.Insurance_ID
+				WHERE Insurance_Type = ?`, 
 			['Health']
 		);
 
@@ -250,7 +259,8 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 					id: insurance.Insurance_ID,
 					company: insurance.Company_Name,
 					policy_number: insurance.Policy_Number,
-					phone_number: insurance.Phone_Number
+					start_date: insurance.Start_Date,
+					note: insurance.Note
 				})
 			)
 		});
