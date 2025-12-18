@@ -6,12 +6,10 @@ import { StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
 
-
-// Weather
+// Weather related variables
 const weather_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const API_Key = 'a7d2d44c1023b2f2fc9dec96f12b617d';
 const units = 'imperial';
-
 
 
 const HomeScreen = ({ navigation }) =>
@@ -42,18 +40,17 @@ const HomeScreen = ({ navigation }) =>
 		Loads alert data from US based government agency:
 		National Oceanic and Atmospheric Administration
 		
-		Uses latitude and longitude of user to load
-		any current alerts.
+		Uses latitude and longitude of user to load any current alerts.
 
-		Alert types include:
-
-		Alert levels include: 
+		Alert levels include: Extreme, Severe, Moderate, Minor, and Unknown.
 	*/
 	const fetchAlertData = async () => 
 	{
 		// If phone in US, use location data
 		// const lat = location.coords.latitude;
 		// const lon = location.coords.longitude;
+
+		// Hard coded for outside the US
 		const lat = 28.078072; // Palm Harbor, Florida
 		const lon = -82.763710;
 
@@ -65,11 +62,12 @@ const HomeScreen = ({ navigation }) =>
 		// const zone = (await result.json())?.properties.forecastZone.slice(-6);
 
 		// const zone = 'FLZ050';  // Pinellas County Florida
-		const zone = 'FLZ124';
 
+		// Statewide alerts for demo (in case zone has no current alerts)
+		const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State
 
-		// const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State
-		const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`; 	
+		// Load zone alerts
+		// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`; 	
 		const result_alert = await fetch(url_alert);
 		const alert_data = await result_alert.json();
 
@@ -77,13 +75,14 @@ const HomeScreen = ({ navigation }) =>
 		let priority_alert_number = 0;
 		let max_severity = 5;
 
+		// Locates first highest severity alert 
 		for (var i = 0; i < alert_data.features.length ; i++)
 		{
 			if (Number(severity[alert_data.features[i].properties.severity]) < Number(max_severity))
 			{	
 				max_severity = severity[alert_data.features[i].properties.severity];
 				priority_alert_number = i;
-	}	
+		}	
 		}
 
 		if (alert_data.features.length != 0 || priority_alert_number != null)
@@ -137,6 +136,7 @@ const HomeScreen = ({ navigation }) =>
 		getLocation();
 	}, []);
 
+
 	// Loads current weather data
 	const fetchWeatherData = async () => 
 	{
@@ -146,13 +146,19 @@ const HomeScreen = ({ navigation }) =>
 			return;
 		}
 
-		const lat = location.coords.latitude;
-		const lon = location.coords.longitude;
+		// const lat = location.coords.latitude;
+		// const lon = location.coords.longitude;
+
+		// Hard coded for outside the US (although this feature does work worldwide)
+		lat = 28.078072; // Palm Harbor, Florida
+		lon = -82.763710;
+		
 		const url = `${weather_URL}?lat=${lat}&lon=${lon}&appid=${API_Key}&units=${units}`;
 		const result = await fetch(url);
 		const weather_data = await result.json();
 		setWeatherData(weather_data);
 	};
+
 
 	////// Load Alert Data \\\\\\
 	useEffect(() => 

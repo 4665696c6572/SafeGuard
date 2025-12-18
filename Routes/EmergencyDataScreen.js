@@ -25,7 +25,7 @@ const EmergencyDataScreen = ({  }) =>
 	return (
 		<SafeAreaProvider>
 			<ScrollView style={{ flex: 1, paddingTop : 10, paddingLeft: 10 }}>
-				<View key={emergencyData.id} >
+				<View key={emergencyData.id} style={{ marginBottom: 40 }}>
 
 				{/* Person's info */}
 				{ emergencyData.person?.name != null ? 
@@ -202,6 +202,7 @@ const selectEmergencyData = async ( db, setEmergencyData, emergencyData ) =>
 				WHERE Insurance_Type = ?`, 
 			['Health']
 		);
+
 
 		setEmergencyData
 		({
