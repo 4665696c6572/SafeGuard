@@ -150,8 +150,8 @@ const HomeScreen = ({ navigation }) =>
 		// const lon = location.coords.longitude;
 
 		// Hard coded for outside the US (although this feature does work worldwide)
-		lat = 28.078072; // Palm Harbor, Florida
-		lon = -82.763710;
+		const lat = 28.078072; // Palm Harbor, Florida
+		const lon = -82.763710;
 		
 		const url = `${weather_URL}?lat=${lat}&lon=${lon}&appid=${API_Key}&units=${units}`;
 		const result = await fetch(url);
@@ -213,7 +213,7 @@ const HomeScreen = ({ navigation }) =>
 			</TableView>
 			{ weatherData && 
 			
-				<View>  
+				<View style = {{marginLeft: 16}}>  
 					{ weatherData?.weather[0].main != null ? <Text>Weather condition: {weatherData.weather[0].description.slice(0,1).toUpperCase() + weatherData.weather[0].description.slice(1)}.</Text> : null }
 					{ weatherData?.main.humidity != null ? <Text>Humidity: {weatherData.main.humidity}%</Text> : null }
 					{ weatherData?.main.temp_max != null ? <Text>High temperature: {Math.round(weatherData.main.temp_max)}°</Text> : null }
