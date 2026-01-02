@@ -1,20 +1,76 @@
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
+import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+import initializeDatabase from './database/initializeDatabase.js';
+
+import HomeScreen from './screens/HomeScreen.js';
+import EmergencyDataScreen from './screens/EmergencyDataScreen.js';
+
+
+const Stack = createNativeStackNavigator();
+
+
+////// Setup Notifications \\\\\\
+Notifications.setNotificationHandler (
+{
+	handleNotification: async () =>
+	({
+		shouldShowBanner: true,
+		shouldPlaySound: false,
+		shouldSetBadge: false,
+	}),
+});
+
+
+const requestNotificationPermission = async () =>
+{
+	const { status } = await Notifications.requestPermissionsAsync();
+
+	if (status !== 'granted') 
+	{
+		console.log('Permission not granted');
+		return;
+	}
+};
+
+
+const setNotificationChannel = async () =>
+{
+	if (Platform.OS === 'android')
+	{
+		await Notifications.setNotificationChannelAsync('hazard_alert',
+		{
+			name: 'Hazard Alert',
+			importance: Notifications.AndroidImportance.MAX
+		});
+	}
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+
+
+export default function App()
+{
+	useEffect( () => 
+	{
+		requestNotificationPermission();
+		setNotificationChannel();
+	}, []);
+
+	return (
+		<SQLiteProvider databaseName='Safe.db' onInit={ initializeDatabase }>
+			<NavigationContainer>
+				<Stack.Navigator>
+					<Stack.Screen name="Home" component={HomeScreen}/>
+					<Stack.Screen name="EmergencyDataScreen" component={EmergencyDataScreen}/>
+				</Stack.Navigator>
+			</NavigationContainer>
+		</SQLiteProvider>
+	);
+}
