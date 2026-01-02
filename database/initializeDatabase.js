@@ -8,14 +8,6 @@ export default async function initializeDatabase(db)
 	{
 		await db.execAsync(
 		`
-			DROP TABLE IF EXISTS Insurance;
-			DROP TABLE IF EXISTS Allergy;
-			DROP TABLE IF EXISTS Medication;
-			DROP TABLE IF EXISTS Medical_Condition;
-			DROP TABLE IF EXISTS Doctor;
-			DROP TABLE IF EXISTS Person;
-			DROP TABLE IF EXISTS Entity;
-
 			PRAGMA foreign_keys = ON;
 			PRAGMA journal_mode = WAL;
 
@@ -91,7 +83,26 @@ export default async function initializeDatabase(db)
 			);
 
 
+			//   Educational Data 
 
+			CREATE TABLE IF NOT EXISTS    Matching_Data
+			(
+				Question_ID    INTEGER    PRIMARY KEY,
+				Question    TEXT,
+				Answer    TEXT,
+				Last_Correct_Date    TEXT    DEFAULT ('2025-12-01')
+			);
+
+			CREATE TABLE IF NOT EXISTS    Multiple_Choice_Data
+			(
+				Question_ID    INTEGER    PRIMARY KEY,
+				Question    TEXT,
+				Answer_Correct    TEXT,
+				Answer_One_Incorrect    TEXT,
+				Answer_Two_Incorrect    TEXT,
+				Answer_Three_Incorrect    TEXT,
+				Last_Correct_Date    TEXT    DEFAULT ('2025-12-01')
+			);
 		`);
 
 		// Demo Data
@@ -117,6 +128,8 @@ export default async function initializeDatabase(db)
 		await db.runAsync('INSERT OR IGNORE INTO Entity (Entity_Name, Entity_Type) VALUES (?, ?)', ['ABC Insurance', 'Business'] );
 		await db.runAsync('INSERT OR IGNORE INTO Insurance (Insurance_ID, Policy_Number, Insurance_Type) VALUES (?, ?, ?)', [4, '1789', 'Health'] );
 
+		for (const row of match_data) { await db.runAsync(match_insert, row); }
+		for (const row of mc_data) { await db.runAsync(mc_insert, row); }
 		
 		console.log("Database initialized");
 	}
@@ -126,3 +139,46 @@ export default async function initializeDatabase(db)
 	}
 }
 
+const match_data = 
+[
+	['Question 1', 'Answer 1'],
+	['Question 2', 'Answer 2'],
+	['Question 3', 'Answer 3'],
+	['Question 4', 'Answer 4'],
+	['Question 5', 'Answer 5'],
+	['Question 6', 'Answer 6'],
+	['Question 7', 'Answer 7'],
+	['Question 8', 'Answer 8'],
+	['Question 9', 'Answer 9'],
+	['Question 10', 'Answer 10'],
+	['Question 11', 'Answer 11'],
+	['Question 12', 'Answer 12']
+];
+
+const match_insert = 
+`
+  INSERT OR IGNORE INTO Matching_Data  
+  (Question, Answer) 
+  VALUES (?,?);
+`;
+
+const mc_data = 
+[
+	['Question 1', 'Answer 1c', 'Answer 1i1', 'Answer 1i2', 'Answer 1i3'],
+	['Question 2', 'Answer 2c', 'Answer 2i1', 'Answer 2i2', 'Answer 2i3'],
+	['Question 3', 'Answer 3c', 'Answer 3i1', 'Answer 3i2', 'Answer 3i3'],
+	['Question 4', 'Answer 4c', 'Answer 4i1', 'Answer 4i2', 'Answer 4i3'],
+	['Question 5', 'Answer 5c', 'Answer 5i1', 'Answer 5i2', 'Answer 5i3'],
+	['Question 6', 'Answer 6c', 'Answer 6i1', 'Answer 6i2', 'Answer 6i3'],
+	['Question 7', 'Answer 7c', 'Answer 7i1', 'Answer 7i2', 'Answer 7i3'],
+	['Question 8', 'Answer 8c', 'Answer 8i1', 'Answer 8i2', 'Answer 8i3'],
+	['Question 9', 'Answer 9c', 'Answer 9i1', 'Answer 9i2', 'Answer 9i3'],
+	['Question 10', 'Answer 10c', 'Answer 10i1', 'Answer 10i2', 'Answer 10i3'],
+];
+
+const mc_insert = 
+`
+  INSERT OR IGNORE INTO Multiple_Choice_Data
+  (Question, Answer_correct, Answer_one_incorrect, Answer_two_incorrect, Answer_three_incorrect)
+  VALUES (?, ?, ?, ?, ?);
+`;

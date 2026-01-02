@@ -5,7 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Cell, Section, TableView} from 'react-native-tableview-simple';
 
-
+import styles from '../styles/styles';
 
 const EmergencyDataScreen = ({  }) =>
 {
@@ -275,23 +275,5 @@ const selectEmergencyData = async function ( db, setEmergencyData, setLoading )
 	}
 };
 
-const styles=StyleSheet.create({
-	container: 
-	{ 
-		flex: 1,
-		backgroundColor: '#e8ecfbff', 
-		marginTop: '10%',
-		marginBottom: '10%',
-	},
-	category: 
-	{
-		marginBottom: 10,
-		fontSize: 18,
-	},
-	text:
-	{
-		fontSize: 16
-	}
-});
 
 export default EmergencyDataScreen;
