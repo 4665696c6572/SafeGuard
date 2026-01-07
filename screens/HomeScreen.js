@@ -7,7 +7,7 @@ import { StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
-import styles from '../styles/styles';
+import styles from '../styles/styles.js';
 // Weather
 const weather_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const API_Key = 'a7d2d44c1023b2f2fc9dec96f12b617d';
@@ -190,6 +190,13 @@ const HomeScreen = ({ navigation }) =>
 					style={styles.button_chrome_grey}
 				>
 					<Text style={styles.text_button}>Multiple Choice</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={ ( ) =>  {navigation.navigate("TrueFalseScreen"); } }
+					style={styles.button_chrome_grey}
+				>
+					<Text style={styles.text_button}>True False</Text>
 				</TouchableOpacity>
 
 				<Section>

@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const button_size = Dimensions.get('screen').width * 0.33;
 
 const styles = StyleSheet.create({
 	container: 
@@ -159,8 +161,75 @@ const styles = StyleSheet.create({
 	text:
 	{
 		fontSize: 16
+	},
+	game_button:
+	{
+		height: button_size,
+		width: button_size,
+		borderRadius: '50%',
+		backgroundColor: 'blue',
+		justifyContent: 'center', 
+		alignContent: 'center',
+		
+	},
+	game_button_start:
+	{
+		// flexDirection: 'row',
+		// justifyContent: 'flex-start',
+
+		// backgroundColor: 'purple'
+		
+	},
+	game_button_center:
+	{
+		flexDirection: 'row',
+		justifyContent: 'center', 
+			// alignContent: 'center',
+		// alignSelf: 'center'
+		// backgroundColor: 'pink',
+		// marginLeft: 0,
+
+
+	},
+	game_button_end:
+	{
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		// alignSelf: 'flex-end'
+		// alignContent: 'flex_end',
+		// alignItems: 'flex-end'
+		// backgroundColor: 'orange'
+		
+	},
+	game_button_text:
+	{
+		textAlign: 'center',
+		verticalAlign: 'middle',
+		color: 'white',
+		fontWeight: 'bold',
+		fontSize: 18,
+		// backgroundColor: 'red'
+	},
+	image:
+	{
+		backgroundColor: 'orange',
+		alignSelf: 'center',
+
+	},
+	blue_01:
+	{
+		backgroundColor: '#63edffff', 
+	},
+	blue_02:
+	{
+		backgroundColor: '#639affff'
 	}
+
+
 });
+
+
+
 
 
 export default styles;

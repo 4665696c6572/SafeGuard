@@ -5,17 +5,21 @@ import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'r
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
-import styles from '../styles/styles';
+import styles from '../styles/styles.js';
+
 const total_question_count = 10;
+
+
 
 export default function MultipleChoiceScreen({  }) 
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
-	
 
+	// const [ answeredCorrectly, setAnsweredCorrectly ] = useState([false]);
 	const [ loadingData, setLoadingData ] = useState(true);
 	const [ multipleChoiceData, setMultipleChoiceData ] = useState();
+	// const [ questionSelected, setQuestionSelected ] = useState(null);
 	const [ questionOrder, setQuestionOrder ] = useState( () => calcQuestionOrder() );
 	const [ answerOrder, setAnswerOrder ] = useState( );
 	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
@@ -163,19 +167,21 @@ const selectMultipleChoiceData = async ( db ) =>
 	try
 	{
 		const result_multiple_choice = await db.getAllAsync(
-		`
-			SELECT
-				Question_ID,
-				Question,
-				Answer_Correct,
-				Answer_One_Incorrect,
-				Answer_Two_Incorrect,
-				Answer_Three_Incorrect,
-				Last_Correct_Date
-			FROM Multiple_Choice_Data
-			ORDER BY Last_Correct_Date
-			LIMIT 10;
-		`);
+			`
+				SELECT
+					Question_ID,
+					Question,
+					Answer_Correct,
+					Incorrect_Answer_One,
+					Incorrect_Answer_Two,
+					Incorrect_Answer_Three,
+					Last_Seen_Date
+				FROM Multiple_Choice_Data
+				ORDER BY Last_Seen_Date
+				LIMIT ?
+			`, 
+			[total_question_count]
+		);
 
 
 	const multiple_choice_data = result_multiple_choice.map(function(result) 
@@ -186,11 +192,11 @@ const selectMultipleChoiceData = async ( db ) =>
 			answers:
 			[ 
 				result.Answer_Correct,
-				result.Answer_One_Incorrect,
-				result.Answer_Two_Incorrect,
-				result.Answer_Three_Incorrect
+				result.Incorrect_Answer_One,
+				result.Incorrect_Answer_Two,
+				result.Incorrect_Answer_Three
 			],
-			last_date: result.Last_Correct_Date
+			last_date: result.Last_Seen_Date
 		}
 	})
 
@@ -215,7 +221,7 @@ const selectMultipleChoiceData = async ( db ) =>
 				await db.runAsync( 
 					`
 						UPDATE Matching_Data
-						SET Last_Correct_Date = ?
+						SET Last_Seen_Date = ?
 						WHERE Question_ID = ?;
 					`,
 					[date, multipleChoiceData[roundStartIndex].id]
@@ -226,3 +232,6 @@ const selectMultipleChoiceData = async ( db ) =>
 				console.error( 'Error updating Correct Date:', error );
 			}
 	}
+
+
+	

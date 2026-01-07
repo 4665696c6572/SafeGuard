@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import styles from '../styles/styles';
+import styles from '../styles/styles.js';
 
 export default function MatchingScreen({  }) 
 {
@@ -199,9 +199,9 @@ const selectMatchData = async ( db ) =>
 				Question_ID,
 				Question,
 				Answer,
-				Last_Correct_Date
+				Last_Seen_Date
 			FROM Matching_Data
-			ORDER BY Last_Correct_Date
+			ORDER BY Last_Seen_Date
 			LIMIT 12;
 		`);
 
@@ -212,7 +212,7 @@ const selectMatchData = async ( db ) =>
 				id: result.Question_ID,
 				question: result.Question,
 				answer: result.Answer,
-				last_date: result.Last_Correct_Date
+				last_date: result.Last_Seen_Date
 			}
 		})
 
@@ -235,7 +235,7 @@ const selectMatchData = async ( db ) =>
 				await db.runAsync( 
 					`
 						UPDATE Matching_Data
-						SET Last_Correct_Date = ?
+						SET Last_Seen_Date = ?
 						WHERE Question_ID = ?;
 					`,
 					[date, matchData[questionSelected].id]

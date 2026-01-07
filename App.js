@@ -14,6 +14,7 @@ import HomeScreen from './screens/HomeScreen.js';
 import EmergencyDataScreen from './screens/EmergencyDataScreen.js';
 import MatchingScreen from './screens/MatchingScreen.js';
 import MultipleChoiceScreen from './screens/MultipleChoiceScreen.js';
+import TrueFalseScreen from './screens/TrueFalseScreen.js';
 
 
 
@@ -41,6 +42,7 @@ export default function App()
 					<Stack.Screen name="EmergencyDataScreen" component={EmergencyDataScreen}/>
 					<Stack.Screen name="MatchingScreen" component={MatchingScreen}/>
 					<Stack.Screen name="MultipleChoiceScreen" component={MultipleChoiceScreen}/>
+					<Stack.Screen name="TrueFalseScreen" component={TrueFalseScreen}/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SQLiteProvider>
