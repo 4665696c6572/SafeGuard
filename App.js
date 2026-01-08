@@ -15,6 +15,7 @@ import EmergencyDataScreen from './screens/EmergencyDataScreen.js';
 import MatchingScreen from './screens/MatchingScreen.js';
 import MultipleChoiceScreen from './screens/MultipleChoiceScreen.js';
 import TrueFalseScreen from './screens/TrueFalseScreen.js';
+import GameScreen from './screens/GameScreen.js';
 
 
 
@@ -40,6 +41,7 @@ export default function App()
 				<Stack.Navigator screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="Home" component={HomeScreen}/>
 					<Stack.Screen name="EmergencyDataScreen" component={EmergencyDataScreen}/>
+					<Stack.Screen name="GameScreen" component={GameScreen}/>
 					<Stack.Screen name="MatchingScreen" component={MatchingScreen}/>
 					<Stack.Screen name="MultipleChoiceScreen" component={MultipleChoiceScreen}/>
 					<Stack.Screen name="TrueFalseScreen" component={TrueFalseScreen}/>

@@ -98,6 +98,14 @@ export default async function initializeDatabase( db )
 			);
 
 
+
+			CREATE TABLE IF NOT EXISTS    Game_Data
+			( 
+				User_ID    INTEGER    PRIMARY KEY,
+				Score    INTEGER    DEFAULT ( 0 ),
+				Level_Status    TEXT
+			);
+
 			CREATE TABLE IF NOT EXISTS    Matching_Data
 			( 
 				Question_ID    INTEGER    PRIMARY KEY,
@@ -114,14 +122,6 @@ export default async function initializeDatabase( db )
 				Incorrect_Answer_One    TEXT,
 				Incorrect_Answer_Two    TEXT,
 				Incorrect_Answer_Three    TEXT,
-				Last_Seen_Date    TEXT    DEFAULT ( '2025-12-01' )
-			);
-
-			CREATE TABLE IF NOT EXISTS    True_False_Data
-			( 
-				Question_ID    INTEGER    PRIMARY KEY,
-				Question    TEXT,
-				True_Or_False    TEXT,
 				Last_Seen_Date    TEXT    DEFAULT ( '2025-12-01' )
 			);
 
@@ -157,6 +157,8 @@ export default async function initializeDatabase( db )
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( Entity_Name, Entity_Type ) VALUES ( ?, ? )', [ 'ABC Insurance', 'Business' ]  );
 		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( Insurance_ID, Policy_Number, Insurance_Type ) VALUES ( ?, ?, ? )', [ 4, '1789', 'Health' ]  );
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( User_ID ) VALUES ( ? )', [ 1 ]  );
 
 		for ( const row of match_data ) { await db.runAsync(  match_insert, row ); }
 		for ( const row of mc_data ) { await db.runAsync( mc_insert, row ); }

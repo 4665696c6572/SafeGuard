@@ -172,33 +172,20 @@ const HomeScreen = ({ navigation }) =>
 					: null
 				}
 				<TouchableOpacity
-					onPress={ ( ) =>  {navigation.navigate("EmergencyDataScreen"); } }
+					onPress={ ( ) =>  { navigation.navigate("EmergencyDataScreen"); }}
 					style={styles.button_chrome_grey}
 				>
 					<Text style={styles.text_button}>Emergency Data</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> 
 
 				<TouchableOpacity
-					onPress={ ( ) =>  {navigation.navigate("MatchingScreen"); } }
+					onPress={ ( ) =>  {navigation.navigate( "GameScreen" ); } }
 					style={styles.button_chrome_grey}
 				>
-					<Text style={styles.text_button}>Matching</Text>
+					<Text style={styles.text_button}>Games</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity
-					onPress={ ( ) =>  {navigation.navigate("MultipleChoiceScreen"); } }
-					style={styles.button_chrome_grey}
-				>
-					<Text style={styles.text_button}>Multiple Choice</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					onPress={ ( ) =>  {navigation.navigate("TrueFalseScreen"); } }
-					style={styles.button_chrome_grey}
-				>
-					<Text style={styles.text_button}>True False</Text>
-				</TouchableOpacity>
-
+				
 				<Section>
 					{ 
 						Array.isArray(userData) &&
