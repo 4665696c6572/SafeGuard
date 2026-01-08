@@ -5,8 +5,15 @@ import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'r
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
+import { calcAnswerOrder } from '../common/game/sharedGame.js';
+import formatLevelData from '../common/game/formatLevelData.js';
+import selectLevelData from '../common/game/database/selectLevelData.js';
+import updateLevelData from '../common/game/database/updateLevelData.js';
+
 import styles from '../styles/styles.js';
 
+const questions_per_round = 1
+const answers_per_round = 4;
 const total_question_count = 10;
 
 
@@ -16,129 +23,104 @@ export default function MultipleChoiceScreen({  })
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
 
-	// const [ answeredCorrectly, setAnsweredCorrectly ] = useState([false]);
 	const [ loadingData, setLoadingData ] = useState(true);
 	const [ multipleChoiceData, setMultipleChoiceData ] = useState();
-	// const [ questionSelected, setQuestionSelected ] = useState(null);
-	const [ questionOrder, setQuestionOrder ] = useState( () => calcQuestionOrder() );
-	const [ answerOrder, setAnswerOrder ] = useState( );
+
+	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( answers_per_round ) );
 	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
-	const [ remainingMultipleChoiceCount, setRemainingMultipleChoiceCount ] = useState(total_question_count);
+	const [ levelComplete, setLevelComplete ] = useState( );
 	const [ multipleChoiceScore, setMultipleChoiceScore ] = useState(0)
 
 
-	useEffect( ( ) =>
+	useEffect( () =>
 	{		
-		if (!db) return;  
+		if ( !db || multipleChoiceData ) return;  
 
-		
-		if (!multipleChoiceData)
+		setLoadingData(true);
+		setLevelComplete(false);
+
+		async function loadData() 
 		{
-			setLoadingData(true);
-			(async function ()
+			try 
 			{
-				let multiple_choice_data = await selectMultipleChoiceData( db );
-				if (multiple_choice_data)    setMultipleChoiceData( multiple_choice_data );
-			})()
+				const unformatted_data = await selectLevelData( db, 'MultipleChoiceScreen', total_question_count );
+				const formatted_data = await formatLevelData(unformatted_data, 'MultipleChoiceScreen');
+				setMultipleChoiceData(formatted_data)
+			} 
+			catch ( error ) 
+			{
+				console.error( error );
+			} 
+			finally 
+			{
+				setLoadingData( false );
+			}
 		}
-
+		loadData();
 	}, [ db ] );
 
-	useEffect( ( ) =>
-	{		
-		if (!multipleChoiceData) return
-		setAnswerOrder(calcAnswerOrder());
-		setLoadingData(false);
-	}, [ multipleChoiceData ] );
 
 
 
-
-	function checkAnswer( answerNumber )
-	{ 
-		if (answerNumber == 0)
+	function checkRoundComplete( correct_answer, user_answer, question_ID)
+	{
+		if (correct_answer ==  user_answer )
 		{
-			setMultipleChoiceScore(prev => prev + 1)
-			updateCorrectDate ( db, multipleChoiceData, roundStartIndex );
-			console.log('correct')
+			console.log('Correct')
+			setMultipleChoiceScore(prev => prev + 1);
 		}
-		setAnswerOrder(calcAnswerOrder());
-		setRemainingMultipleChoiceCount(prev => prev - 1);
-		setRoundStartIndex(prev => prev + 1);
+
+		setAnswerOrder( calcAnswerOrder( answers_per_round ));
+		setRoundStartIndex( prev => prev + 1 );
+		updateLevelData( db, 'MultipleChoiceScreen', question_ID );
 	}
 
 
 	if (loadingData)    return <ActivityIndicator/>;
-// console.log('q ' + questionOrder)
-// console.log('a ' + answerOrder)
+
 	return (
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '10%'} ]}>
-			{ 
-				remainingMultipleChoiceCount > 0 ?  
-				<View style={ styles.score_row }>
+				{ 
+					roundStartIndex < total_question_count ?  
+					<View style={ styles.score_row }>
 
-					<View style={ styles.score }>
-						<Text style={ styles.score_text } >Score</Text>	
-						<Text style={ styles.score_text } >{ multipleChoiceScore } </Text>	
-					</View> 
+						<View style={ styles.score }>
+							<Text style={ styles.score_text } >Score</Text>	
+							<Text style={ styles.score_text } >{ multipleChoiceScore } </Text>	
+						</View> 
 
-					<View style={ styles.count }>
-						<Text style={ styles.score_text } >Remaining</Text>
-						<Text style={ styles.score_text } >{total_question_count - remainingMultipleChoiceCount } / {remainingMultipleChoiceCount}</Text>
-					</View> 
-				</View>
-				: null 
-			}
+						<View style={ styles.count }>
+							<Text style={ styles.score_text } >Round</Text>
+							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { total_question_count }</Text>
+						</View>  
+					</View>
+					: null
+					
+				}
 				{
 					multipleChoiceData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
-					<View style={ styles.game_column } key = {`${multipleChoiceData[questionOrder[roundStartIndex]].id}`}>
+					<View style={ styles.game_column } key = {entry.id}>
 						
 
 						<View style={[ styles.game_box_large, styles.multiple_choice_question ]}>
-							<Text style={ styles.multiple_choice_question_text }>{ multipleChoiceData[questionOrder[roundStartIndex]].question }</Text>
+							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
 						</View>
 
 
+						{	
+							answerOrder.map((index) => 
+							<TouchableHighlight 
+								key = {index}
+								style={[ styles.game_box_large, styles.game_box_active ]} 
+								onPress={ () => checkRoundComplete( entry.answers[0], entry.answers[answerOrder[index]], entry.ID) } 
+								underlayColor={ underlay }
+								activeOpacity={ 1 }
+							>
+								<Text style={ styles.game_text }>{ entry.answers[answerOrder[index]] }</Text>
+							</TouchableHighlight>
 
-						<TouchableHighlight style={[ styles.game_box_large, styles.game_box_active ]}
-							testID='answer_box_1'
-							onPress={ () => checkAnswer( answerOrder[0] ) } 
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_text }>{ multipleChoiceData[questionOrder[roundStartIndex]].answers[answerOrder[0]]}</Text>
-						</TouchableHighlight>
-
-
-						<TouchableHighlight style={[ styles.game_box_large, styles.game_box_active ]}
-							testID='answer_box_2'
-							onPress={ () => checkAnswer( answerOrder[1] ) } 
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_text }>{  multipleChoiceData[questionOrder[roundStartIndex]].answers[answerOrder[1]] }</Text>
-						</TouchableHighlight>
-
-						<TouchableHighlight style={[ styles.game_box_large, styles.game_box_active ]}
-							testID='answer_box_3'
-							onPress={ () => checkAnswer( answerOrder[2] ) } 
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_text }>{  multipleChoiceData[questionOrder[roundStartIndex]].answers[answerOrder[2]] }</Text>
-						</TouchableHighlight>
-
-
-						<TouchableHighlight style={[ styles.game_box_large, styles.game_box_active ]}
-							testID='answer_box_3'
-							onPress={ () => checkAnswer( answerOrder[3] ) } 
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_text }>{  multipleChoiceData[questionOrder[roundStartIndex]].answers[answerOrder[3]] }</Text>
-						</TouchableHighlight>
-						
+						)}
 					</View>
 				)}
 				<StatusBar style="auto" />
@@ -146,92 +128,3 @@ export default function MultipleChoiceScreen({  })
 		</View>
 	);
 }
-
-
-
-const calcQuestionOrder = () =>
-{
-	let start = 0;
-	return Array.from({length: total_question_count}, (_, start) => start).sort( () => Math.random() - 0.5);
-}
-
-const calcAnswerOrder = () =>
-{
-	let start = 0;
-	return Array.from({length: 4}, (_, start) => start).sort( () => Math.random() - 0.5);
-}
-
-
-const selectMultipleChoiceData = async ( db ) =>
-{
-	try
-	{
-		const result_multiple_choice = await db.getAllAsync(
-			`
-				SELECT
-					Question_ID,
-					Question,
-					Answer_Correct,
-					Incorrect_Answer_One,
-					Incorrect_Answer_Two,
-					Incorrect_Answer_Three,
-					Last_Seen_Date
-				FROM Multiple_Choice_Data
-				ORDER BY Last_Seen_Date
-				LIMIT ?
-			`, 
-			[total_question_count]
-		);
-
-
-	const multiple_choice_data = result_multiple_choice.map(function(result) 
-	{
-		return {
-			id: result.Question_ID,
-			question: result.Question,
-			answers:
-			[ 
-				result.Answer_Correct,
-				result.Incorrect_Answer_One,
-				result.Incorrect_Answer_Two,
-				result.Incorrect_Answer_Three
-			],
-			last_date: result.Last_Seen_Date
-		}
-	})
-
-			console.log( 'MultipleChoice Data Loaded' );
-			return multiple_choice_data;
-			// setMultipleChoiceData(multiple_choice_data)
-	
-		}
-		catch ( error )
-		{
-			console.log( 'Error loading Multiple Choice data:', error );
-		}
-	};
-
-
-	const updateCorrectDate = async ( db, multipleChoiceData, roundStartIndex ) =>
-	{
-		let date = new Date().toISOString().slice(0,10);
-
-		try
-			{
-				await db.runAsync( 
-					`
-						UPDATE Matching_Data
-						SET Last_Seen_Date = ?
-						WHERE Question_ID = ?;
-					`,
-					[date, multipleChoiceData[roundStartIndex].id]
-				);
-			}
-		catch (error)
-			{
-				console.error( 'Error updating Correct Date:', error );
-			}
-	}
-
-
-	
