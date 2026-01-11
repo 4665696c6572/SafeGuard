@@ -4,101 +4,87 @@ import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Image, ImageBackground, Modal, StyleSheet, Pressable, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { checkLevelComplete } from '../common/game/sharedGame.js';
 
 import formatLevelData from '../common/game/formatLevelData.js';
+
+import useLoadGameData from '../common/game/hook/useLoadGameData.js';
+
 import selectLevelData from '../common/game/database/selectLevelData.js';
 import updateLevelData from '../common/game/database/updateLevelData.js';
 
 import styles from '../styles/styles.js';
 
-const total_question_count = 6;
+const questions_per_level = 6;
 const questions_per_round = 1
 
 
 
-export default function TrueFalseScreen({  }) 
+export default function TrueFalseScreen({ navigation }) 
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
 
-	const [ loadingData, setLoadingData ] = useState(true);
-	const [ trueFalseData, setTrueFalseData ] = useState();
 	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
+	const [ levelScore, setLevelScore ] = useState(0)
+	const [ levelComplete, setLevelComplete ] = useState( false );
 
-	const [ trueFalseScore, setTrueFalseScore ] = useState(0)
+	const [ levelData, loadingData ] = useLoadGameData( db, 'TrueFalseScreen', questions_per_level );
 
 
-	
-	
-	useEffect( () =>
-	{		
-		if ( !db || trueFalseData ) return;  
-
-		setLoadingData(true);
-
-		async function loadData() 
+	useEffect(( ) =>
+	{
+		if ( levelComplete )
 		{
-			try 
-			{
-				const unformatted_data = await selectLevelData( db, 'TrueFalseScreen', total_question_count );
-				const formatted_data = await formatLevelData(unformatted_data, 'TrueFalseScreen');
-				setTrueFalseData(formatted_data)
-			} 
-			catch ( error ) 
-			{
-				console.error( error );
-			} 
-			finally 
-			{
-				setLoadingData( false );
-			}
+			navigation.navigate( "GameScreen" );
 		}
-		loadData();
-	}, [ db ] );
+	}), [ levelComplete ]
 
 
-	
 	function checkRoundComplete( correct_answer,  user_answer, question_ID)
 	{
 		if (correct_answer ==  user_answer )
 		{
-			console.log('Correct ' + question_ID)
-			setTrueFalseScore(prev => prev + 1); 
+			console.log('Correct ' + question_ID);
+			setLevelScore(prev => prev + 1); 
 		}
 		console.log(roundStartIndex)
-		
-		setRoundStartIndex(prev => prev + 1)	
+
+		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
+		{
+			setLevelComplete( true );
+			console.log( 'Level complete.')
+		}		
+
+		setRoundStartIndex(prev => prev + 1);	
 		updateLevelData(db, 'TrueFalseScreen', question_ID);
-		
 	}
 
 
-
-
-
 	if (loadingData)    return <ActivityIndicator/>;
+
 
 	return (
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '10%'} ]}>
 				{ 
-					roundStartIndex < total_question_count ?  
+					roundStartIndex < questions_per_level ?  
 					<View style={ styles.score_row }>
 
 						<View style={ styles.score }>
 							<Text style={ styles.score_text } >Score</Text>	
-							<Text style={ styles.score_text } >{ trueFalseScore } </Text>	
+							<Text style={ styles.score_text } >{ levelScore } </Text>	
 						</View> 
 
 						<View style={ styles.count }>
 							<Text style={ styles.score_text } >Round</Text>
-							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { total_question_count }</Text>
+							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { questions_per_level }</Text>
 						</View>  
 					</View>
 					: null 
 				}
 				{
-					trueFalseData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
+					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
 					<View style={ styles.game_column } key = {entry.id}>
 						
 

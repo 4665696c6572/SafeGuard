@@ -6,3 +6,9 @@ export function calcAnswerOrder(length)
 }
 
 
+export function checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round )
+{
+	console.log( 'checkLevelComplete' )
+	if ( roundStartIndex == questions_per_level - questions_per_round )    return true;
+	return false;
+}

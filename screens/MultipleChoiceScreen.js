@@ -5,74 +5,59 @@ import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'r
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
-import { calcAnswerOrder } from '../common/game/sharedGame.js';
-import formatLevelData from '../common/game/formatLevelData.js';
-import selectLevelData from '../common/game/database/selectLevelData.js';
+import { calcAnswerOrder, checkLevelComplete } from '../common/game/sharedGame.js';
+
+import useLoadGameData from '../common/game/hook/useLoadGameData.js';
+
 import updateLevelData from '../common/game/database/updateLevelData.js';
 
 import styles from '../styles/styles.js';
 
+
 const questions_per_round = 1
 const answers_per_round = 4;
-const total_question_count = 10;
+const questions_per_level = 10;
 
 
-
-export default function MultipleChoiceScreen({  }) 
+export default function MultipleChoiceScreen({ navigation }) 
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
 
-	const [ loadingData, setLoadingData ] = useState(true);
-	const [ multipleChoiceData, setMultipleChoiceData ] = useState();
-
 	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( answers_per_round ) );
 	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
-	const [ levelComplete, setLevelComplete ] = useState( );
-	const [ multipleChoiceScore, setMultipleChoiceScore ] = useState(0)
+	const [ levelComplete, setLevelComplete ] = useState( false );
+	const [ levelScore, setLevelScore ] = useState(0)
+
+	const [ levelData, loadingData ] = useLoadGameData( db, 'MultipleChoiceScreen', questions_per_level )
 
 
-	useEffect( () =>
-	{		
-		if ( !db || multipleChoiceData ) return;  
-
-		setLoadingData(true);
-		setLevelComplete(false);
-
-		async function loadData() 
+	useEffect(( ) =>
+	{
+		if ( levelComplete )
 		{
-			try 
-			{
-				const unformatted_data = await selectLevelData( db, 'MultipleChoiceScreen', total_question_count );
-				const formatted_data = await formatLevelData(unformatted_data, 'MultipleChoiceScreen');
-				setMultipleChoiceData(formatted_data)
-			} 
-			catch ( error ) 
-			{
-				console.error( error );
-			} 
-			finally 
-			{
-				setLoadingData( false );
-			}
+			navigation.navigate( "GameScreen" );
 		}
-		loadData();
-	}, [ db ] );
-
-
-
+	}), [ levelComplete ]
+	
 
 	function checkRoundComplete( correct_answer, user_answer, question_ID)
 	{
 		if (correct_answer ==  user_answer )
 		{
-			console.log('Correct')
-			setMultipleChoiceScore(prev => prev + 1);
+			console.log('Correct');
+			setLevelScore(prev => prev + 1);
 		}
 
 		setAnswerOrder( calcAnswerOrder( answers_per_round ));
 		setRoundStartIndex( prev => prev + 1 );
 		updateLevelData( db, 'MultipleChoiceScreen', question_ID );
+
+		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
+		{	
+			setLevelComplete( true );
+			console.log( 'Level complete.')
+		}
 	}
 
 
@@ -82,24 +67,24 @@ export default function MultipleChoiceScreen({  })
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '10%'} ]}>
 				{ 
-					roundStartIndex < total_question_count ?  
+					roundStartIndex < questions_per_level ?  
 					<View style={ styles.score_row }>
 
 						<View style={ styles.score }>
 							<Text style={ styles.score_text } >Score</Text>	
-							<Text style={ styles.score_text } >{ multipleChoiceScore } </Text>	
+							<Text style={ styles.score_text } >{ levelScore } </Text>	
 						</View> 
 
 						<View style={ styles.count }>
 							<Text style={ styles.score_text } >Round</Text>
-							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { total_question_count }</Text>
+							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { questions_per_level }</Text>
 						</View>  
 					</View>
 					: null
 					
 				}
 				{
-					multipleChoiceData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
+					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
 					<View style={ styles.game_column } key = {entry.id}>
 						
 

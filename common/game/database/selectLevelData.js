@@ -1,8 +1,8 @@
-export default async function selectLevelData( db, screen_name, total_question_count ) 
+export default async function selectLevelData( db, screen_name, questions_per_level ) 
 {
 	try
 	{
-		const level_data = await db.getAllAsync( queries[`${screen_name}`], total_question_count);
+		const level_data = await db.getAllAsync( queries[`${screen_name}`], questions_per_level);
 		console.log( `${screen_name} Loaded` );
 		return level_data;
 	}
