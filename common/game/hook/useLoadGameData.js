@@ -7,7 +7,6 @@ import selectLevelData from '../database/selectLevelData.js';
 
 export default function useLoadGameData( db, screen_name, questions_per_level ) 
 {
-	// const [ levelComplete, setLevelComplete ] = useState( false );
 	const [ loadedData, setLoadedData ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
 

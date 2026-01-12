@@ -5,11 +5,11 @@ import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'r
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
-import { calcAnswerOrder, checkLevelComplete } from '../common/game/sharedGame.js';
-
-import useLoadGameData from '../common/game/hook/useLoadGameData.js';
+import { calcAnswerOrder, checkAnswer,  checkLevelComplete } from '../common/game/sharedGame.js'
 
 import updateLevelData from '../common/game/database/updateLevelData.js';
+
+import useLoadGameData from '../common/game/hook/useLoadGameData.js';
 
 import styles from '../styles/styles.js';
 
@@ -25,9 +25,9 @@ export default function MultipleChoiceScreen({ navigation })
 	const underlay = '#0b3e82ff'
 
 	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( answers_per_round ) );
-	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
+	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
 	const [ levelComplete, setLevelComplete ] = useState( false );
-	const [ levelScore, setLevelScore ] = useState(0)
+	const [ levelScore, setLevelScore ] = useState( 0 )
 
 	const [ levelData, loadingData ] = useLoadGameData( db, 'MultipleChoiceScreen', questions_per_level )
 
@@ -39,25 +39,19 @@ export default function MultipleChoiceScreen({ navigation })
 			navigation.navigate( "GameScreen" );
 		}
 	}), [ levelComplete ]
-	
 
-	function checkRoundComplete( correct_answer, user_answer, question_ID)
+
+	function handleAnswerCheck( correct_answer,  user_answer, question_ID )
 	{
-		if (correct_answer ==  user_answer )
-		{
-			console.log('Correct');
-			setLevelScore(prev => prev + 1);
+		if ( checkAnswer( correct_answer,  user_answer ))
+		{    
+			setAnswerOrder( calcAnswerOrder( answers_per_round ));
+			setLevelScore( prev => prev + 1 ); 
 		}
-
-		setAnswerOrder( calcAnswerOrder( answers_per_round ));
 		setRoundStartIndex( prev => prev + 1 );
-		updateLevelData( db, 'MultipleChoiceScreen', question_ID );
+		updateLevelData( db, 'TrueFalseScreen', question_ID );
 
-		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
-		{	
-			setLevelComplete( true );
-			console.log( 'Level complete.')
-		}
+		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );	
 	}
 
 
@@ -98,7 +92,7 @@ export default function MultipleChoiceScreen({ navigation })
 							<TouchableHighlight 
 								key = {index}
 								style={[ styles.game_box_large, styles.game_box_active ]} 
-								onPress={ () => checkRoundComplete( entry.answers[0], entry.answers[answerOrder[index]], entry.ID) } 
+								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.ID) } 
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>

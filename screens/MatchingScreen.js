@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { calcAnswerOrder, checkLevelComplete } from '../common/game/sharedGame.js';
+
+import { calcAnswerOrder, checkAnswer,  checkLevelComplete, checkRoundComplete, setResultArray, updateResultArray } from '../common/game/sharedGame.js'
 
 import useLoadGameData from '../common/game/hook/useLoadGameData.js';
 
@@ -12,7 +13,7 @@ import updateLevelData from '../common/game/database/updateLevelData.js';
 
 import styles from '../styles/styles.js';
 
-const answers_per_round = 3;
+// const answers_per_round = 3;
 const questions_per_round = 3; 
 const questions_per_level = 12
 
@@ -22,29 +23,26 @@ export default function MatchingScreen({ navigation })
 	const underlay = '#0b3e82ff'
 
 	const [ answerButtonsDisabled, setAnswerButtonsDisabled ] = useState( true );
-	const [ answeredCorrectly, setAnsweredCorrectly ] = useState( [false, false, false] );
-
-
-	const [ questionSelected, setQuestionSelected ] = useState( null );
-	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( questions_per_round ) );
-	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
-	const [ levelScore, setLevelScore ] = useState( 0 )
+	const [ answeredCorrectly, setAnsweredCorrectly ] = useState( setResultArray( questions_per_round ));
+	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( questions_per_round ));
 	const [ levelComplete, setLevelComplete ] = useState( false );
+	const [ levelScore, setLevelScore ] = useState( 0 )
+	const [ questionSelected, setQuestionSelected ] = useState( null );
+	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
 
 	const [levelData, loadingData] = useLoadGameData(db, 'MatchingScreen', questions_per_level);
 
 
 	useEffect( () =>
 	{
-		
-		if(checkRoundComplete(answeredCorrectly))
+		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{	
-			setAnsweredCorrectly( [false, false, false] );
+			setAnsweredCorrectly( setResultArray( questions_per_round ));
 			setAnswerOrder( calcAnswerOrder( questions_per_round ));
-			setRoundStartIndex( prev => prev + questions_per_round );			
+			setRoundStartIndex( prev => prev + questions_per_round );
+			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))   setLevelComplete( true );
 		}
 	}, [ answeredCorrectly ] );
-
 
 
 	useEffect(( ) =>
@@ -56,48 +54,17 @@ export default function MatchingScreen({ navigation })
 	}), [ levelComplete ]
 
 
-
-	function checkAnswer( question_ID, answer_ID, question_index  )
+	function handleAnswerCheck( question_ID, answer_ID, question_index )
 	{ 
-		if ( answer_ID != question_ID )    return;
-		else 
+		if (checkAnswer( question_ID, answer_ID ))
 		{
-	
-			const correct = answeredCorrectly.map((curr, i) => 
-			{
-				if ( i == question_index )    return true;
-				else    return curr;
-			});	
-		
+			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_index ))
+		}
+		if ( answer_ID != question_ID )    return;
 			
-			setLevelScore(prev => prev + 1)
-			setAnswerButtonsDisabled(true);
-			setAnsweredCorrectly(correct);			
+			setLevelScore( prev => prev + 1 )
+			setAnswerButtonsDisabled( true );
 			updateLevelData ( db, 'MatchingScreen', question_ID );
-		}
-	}
-
-
-	function checkRoundComplete()
-	{		
-		if 
-		( 
-			answeredCorrectly[0] == true && 
-			answeredCorrectly[1] == true &&
-			answeredCorrectly[2] == true
-		)
-		{  
-			console.log(roundStartIndex, questions_per_level)
-			console.log('screen cleared'); 
-			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))  
-			{
-				setLevelComplete( true );
-				console.log( "Level complete.")
-			}
-			return true;
-		}
-		
-		else return false;
 	}
 
 
@@ -107,7 +74,7 @@ export default function MatchingScreen({ navigation })
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '25%'} ]}>
 			{ 
-				 roundStartIndex < questions_per_level ?  
+				roundStartIndex < questions_per_level ?  
 				<View style={ styles.score_row }>
 
 					<View style={ styles.score }>
@@ -162,7 +129,7 @@ export default function MatchingScreen({ navigation })
 						]}
 						onPress={ () => 
 						{	////	question id, answer (question) id, answeredCorrectly index
-							checkAnswer( questionSelected, levelData[roundStartIndex + answerOrder[i]].id, answerOrder[i] );
+							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].id, answerOrder[i] );
 						}} 
 						underlayColor={ underlay }
 						activeOpacity={ 1 }

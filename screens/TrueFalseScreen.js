@@ -4,14 +4,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Image, ImageBackground, Modal, StyleSheet, Pressable, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { checkLevelComplete } from '../common/game/sharedGame.js';
 
-import formatLevelData from '../common/game/formatLevelData.js';
+import {checkAnswer, checkLevelComplete } from '../common/game/sharedGame.js'
+
+import updateLevelData from '../common/game/database/updateLevelData.js';
 
 import useLoadGameData from '../common/game/hook/useLoadGameData.js';
-
-import selectLevelData from '../common/game/database/selectLevelData.js';
-import updateLevelData from '../common/game/database/updateLevelData.js';
 
 import styles from '../styles/styles.js';
 
@@ -19,15 +17,14 @@ const questions_per_level = 6;
 const questions_per_round = 1
 
 
-
 export default function TrueFalseScreen({ navigation }) 
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
 
-	const [ roundStartIndex, setRoundStartIndex ] = useState(0);
-	const [ levelScore, setLevelScore ] = useState(0)
 	const [ levelComplete, setLevelComplete ] = useState( false );
+	const [ levelScore, setLevelScore ] = useState( 0 );
+	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
 
 	const [ levelData, loadingData ] = useLoadGameData( db, 'TrueFalseScreen', questions_per_level );
 
@@ -41,23 +38,21 @@ export default function TrueFalseScreen({ navigation })
 	}), [ levelComplete ]
 
 
-	function checkRoundComplete( correct_answer,  user_answer, question_ID)
+	function handleAnswerCheck( correct_answer,  user_answer, question_ID)
 	{
-		if (correct_answer ==  user_answer )
+		if ( checkAnswer( correct_answer,  user_answer ))
 		{
-			console.log('Correct ' + question_ID);
-			setLevelScore(prev => prev + 1); 
+			console.log( 'Correct ' );
+			setLevelScore( prev => prev + 1 ); 
 		}
-		console.log(roundStartIndex)
 
 		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
 		{
 			setLevelComplete( true );
-			console.log( 'Level complete.')
-		}		
-
-		setRoundStartIndex(prev => prev + 1);	
-		updateLevelData(db, 'TrueFalseScreen', question_ID);
+		}
+		
+		setRoundStartIndex( prev => prev + 1 );
+		updateLevelData( db, 'TrueFalseScreen', question_ID );
 	}
 
 
@@ -103,7 +98,7 @@ export default function TrueFalseScreen({ navigation })
 								]}
 								onPress={ () => 
 								{
-									checkRoundComplete( entry.correct_answer, 'True', entry.id )
+									handleAnswerCheck( entry.correct_answer, 'True', entry.id )
 								}}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
@@ -122,7 +117,7 @@ export default function TrueFalseScreen({ navigation })
 								]}
 								onPress={ () => 
 								{
-									checkRoundComplete( entry.correct_answer, 'False', entry.id )
+									handleAnswerCheck( entry.correct_answer, 'False', entry.id )
 								}}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
