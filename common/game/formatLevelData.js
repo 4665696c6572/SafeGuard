@@ -1,4 +1,4 @@
-export default async function formatLevelData( results, screen_name )
+export default function formatLevelData( results, screen_name )
 {
 	if (screen_name == 'MultipleChoiceScreen')
 	{

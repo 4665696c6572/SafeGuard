@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import formatEmergencyData from '../formatEmergencyData.js'
+import selectEmergencyData from '../database/selectEmergencyData.js';
 
-import formatLevelData from '../formatLevelData.js';
-import selectLevelData from '../database/selectLevelData.js';
 
-
-export default function useLoadGameData( db, screen_name, questions_per_level ) 
+export default function useLoadEmergencyData( db ) 
 {
 	const [ loadedData, setLoadedData ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
@@ -15,8 +14,8 @@ export default function useLoadGameData( db, screen_name, questions_per_level )
 		{
 			try 
 			{
-				const unformatted_data = await selectLevelData( db, screen_name, questions_per_level );
-				const formatted_data = formatLevelData( unformatted_data, screen_name );
+				const unformatted_data = await selectEmergencyData( db );
+				const formatted_data = formatEmergencyData( unformatted_data );
 				setLoadedData( formatted_data )
 			} 
 			catch ( error ) 

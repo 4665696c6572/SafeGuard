@@ -1,32 +1,28 @@
-import { useSQLiteContext } from 'expo-sqlite';
-import {  Component, Fragment, React, useEffect, useState } from 'react';
-import { ActivityIndicator,  ScrollView, View, Text, StyleSheet } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { Cell, Section, TableView} from 'react-native-tableview-simple';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Fragment } from 'react';
+import { ActivityIndicator,  ScrollView, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import useLoadEmergencyData from '../common/emergency/hook/useLoadEmergencyData';
 
 import styles from '../styles/styles';
+
 
 const EmergencyDataScreen = ({  }) =>
 {
 	const db = useSQLiteContext();
-	const [emergencyData, setEmergencyData] = useState();
-	const [loading, setLoading] = useState(true);
 
-	////// Load Database \\\\\\
-	useEffect( ( ) =>
-	{
-		selectEmergencyData( db, setEmergencyData, setLoading );
-	}, [ db ] );
+	const [ emergencyData, loadingData ] = useLoadEmergencyData( db );
 
-	if (loading)    return <ActivityIndicator/>;
+	if ( loadingData )    return <ActivityIndicator/>;
 
 	return (
 		<SafeAreaProvider style={ styles.container }>
 			<ScrollView style={{ flex: 1, marginBottom : 5,  paddingLeft: 10, paddingTop : 10 }}>
 				<View key={emergencyData.id} >
 
-				{/* Person's info */}
+				{/* Personal info */}
 				{ emergencyData.person?.name != null ? 
 					<Fragment> 
 						{ emergencyData?.person.name != null ? <Text style={{fontSize: 18}}>{emergencyData.person.name}</Text> : null }
@@ -116,164 +112,10 @@ const EmergencyDataScreen = ({  }) =>
 					</Fragment> : null
 				}
 				</View>
+				<StatusBar style="auto" />
 			</ScrollView>
 		</SafeAreaProvider>
 	);
 }
-
-
-const selectEmergencyData = async function ( db, setEmergencyData, setLoading ) 
-{
-	setLoading(true);
-	try
-	{
-		const result_person = await db.getAllAsync(
-		`
-			SELECT 
-				ENTITY_ID, 
-				Entity_Name AS Name, 
-				DOB,
-				Sex, 
-				Height, 
-				Weight, 
-				Blood_Type 
-			FROM Entity, Person 
-			WHERE Person_ID = ? 
-			AND Entity_ID = ?;`, 
-			[1, 1]
-		);
-
-		const result_condition = await db.getAllAsync(
-		`
-			SELECT
-				Medical_Condition_ID,
-				Condition_Name,
-				Diagnosis_Date,
-				Note,
-				Entity_NAME AS Doctor
-			FROM Medical_Condition
-			JOIN Entity
-			ON Entity.Entity_ID = Medical_Condition.Doctor_ID
-			WHERE Condition_Name NOT LIKE ?;`, 
-			['%Allergy%']
-		);
-
-		const result_medication = await db.getAllAsync(
-		`
-			SELECT 
-				Medication_ID,
-				Medication_Name, 
-				Strength, 
-				Frequency,
-				Start_Date,
-				Note,
-				Entity_NAME AS Doctor
-			FROM Medication
-			JOIN Entity 
-			ON Entity.Entity_ID = Medication.Doctor_ID;
-		`);
-
-		const result_allergy = await db.getAllAsync(
-		`
-			SELECT
-				Allergy_ID,
-				Allergen,
-				Severity,
-				Medication_Name,
-				Diagnosis_Date,
-				Medical_Condition.Note
-			FROM Allergy
-			LEFT JOIN Medical_Condition
-			ON Medical_Condition.Medical_Condition_ID = Allergy.Allergy_ID
-			LEFT JOIN Medication 
-			ON Medical_Condition.Medical_Condition_ID = Medication.Medical_Condition_ID;
-		`);
-
-		const result_insurance = await db.getAllAsync(
-		`
-			SELECT 
-				Insurance_ID,
-				Entity.Entity_Name AS Company_Name, 
-				Policy_Number,
-				Start_Date,
-				Note
-				FROM Insurance
-				JOIN Entity on Entity.Entity_ID = Insurance.Insurance_ID
-				WHERE Insurance_Type = ?`, 
-			['Health']
-		);
-
-
-		setEmergencyData
-		({
-			id: result_person[0]?.Entity_ID,
-			person:
-			{
-				name: result_person[0]?.Name,
-				dob: result_person[0]?.DOB,
-				sex: result_person[0]?.Sex,
-				height: result_person[0]?.Height,
-				weight: result_person[0]?.Weight,
-				blood_type: result_person[0]?.Blood_Type
-			},
-			medical_condition:
-			(
-				result_condition || []).map(condition => 
-				({
-					id: condition.Medical_Condition_ID,
-					condition_name: condition.Condition_Name,
-					diagnosis_date: condition.Diagnosis_Date,
-					note: condition.Note,
-					doctor: condition.Doctor,
-				})
-			),
-			
-			medication:
-			(
-				result_medication || []).map(medication => 
-				({
-					id: medication.Medication_ID,
-					medication_name: medication.Medication_Name,
-					strength: medication.Strength,
-					frequency: medication.Frequency,
-					start_date: medication.Start_Date,
-					note: medication.Note,
-					doctor: medication.Doctor
-				})
-			),
-			allergy:
-			(
-				result_allergy || []).map(allergy => 
-				({
-					id: allergy.Allergy_ID,
-					allergen: allergy.Allergen,
-					severity: allergy.Severity,
-					medication_name: allergy.Medication_Name,
-					diagnosis_date: allergy.Diagnosis_Date,
-					note: allergy.Note
-				})
-			),
-			health_insurance:
-			(
-				result_insurance || []).map(insurance => 
-				({
-					id: insurance.Insurance_ID,
-					company: insurance.Company_Name,
-					policy_number: insurance.Policy_Number,
-					start_date: insurance.Start_Date,
-					note: insurance.Note
-				})
-			)
-		});
-
-	console.log( 'Emergency Data Loaded' );
-	setLoading(false);
-	}
-	catch ( error )
-	{
-		console.log( 'Error loading Entity data:', error );  
-	}
-};
-
 
 export default EmergencyDataScreen;
