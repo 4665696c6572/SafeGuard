@@ -1,152 +1,28 @@
 import * as Location from 'expo-location';
-import * as Notifications from 'expo-notifications';
 import { useSQLiteContext } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
+import fetchWeatherData from '../common/home/fetchWeather.js';
+import { fetchAlertZone, fetchAlertData, findHighestSeverity, scheduleAlertNotification } from '../common/home/alertFunctions.js';
+
 import styles from '../styles/styles.js';
-// Weather
-const weather_URL = 'https://api.openweathermap.org/data/2.5/weather';
-const API_Key = 'a7d2d44c1023b2f2fc9dec96f12b617d';
-const units = 'imperial';
+
 
 const HomeScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
-	const [alertData, setAlertData] = useState();
-	const [alertTitle, setAlertTitle] = useState();
-	const [errorMessage, setErrorMessage] = useState();
-	const [location, setLocation] = useState();
-	const [userData, setUserData] = useState( [ ] );
-    const [weatherData, setWeatherData] = useState();
 
-	////// Load Location \\\\\\
-	useEffect(() => 
-	{
-		(async function getLocation() 
-		{
-			let { status } = await Location.requestForegroundPermissionsAsync();
-			if (status !== 'granted') 
-			{
-				setErrorMsg('Permission to access location was denied');
-				return;
-			}
+	const [ errorMessage, setErrorMessage ] = useState( );
+	const [ userData, setUserData ] = useState( [ ] );
+	const [ locationData, setLocationData ] = useState( );
+	const [ weatherData, setWeatherData ] = useState( );
+	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
+	const [ alertData, setAlertData ] = useState( );
 
-			let location = await Location.getCurrentPositionAsync({});
-			console.log('location loaded')
-			setLocation(location);
-		}) ();
-
-	}, []);
-
-
-	/*
-		Loads alert data from US based government agency:
-		National Oceanic and Atmospheric Administration
-		
-		Uses latitude and longitude of user to load
-		any current alerts.
-
-		Alert types include:
-
-		Alert levels include: 
-	*/
-	const fetchAlertData = async () => 
-	{
-		
-
-		// If phone in US, use location data				// const lat =  location.coords.latitude;			// const lon = location.coords.longitude;
-		const lat =  28.078072; // Palm Harbor, Florida
-		const lon = -82.763710;
-
-		const url_zone = `https://api.weather.gov/points/${lat},${lon}`;
-		const result_zone = await fetch(url_zone);
-
-		// Zone ID 2 letter state, Z, 3 number zone  example: FLZ050				// Note: only works when phone in US			// const zone = (await result.json())?.properties.forecastZone.slice(-6);				// const zone = 'FLZ050';  // Pinellas County Florida
-		const zone = 'FLZ124';
-
-
-		const url_alert =`https://api.weather.gov/alerts/active/area/FL`;  // State
-		// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`; 	
-		const result_alert = await fetch(url_alert);
-		const alert_data = await result_alert.json();
-
-		const severity =  {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
-		let priority_alert_number = 0;
-		let max_severity = 5;
-
-		for (var i = 0; i < alert_data.features.length ; i++)
-		{
-			if (Number(severity[alert_data.features[i].properties.severity]) < Number(max_severity))
-			{	
-				// console.log('i ' + i ) 			// console.log('max_severity before ' + max_severity )  				// console.log('priority_alert_number before ' + priority_alert_number ) 				// console.log(alert_data.features[i].properties.severity)
-
-				max_severity = severity[alert_data.features[i].properties.severity];
-				priority_alert_number = i;
-
-				// console.log('max_severity after ' + max_severity ) 					// console.log('priority_alert_number after ' + priority_alert_number )
-			}	
-		}
-
-		
-		if (alert_data.features.length != 0 || priority_alert_number != null)
-		{
-			setAlertTitle("Alert severity level: " + alert_data.features[priority_alert_number].properties.severity);
-			setAlertData(alert_data.features[priority_alert_number].properties.description);
-		}
-	};
-
-	const scheduleAlertNotification = async () => 
-	{
-		if(!alertTitle || !alertData)
-		{
-			console.log('No alert data')
-			return;
-		}
-
-		await Notifications.scheduleNotificationAsync (
-		{
-			content: 
-			{
-				title: alertTitle,
-				body: alertData,
-				channelId: 'hazard_alert'
-			},
-			trigger: { seconds: 2 },
-		});
-	}
-
-
-	// Loads current weather data
-	const fetchWeatherData = async () => 
-	{
-		if (!location)
-		{
-			console.log('location failed');
-			return;
-		}
-
-		const lat = location.coords.latitude;
-		const lon = location.coords.longitude;
-		const url = `${weather_URL}?lat=${lat}&lon=${lon}&appid=${API_Key}&units=${units}`;
-		const result = await fetch(url);
-		const weather_data = await result.json();
-		setWeatherData(weather_data);
-	};
-
-	useEffect(() => 
-	{
-		if(location)
-		{
-			fetchWeatherData();
-			fetchAlertData();
-		}
-	}, [location]);
-
-//  console.log(weatherData)
 
 	////// Load Database \\\\\\
 	useEffect( ( ) =>
@@ -158,34 +34,113 @@ const HomeScreen = ({ navigation }) =>
 	}, [ db ] );
 
 
+	////// Load Location \\\\\\
+	useEffect( () => 
+	{
+		async function getLocation() 
+		{
+			
+			let { status } = await Location.requestForegroundPermissionsAsync();
+			if (status !== 'granted') 
+			{
+				
+				setErrorMsg('Permission to access location was denied');
+				return;
+			}
+
+			let location_data = await Location.getCurrentPositionAsync({});
+
+			console.log( 'location loaded' )
+			setLocationData( location_data );
+		}
+		getLocation();
+	}, []);
+
+
+		////// Load Alert \\\\\\
+		useEffect( () => 
+		{
+			async function fetchAlert( locationData ) 
+			{
+				try 
+				{
+					const alert_zone = await fetchAlertZone( locationData );
+					const alert_data = await fetchAlertData( alert_zone );
+					if ( alert_data )
+					{ 
+						setAlertData( findHighestSeverity( alert_data ));
+					}
+					else    return;
+				} 
+				catch ( error ) 
+				{
+					console.error( error );
+				} 
+				finally 
+				{
+					setLoadingAlertData( false );
+				}
+			}
+			fetchAlert( locationData );
+		}, [ locationData ]);
+
+
+	////// Load Weather \\\\\\
+	useEffect( ( ) => 
+	{
+		if( locationData )
+		{
+			async function fetchWeather( locationData ) 
+			{
+				try 
+				{
+					const weather_data = await fetchWeatherData( locationData );
+					if(weather_data)
+					{
+						setWeatherData( weather_data )
+						console.log('Weather Data Loaded.')
+					}
+					else    return
+				} 
+				catch ( error ) 
+				{
+					console.error( error );
+				} 
+			}
+			fetchWeather( locationData );
+		}
+	}, [ locationData ]);
+
+
 	return (
 		<SafeAreaProvider style={ styles.container }>
-			{ errorMessage != null ? <Text>{errorMessage}</Text> : null }
+			{ errorMessage != null ? <Text>{ errorMessage }</Text> : null }
 			<TableView style={{ marginTop : '12%' }}>
-				{   alertData != null ? 
+				{   loadingAlertData == false ? 
+			
 					<TouchableOpacity 
-						onPress={scheduleAlertNotification}
+						onPress={() => { scheduleAlertNotification( alertData ) }}
 						style={styles.button_chrome_grey}
 					>
 						<Text style={styles.text_button}>Load Demo Alert</Text>
 					</TouchableOpacity>  
 					: null
-				}
+				} 
+
 				<TouchableOpacity
 					onPress={ ( ) =>  { navigation.navigate("EmergencyDataScreen"); }}
 					style={styles.button_chrome_grey}
 				>
 					<Text style={styles.text_button}>Emergency Data</Text>
-				</TouchableOpacity> 
-
-				<TouchableOpacity
-					onPress={ ( ) =>  {navigation.navigate( "GameScreen" ); } }
-					style={styles.button_chrome_grey}
-				>
-					<Text style={styles.text_button}>Games</Text>
 				</TouchableOpacity>
 
-				
+				<TouchableOpacity
+					onPress={ ( ) =>  { navigation.navigate("GameScreen", {score: 0 }); }}
+					style={styles.button_chrome_grey}
+				>
+					<Text style={styles.text_button}>Game</Text>
+				</TouchableOpacity>
+
 				<Section>
 					{ 
 						Array.isArray(userData) &&
@@ -230,18 +185,16 @@ const selectEntityData = async ( db, setUserData ) =>
 		`
 			SELECT * FROM Entity, Person 
 			WHERE Person_ID = ? AND Entity_ID = ?;`, 
-			[1,1]
+			[ 1, 1 ]
 		);
 
 		setUserData( result );
-		// console.log( 'Entity Data Loaded' );
+		console.log( 'Entity Data Loaded' );
 	}
 	catch ( error )
 	{
 		console.log( 'Error loading Entity data:', error );
 	}
 };
-
-
 
 export default HomeScreen;

@@ -9,6 +9,7 @@ export function notificationHandlerSetup()
 		handleNotification: async () => 
 		({
 			shouldShowBanner: true,
+			shouldShowList: true,
 			shouldPlaySound: false,
 			shouldSetBadge: false,
 		}),
@@ -19,9 +20,9 @@ export async function requestNotificationPermission()
 {
 	const { status } = await Notifications.requestPermissionsAsync();
 
-	if (status !== 'granted') 
+	if ( status !== 'granted' ) 
 	{
-		console.log('Permission not granted');
+		console.log( 'Permission not granted' );
 		return;
 	}
 };
@@ -29,13 +30,12 @@ export async function requestNotificationPermission()
 
 export async function setNotificationChannel()
 {
-	if (Platform.OS === 'android') 
+	if ( Platform.OS === 'android' ) 
 	{
-		await Notifications.setNotificationChannelAsync('hazard_alert', 
+		await Notifications.setNotificationChannelAsync( "default", 
 		{
-			name: 'Hazard Alert',
-			importance: Notifications.AndroidImportance.HIGH
+			name: "default",
+			importance: Notifications.AndroidImportance.MAX,
 		});
     }
 }
-

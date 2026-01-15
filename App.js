@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import initializeDatabase from './database/initializeDatabase.js';
 
-import { notificationHandlerSetup, requestNotificationPermission, setNotificationChannel } from './services/notificationSetup.js'
+import { notificationHandlerSetup, requestNotificationPermission, setNotificationChannel } from './common/home/notificationSetup.js';
 
 
 import HomeScreen from './screens/HomeScreen.js';
@@ -29,10 +29,14 @@ notificationHandlerSetup();
 
 export default function App() 
 {
-	useEffect( () => 
-	{
-		requestNotificationPermission();
-		setNotificationChannel();
+	useEffect( ( ) => 
+	{(
+		async () => 
+		{
+			await requestNotificationPermission();
+			await setNotificationChannel();
+		}
+	)();
 	}, []);
 
 	return (
