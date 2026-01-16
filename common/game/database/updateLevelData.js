@@ -26,7 +26,6 @@ export default async function updateLevelData( db, screen_name, question_ID )
 {
 	try
 	{
-
 		await db.runAsync( queries[`${screen_name}`], [date, question_ID]);
 		console.log( `updated` );
 	}

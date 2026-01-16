@@ -1,8 +1,17 @@
-
-export function calcAnswerOrder(length)
+// This function uses Fisher-Yates Shuffle https://www.geeksforgeeks.org/javascript/how-to-shuffle-an-array-using-javascript/
+export function calcAnswerOrder ( length )
 {
-	let start = 0;
-	return Array.from({length: length}, (_, start) => start).sort( () => Math.random() - 0.5);
+	let array = Array.from( { length }, ( _, i ) => i );
+	for ( let i = array.length - 1; i > 0; i-- ) 
+	{ 
+		const j = Math.floor( Math.random() * ( i + 1 ));
+
+		const temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+
+	return array;
 }
 
 
@@ -23,15 +32,11 @@ export function checkLevelComplete( roundStartIndex, questions_per_level, questi
 
 
 // Matching Screen is the only screen where a round has more than one question 
-export  function checkRoundComplete( answeredCorrectly,questions_per_round )
+export  function checkRoundComplete( answeredCorrectly, questions_per_round )
 {	
 	console.log( 'checkRoundComplete' )
-	for ( let i = 0; i < questions_per_round; i++ )
-	{
-		console.log( answeredCorrectly[i] == false )
-		if ( answeredCorrectly[i] == false )  return false
-	}
-	return true;
+	if ( answeredCorrectly.length != questions_per_round ) return false;
+	return answeredCorrectly.every( Boolean );
 }
 
 
@@ -44,11 +49,5 @@ export function setResultArray( questions_per_round )
 // Matching Screen is the only screen where a round has more than one question 
 export function updateResultArray ( answeredCorrectly, question_index ) 
 {
-	const correct = answeredCorrectly.map(( curr, i ) => 
-	{
-		if ( i == question_index )    return true;
-		else    return curr;
-	});	
-
-	return correct;
+	return answeredCorrectly.with(  question_row, true );
 }

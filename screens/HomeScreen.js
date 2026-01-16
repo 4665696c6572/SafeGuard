@@ -16,12 +16,12 @@ const HomeScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
 
-	const [ errorMessage, setErrorMessage ] = useState( );
-	const [ userData, setUserData ] = useState( [ ] );
-	const [ locationData, setLocationData ] = useState( );
-	const [ weatherData, setWeatherData ] = useState( );
-	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
 	const [ alertData, setAlertData ] = useState( );
+	const [ errorMessage, setErrorMessage ] = useState( );
+	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
+	const [ locationData, setLocationData ] = useState( );	
+	const [ userData, setUserData ] = useState( [ ] );
+	const [ weatherData, setWeatherData ] = useState( );
 
 
 	////// Load Database \\\\\\
