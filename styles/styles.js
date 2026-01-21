@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
 const button_size = Dimensions.get('screen').width * 0.33;
+const screen_width = Dimensions.get('screen').width;
 
 const styles = StyleSheet.create({
 	container: 
@@ -12,12 +13,9 @@ const styles = StyleSheet.create({
 	},
 	game_area: 
 	{
-		// alignItems: 'center',
 		justifyContent: 'center',
 		marginTop: '10%',
-		// marginBottom: '15%',
 		gap: '5%',
-		// backgroundColor: 'purple',
 		marginLeft: '5%',
 		marginRight: '5%',
 	},
@@ -32,27 +30,18 @@ const styles = StyleSheet.create({
 		marginBottom: 0,
 		paddingTop: 0,
 		marginTop: 0,
-		// backgroundColor: 'red'
-		// gap: '50%',
-		// marginLeft: '10%',
-		// marginRight: '10%'
 		
 	},
 	game_box_large: // 1 column
 	{
 		borderRadius: 20,
-
 		height: '17%', 
-		// width: '90%',
 		justifyContent: 'center',
 		alignItems: 'center',
 		paddingBottom: 0,
 		marginBottom: 0,
 		paddingTop: 0,
 		marginTop: 0,
-		// marginLeft: '10%',
-		// marginRight: '10%'
-
 	},
 	game_box_active:
 	{
@@ -61,9 +50,7 @@ const styles = StyleSheet.create({
 	game_column:
 	{
 		flex: 1, 
-		// flexDirection: 'row', 
 		gap: '5%',
-		// backgroundColor: 'pink',
 		paddingBottom: '10%',
 		marginBottom: 0,
 		paddingTop: 0,
@@ -96,15 +83,12 @@ const styles = StyleSheet.create({
 	{
 		opacity: 0.7
 	},
-	count:
+	count_text :
 	{
-		
-		// backgroundColor: 'green',
-		// alignSelf: 'flex-end',
-		// marginRight: '10%',
-		// width: '50%'
-		// paddingRight: '10%'
-		// marginBottom: '5%'
+		color: '#0b3e82ff',
+		fontSize: 16,
+		fontWeight: '900',
+		textAlign: 'right'
 	},
 	score_text:
 	{
@@ -116,18 +100,13 @@ const styles = StyleSheet.create({
 	},
 	score:
 	{
-		// backgroundColor: 'red',
-		// alignSelf: 'flex-start',
-		// width: '50%'
-		// marginLeft: '10%',
-		// marginBottom: '5%'
+		alignContent: 'center'
 	},
 	score_row:
 	{
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		// backgroundColor: 'purple'
-			marginBottom: '5%',
+		marginBottom: '5%',
 		gap: '25%'
 	}, 
 	multiple_choice_question:
@@ -171,34 +150,16 @@ const styles = StyleSheet.create({
 		justifyContent: 'center', 
 		alignContent: 'center',
 		
-	},
-	game_button_start:
-	{
-		// flexDirection: 'row',
-		// justifyContent: 'flex-start',
-
-		// backgroundColor: 'purple'
-		
-	},
+	},	
 	game_button_center:
 	{
 		flexDirection: 'row',
-		justifyContent: 'center', 
-			// alignContent: 'center',
-		// alignSelf: 'center'
-		// backgroundColor: 'pink',
-		// marginLeft: 0,
-
-
+		justifyContent: 'center'
 	},
 	game_button_end:
 	{
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
-		// alignSelf: 'flex-end'
-		// alignContent: 'flex_end',
-		// alignItems: 'flex-end'
-		// backgroundColor: 'orange'
+		justifyContent: 'flex-end'
 		
 	},
 	game_button_text:
@@ -208,13 +169,11 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontWeight: 'bold',
 		fontSize: 18,
-		// backgroundColor: 'red'
 	},
 	image:
 	{
 		backgroundColor: 'orange',
 		alignSelf: 'center',
-
 	},
 	blue_01:
 	{
@@ -223,13 +182,18 @@ const styles = StyleSheet.create({
 	blue_02:
 	{
 		backgroundColor: '#639affff'
-	}
-
-
+	},
+	progress_bar:
+	{
+		paddingLeft: screen_width * 0.10,
+	},
+	progress_bar_container: 
+	{
+		flexDirection:'row', 
+		height: 25,
+		justifyContent: 'space-between'
+	},
 });
-
-
-
 
 
 export default styles;

@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation }) =>
 
 			let location_data = await Location.getCurrentPositionAsync({});
 
-			console.log( 'location loaded' )
+			console.log( 'location loaded.' )
 			setLocationData( location_data );
 		}
 		getLocation();
@@ -189,7 +189,7 @@ const selectEntityData = async ( db, setUserData ) =>
 		);
 
 		setUserData( result );
-		console.log( 'Entity Data Loaded' );
+		console.log( 'Entity Data Loaded.' );
 	}
 	catch ( error )
 	{

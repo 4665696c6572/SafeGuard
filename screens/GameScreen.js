@@ -21,36 +21,53 @@ const GameScreen = ({ navigation }) =>
 
 	const underlay = '#0b3e82ff'
 
-	useEffect( () =>
-	{	
-		if ( !db ) return;  
-			setLoadingData(true);
 
-			async function fetchData() 
+	/*
+	*	Takes GameScreen out of focus when leaving
+	*	so that it needs to reload when back button
+	*	is hit from one of the other pages.
+	*	This allows for changes to be displayed.
+	*/
+	useEffect( ( ) =>
+	{
+		const unsubscribe = navigation.addListener('focus', () =>
+		{
+			if ( !db )
 			{
-				try 
+				
+				return; 
+			}  
+			else
+			{
+				setLoadingData(true);
+
+				async function fetchData() 
 				{
-					const game_data = await selectGameData( db );
-					setTotalScore( game_data[0].Score );
-				} 
-				catch ( error ) 
-				{
-					console.error( error );
-				} 
-				finally 
-				{
-					setLoadingData( false );
+					try 
+					{
+						const game_data = await selectGameData( db );
+						setTotalScore( game_data[0].Score )
+					} 
+					catch ( error ) 
+					{
+						console.error( error );
+					} 
+					finally 
+					{
+						setLoadingData( false );
+					}
 				}
+				fetchData();
 			}
-			fetchData();
-		
+		});
+		return unsubscribe;
 	}, [ db ] );
 
 
 
 
 	if (loadingData)    return <ActivityIndicator/>;
-console.log(totalScore)
+
 	return (
 		<View style={ styles.container }>
 			<SafeAreaProvider style={ styles.game_area }>
@@ -65,7 +82,7 @@ console.log(totalScore)
 				<View style={styles.game_button_start}>
 					<TouchableHighlight style={ styles.game_button }
 				
-									onPress={ ( ) =>  { navigation.navigate( "TrueFalseScreen" ); }} 
+									onPress={ ( ) =>  { navigation.navigate( "TrueFalseScreen",  { score: totalScore }); }} 
 									underlayColor={ underlay }
 									activeOpacity={ 1 }
 								>
@@ -76,7 +93,7 @@ console.log(totalScore)
 				<View style={styles.game_button_center}>
 					<TouchableHighlight style={ styles.game_button }
 						
-									onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen" ); }} 
+									onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen",  { score: totalScore }); }} 
 									underlayColor={ underlay }
 									activeOpacity={ 1 }
 								>
@@ -87,7 +104,7 @@ console.log(totalScore)
 				<View style={styles.game_button_end}>
 					<TouchableHighlight style={ styles.game_button }
 								
-									onPress={ ( ) =>  { navigation.navigate( "MatchingScreen" ); }} 
+									onPress={ ( ) =>  { navigation.navigate( "MatchingScreen",  { score: totalScore }); }} 
 									underlayColor={ underlay }
 									activeOpacity={ 1 }
 								>
@@ -98,7 +115,7 @@ console.log(totalScore)
 					<View style={styles.game_button_center}>
 					<TouchableHighlight style={ styles.game_button }
 						
-									onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen" ); }} 
+									onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen",  { score: totalScore }); }} 
 									underlayColor={ underlay }
 									activeOpacity={ 1 }
 								>
@@ -109,7 +126,7 @@ console.log(totalScore)
 					<View style={styles.game_button_start}>
 					<TouchableHighlight style={ styles.game_button }
 				
-									onPress={ ( ) =>  { navigation.navigate( "MatchingScreen" ); }} 
+									onPress={ ( ) =>  { navigation.navigate( "MatchingScreen",  { score: totalScore }); }} 
 									underlayColor={ underlay }
 									activeOpacity={ 1 }
 								>
@@ -120,7 +137,7 @@ console.log(totalScore)
 					<View style={styles.game_button_center}>
 						<TouchableHighlight style={ styles.game_button }
 							
-										onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen" ); }} 
+										onPress={( ) =>  { navigation.navigate( "MultipleChoiceScreen",  { score: totalScore }); }} 
 										underlayColor={ underlay }
 										activeOpacity={ 1 }
 									>

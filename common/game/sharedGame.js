@@ -47,7 +47,7 @@ export function setResultArray( questions_per_round )
 
 
 // Matching Screen is the only screen where a round has more than one question 
-export function updateResultArray ( answeredCorrectly, question_index ) 
+export function updateResultArray ( answeredCorrectly, question_row ) 
 {
 	return answeredCorrectly.with(  question_row, true );
 }

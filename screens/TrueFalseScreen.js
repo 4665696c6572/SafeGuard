@@ -1,27 +1,31 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Image, ImageBackground, Modal, StyleSheet, Pressable, Text, TouchableHighlight, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Dimensions, Image, Modal,Text, TouchableHighlight, View } from 'react-native';
+import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import {  StackActions } from '@react-navigation/native';
 
 import {checkAnswer, checkLevelComplete } from '../common/game/sharedGame.js'
 
+import updateGameData from '../common/game/database/updateGameData.js'
 import updateLevelData from '../common/game/database/updateLevelData.js';
-
 import useLoadGameData from '../common/game/hook/useLoadGameData.js';
 
 import styles from '../styles/styles.js';
 
 const questions_per_level = 6;
-const questions_per_round = 1
+const questions_per_round = 1;
 
+const imgUri = require( '../assets/frog.png' );
+const screen_width = Dimensions.get('screen').width;
 
-export default function TrueFalseScreen({ navigation }) 
+export default function TrueFalseScreen({ navigation, route }) 
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
 
+	const [ currentNumber, setCurrentNumber ] = useState( 1 );
 	const [ levelComplete, setLevelComplete ] = useState( false );
 	const [ levelScore, setLevelScore ] = useState( 0 );
 	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
@@ -33,7 +37,14 @@ export default function TrueFalseScreen({ navigation })
 	{
 		if ( levelComplete )
 		{
-			navigation.navigate( "GameScreen" );
+			const new_score = route?.params?.score + levelScore;
+
+			updateGameData( new_score, db );
+			setTimeout(function() 
+			{
+				navigation.dispatch(StackActions.pop());
+				navigation.navigate("GameScreen", {score: new_score});
+			}, 1200) 
 		}
 	}), [ levelComplete ]
 
@@ -42,7 +53,7 @@ export default function TrueFalseScreen({ navigation })
 	{
 		if ( checkAnswer( correct_answer,  user_answer ))
 		{
-			console.log( 'Correct ' );
+			console.log( 'Correct' );
 			setLevelScore( prev => prev + 1 ); 
 		}
 
@@ -50,7 +61,8 @@ export default function TrueFalseScreen({ navigation })
 		{
 			setLevelComplete( true );
 		}
-		
+
+		setCurrentNumber( prev => prev + 1 );
 		setRoundStartIndex( prev => prev + 1 );
 		updateLevelData( db, 'TrueFalseScreen', question_ID );
 	}
@@ -61,23 +73,44 @@ export default function TrueFalseScreen({ navigation })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '10%'} ]}>
-				{ 
-					roundStartIndex < questions_per_level ?  
-					<View style={ styles.score_row }>
+			<SafeAreaProvider style={ styles.game_area }>
+				<Modal visible={ levelComplete } >
+					<SafeAreaProvider style={ styles.game_area }>
 
-						<View style={ styles.score }>
-							<Text style={ styles.score_text } >Score</Text>	
-							<Text style={ styles.score_text } >{ levelScore } </Text>	
+						<View>
+							<Text style={ styles.score_text } >Final score</Text>	
+							<Text style={ styles.score_text } >{ levelScore }</Text>	
 						</View> 
 
-						<View style={ styles.count }>
-							<Text style={ styles.score_text } >Round</Text>
-							<Text style={ styles.score_text } >{ roundStartIndex  + 1} / { questions_per_level }</Text>
-						</View>  
+						<View style={{ alignItems: 'center' }}>
+							<Image source={ imgUri } style={{ height: 250, width: 250 }}/>
+						</View>
+					</SafeAreaProvider>
+				</Modal>
+
+				{/* Progress and Score */}
+				<View style={ styles.progress_bar_container } >
+					<View style={ styles.progress_bar }>
+						<Progress.Bar 
+							progress={( currentNumber / questions_per_level )} 
+							height= '20' 
+							width={ screen_width * 0.6 } 
+							color='#66a1efff' 
+							borderRadius={5} 
+							unfilledColor='#bacfeaff' 
+							borderColor='#DBE2E9'
+						/>
 					</View>
-					: null 
-				}
+
+						<Text style={ styles.count_text } >{ Math.min( currentNumber, questions_per_level )} / { questions_per_level }</Text>
+				</View>
+
+				<View>
+						<Text style={ styles.score_text } >Score</Text>	
+						<Text style={ styles.score_text } >{ levelScore }</Text>	
+				</View> 
+
+
 				{
 					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) => 
 					<View style={ styles.game_column } key = {entry.id}>

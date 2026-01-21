@@ -77,7 +77,7 @@ export default async function selectEmergencyData( db )
 				WHERE Insurance_Type = ?`, 
 			[ 'Health' ]
 		);
-		console.log( 'Emergency Data Loaded' );
+		console.log( 'Emergency data loaded.' );
 		return (
 		{
 			result_person,

@@ -8,7 +8,7 @@ export default async function selectGameData ( db )
 			WHERE User_ID = ?;
 		`,  [ 1 ]
 		);
-		console.log( 'Game data loaded' );
+		console.log( 'Game data loaded.' );
 		return game_data;
 	}
 	catch ( error )
