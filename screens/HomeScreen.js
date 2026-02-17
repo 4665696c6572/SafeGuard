@@ -141,26 +141,6 @@ const HomeScreen = ({ navigation }) =>
 					<Text style={styles.text_button}>Game</Text>
 				</TouchableOpacity>
 
-				<Section>
-					{ 
-						Array.isArray(userData) &&
-						userData.map(( user ) => (
-						<Cell
-							key={ user.Entity_ID }
-								cellContentView={
-								<View>
-									<Text>Name: { user.Entity_Name } </Text>
-									<Text>DOB: {user.DOB} </Text>
-									{user?.Sex != null ? <Text>Sex: {user.Sex} </Text> : null}
-									{user?.Height != null ? <Text>Height: {user.Height} </Text> : null}
-									{user?.Weight != null ? <Text>Weight: {user.Weight} </Text> : null}
-									{user?.Blood_Type != null ? <Text>Blood Type: {user.Blood_Type} </Text> : null}
-								</View>
-							}
-						/>
-					))}
-				</Section>
-				
 			</TableView>
 			{ weatherData && 
 			

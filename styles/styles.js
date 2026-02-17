@@ -4,6 +4,11 @@ const button_size = Dimensions.get('screen').width * 0.33;
 const screen_width = Dimensions.get('screen').width;
 
 const styles = StyleSheet.create({
+	allergy_alert:
+	{
+		color: 'rgb(126, 4, 4)',
+		fontWeight: 900
+	},
 	container: 
 	{ 
 		flex: 1,

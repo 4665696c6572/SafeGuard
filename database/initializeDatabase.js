@@ -28,135 +28,193 @@ export default async function initializeDatabase( db )
 
 			CREATE TABLE IF NOT EXISTS    Entity
 			( 
-				Entity_ID    INTEGER    PRIMARY KEY,
-				Entity_Name    TEXT    NOT NULL    UNIQUE,
-				Entity_Type    TEXT    NOT NULL    CHECK ( Entity_Type IN ( 'Person', 'Doctor', 'Business' ) )
+				entity_id    INTEGER    PRIMARY KEY,
+				entity_name    TEXT    NOT NULL    UNIQUE,
+				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business', 'Medical_Facility' ) )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
 			( 
-				Person_ID    INTEGER    PRIMARY KEY,
-				DOB    TEXT,
-				Sex    TEXT,
-				Height    TEXT,
-				Weight    TEXT,				
-				Blood_Type    TEXT    CHECK ( Blood_Type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-' ) ),
-				FOREIGN KEY ( Person_ID )    REFERENCES Entity( Entity_ID )
+				person_id    INTEGER    PRIMARY KEY,
+				dob    TEXT,
+				sex    TEXT,
+				height    TEXT,
+				weight    TEXT,				
+				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' ) ),
+				FOREIGN KEY ( person_id )    REFERENCES Entity( entity_id )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Doctor
 			( 
-				Doctor_ID    INTEGER    PRIMARY KEY,
-				Facility_ID    INTEGER,
-				Specialty    TEXT,
-				Start_Date    TEXT,
-				End_Date    TEXT,
-				FOREIGN KEY ( Doctor_ID )    REFERENCES Entity( Entity_ID ),
-				FOREIGN KEY ( Facility_ID )    REFERENCES Entity( Entity_ID )
+				doctor_id    INTEGER     PRIMARY KEY,
+				facility_id    INTEGER,
+				specialty    TEXT,
+				current    INTEGER,
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id ),
+				FOREIGN KEY ( facility_id )    REFERENCES Entity( entity_id )
 			); 
 
 			CREATE TABLE IF NOT EXISTS    Medical_Condition
 			( 
-				Medical_Condition_ID    INTEGER    PRIMARY KEY,
-				Doctor_ID    INTEGER, 
-				Condition_Name    TEXT    NOT NULL,
-				Diagnosis_Date    TEXT,
-				Note    TEXT,
-				FOREIGN KEY ( Doctor_ID )    REFERENCES Entity( Entity_ID )
-			);
-
-			CREATE TABLE IF NOT EXISTS    Medication
-			( 
-				Medication_ID    INTEGER    PRIMARY KEY,
-				Doctor_ID    INTEGER, 
-				Medical_Condition_ID    INTEGER, 
-				Medication_Name    TEXT    NOT NULL,
-				Strength    TEXT,
-				Frequency    TEXT,
-				Start_Date    TEXT,
-				Note    TEXT,
-				FOREIGN KEY ( Medical_Condition_ID )    REFERENCES Medical_Condition( Medical_Condition_ID ),
-				FOREIGN KEY ( Doctor_ID )    REFERENCES Entity( Entity_ID )    ON DELETE RESTRICT
+				condition_id    INTEGER    PRIMARY KEY,
+				condition_name    TEXT    NOT NULL,
+				doctor_id    INTEGER, 				
+				diagnosis_date    TEXT,
+				condition_note    TEXT,
+				is_allergy    INTEGER    NOT NULL,
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Allergy
 			( 
-				Allergy_ID    INTEGER    PRIMARY KEY,
-				Allergen    TEXT,
-				Severity    TEXT    CHECK ( Severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
-				FOREIGN KEY ( Allergy_ID )    REFERENCES Medical_Condition( Medical_Condition_ID )
+				allergy_id    INTEGER    PRIMARY KEY,
+				allergen    TEXT,
+				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
+				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Medication
+			( 
+				medication_id    INTEGER    PRIMARY KEY,
+				doctor_id    INTEGER, 
+				condition_id    INTEGER, 
+				medication_name    TEXT    NOT NULL,
+				strength    TEXT,
+				frequency    TEXT,
+				start_date    TEXT,
+				is_life_sustaining    Integer     NOT NULL,
+				medication_note    TEXT,
+				FOREIGN KEY ( condition_id )    REFERENCES Medical_Condition( condition_id ),
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE RESTRICT
 			);
 
 			CREATE TABLE IF NOT EXISTS    Insurance
 			( 
-				Policy_Number    TEXT    PRIMARY KEY,
-				Insurance_ID    INTEGER,
-				Start_Date    TEXT,
-				Note    TEXT,
-				Insurance_Type    TEXT    CHECK ( Insurance_Type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' ) ),
-				FOREIGN KEY ( Insurance_ID )    REFERENCES Entity( Entity_ID )
+				insurance_id   INTEGER    PRIMARY KEY,
+				policy_number    TEXT,	
+				start_date    TEXT,
+				insurance_note    TEXT,
+				insurance_type    TEXT    CHECK ( insurance_type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' )),
+				FOREIGN KEY ( insurance_id)    REFERENCES Entity( entity_id )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Address
+			( 
+				address_id    INTEGER    PRIMARY KEY,
+				entity_id    INTEGER,
+				address_line_one    TEXT,
+				address_line_two    TEXT,
+				city    TEXT,
+				state    TEXT,
+				post_code    TEXT,
+				country    TEXT,
+				address_note    TEXT,
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Email
+			( 
+				email_id    INTEGER    PRIMARY KEY,
+				entity_id    INTEGER,
+				email,
+				email_note    TEXT,
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Phone
+			( 
+				phone_number_id    INTEGER    PRIMARY KEY,
+				entity_id    INTEGER,
+				phone_number    TEXT    NOT NULL,
+				number_type    TEXT    NOT NULL    CHECK ( number_type IN ( 'Cell', 'Fax', 'Home', 'Office', 'Other' ) ),
+				phone_number_note    TEXT,
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id ),
+				UNIQUE ( entity_id, number_type )
 			);
 
 
 
 			CREATE TABLE IF NOT EXISTS    Game_Data
 			( 
-				User_ID    INTEGER    PRIMARY KEY,
-				Score    INTEGER    DEFAULT ( 0 ),
-				Level_Status    TEXT
+				user_id    INTEGER    PRIMARY KEY,
+				score    INTEGER    DEFAULT ( 0 ),
+				level_status    TEXT
 			);
 
 			CREATE TABLE IF NOT EXISTS    Matching_Data
 			( 
-				Question_ID    INTEGER    PRIMARY KEY,
-				Question    TEXT,
-				Answer    TEXT,
-				Last_Seen_Date    TEXT    DEFAULT ( '2025-12-01' )
+				question_id    INTEGER    PRIMARY KEY,
+				question    TEXT,
+				answer    TEXT,
+				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Multiple_Choice_Data
 			( 
-				Question_ID    INTEGER    PRIMARY KEY,
-				Question    TEXT,
-				Answer_Correct    TEXT,
-				Incorrect_Answer_One    TEXT,
-				Incorrect_Answer_Two    TEXT,
-				Incorrect_Answer_Three    TEXT,
-				Last_Seen_Date    TEXT    DEFAULT ( '2025-12-01' )
+				question_id    INTEGER    PRIMARY KEY,
+				question    TEXT,
+				answer_correct    TEXT,
+				answer_one_incorrect    TEXT,
+				answer_two_incorrect    TEXT,
+				answer_three_incorrect    TEXT,
+				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
 
 			CREATE TABLE IF NOT EXISTS    True_False_Data
 			( 
-				Question_ID    INTEGER    PRIMARY KEY,
-				Question    TEXT,
-				True_Or_False    TEXT,
-				Last_Seen_Date    TEXT    DEFAULT ( '2025-12-01' )
+				question_id    INTEGER    PRIMARY KEY,
+				question    TEXT,
+				answer    TEXT,
+				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
-
 		` );
 
+
 		// Demo Data
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( Entity_Name, Entity_Type ) VALUES ( ?, ? )', [ 'Michael S. Baker', 'Person' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Person ( Person_ID, DOB, Sex, Height, Weight, Blood_Type ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 1, '1995-12-13', 'Male', '181 cm', '83 kg', 'A+' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Michael S. Baker', 'Person' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Person ( person_id, dob, height, weight ) VALUES ( ?, ?, ?, ? )', [ 1, '1995-12-13', '181 cm', '83 kg' ]);
+		
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ "Dr. Smiths clinic", 'Medical_Facility' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) VALUES ( ?, ?, ? )', [ 2, '588-2300', 'Office']);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( Entity_Name, Entity_Type ) VALUES ( ?, ? )', [ 'Dr. Smith', 'Doctor' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( Doctor_ID, Specialty ) VALUES ( ?,? )', [ 2, 'Pulmonologist' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, '13731 S. Archer Avenue', 'Lemont', 'IL', '60439', 'USA' ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( Entity_Name, Entity_Type ) VALUES ( ?, ? )', [ 'Dr. Parker', 'Doctor' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( Doctor_ID, Specialty ) VALUES ( ?,? )', [ 3, 'Allergist' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES ( ?, ? )', [ 2, 'clinic@mail.com']);
+		
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Dr. Smith', 'Doctor' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id, facility_id, specialty, current ) VALUES ( ?, ?, ?, ? )', [ 3, 2, 'Pulmonologist', 1 ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( Doctor_ID, Condition_Name, Diagnosis_Date ) VALUES ( ?, ?, ? )', [ 2, 'Chronic obstructive pulmonary disease', '2021-11-15' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( Doctor_ID, Medical_Condition_ID, Medication_Name, Strength, Frequency, Start_Date ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, 1, 'Salbutamol', '20 mg', '2 puffs ( 200 mcg ) every 4-6 hours', '2020-11-15' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Dr. Parker', 'Doctor' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id,  specialty, current ) VALUES ( ?, ?, ? )', [ 4, 'Allergist', 0 ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( Condition_Name, Diagnosis_Date ) VALUES ( ?, ? )', [ 'Allergy', '2022-06-06' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( Allergy_ID, Allergen, Severity ) VALUES ( ?, ?, ? )', [ 2, 'Nickel', 'Moderate' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 3, 'Chronic obstructive pulmonary disease', '2021-11-15', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 1, 'Salbutamol', '20 mg', '2 puffs ( 200 mcg ) every 4-6 hours', '2020-11-15', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 1, 'Amoxicillin', '500 mg', '1 capsule every 12 hours', '2020-11-15', 0 ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( Condition_Name ) VALUES ( ? )', [ 'Allergy' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( Allergy_ID, Allergen, Severity ) VALUES ( ?, ?, ? )', [ 3, 'Pollen', 'Mild' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( Doctor_ID, Medical_Condition_ID, Medication_Name, Strength, Frequency, Start_Date ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 3, 3, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 4, 'Condition 2', '2021-11-15', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 4, 2, 'Med 3', '50 mg', '1 capsule every 8 hours', '2020-11-15', 0 ]);
+	
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ? )', [ 'Allergy', '2022-06-06', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 3, 'Nickel', 'Life Threatening' ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( Entity_Name, Entity_Type ) VALUES ( ?, ? )', [ 'ABC Insurance', 'Business' ]  );
-		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( Insurance_ID, Policy_Number, Insurance_Type ) VALUES ( ?, ?, ? )', [ 4, '1789', 'Health' ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition (  doctor_id, condition_name, is_allergy ) VALUES ( ?, ?, ? )', [ 4, 'Allergy', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 4, 'Apple allergy', 'Mild' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 4, 4, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03', 0 ]);
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'ABC Insurance', 'Business' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, '1789', 'Health' ]);
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, address_line_two, city, State, post_code, country, address_note ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )', [ 5, '23 Main Street', 'Unit 1', 'Lemont', 'IL', '44', 'USA', 'Office location' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, '34', 'Lockport', 'IL', '60441', 'USA' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-1111', 'Office', 'Office number' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-2222', 'Fax', 'Fax' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) Values ( ?, ?, ? )', [ 3, '1 (800) 555-3333', 'Office' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email, email_note ) VALUES (?, ?, ? )', [ 5, 'abc@email.com', 'email note' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES (?, ? )', [ 3, 'user@email.com' ]);
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'DEF Insurance', 'Business' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 6, '1kifuj', 'Health' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 6, '1 (800) 555-4444', 'Office', 'Office number' ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( User_ID ) VALUES ( ? )', [ 1 ]  );
 
@@ -174,72 +232,72 @@ export default async function initializeDatabase( db )
 
 const match_data = 
 [ 
-	[ 'Question 1', 'Answer 1' ],
-	[ 'Question 2', 'Answer 2' ],
-	[ 'Question 3', 'Answer 3' ],
-	[ 'Question 4', 'Answer 4' ],
-	[ 'Question 5', 'Answer 5' ],
-	[ 'Question 6', 'Answer 6' ],
-	[ 'Question 7', 'Answer 7' ],
-	[ 'Question 8', 'Answer 8' ],
-	[ 'Question 9', 'Answer 9' ],
-	[ 'Question 10', 'Answer 10' ],
-	[ 'Question 11', 'Answer 11' ],
-	[ 'Question 12', 'Answer 12' ]
+	[ 5, 'question 1', 'answer 1' ],
+	[ 6, 'question 2', 'answer 2' ],
+	[ 7, 'question 3', 'answer 3' ],
+	[ 8, 'question 4', 'answer 4' ],
+	[ 9, 'question 5', 'answer 5' ],
+	[ 10, 'question 6', 'answer 6' ],
+	[ 11, 'question 7', 'answer 7' ],
+	[ 12, 'question 8', 'answer 8' ],
+	[ 13, 'question 9', 'answer 9' ],
+	[ 14, 'question 10', 'answer 10' ],
+	[ 15, 'question 11', 'answer 11' ],
+	[ 16, 'question 12', 'answer 12' ]
 ];
 
 const match_insert = 
 `
 	INSERT OR IGNORE INTO Matching_Data  
-	( Question, Answer ) 
-	VALUES ( ?, ? );
+	( question_id, question, answer ) 
+	VALUES ( ?, ?, ? );
 `;
 
 const mc_data = 
 [ 
-	[ 'Question 1', 'Answer 1c', 'Answer 1i1', 'Answer 1i2', 'Answer 1i3' ],
-	[ 'Question 2', 'Answer 2c', 'Answer 2i1', 'Answer 2i2', 'Answer 2i3' ],
-	[ 'Question 3', 'Answer 3c', 'Answer 3i1', 'Answer 3i2', 'Answer 3i3' ],
-	[ 'Question 4', 'Answer 4c', 'Answer 4i1', 'Answer 4i2', 'Answer 4i3' ],
-	[ 'Question 5', 'Answer 5c', 'Answer 5i1', 'Answer 5i2', 'Answer 5i3' ],
-	[ 'Question 6', 'Answer 6c', 'Answer 6i1', 'Answer 6i2', 'Answer 6i3' ],
-	[ 'Question 7', 'Answer 7c', 'Answer 7i1', 'Answer 7i2', 'Answer 7i3' ],
-	[ 'Question 8', 'Answer 8c', 'Answer 8i1', 'Answer 8i2', 'Answer 8i3' ],
-	[ 'Question 9', 'Answer 9c', 'Answer 9i1', 'Answer 9i2', 'Answer 9i3' ],
-	[ 'Question 10', 'Answer 10c', 'Answer 10i1', 'Answer 10i2', 'Answer 10i3' ],
+	[ 'question 1', 'answer 1c', 'answer 1i1', 'answer 1i2', 'answer 1i3' ],
+	[ 'question 2', 'answer 2c', 'answer 2i1', 'answer 2i2', 'answer 2i3' ],
+	[ 'question 3', 'answer 3c', 'answer 3i1', 'answer 3i2', 'answer 3i3' ],
+	[ 'question 4', 'answer 4c', 'answer 4i1', 'answer 4i2', 'answer 4i3' ],
+	[ 'question 5', 'answer 5c', 'answer 5i1', 'answer 5i2', 'answer 5i3' ],
+	[ 'question 6', 'answer 6c', 'answer 6i1', 'answer 6i2', 'answer 6i3' ],
+	[ 'question 7', 'answer 7c', 'answer 7i1', 'answer 7i2', 'answer 7i3' ],
+	[ 'question 8', 'answer 8c', 'answer 8i1', 'answer 8i2', 'answer 8i3' ],
+	[ 'question 9', 'answer 9c', 'answer 9i1', 'answer 9i2', 'answer 9i3' ],
+	[ 'question 10', 'answer 10c', 'answer 10i1', 'answer 10i2', 'answer 10i3' ],
 ];
 
 const mc_insert = 
 `
 	INSERT OR IGNORE INTO Multiple_Choice_Data
-	( Question, Answer_correct, Incorrect_Answer_One, Incorrect_Answer_Two, Incorrect_Answer_Three )
+	( question, answer_correct, answer_one_Incorrect, answer_two_Incorrect, answer_three_Incorrect )
 	VALUES ( ?, ?, ?, ?, ? );
 `;
 
 const tf_data = 
 [ 
-	[ 'Question 1',  'True' ],
-	[ 'Question 2',  'True' ],
-	[ 'Question 3',  'True' ],
-	[ 'Question 4', 'False' ],
-	[ 'Question 5', 'False' ],
-	[ 'Question 6',  'True' ],
-	[ 'Question 7', 'False' ],
-	[ 'Question 8',  'True' ],
-	[ 'Question 9', 'False' ],
-	[ 'Question 10', 'True' ],
-	[ 'Question 10', 'True' ],
-	[ 'Question 11',  'True' ],
-	[ 'Question 12',  'True' ],
-	[ 'Question 13',  'True' ],
-	[ 'Question 14', 'False' ],
-	[ 'Question 15', 'False' ],
-	[ 'Question 16',  'True' ]	
+	[ 'question 1',  'True' ],
+	[ 'question 2',  'True' ],
+	[ 'question 3',  'True' ],
+	[ 'question 4', 'False' ],
+	[ 'question 5', 'False' ],
+	[ 'question 6',  'True' ],
+	[ 'question 7', 'False' ],
+	[ 'question 8',  'True' ],
+	[ 'question 9', 'False' ],
+	[ 'question 10', 'True' ],
+	[ 'question 10', 'True' ],
+	[ 'question 11',  'True' ],
+	[ 'question 12',  'True' ],
+	[ 'question 13',  'True' ],
+	[ 'question 14', 'False' ],
+	[ 'question 15', 'False' ],
+	[ 'question 16',  'True' ]	
 ];
 
 const tf_insert = 
 `
 	INSERT OR IGNORE INTO True_False_Data
-	( Question, True_Or_False )
+	( question, answer )
 	VALUES ( ?, ? );
 `;

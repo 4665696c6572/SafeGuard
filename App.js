@@ -11,7 +11,7 @@ import { notificationHandlerSetup, requestNotificationPermission, setNotificatio
 
 
 import HomeScreen from './screens/HomeScreen.js';
-import EmergencyDataScreen from './screens/EmergencyDataScreen.js';
+import EmergencyDataScreen from './screens/userDataScreens/EmergencyDataScreen.js';
 import MatchingScreen from './screens/MatchingScreen.js';
 import MultipleChoiceScreen from './screens/MultipleChoiceScreen.js';
 import TrueFalseScreen from './screens/TrueFalseScreen.js';
