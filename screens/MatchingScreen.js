@@ -1,23 +1,22 @@
+import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
-import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
-import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {  StackActions } from '@react-navigation/native';
+import * as Progress from 'react-native-progress';
+import {  StackActions, useIsFocused } from '@react-navigation/native';
 
 import { calcAnswerOrder, checkAnswer,  checkLevelComplete, checkRoundComplete, setResultArray, updateResultArray } from '../common/game/sharedGame.js'
 
-import updateGameData from '../common/game/database/updateGameData.js'
+import updateGameData from '../common/game/database/updateGameData.js';
 import updateLevelData from '../common/game/database/updateLevelData.js';
-import useLoadGameData from '../common/game/hook/useLoadGameData.js';
+import useLoadLevelData from '../common/game/hook/useLoadLevelData.js';
 
 import styles from '../styles/styles.js';
 
 const screen_width = Dimensions.get('screen').width;
 const imgUri = require( '../assets/frog.png' );
 
-// const answers_per_round = 3;
 const questions_per_round = 3; 
 const questions_per_level = 12;
 
@@ -34,10 +33,21 @@ export default function MatchingScreen({ navigation, route })
 	const [ levelScore, setLevelScore ] = useState( 0 )
 	const [ questionSelected, setQuestionSelected ] = useState( null );
 	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
-	
 
-	const [levelData, loadingData] = useLoadGameData(db, 'MatchingScreen', questions_per_level);
+	const [ cheerVisible, setCheerVisible ] = useState( false );
 
+	const [ levelData, loadingData, loadData ] = useLoadLevelData(db, 'MatchingScreen', questions_per_level);
+
+
+		const isFocused = useIsFocused();
+		
+	useEffect(() =>
+		{
+			if ( isFocused )
+			{
+				loadData( );
+			}
+	}, [ isFocused ]);
 
 	useEffect( () =>
 	{
@@ -46,7 +56,16 @@ export default function MatchingScreen({ navigation, route })
 			setAnsweredCorrectly( setResultArray( questions_per_round ));
 			setAnswerOrder( calcAnswerOrder( questions_per_round ));
 			setRoundStartIndex( prev => prev + questions_per_round );
-			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))   setLevelComplete( true );
+
+			if ( ( roundStartIndex == questions_per_level / 4 ) )
+			{
+				setCheerVisible( true );
+				setTimeout( function( ) 
+				{
+					setCheerVisible( false )
+				}, 1000 ); 
+			}
+			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
 		}
 	}, [ answeredCorrectly ] );
 
@@ -67,81 +86,83 @@ export default function MatchingScreen({ navigation, route })
 	}), [ levelComplete ]
 
 
-	function handleAnswerCheck( question_ID, answer_ID, question_row )
+	function handleAnswerCheck( question_id, answer_id, question_row )
 	{ 
-		if (checkAnswer( question_ID, answer_ID ))
+		if (checkAnswer( question_id, answer_id ))
 		{
-			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ))
+			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ));
 		}
-		if ( answer_ID != question_ID )    return;
+		else Haptics.selectionAsync();
+		if ( answer_id != question_id )    return;
 			
 		setAnswerButtonsDisabled( true );
 		setCurrentNumber( prev => prev + 1 );
-		setLevelScore( prev => prev + 1 );
-		updateLevelData ( db, 'MatchingScreen', question_ID );
+		setLevelScore( prev => prev + 1 )
+		updateLevelData ( db, 'MatchingScreen', question_id );
 	}
-
 
 	if ( loadingData )    return <ActivityIndicator/>;
 
 	return (
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '25%'} ]}>
-				<Modal visible={ levelComplete } >
-						<SafeAreaProvider style={[ styles.game_area ]}>
+				<Modal animationType='fade' color='#d1dce4ff' visible={ levelComplete } >
+					<View style={ styles.game_area }>
 
-							<View>
-								<Text style={ styles.score_text } >Final score</Text>	
-								<Text style={ styles.score_text } >{ levelScore }</Text>	
-							</View> 
+						<View>
+							<Text style={ styles.score_text } >Final score</Text>	
+							<Text style={ styles.score_text } >{ levelScore }</Text>	
+						</View>
 
-							<View style={{ alignItems: 'center' }}>
-									<Image source={ imgUri } style={{ height: 250, width: 250 }}/>
-							</View>
-							
-						</SafeAreaProvider>
+						<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
+					</View>
 				</Modal>
-				
-				
+
+				{/*  Cheer Modal */}
+				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>					
+				</Modal>
+
 				{/*  Progress and Score  */}
 				<View style={ styles.progress_bar_container } >
 					<View style={ styles.progress_bar }>
-						<Progress.Bar 
-							progress={( currentNumber / questions_per_level )} 
-							height= '20' 
-							width={ screen_width * 0.6 } 
-							color='#66a1efff' 
-							borderRadius={5} 
-							unfilledColor='#bacfeaff' 
+						<Progress.Bar
+							progress={( currentNumber / questions_per_level )}
+							height= '20'
+							width={ screen_width * 0.6 }
+							color='#66a1efff'
+							borderRadius={5}
+							unfilledColor='#bacfeaff'
 							borderColor='#DBE2E9'
 						/>
 					</View>
 
-					<Text style={ styles.count_text } >{ Math.min( currentNumber, questions_per_level )} / { questions_per_level }</Text>
-
+					<Text style={ styles.count_text }>
+						{ Math.min( currentNumber, questions_per_level )} / { questions_per_level }
+					</Text>
 				</View>
 
-				<View style={ styles.score }>
+				<View>
 					<Text style={ styles.score_text } >Score</Text>	
 					<Text style={ styles.score_text } >{ levelScore }</Text>	
-				</View> 
+				</View>
 
 
 				{
-				levelData.slice(roundStartIndex, roundStartIndex + 3).map((entry, i ) => 
-				<View style={ styles.game_row } key ={entry.id} >
-				{ 
+				levelData.slice(roundStartIndex, roundStartIndex + 3).map((entry, i ) =>
+				<View style={ styles.game_row } key ={entry.question_id} >
+				{
 					answeredCorrectly[i] === false ?
 
-					<TouchableHighlight 
+					<TouchableHighlight
 						style=
 						{[
 							styles.game_box_small,
-							[ questionSelected === entry.id ? styles.game_box_selected : styles.game_box_active ] 
+							[ questionSelected === entry.question_id ? styles.game_box_selected : styles.game_box_active ]
 						]}
-						onPress={ () => 
+						onPress={ () =>
 						{
-							setQuestionSelected( entry.id ); 
+							setQuestionSelected( entry.question_id );
 							setAnswerButtonsDisabled( false ); 
 						}}
 						underlayColor={ underlay }
@@ -154,31 +175,30 @@ export default function MatchingScreen({ navigation, route })
 				}
 
 
-				{ 
+				{
 					answeredCorrectly[answerOrder[i]] === false ?
 
-					<TouchableHighlight 
+					<TouchableHighlight
 						style=
-						{[ 
-							styles.game_box_small, 
-							styles.game_box_active, 
-							answerButtonsDisabled ? styles.game_box_disabled : null 
+						{[
+							styles.game_box_small,
+							styles.game_box_active,
+							answerButtonsDisabled ? styles.game_box_disabled : null
 						]}
-						onPress={ () => 
+						onPress={ () =>
 						{	////	question id, answer (question) id, answeredCorrectly index
-							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].id, answerOrder[i] );
-						}} 
+							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].question_id, answerOrder[i] );
+						}}
 						underlayColor={ underlay }
 						activeOpacity={ 1 }
 					>
-						<Text style={ styles.game_text }>{  levelData[roundStartIndex + answerOrder[i]].answer }</Text>
+						<Text style={ styles.game_text }>{ levelData[roundStartIndex + answerOrder[i]].answer }</Text>
 					</TouchableHighlight>
 
 					: <View style={ styles.game_box_small } />
 				}
 				</View>
-			)}			
-				<StatusBar style="auto" />
+			)}
 			</SafeAreaProvider>
 		</View>
 	);

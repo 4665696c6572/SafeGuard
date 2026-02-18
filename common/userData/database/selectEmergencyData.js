@@ -119,7 +119,7 @@ export default async function selectEmergencyData( db, table)
 				[ 'Health' ]
 			);
 		}
-		console.log(allergy)
+		console.log(insurance)
 		
 		console.log( '*** Emergency data loaded ***' );
 

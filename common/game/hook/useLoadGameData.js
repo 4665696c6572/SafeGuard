@@ -1,35 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
+import selectGameData from '../database/selectGameData.js';
 
-import formatLevelData from '../formatLevelData.js';
-import selectLevelData from '../database/selectLevelData.js';
-
-
-export default function useLoadGameData( db, screen_name, questions_per_level ) 
+export default function useLoadGameData( db )
 {
-	const [ loadedData, setLoadedData ] = useState( );
+	const [ totalScore, setTotalScore ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
 
-	useEffect( () => {
-		async function loadData() 
+	const loadData = useCallback(async () =>
+	{		
+		try
 		{
-			try 
-			{
-				const unformatted_data = await selectLevelData( db, screen_name, questions_per_level );
-				const formatted_data = formatLevelData( unformatted_data, screen_name );
-				setLoadedData( formatted_data )
-			} 
-			catch ( error ) 
-			{
-				console.error( error );
-			} 
-			finally 
-			{
-				setLoadingData( false );
-			}
+			const game_data = await selectGameData( db );
+			setTotalScore( game_data[0].score )
 		}
-		loadData();
-	}, []);
+		catch ( error )
+		{
+			console.error( error );
+		}
+		finally
+		{
+			setLoadingData( false );
+		}
+	}, [ db ]);
 
-	return  [ loadedData, loadingData ];
+	return [ totalScore, setTotalScore, loadingData, loadData ];
 }

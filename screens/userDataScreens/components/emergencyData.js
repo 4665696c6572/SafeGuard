@@ -152,7 +152,7 @@ export const HealthInsurance = ( { insuranceData }) =>
 					insuranceData.map( insurance => 
 					<View key={ insurance.insurance_id } style={{ marginBottom: 10 }}>
 					
-						{ insurance.company_name ? <Text style={[ styles.text, styles.insurance_alert ]}>{ insurance. company_name } insurance</Text> : null }
+						{ insurance.entity_name ? <Text style={[ styles.text, styles.insurance_alert ]}>{ insurance.entity_name } insurance</Text> : null }
 						{ insurance.policy_number ? <Text style={[ styles.text, styles.insurance_alert ]}>Policy number: { insurance.policy_number }</Text> : null }
 						{ insurance.start_date ? <Text style={ styles.text }>Start date: { insurance.start_date } insurance</Text> : null }
 						{ insurance.note ? <Text style={ styles.text }>Notes: { insurance.note }</Text> : null }

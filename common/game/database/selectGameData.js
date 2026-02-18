@@ -4,11 +4,15 @@ export default async function selectGameData ( db )
 	{
 		const game_data = await db.getAllAsync(
 		`
-			SELECT Score, Level_Status FROM Game_Data 
-			WHERE User_ID = ?;
-		`,  [ 1 ]
+			SELECT
+				score,
+				level_status
+			FROM Game_Data
+			WHERE user_id = ?;
+		`, [ 1 ]
 		);
-		console.log( 'Game data loaded.' );
+		console.log( 'Game data loaded' );
+
 		return game_data;
 	}
 	catch ( error )

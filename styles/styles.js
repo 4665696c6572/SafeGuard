@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
 	{ 
 		flex: 1,
 		backgroundColor: '#D8DFE6', 
-		marginTop: '10%',
-		
+		paddingTop: '10%'		
 	},
 	game_area: 
 	{
+		marginBottom: '10%',
 		justifyContent: 'center',
-		marginTop: '10%',
+		marginTop: '5%',
 		gap: '5%',
 		marginLeft: '5%',
 		marginRight: '5%',
