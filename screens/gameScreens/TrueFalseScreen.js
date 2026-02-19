@@ -6,18 +6,18 @@ import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import {checkAnswer, checkLevelComplete } from '../common/game/sharedGame.js'
+import {checkAnswer, checkLevelComplete } from '../../common/game/sharedGame.js';
 
-import updateGameData from '../common/game/database/updateGameData.js';
-import updateLevelData from '../common/game/database/updateLevelData.js';
-import useLoadLevelData from '../common/game/hook/useLoadLevelData.js';
+import updateGameData from '../../common/game/database/updateGameData.js';
+import updateLevelData from '../../common/game/database/updateLevelData.js';
+import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
-import styles from '../styles/styles.js';
+import styles from '../../styles/styles.js';
 
 const questions_per_level = 6;
 const questions_per_round = 1;
 
-const imgUri = require( '../assets/frog.png' );
+const imgUri = require( '../../assets/frog.png' );
 const screen_width = Dimensions.get('screen').width;
 
 export default function TrueFalseScreen({ navigation, route })

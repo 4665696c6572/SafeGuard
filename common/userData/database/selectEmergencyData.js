@@ -1,42 +1,133 @@
-export default async function selectEmergencyData( db, table)
+// import splitData from "../splitData";
+
+export default async function selectEmergencyData( db, table, action, condition )
 {
 	try
 	{
+		if ( table == 'Allergy' || table == 'All' )
 		{	
+			var allergy = await db.getAllAsync(
+			`
+				SELECT
+					allergy_id,
+					allergen,
+					severity,
+					diagnosis_date,
+					Medical_Condition.condition_name AS condition_name,
+					Medical_Condition.doctor_id AS condition_doctor_id,
+					Medical_Condition.condition_note AS allergy_note
+				FROM Allergy
+				LEFT JOIN Medical_Condition
+				ON Medical_Condition.condition_id = Allergy.allergy_id				
+				ORDER BY severity ASC, allergen ASC;
+			`);
+		}
+
+		if ( table == 'Contact' )
+		{	
+			var contact =	 await db.getAllAsync(
+			`
+			SELECT
+				Entity.entity_id AS entity_id,
+				entity_name, 
+				address_id,
+				address_line_one,
+				address_line_two,
+				city,
+				state,
+				post_code,
+				country,				
+				address_note,
+				Office.phone_number_id AS phone_number_id,
+				Office.phone_number AS phone_number,
+				Office.number_type AS phone_number_type,
+				Office.phone_number_note AS phone_number_note,
+				Fax.phone_number_id AS fax_number_id,
+				Fax.phone_number AS fax_number,
+				Fax.number_type AS fax_number_type,
+				Fax.phone_number_note AS fax_note,
+				email_id,
+				email,
+				email_note
+			FROM Entity
+			LEFT JOIN Address
+				ON Address.entity_id = Entity.entity_id
+			LEFT JOIN Phone AS Office
+				ON Office.entity_id = Entity.entity_id
+				AND Office.number_type = 'Office'
+			LEFT JOIN Phone AS Fax
+				ON Fax.entity_id = Entity.entity_id
+				AND Fax.number_type = 'Fax'
+			LEFT JOIN Email 
+				ON Email.entity_id = Entity.entity_id
+			WHERE Entity.entity_id = ?
+			GROUP By Entity.entity_id`,
+			[ condition ]
+			);
+		}
+
+		if ( table == 'Doctor' )
+		{
 			var doctor = await db.getAllAsync(
 			`
 				SELECT 
-					entity_id AS doctor_id, 
-					entity_name AS doctor_name
-				FROM Entity
-				WHERE entity_type = ?
-				ORDER BY entity_name`,	
+					entity_id, 
+					entity_name,
+					facility_name,
+					specialty,
+					current
+				FROM Doctor
+				LEFT JOIN Entity
+					ON Entity.entity_id = Doctor.doctor_id
+				WHERE Entity.entity_type = ?`,	
 				[ 'Doctor' ]
-			);			
+			);
 		}
 
-		if ( table == 'Person' || table == 'All' )
+		if ( table == 'Doctor_Name' || table == 'All')
+		{	
+			{
+				var doctor = await db.getAllAsync(
+				`
+					SELECT 
+						entity_id, 
+						entity_name
+					FROM Entity
+					WHERE entity_type = ?
+					ORDER BY entity_name`,	
+					[ 'Doctor' ]
+				);
+			}
+		}
+
+		if ( table == 'Insurance' || table == 'All' )
 		{
-			var person = await db.getAllAsync(
+			if(table =='All')    condition = 'Health';
+			var insurance = await db.getAllAsync(
 			`
-				SELECT
-					entity_id,
-					entity_name,
-					Entity_type,
-					dob,
-					sex,
-					height,
-					weight,
-					blood_type
-				FROM Entity, Person
-				WHERE person_id = ?
-				AND entity_id = ?;`,
-				[ 1, 1 ]
+				SELECT 
+					insurance_id,
+					Entity.entity_name AS entity_name, 
+					policy_number,
+					start_date,
+					insurance_note,
+					insurance_type,
+					Office.phone_number_id AS phone_number_id,
+					Office.phone_number AS phone_number,
+					Office.phone_number_note AS phone_number_note
+				FROM Insurance
+				LEFT JOIN Entity on Entity.entity_id = Insurance.insurance_id
+				LEFT JOIN Phone AS Office
+					ON Office.entity_id = insurance_id
+					AND Office.number_type = 'Office'
+				WHERE insurance_type = ?
+				GROUP BY insurance_id`, 
+				[ condition ]
 			);
 		}
 
 		if ( table == 'Medical_Condition' || table == 'All' )
-		{
+		{	
 			var medical_condition = await db.getAllAsync(
 			`
 				SELECT
@@ -56,7 +147,7 @@ export default async function selectEmergencyData( db, table)
 			);
 		}
 
-		if ( table == 'Medication' || table == 'All' )
+		if (( table == 'Medication' || table == 'All' ) && action != 'Update' )
 		{	
 			var medication = await db.getAllAsync(
 			`
@@ -75,80 +166,53 @@ export default async function selectEmergencyData( db, table)
 			`);
 		}
 
-		if ( table == 'Allergy' || table == 'All' )
+		if ( table == 'Person' || table == 'All' )
 		{	
-			var allergy = await db.getAllAsync(
+			var person = await db.getAllAsync(
 			`
 				SELECT
-					allergy_id,
-					allergen,
-					severity,
-					diagnosis_date,
-					Medical_Condition.condition_name AS condition_name,
-					Medical_Condition.doctor_id AS condition_doctor_id,
-					Medical_Condition.condition_note AS allergy_note
-				FROM Allergy
-				LEFT JOIN Medical_Condition
-				ON Medical_Condition.condition_id = Allergy.allergy_id
-				
-				ORDER BY severity ASC, allergen ASC;
-			`);
-		}
-
-		if ( table == 'Insurance' || table == 'All' )
-		{
-			var insurance = await db.getAllAsync(
-			`
-				SELECT
-					insurance_id,
-					Entity.entity_name AS entity_name,
-					policy_number,
-					start_date,
-					insurance_note,
-					insurance_type,
-					Office.phone_number_id AS phone_number_id,
-					Office.phone_number AS phone_number,
-					Office.phone_number_note AS phone_number_note
-				FROM Insurance
-				LEFT JOIN Entity on Entity.entity_id = Insurance.insurance_id
-				LEFT JOIN Phone AS Office
-					ON Office.entity_id = insurance_id
-					AND Office.number_type = 'Office'
-				WHERE insurance_type = ?
-				GROUP BY insurance_id`,
-				[ 'Health' ]
+					entity_id,
+					entity_name,
+					Entity_type,
+					dob,
+					sex,
+					height,
+					weight,
+					blood_type
+				FROM Entity, Person
+				WHERE person_id = ?
+				AND entity_id = ?;`,
+				[ 1, 1 ]
 			);
 		}
-		console.log(insurance)
-		
-		console.log( '*** Emergency data loaded ***' );
+
 
 		if ( table == 'Allergy' )    return allergy;
+		// if ( table == 'Contact' )    return splitData( contact );
 		if ( table == 'Doctor_Name' || table == 'Doctor' )    return doctor;
-		if ( table == 'Facility_Name' )    return facility;
-		if ( table == 'Insurance' )    return insurance;		
+		if ( table == 'Insurance' )    return insurance;
 		if ( table == 'Medical_Condition' )    return medical_condition;
 		if ( table == 'Medication' )    return medication;
-		if ( table == 'Person' )    return person;
+		if ( table == 'Person' ) return person;
+
 
 		if ( table == 'All' )
 		{
-			if ( !allergy )    allergy = [];
-			if ( !doctor )    person = [];
-			if ( !insurance )    insurance = [];
-			if ( !medical_condition )    medical_condition = [];			
-			if ( !medication )    medication = [];
-			if ( !person )    person = [];
+			if ( !allergy ) allergy = []
+			if ( !doctor ) person = []
+			if ( !insurance ) insurance = []
+			if ( !medical_condition ) medical_condition = []
+			if ( !medication ) medication = []
+			if ( !person ) person = []
 
 			return (
 			{
 				'allergy': allergy,
 				'doctor': doctor,
 				'insurance': insurance,
-				'medical_condition': medical_condition,				
+				'medical_condition': medical_condition,
 				'medication': medication,
-				'person': person							
-				
+				'person': person
 			})
 		}
 	}

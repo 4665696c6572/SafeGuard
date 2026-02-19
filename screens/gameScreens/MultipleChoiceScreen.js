@@ -6,13 +6,13 @@ import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {  StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer,  checkLevelComplete } from '../common/game/sharedGame.js';
+import { calcAnswerOrder, checkAnswer,  checkLevelComplete } from '../../common/game/sharedGame.js';
 
-import updateGameData from '../common/game/database/updateGameData.js';
-import updateLevelData from '../common/game/database/updateLevelData.js';
-import useLoadLevelData from '../common/game/hook/useLoadLevelData.js';
+import updateGameData from '../../common/game/database/updateGameData.js';
+import updateLevelData from '../../common/game/database/updateLevelData.js';
+import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
-import styles from '../styles/styles.js';
+import styles from '../../styles/styles.js';
 
 
 const questions_per_round = 1;
@@ -20,7 +20,7 @@ const answers_per_round = 4;
 const questions_per_level = 10;
 
 const screen_width = Dimensions.get('screen').width;
-const imgUri = require( '../assets/frog.png' );
+const imgUri = require( '../../assets/frog.png' );
 
 export default function MultipleChoiceScreen({ navigation, route }) 
 {

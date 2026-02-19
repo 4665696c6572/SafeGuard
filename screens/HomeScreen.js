@@ -135,6 +135,13 @@ const HomeScreen = ({ navigation }) =>
 				</TouchableOpacity>
 
 				<TouchableOpacity
+					onPress={ ( ) =>  { navigation.navigate("EmergencyDataFormScreen" ); }}
+					style={ styles.button_chrome_grey }
+				>
+					<Text style={styles.text_button}>User Data</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
 					onPress={ ( ) =>  { navigation.navigate("GameScreen", {score: 0 }); }}
 					style={styles.button_chrome_grey}
 				>

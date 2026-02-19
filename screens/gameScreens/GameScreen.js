@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import useLoadGameData from '../common/game/hook/useLoadGameData.js';
+import useLoadGameData from '../../common/game/hook/useLoadGameData.js';
 
-import styles from '../styles/styles.js';
+import styles from '../../styles/styles.js';
 
 const GameScreen = ({ navigation }) =>
 {
