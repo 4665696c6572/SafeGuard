@@ -74,16 +74,6 @@ function TabNavigator()
 			/> 
 
 			<Tab.Screen
-				name='Insurance'
-				component={ InsuranceScreen }
-				options={{
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={size} color={color} />
-					),
-				}}
-			/>
-
-			<Tab.Screen
 				name='Doctor'
 				component={ DoctorScreen }
 				options={{

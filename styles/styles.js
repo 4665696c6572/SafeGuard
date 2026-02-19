@@ -259,17 +259,6 @@ const styles = StyleSheet.create({
 		color: '#454545',
 		width: '95%' 
 	},
-	med_list:
-	{
-		backgroundColor: 'pink',
-		color: 'yellow',   // ~~
-		alignItems: 'center',
-		borderBottomWidth: 0.75,
-		flexDirection: 'row',   
-		height: 40,  
-		paddingLeft: 5, 
-		paddingRight: 5, 
-	},
 	allergy_alert:
 	{
 		color: 'rgb(126, 4, 4)',
@@ -361,6 +350,15 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		paddingBottom: 20,
 		paddingTop: 20
+	},
+	text_list:
+	{
+		borderBottomWidth: 0.75,
+		flexDirection: 'row',
+		height: 50,
+		justifyContent: 'space-between',
+		paddingLeft: 10,
+		paddingRight: 10
 	}
 });
 

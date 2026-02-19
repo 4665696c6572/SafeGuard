@@ -15,7 +15,7 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 				<Text style={ styles.title_bar }>Health Insurance</Text>
 				{
 					insuranceData.map(( insurance, i) =>
-					<View key={insurance.insurance_id} style = {{ flexDirection: 'row', justifyContent: 'space-between', height: 50, borderBottomWidth: 0.75, paddingLeft: 10, paddingRight: 10 }}>
+					<View key={insurance.insurance_id} style={ styles.text_list }>
 						<View style={{flex:0.9}}>
 								{ insurance?.entity_name ? <Text style={ styles.text }>{ insurance.entity_name }</Text> : null}
 						</View>

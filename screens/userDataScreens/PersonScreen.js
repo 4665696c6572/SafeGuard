@@ -1,4 +1,3 @@
-
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
@@ -7,7 +6,6 @@ import { useIsFocused } from '@react-navigation/native';
 import updateEmergencyData from '../../common/userData/database/updateEmergencyData.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 import insertEmergencyData from '../../common/userData/database/insertEmergencyData.js';
-
 
 import styles from '../../styles/styles.js';
 
