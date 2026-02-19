@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
 		fontSize: 26,
 		fontWeight: '900',
 		textAlign: 'center'
-		
 	},
 	score:
 	{
@@ -128,8 +127,7 @@ const styles = StyleSheet.create({
 	{
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		// backgroundColor: 'purple'
-			marginBottom: '5%',
+		marginBottom: '5%',
 		gap: '25%'
 	}, 
 	multiple_choice_question:
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 	},
 	
-	game_button: // Lily pad ~~~
+	game_button:
 	{
 		height: button_size,
 		width: button_size,

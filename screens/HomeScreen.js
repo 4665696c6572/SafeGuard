@@ -119,7 +119,7 @@ const HomeScreen = ({ navigation }) =>
 				{   loadingAlertData == false ? 
 			
 					<TouchableOpacity 
-						onPress={() => { scheduleAlertNotification( alertData ) }}
+						onPress={() => { scheduleAlertNotification( alertData )}}
 						style={styles.button_chrome_grey}
 					>
 						<Text style={styles.text_button}>Load Demo Alert</Text>

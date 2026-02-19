@@ -11,69 +11,139 @@ import insertEmergencyData from '../../common/userData/database/insertEmergencyD
 
 import styles from '../../styles/styles.js';
 
-import { Person, EditPerson } from '../userDataScreens/components/person';
+import { Person, EditPerson } from './components/person';
+import { Insurance, EditInsurance, ViewInsurance } from './components/insurance.js';
 
 
 const PersonScreen = ({ navigation, route }) =>
 {
-	
 	const db = useSQLiteContext();
 	const params = route?.params;
 
-	const [ entityData, setEntityData, loadingData, loadData ] = useLoadEmergencyData( db, 'Person', 'Select' );
+	const [ entityData, setEntityData, loadingEntityData, loadEntityData ] = useLoadEmergencyData( db, 'Person', 'Select' );
 	const [ editPersonVisible, setEditPersonVisible ] = useState( false );
 	const [ tempEntityData, setTempEntityData ] = useState( );
+
+	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Select', 'Health' );
+	const [ tempInsuranceData, setTempInsuranceData ] = useState( );
+	const [ insuranceIndex, setInsuranceIndex ] = useState( params?.condition ? params.condition : null );
+	const [ viewInsuranceVisible, setViewInsuranceVisible ] = useState( false );
+	const [ editInsuranceVisible, setEditInsuranceVisible ] = useState( false );
+
+
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const isFocused = useIsFocused();
 	
 	useEffect(() => 
+	{
+		if ( isFocused ) 
 		{
-			if ( isFocused ) 
-			{
-				loadData( );
-			}
+			loadEntityData( );
+			loadInsuranceData( );
+		}
 	}, [ isFocused ]);
 
-	
-	function saveToDB( )
+
+	async function saveToDB( table, data, loadData, shouldNavigate )
 	{
-	
-		if ( entityData[0]?.entity_id )
-		{									
-			updateEmergencyData( 'Person', entityData, db, entityData[0].entity_id );
+		let id
+		if (table == 'Person')
+		{
+			if ( data.entity_id )
+			{									
+				await updateEmergencyData( table, data, db, data.entity_id );
+			}
+			else
+			{
+				await insertEmergencyData( table, data, db );
+			}
+			loadData( );
 		}
-		else
-		{   
-			insertEmergencyData( 'Person', entityData, db );
+		else if (table == 'Insurance')
+		{
+			if ( data?.insurance_id )
+			{
+				await updateEmergencyData( table, data, db, data.insurance_id );
+			}
+			else
+			{
+				id = await insertEmergencyData( table, data, db );
+			}
+
+			loadData( );
+
+			if ( shouldNavigate ) handleNavigation( id, data.entity_name )
 		}
+	loadData( );
 	}
 
+	function handleNavigation( id, name )
+	{
+		navigation.navigate('ContactScreen', { id: id, contact_name: name, return: true });
+	}
 
-
-
-	if ( loadingData )    return <ActivityIndicator/>;
+	if ( loadingEntityData || loadingInsuranceData )    return <ActivityIndicator/>;
 
 
 	return (
 		<View style={ styles.container }>
 			<Person 
 				entityData={ entityData }
-				screen={ 'EntityScreen' }
 				setEditPersonVisible={ setEditPersonVisible }
-				setTempEntityData={ setTempEntityData }			
+				setTempEntityData={ setTempEntityData }
+				showEditButton={ true }
 			/>
 
-			<Modal animationType='fade' color='#d1dce4ff' visible={ editPersonVisible }>
-				<EditPerson				
+			<Insurance
+				insuranceData={ insuranceData }
+				setEditInsuranceVisible={ setEditInsuranceVisible }
+				setInsuranceIndex={ setInsuranceIndex }
+				setViewInsuranceVisible={ setViewInsuranceVisible }
+			/>
+
+			<Modal animationType='slide' color='#d1dce4ff' visible={ editPersonVisible }>
+				<EditPerson
 					entityData={ entityData }
 					isFormValid={ isFormValid }
-					setIsFormValid={ setIsFormValid }			
-					saveToDB={ saveToDB }					
-					setEditPersonVisible={setEditPersonVisible}	
-					setEntityData={ setEntityData }
+					loadEntityData={ loadEntityData }
+					saveToDB={ saveToDB }
+					setEditPersonVisible={setEditPersonVisible}
+					setIsFormValid={ setIsFormValid }
 					setTempEntityData={ setTempEntityData }
 					tempEntityData={ tempEntityData }
 				/>
+			</Modal>
+
+			{/* ****************************************************** */}
+			<Modal animationType='slide' color='#d1dce4ff' visible={ viewInsuranceVisible }>
+				<ViewInsurance
+					handleNavigation={ handleNavigation }
+					insuranceData={ insuranceData }
+					insuranceIndex={ insuranceIndex }
+					setEditInsuranceVisible={ setEditInsuranceVisible }
+					setInsuranceIndex={ setInsuranceIndex }
+					setTempInsuranceData={ setTempInsuranceData }
+					setViewInsuranceVisible={ setViewInsuranceVisible }
+					
+				/>
+				
+			</Modal>
+
+			<Modal animationType='slide' color='#d1dce4ff' visible={ editInsuranceVisible }>
+				<EditInsurance
+					insuranceData={ insuranceData }
+					insuranceIndex={ insuranceIndex }
+					isFormValid={ isFormValid }
+					loadInsuranceData={ loadInsuranceData }
+					saveToDB={ saveToDB }
+					setEditInsuranceVisible={ setEditInsuranceVisible }
+					setInsuranceIndex={ setInsuranceIndex }
+					setIsFormValid={ setIsFormValid }
+					setTempInsuranceData={ setTempInsuranceData }
+					setViewInsuranceVisible={ setViewInsuranceVisible }
+					tempInsuranceData={ tempInsuranceData }
+				/>
+				
 			</Modal>
 		</View>
 	);

@@ -1,7 +1,7 @@
 // This function uses Fisher-Yates Shuffle https://www.geeksforgeeks.org/javascript/how-to-shuffle-an-array-using-javascript/
 export function calcAnswerOrder ( length )
 {
-	let array = Array.from( { length }, ( _, i ) => i );
+	let array = Array.from({length }, ( _, i ) => i );
 	for ( let i = array.length - 1; i > 0; i-- ) 
 	{ 
 		const j = Math.floor( Math.random() * ( i + 1 ));

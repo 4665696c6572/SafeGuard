@@ -35,7 +35,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 			<ScrollView style={{ flex: 1, marginBottom : 45, paddingLeft: 10, paddingTop : 10 }}>
 				<Person 
 					entityData={ emergencyData?.person }	
-					nav={ ( ) => { navigation.navigate( "EmergencyDataFormScreen" )}}			
+					nav={ ( ) => { navigation.navigate( "EmergencyDataFormScreen" )}}
 				/>
 
 				<Allergy

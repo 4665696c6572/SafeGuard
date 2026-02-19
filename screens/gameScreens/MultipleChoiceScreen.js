@@ -146,7 +146,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 							<TouchableHighlight
 								key = {index}
 								style={[ styles.game_box_large, styles.game_box_active ]}
-								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.ID) }
+								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.ID)}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>

@@ -8,111 +8,97 @@ import { Picker } from '@react-native-picker/picker';
 
 import styles from "../../../styles/styles";
 
-import updateStateData  from '../../../common/userData/updateStateData.js';
-
 const underlay_color = '#d1dce4ff';
 
-export const Person = ( { entityData, screen, setEditPersonVisible, setTempEntityData }) => 
+export const Person = ({entityData, setEditPersonVisible, setTempEntityData, showEditButton }) =>
 {
-
-	return (
-		<View style={ styles.container }>
+	return ( 
+		<View style={[ styles.container, { flex: 1/3 }]}>
 			<View style={ styles.data_container }>
 			<Text style={ styles.title_bar }>Personal Information</Text>
-			{  
-				entityData[0]?.entity_name != null ? 
-				<Fragment> 		
+			{
+				entityData[0]?.entity_name != null ?
+				<Fragment> 	
 				{
-					entityData.map( person => 
+					entityData.map( person =>
 					(
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}> 		
-								{ person?.entity_name != null ? <Text style={ styles.heading_text }>{person.entity_name}</Text> : null }
-
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}> 
 								{ 
-									screen == 'EmergencyDataScreen' ? null :
-									<TouchableOpacity 
-										accessibilityLabel='button'
-										onPress={ () => 
+									person?.entity_name != null ? 
+									<Text style={ styles.heading_text }>
+											{person.entity_name}
+									</Text> 
+								: null 
+								}
+								{
+									showEditButton ? 
+									<TouchableOpacity
+										accessibilityLabel='Edit button'
+										accessibilityHint='Press to edit user information.'
+										onPress={ () =>
 										{
 											setEditPersonVisible( true );
-											setTempEntityData( entityData );
+											setTempEntityData( entityData[0] );
 										}}
 									>
 										<Text style={ styles.text_button }>Edit</Text>
-									</TouchableOpacity>		
-								}							
+									</TouchableOpacity>
+								: null
+								}
 							</View>
 
-							{ 
-								person?.dob != null ? 
-								<Text 
-									accessibilityRole="text"
-									accessibilityLabel="Date of birth"
-									style={ styles.text }
-								>
-									Date of birth: {person.dob}
-								</Text> 
-							: null 
+							{
+								person?.dob != null ?
+								<Text style={ styles.text }>
+									Date of birth: { person.dob }
+								</Text>
+							: null
 							}
-							{ 
-								person?.sex != null ? 
-								<Text 
-									accessibilityRole="text"
-									accessibilityLabel="Sex"
-									style={ styles.text }
-								>
+							{
+								person?.sex != null ?
+								<Text style={ styles.text }>
 									Sex: {person.sex}
-								</Text> 
-							: null  
+								</Text>
+							: null
 							}
-							{ 
-								person?.height != null ? 
-								<Text 
-									accessibilityRole="text"
-									accessibilityLabel="Height"
-									style={ styles.text }
-								>
+							{
+								person?.height != null ?
+								<Text style={ styles.text }>
 									Height: {person.height}
-								</Text> 
-							: null 
+								</Text>
+							: null
 							}
-							{ 
-								person?.weight != null ? 
-								<Text 
-									accessibilityRole="text"
-									accessibilityLabel="Weight"
-									style={ styles.text }
-								>
+							{
+								person?.weight != null ?
+								<Text style={ styles.text }>
 									Weight: {person.weight}
-								</Text> 
-							: null 
+								</Text>
+							: null
 							}
-							{ 
-								person?.blood_type != null ? 
-								<Text 
-									accessibilityRole="text"
-									accessibilityLabel="Blood type"
-									style={ styles.text }
-								>
+							{
+								person?.blood_type != null ?
+								<Text style={ styles.text }>
 									Blood Type: {person.blood_type}
-								</Text> 
-							: null 
+								</Text>
+							: null
 							}
 						</View>
 					))
 				}
-				</Fragment>				
-				: 
+				</Fragment>
+				:
 				<View>
-					{ 
+					{
 						screen == 'EmergencyDataScreen' ? null :
 						<TouchableOpacity
-							accessibilityLabel='button'
+							accessibilityLabel='Add information button'
+							accessibilityHint='Press to add user information.'
 							onPress={ () => setEditPersonVisible( true )}
+							style={ styles.data_button_size }
 						>
 							<Text style={ styles.text_button }>Add information</Text>
-						</TouchableOpacity> 
+						</TouchableOpacity>
 					}
 				</View>
 			}
@@ -124,262 +110,237 @@ export const Person = ( { entityData, screen, setEditPersonVisible, setTempEntit
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const EditPerson = ( { entityData, isFormValid, saveToDB, setEditPersonVisible, setEntityData, setIsFormValid, setTempEntityData, tempEntityData } ) => 
+export const EditPerson = ({ 
+								entityData, isFormValid, loadEntityData, 
+								saveToDB, setEditPersonVisible, setIsFormValid, 
+								setTempEntityData, tempEntityData 
+							}) =>
 {
-	// Date Picker \/
+	// Date Picker
 	const [ datePickerVisible, setDatePickerVisible ] = useState( false );
 
 	const showDatePicker = () => setDatePickerVisible( true );
 	const hideDatePicker = () => setDatePickerVisible( false );
 
-	const handleConfirm = ( date ) => 
+	const handleConfirm = ( date ) =>
 	{
-		setEntityData( updateStateData( 'dob', date.toISOString().slice( 0,10), entityData ));
+		setTempEntityData( prev => ({ ...prev, 'dob': date.toISOString().slice( 0,10 )}));
 		hideDatePicker();
 	};
-	// Date Picker /\	
 
 
-		// Form Validation  \/
-	// Form Validation ( Must (minimally) have a name )   
-	const [ entityName, setEntityName ] = useState( entityData[0]?.entity_name ? entityData[0].entity_name : '' );
+	// Form Validation ( Must (minimally) have a name )
+	const [ entityName, setEntityName ] = useState( tempEntityData?.entity_name ? tempEntityData.entity_name : '' );
 
 	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
 
-		useEffect(() => 
-		{
-			validateForm();
-		}, [entityName ]);
-
-		
-		const validateForm = ( ) => 
-		{	
-			let errors = {};
-
-        // Validate name field
-        if ( entityName == '')     errors.entityName = 'Name is required.'; 
-
-        // Set the errors and update form validity
-        setErrors( errors );
-        setIsFormValid(Object.keys( errors ).length === 0);
-    };
-	// Form Validation  /\
-
-
-
-
-	//  Close / Save button handler for Edit modal
-	function handlePress( )
+	useEffect(() =>
 	{
-		// Only triggers save( insert/update ) if minimum entered (or already exists )
-		if ( !isFormValid )    setShowValidationError( true );	
-		else
-		{
-			// Only save if changes have been made
-			if (JSON.stringify( entityData ) !== JSON.stringify( tempEntityData ) &&  tempEntityData != undefined )
-			{
-				saveToDB( );
-			}
+		validateForm();
+	}, [entityName ]);
 
+	const validateForm = ( ) =>
+	{	
+		let errors = {};
+
+		// Validate name field
+		if ( entityName == '')     errors.entityName = 'Name is required.';
+
+		setErrors( errors );
+		setIsFormValid(Object.keys( errors ).length === 0);
+	};
+
+
+	// Close / Save button handler for Edit modal
+	function handlePress( close )
+	{		
+		// Don't save if changes have not been made
+		if (JSON.stringify( entityData ) === JSON.stringify( tempEntityData ) || close == true )
+		{
 			setEditPersonVisible( false );
 			setEntityName( '' );
 			setTempEntityData( );
 		}
+
+		if ( isFormValid )
+		{
+			saveToDB( 'Person', tempEntityData, loadEntityData, false );
+			setEditPersonVisible( false );
+			setEntityName( '' );
+			setTempEntityData( );
+		}
+		else    setShowValidationError( true );
 	}
 
 
 	return(
-		<View style={ styles.container }>
+		<View style={ styles.edit_container }>
 			<View style={ styles.data_container }>
-			{ 
-				<View>
-				{  
-					entityData.map( person => 
-					<View key={person.entity_id}>
-						<TextInput					
-							accessibilityLabel='Name'			
+					<View>
+						<TextInput
+							accessibilityLabel='Full user name'
 							style={ styles.text_input }
-							placeholder={ person.entity_name ?  person.entity_name :  'Full Name' }
-							//left={<TextInput.Icon icon="account-circle" />}
-							onChangeText={ ( text ) => setEntityData(  updateStateData( 'entity_name', text, entityData ))}
+							placeholder={ tempEntityData?.entity_name ? tempEntityData.entity_name : 'Full Name' }
+							onChangeText={ ( text ) =>
+							{
+								setEntityName( text );
+								setTempEntityData( prev => ({ ...prev, 'entity_name': text }))
+								setTempEntityData( prev => ({ ...prev, 'entity_name': text }))
+							}}
 						/>
-
 
 
 						<TouchableHighlight
-							accessibilityLabel="Date picker"
-							accessibilityHint="Touch to open date picker for date of birth."
-							onPress={ showDatePicker } 
+							accessibilityLabel='Date picker'
+							accessibilityHint='Touch to open date picker for date of birth.'
+							onPress={ showDatePicker }
 							style={ styles.menu }
 							underlayColor={ underlay_color }
 						>
-							<Text style={[ styles.text_input, styles.menu_text ]}>{ person.dob ?  person.dob :  'Date of birth' }</Text>
-						</TouchableHighlight> 
+							<Text style={[ styles.text_input, styles.menu_text ]}>{ tempEntityData?.dob ? tempEntityData.dob : 'Date of birth' }</Text>
+						</TouchableHighlight>
 						
 						<DateTimePickerModal
 							isVisible={ datePickerVisible }
-							mode="date"
+							mode='date'
 							onConfirm={ handleConfirm }
 							onCancel={ hideDatePicker }
-							// display={'spinner'}
 						/>
 
+
 						<View style={ styles.picker_view }>
-						{/* <Image source={lily_pad} style={{height: 20, width: 20}} /> */}
-						{/* @react-native-picker/picker  ~~~ */}
 							<Picker
 								accessibilityLabel='Sex menu'
+								accessibilityHint='Select you sex.'
 								style={ styles.picker }
-								selectedValue={ person.sex ?  person.sex :  'Sex'  }
-								onValueChange={( itemValue ) => setEntityData( updateStateData( 'sex', itemValue, entityData ))}	
+								selectedValue={ tempEntityData?.sex ? tempEntityData.sex : 'Sex' }
+								onValueChange={( itemValue ) =>setTempEntityData( prev => ({ ...prev, 'sex': itemValue }))}
 							>
-								<Picker.Item 
-									color='black' 
+								<Picker.Item
+									color='black'
 									enabled={ false }
-									label='Sex'  
-									value=''  
+									label='Sex'
+									value=''
 								/>
-								<Picker.Item 
+								<Picker.Item
 									accessibilityLabel='menuitem'
-									label='Male'  
-									value='Male'  
+									label='Male'
+									value='Male'
 								/>
-								<Picker.Item 
+								<Picker.Item
 									accessibilityLabel='menuitem'
-									label='Female'  
-									value='Female'  
+									label='Female'
+									value='Female'
 								/>
-								<Picker.Item 
+								<Picker.Item
 									accessibilityLabel='menuitem'
-									label='Prefer not to say.'  
-									value='Prefer not to say.'  
+									label='Prefer not to say.'
+									value='Prefer not to say.'
 								/>
 							</Picker>
 						</View>
 
-						{/* ~~~  { borderRadius: 5}  all seem to have rounded */}
+
 						<TextInput
-							accessibilityLabel='height'
-							style={[ styles.text_input,  ]}
-							placeholder={ person.height?  person.height :  'height' }
-							//left={<TextInput.Icon icon="account-circle" />}
-							onChangeText={ ( text ) => setEntityData( updateStateData( 'height', text, entityData ))}
+							accessibilityLabel='Height'
+							style={ styles.text_input }
+							placeholder={ tempEntityData?.height?tempEntityData.height :'height' }
+							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'height': text }))}
 						/>
 
 
 						<TextInput
 							accessibilityLabel='Weight'
 							style={ styles.text_input }
-							placeholder={ person.weight?  person.weight :  'weight' }
-							onChangeText={ ( text ) => setEntityData( updateStateData( 'weight', text, entityData ))}
-							// left={ <TextInput.Icon icon="account-circle" />}
+							placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
+							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
 						/>
 						
 
 
 						<View style={ styles.picker_view }>
-						{/* <Image source={lily_pad} style={{height: 20, width: 20}} /> */}
-						{/* @react-native-picker/picker */}
 							<Picker
-								accessibilityLabel='Blood type menu'
-								selectedValue={ person.blood_type?  person.blood_type :  ''  }
-								style={ styles.picker } 
-								onValueChange={( itemValue ) =>
-								{
-									setEntityData( updateStateData( 'blood_type', itemValue, entityData ))																
-								}}	
+								accessibilityLabel='Blood type menu.'
+								accessibilityHint='Select your blood type.'
+								selectedValue={ tempEntityData?.blood_type? tempEntityData.blood_type : '' }
+								style={ styles.picker }
+								onValueChange={( itemValue ) => setTempEntityData( prev => ({ ...prev, 'blood_type': itemValue }))}
 							>
 								<Picker.Item
 									color='black'
-									enabled={ false }								
+									enabled={ false }
 									label='Blood Type'
 									value=''
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='A+'
 									value='A+'
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='A-'
-									value='A-'					
+									value='A-'
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='B+'
 									value='B+'
 								/>
 								<Picker.Item
-									accessibilityLabel="menuitem"
+									accessibilityLabel='menuitem'
 									label='B-'
 									value='B-'
 								/>
 								<Picker.Item
-									accessibilityLabel="menuitem"
+									accessibilityLabel='menuitem'
 									label='AB+'
 									value='AB+'
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='AB-'
 									value='AB-'
 								/>
 								<Picker.Item
-									accessibilityLabel="menuitem"
+									accessibilityLabel='menuitem'
 									label='O+'
 									value='O+'
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='O-'
 									value='O-'
 								/>
-								<Picker.Item 
-									accessibilityLabel="menuitem"
+								<Picker.Item
+									accessibilityLabel='menuitem'
 									label='Unknown'
 									value='Unknown'
-								/> 
+								/>
 							</Picker>
 						</View>
 					</View>
-				)}
-				</View>
-			}
+
 
 				{/* Cancel/Save Button Row */}
 				<View style={ styles.save_row }>
 					{/* Cancel Button */}
 					<TouchableOpacity
-						accessibilityLabel='button'
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel editing.'
 						style={ styles.game_button_end }
-						onPress={ () => handlePress( )}
+						onPress={ () => handlePress( true )}
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
 					{/* Save Button */}
 					<TouchableOpacity
-						accessibilityLabel='button'
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save.'
 						style={ styles.game_button_end }
-						onPress={ () => handlePress( )}
+						onPress={ () => handlePress( false )}
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>	

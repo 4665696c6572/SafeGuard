@@ -5,7 +5,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import styles from "../../../styles/styles";
 
 
-export const Person = ( { entityData, nav }) => 
+export const Person = ({entityData, nav }) => 
 {
 	return (
 		<View style={{ marginVertical: 8 }}>
@@ -40,7 +40,7 @@ export const Person = ( { entityData, nav }) =>
 	);
 };
 
-export const MedicalCondition = ( { conditionData }) =>
+export const MedicalCondition = ({conditionData }) =>
 {
 	return (
 		<View style={{ marginVertical: 8 }}>
@@ -61,7 +61,7 @@ export const MedicalCondition = ( { conditionData }) =>
 	);
 };
 
-export const Medication = ( { doctorData, medicationData }) => 
+export const Medication = ({doctorData, medicationData }) => 
 {
 	return (
 		<View>
@@ -109,7 +109,7 @@ export const Medication = ( { doctorData, medicationData }) =>
 	);
 };
 
-export const Allergy = ( { allergyData }) =>
+export const Allergy = ({allergyData }) =>
 {
 	return (
 		<View style={{ marginVertical: 8 }}>
@@ -141,7 +141,7 @@ export const Allergy = ( { allergyData }) =>
 	);
 };
 
-export const HealthInsurance = ( { insuranceData }) =>
+export const HealthInsurance = ({insuranceData }) =>
 {
 	return (
 		<View style={{ marginVertical: 8 }}>
