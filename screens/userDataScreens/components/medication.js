@@ -55,7 +55,10 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 	);
 };
 
-export const ViewMedication = ({ doctorData, medicationData, medicationIndex, setEditMedicationVisible, setMedicationIndex, setTempMedicationData, setViewMedicationVisible }) =>
+export const ViewMedication = ({ 
+									doctorData, medicationData, medicationIndex, setEditMedicationVisible,
+									setMedicationIndex, setTempMedicationData, setViewMedicationVisible 
+								}) =>
 {
 	return (
 		<View style={ styles.container }>
@@ -121,7 +124,11 @@ export const ViewMedication = ({ doctorData, medicationData, medicationIndex, se
 
 
 
-export const EditMedication = ({ doctorData, isFormValid, medicationData, medicationIndex, saveToDB, setEditMedicationVisible, setIsFormValid, setMedicationData, setMedicationIndex, setTempMedicationData, tempMedicationData }) =>
+export const EditMedication = ({ 
+									doctorData, isFormValid, medicationData, medicationIndex, saveToDB,
+									setEditMedicationVisible, setIsFormValid, setMedicationData, 
+									setMedicationIndex, setTempMedicationData, tempMedicationData 
+								}) =>
 {
 
 	// Doctor Picker
