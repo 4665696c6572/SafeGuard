@@ -1,0 +1,292 @@
+import { Checkbox } from 'expo-checkbox';
+import { useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { TextInput } from 'react-native-paper';
+
+import styles from "../../../styles/styles.js";
+
+const underlay_color = '#d1dce4ff';
+
+export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setViewDoctorVisible }) =>
+{
+	return (
+		<ScrollView style={ styles.container }>
+			<View style={styles.data_container }>
+				<Text style={ styles.title_bar }>Doctors</Text>
+				{
+					doctorData.map(( doctor, i) =>
+					<View key={doctor.entity_id} style={ styles.text_list }>
+						<View style={{flex:0.9}}>
+								{ doctor?.entity_name ? <Text style={ styles.text }>{ doctor.entity_name }</Text> : null}
+						</View>
+
+						<TouchableOpacity
+							style={ styles.expand_button }
+							onPress={ ( ) =>
+							{
+								setDoctorIndex( i );
+								setViewDoctorVisible( true );
+							}}
+						>
+							<Text style={[ styles.text, { paddingRight: 5 }]}>{'< >'}</Text>
+						</TouchableOpacity>
+					</View>
+				)}
+
+
+				<TouchableOpacity
+					onPress={ ( ) => setEditDoctorVisible( true )}
+					style={ styles.data_button_size }
+				>
+					<Text style={styles.text_button}>Add new doctor</Text>
+				</TouchableOpacity>
+			</View>
+		</ScrollView>
+	);
+};
+
+
+
+
+export const ViewDoctor = ({
+								doctorData, doctorIndex, handleNavigation, setEditDoctorVisible,
+								setDoctorIndex, setTempDoctorData, setViewDoctorVisible
+							}) =>
+{
+	return (
+		<View style={ styles.container }>
+			<View style={ styles.data_container }>
+				<View style={ styles.heading_row }>
+					{ doctorData?.[doctorIndex]?.entity_name ? <Text style={ styles.heading_text }>{ doctorData[doctorIndex].entity_name }</Text> : null }
+
+					<TouchableOpacity
+						style={ styles.game_button_end }
+						onPress={ ( ) =>
+						{
+							setEditDoctorVisible( true );
+							setTempDoctorData({ ...doctorData[doctorIndex] });
+							setViewDoctorVisible( false );
+						}}
+					>
+						<Text style={[ styles.text_button, { paddingLeft: 5, paddingRight: 5 }]}>Edit</Text>
+					</TouchableOpacity>
+				</View>
+
+				{ doctorData?.[doctorIndex]?.specialty ? <Text style={ styles.text }>Specialty: { doctorData[doctorIndex].specialty }</Text> : null }
+				{ doctorData?.[doctorIndex]?.facility_name ? <Text style={ styles.text }>Facility name: { doctorData[doctorIndex].facility_name }</Text> : null }
+				{
+					doctorData?.[doctorIndex]?.current != null ?
+					<View>
+						{
+							doctorData?.[doctorIndex].current == true ?
+							<Text style={ styles.text }>I am currently seeing this doctor.</Text>
+							:
+							<Text style={ styles.text }>I am not currently seeing this doctor.</Text>
+						}
+					</View>
+				: null
+				}
+
+
+				
+				{/* Close/View Button Row */}
+				<View style={ styles.save_row }>
+				{/* Close Button */}
+				<TouchableOpacity
+					style={ styles.game_button_end }
+					onPress={ ( ) =>
+					{
+						setDoctorIndex( null );
+						setViewDoctorVisible( false );
+					}}
+				>
+					<Text style={ styles.save_button_text }>Close</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={ styles.game_button_end }
+					onPress={ ( ) =>
+					{
+						handleNavigation( doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name, doctorData?.[doctorIndex]?.facility_name );
+						setViewDoctorVisible( false );
+					}}
+				>
+					<Text style={ styles.save_button_text }>View facility details</Text>
+				</TouchableOpacity>
+				</View>
+			</View>
+		</View>
+	);
+};
+
+
+
+export const EditDoctor = ({
+								doctorData, doctorIndex, isFormValid, saveToDB, 
+								setEditDoctorVisible, setDoctorIndex, setIsFormValid, 
+								setTempDoctorData, setViewDoctorVisible, tempDoctorData
+							}) =>
+{
+
+	const [ currentDr, setCurrentDr ] = useState( tempDoctorData?.current ? tempDoctorData.current : false );
+
+	// Form Validation ( Must (minimally) have a name )
+	const [ doctorName, setDoctorName ] = useState( tempDoctorData?.entity_name ? tempDoctorData.entity_name : '' );
+	const [ showValidationError, setShowValidationError ] = useState( false );
+	const [ errors, setErrors ] = useState({ });
+
+
+	useEffect(() =>
+	{
+		validateForm( );
+	}, [ doctorName ]);
+
+
+	const validateForm = ( ) =>
+	{	
+		let errors = {};
+
+	// Validate name field
+	if ( doctorName == '')     errors.doctorName = 'Name is required.';
+
+	setErrors( errors );
+	setIsFormValid(Object.keys( errors ).length === 0);
+	};
+
+
+	const handlePress = ( close, shouldNavigate ) =>
+	{
+		let prev_data = ( doctorIndex != null ) ? JSON.stringify( doctorData[doctorIndex] ) : null;
+
+		if ( prev_data === JSON.stringify( tempDoctorData ) || close == true )
+		{
+			// View -> Edit -> Cancel / Save without changes ( reloads view )
+			if ( doctorData?.[doctorIndex]?.facility_id )    setViewDoctorVisible( true );
+			
+			// New -> Cancel
+			else    setDoctorIndex( null );
+
+			setDoctorName( '' );
+			setEditDoctorVisible( false );
+			setTempDoctorData( );
+			return;
+		}
+
+		// New / Edit -> Save / Next
+		if ( isFormValid )
+		{
+			
+			saveToDB( tempDoctorData, shouldNavigate );
+			setDoctorName( '' );
+			setEditDoctorVisible( false );
+			setDoctorIndex( null );
+			setTempDoctorData( );
+			return;
+		}
+
+		else    setShowValidationError( true );
+	}
+
+
+	return(
+		<View style={ styles.edit_container }>
+			<View style={ styles.data_container }>
+						<TextInput
+							accessibilityLabel="Doctor's name"
+							accessibilityHint='Enter name of doctor.'
+							placeholder={ tempDoctorData?.entity_name ? tempDoctorData.entity_name : "Doctor's name" }
+							style={ styles.text_input }
+							onChangeText={ ( text ) =>
+							{
+								setDoctorName( text );
+								setTempDoctorData( prev => ({ ...prev, 'entity_name': text }));
+								setTempDoctorData( prev => ({ ...prev, 'entity_type': 'Doctor' }));
+							}}
+						/>
+
+						<TextInput
+							accessibilityLabel='Specialty'
+							accessibilityHint="Enter doctor's specialty."
+							onChangeText={ ( text ) => setTempDoctorData( prev => ({ ...prev, 'specialty': text }))}
+							placeholder={ tempDoctorData?.specialty ? tempDoctorData.specialty : 'Specialty' }
+							style={ styles.text_input }
+						/>
+
+						
+						<TextInput
+							accessibilityLabel='Facility name'
+							accessibilityHint='Enter the name of the facility that the doctor works at.'
+							style={ styles.text_input }
+							onChangeText={ ( text ) => setTempDoctorData( prev => ({ ...prev, 'facility_name': text }))}
+							placeholder={ tempDoctorData?.facility_name ? tempDoctorData.facility_name : 'Facility name' }
+							textContentType='name'
+						/>
+
+
+						<View style={ styles.checkbox_row }>
+							<Text style={ styles.text }> This is a doctor I am currently seeing:</Text>
+							<Checkbox
+								accessibilityLabel='Current doctor'
+								accessibilityHint='Check the box if this is a doctor that you are currently a patient of.'								
+								color={ currentDr ? '#3087eb' : undefined}
+								value={ currentDr }
+								onValueChange={ ( ) =>
+								{
+									setCurrentDr( !currentDr );
+									setTempDoctorData( prev => ({ ...prev, 'current': !currentDr }));
+								}}
+							/>
+						</View>
+
+
+				{/* Cancel/Save Button Row */}
+				<View style={ styles.save_row }>
+					{/* Cancel Button */}
+					<TouchableOpacity
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel changes.'
+						style={ styles.game_button_end }
+						onPress={ ( ) => handlePress( true, false )}
+					>
+						<Text style={ styles.save_button_text }>Cancel</Text>
+					</TouchableOpacity>
+
+					
+					{/* Save Button */}
+					<TouchableOpacity
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save changes.'
+						style={ styles.game_button_end }
+						onPress={ ( ) => handlePress( false, false )}
+					>
+						<Text style={ styles.save_button_text }>Save</Text>
+					</TouchableOpacity>
+
+					{/* Next Button */}
+					{
+						!doctorData?.[doctorIndex]?.entity_id ?
+						<TouchableOpacity
+							accessibilityLabel='Contact details button'
+							accessibilityHint='Save and go to add contact detail screen.'
+							style={ styles.game_button_end }
+							onPress={ ( ) => handlePress( false, true )}
+						>
+							<Text style={ styles.save_button_text }>Next</Text>
+						</TouchableOpacity>
+					: null
+					}
+					
+				</View>
+
+				{/* Form Validation Error */}
+				{
+					showValidationError ?
+					<View style={{ alignItems: 'center'}}>
+						<Text style={ styles.allergy_alert }>{ errors.doctorName }</Text>
+					</View>
+				: null
+				}
+			</View>
+		</View>
+	)
+}

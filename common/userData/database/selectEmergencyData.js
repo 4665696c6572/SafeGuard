@@ -77,7 +77,8 @@ export default async function selectEmergencyData( db, table, condition )
 				FROM Doctor
 				LEFT JOIN Entity
 					ON Entity.entity_id = Doctor.doctor_id
-				WHERE Entity.entity_type = ?`,	
+				WHERE Entity.entity_type = ?
+				ORDER BY entity_name`,	
 				[ 'Doctor' ]
 			);
 		}
@@ -118,7 +119,8 @@ export default async function selectEmergencyData( db, table, condition )
 					ON Office.entity_id = insurance_id
 					AND Office.number_type = 'Office'
 				WHERE insurance_type = ?
-				GROUP BY insurance_id`, 
+				GROUP BY insurance_id
+				ORDER BY entity_name`, 
 				[ condition ]
 			);
 		}

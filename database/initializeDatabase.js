@@ -8,6 +8,10 @@ export default async function initializeDatabase( db )
 	{
 		await db.execAsync( 
 		`
+			DROP TABLE IF EXISTS Address;
+			DROP TABLE IF EXISTS Phone;
+			DROP TABLE IF EXISTS Email;
+
 			DROP TABLE IF EXISTS True_False_Data;
 			DROP TABLE IF EXISTS Multiple_Choice_Data;
 			DROP TABLE IF EXISTS Matching_Data;
@@ -30,7 +34,7 @@ export default async function initializeDatabase( db )
 			( 
 				entity_id    INTEGER    PRIMARY KEY,
 				entity_name    TEXT    NOT NULL    UNIQUE,
-				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business', 'Medical_Facility' ) )
+				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ) )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
@@ -47,11 +51,10 @@ export default async function initializeDatabase( db )
 			CREATE TABLE IF NOT EXISTS    Doctor
 			( 
 				doctor_id    INTEGER     PRIMARY KEY,
-				facility_id    INTEGER,
+				facility_name    TEXT,
 				specialty    TEXT,
 				current    INTEGER,
-				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id ),
-				FOREIGN KEY ( facility_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
 			); 
 
 			CREATE TABLE IF NOT EXISTS    Medical_Condition
@@ -63,14 +66,6 @@ export default async function initializeDatabase( db )
 				condition_note    TEXT,
 				is_allergy    INTEGER    NOT NULL,
 				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
-			);
-
-			CREATE TABLE IF NOT EXISTS    Allergy
-			( 
-				allergy_id    INTEGER    PRIMARY KEY,
-				allergen    TEXT,
-				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
-				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Medication
@@ -88,6 +83,14 @@ export default async function initializeDatabase( db )
 				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE RESTRICT
 			);
 
+			CREATE TABLE IF NOT EXISTS    Allergy
+			( 
+				allergy_id    INTEGER    PRIMARY KEY,
+				allergen    TEXT,
+				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
+				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
+			);
+
 			CREATE TABLE IF NOT EXISTS    Insurance
 			( 
 				insurance_id   INTEGER    PRIMARY KEY,
@@ -96,6 +99,16 @@ export default async function initializeDatabase( db )
 				insurance_note    TEXT,
 				insurance_type    TEXT    CHECK ( insurance_type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' )),
 				FOREIGN KEY ( insurance_id)    REFERENCES Entity( entity_id )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Phone
+			( 
+				phone_number_id    INTEGER    PRIMARY KEY,
+				entity_id    INTEGER,
+				phone_number    TEXT    NOT NULL,
+				number_type    TEXT    NOT NULL    CHECK ( number_type IN ( 'Cell', 'Fax', 'Home', 'Office', 'Other' )),
+				phone_number_note    TEXT,
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Address
@@ -120,19 +133,6 @@ export default async function initializeDatabase( db )
 				email_note    TEXT,
 				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
 			);
-
-			CREATE TABLE IF NOT EXISTS    Phone
-			( 
-				phone_number_id    INTEGER    PRIMARY KEY,
-				entity_id    INTEGER,
-				phone_number    TEXT    NOT NULL,
-				number_type    TEXT    NOT NULL    CHECK ( number_type IN ( 'Cell', 'Fax', 'Home', 'Office', 'Other' ) ),
-				phone_number_note    TEXT,
-				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id ),
-				UNIQUE ( entity_id, number_type )
-			);
-
-
 
 			CREATE TABLE IF NOT EXISTS    Game_Data
 			( 
@@ -167,56 +167,54 @@ export default async function initializeDatabase( db )
 				answer    TEXT,
 				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
+
+
 		` );
+		// User setup
+		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Full Name', 'Person' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id ) VALUES ( ? )', [ 1 ]);
 
 
 		// Demo Data
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Michael S. Baker', 'Person' ]);
+		await db.runAsync( 'UPDATE Entity SET entity_name = ? WHERE entity_id = ?;', [ 'Michael S. Baker', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Person ( person_id, dob, height, weight ) VALUES ( ?, ?, ?, ? )', [ 1, '1995-12-13', '181 cm', '83 kg' ]);
-		
-		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ "Dr. Smiths clinic", 'Medical_Facility' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) VALUES ( ?, ?, ? )', [ 2, '588-2300', 'Office']);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, '13731 S. Archer Avenue', 'Lemont', 'IL', '60439', 'USA' ]);
-
-		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES ( ?, ? )', [ 2, 'clinic@mail.com']);
-		
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Dr. Smith', 'Doctor' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id, facility_id, specialty, current ) VALUES ( ?, ?, ?, ? )', [ 3, 2, 'Pulmonologist', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id, facility_name, specialty, current ) VALUES ( ?, ?, ?, ? )', [ 2, "Dr. Smiths clinic", 'Pulmonologist', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, '13731 S. Archer Avenue', 'Lemont', 'IL', '60439', 'USA' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES ( ?, ? )', [ 2, 'clinic@mail.com']);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) VALUES ( ?, ?, ? )', [ 2, '588-2300', 'Office number']);
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 2, 'Chronic obstructive pulmonary disease', '2021-11-15', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 2, 1, 'Amoxicillin', '500 mg', '1 capsule every 12 hours', '2020-11-15', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 2, 1, 'Salbutamol', '20 mg', '2 puffs ( 200 mcg ) every 4-6 hours', '2020-11-15', 1 ]);
+
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 2, 'Condition 2', '2021-11-15', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 2, 2, 'Med 3', '50 mg', '1 capsule every 8 hours', '2020-11-15', 0 ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Dr. Parker', 'Doctor' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id,  specialty, current ) VALUES ( ?, ?, ? )', [ 4, 'Allergist', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Doctor ( doctor_id,  specialty, current ) VALUES ( ?, ?, ? )', [ 3, 'Allergist', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 3, '34', 'Lockport', 'IL', '60441', 'USA' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES (?, ? )', [ 3, 'user@email.com' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) Values ( ?, ?, ? )', [ 3, '1 (800) 555-3333', 'Office' ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 3, 'Chronic obstructive pulmonary disease', '2021-11-15', 0 ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 1, 'Salbutamol', '20 mg', '2 puffs ( 200 mcg ) every 4-6 hours', '2020-11-15', 1 ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 1, 'Amoxicillin', '500 mg', '1 capsule every 12 hours', '2020-11-15', 0 ]);
-
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( doctor_id, condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ?, ? )', [ 4, 'Condition 2', '2021-11-15', 0 ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 4, 2, 'Med 3', '50 mg', '1 capsule every 8 hours', '2020-11-15', 0 ]);
-	
 		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition ( condition_name, diagnosis_date, is_allergy ) VALUES ( ?, ?, ? )', [ 'Allergy', '2022-06-06', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 3, 'Nickel', 'Life Threatening' ]);
 
-		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition (  doctor_id, condition_name, is_allergy ) VALUES ( ?, ?, ? )', [ 4, 'Allergy', 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition (  doctor_id, condition_name, is_allergy ) VALUES ( ?, ?, ? )', [ 3, 'Allergy', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 4, 'Apple allergy', 'Mild' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 4, 4, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03', 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 4, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03', 0 ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'ABC Insurance', 'Business' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, '1789', 'Health' ]);
-
-		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, address_line_two, city, State, post_code, country, address_note ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )', [ 5, '23 Main Street', 'Unit 1', 'Lemont', 'IL', '44', 'USA', 'Office location' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, city, State, post_code, country ) VALUES ( ?, ?, ?, ?, ?, ? )', [ 2, '34', 'Lockport', 'IL', '60441', 'USA' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-1111', 'Office', 'Office number' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-2222', 'Fax', 'Fax' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type ) Values ( ?, ?, ? )', [ 3, '1 (800) 555-3333', 'Office' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email, email_note ) VALUES (?, ?, ? )', [ 5, 'abc@email.com', 'email note' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email ) VALUES (?, ? )', [ 3, 'user@email.com' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 4, '1789', 'Health' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Address ( entity_id, address_line_one, address_line_two, city, State, post_code, country, address_note ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )', [ 4, '23 Main Street', 'Unit 1', 'Lemont', 'IL', '44', 'USA', 'Office location' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Email ( entity_id, Email, email_note ) VALUES (?, ?, ? )', [ 4, 'abc@email.com', 'email note' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 4, '1 (800) 555-2222', 'Fax', 'Fax' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 4, '1 (800) 555-1111', 'Office', 'Office number' ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'DEF Insurance', 'Business' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 6, '1kifuj', 'Health' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 6, '1 (800) 555-4444', 'Office', 'Office number' ]);
-
-		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( User_ID ) VALUES ( ? )', [ 1 ]  );
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, 'A13989', 'Health' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-4444', 'Office', 'Office number' ]);
 
 		for ( const row of match_data ) { await db.runAsync(  match_insert, row ); }
 		for ( const row of mc_data ) { await db.runAsync( mc_insert, row ); }

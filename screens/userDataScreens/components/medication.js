@@ -30,7 +30,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 						}
 
 						<TouchableOpacity
-							style={{ fontSize: 18, flex: 0.1, alignItems: 'flex-end' }}
+							style={ styles.expand_button }
 							onPress={ ( ) => 
 							{
 								setViewMedicationVisible( true );
@@ -175,8 +175,6 @@ export const EditMedication = ({
 	};
 
 
-
-
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{	
@@ -223,17 +221,17 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication strength'
 					accessibilityHint='Enter strength of medication (example: 500 or 500mg).'
-					style={ styles.text_input }
 					placeholder={ tempMedicationData?.strength ? tempMedicationData.strength : 'Strength' }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'strength': text }))}
+					style={ styles.text_input }
 				/>
 
 				<TextInput
 					accessibilityLabel='Medication frequency'
 					accessibilityHint='Enter dosage frequency (example: every eight hours).'
-					style={ styles.text_input }
 					placeholder={ tempMedicationData?.frequency ? tempMedicationData.frequency : 'Frequency' }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'frequency': text }))}
+					style={ styles.text_input }
 				/>
 
 
@@ -277,9 +275,9 @@ export const EditMedication = ({
 				<TouchableHighlight
 					accessibilityLabel="Date picker"
 					accessibilityHint="Touch to open date picker for start date of medication."
-					onPress={ showDatePicker }
 					style={ styles.menu }
 					underlayColor={ underlay_color }
+					onPress={ showDatePicker }
 				>
 					<Text style={[ styles.text_input, styles.menu_text ]}>{ tempMedicationData?.start_date ? tempMedicationData.start_date : 'Start date:' }</Text>
 				</TouchableHighlight>
@@ -289,32 +287,31 @@ export const EditMedication = ({
 					isVisible={ datePickerVisible }
 					mode="date"
 					onConfirm={ handleConfirm }
-					onCancel={ hideDatePicker }					
+					onCancel={ hideDatePicker }
 				/>
 
 
+				<View style={ styles.checkbox_row }>
 				<TextInput
 					accessibilityLabel='Notes'
 					accessibilityHint='Enter medication relevant notes.'
+					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
-					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
 				/>
 
-
-				<View style={{flexDirection: 'row', paddingLeft: 5, alignItems: 'center'}}>
-				<Checkbox.Item
-					accessibilityLabel='Life-sustaining medication'
-					accessibilityHint='Check the box if this is a life-sustaining medication.'
-					label={'This a life-sustaining medication:'}
-					status={ lifeSustaining ? 'checked' : 'unchecked' }
-					onPress={ ( ) =>
-					{
-						setLifeSustaining( !lifeSustaining );
-						setTempMedicationData( prev => ({ ...prev, 'is_life_sustaining' : !lifeSustaining }));
-					}}
-				/>		
-			</View>
+					<Checkbox.Item
+						accessibilityLabel='Life-sustaining medication'
+						accessibilityHint='Check the box if this is a life-sustaining medication.'
+						label={'This a life-sustaining medication:'}
+						status={ lifeSustaining ? 'checked' : 'unchecked' }
+						onPress={ ( ) =>
+						{
+							setLifeSustaining( !lifeSustaining );
+							setTempMedicationData( prev => ({ ...prev, 'is_life_sustaining' : !lifeSustaining }));
+						}}
+					/>		
+				</View>
 
 				<TouchableOpacity // ~~~
 					onPress={ ( ) => { navigation.navigate( "DoctorScreen" ); }}
@@ -331,9 +328,8 @@ export const EditMedication = ({
 					<TouchableOpacity
 						accessibilityLabel='Close button'
 						accessibilityHint='Press to close medication details screen.'
-						style={ styles.game_button_end }
 						onPress={ ( ) => handlePress( true )}
-						
+						style={ styles.game_button_end }
 					>
 						<Text style={ styles.save_button_text }>Close</Text>
 					</TouchableOpacity>
@@ -343,11 +339,11 @@ export const EditMedication = ({
 					<TouchableOpacity
 						accessibilityLabel='save button'
 						accessibilityHint='Press to save medication details.'
-						style={ styles.game_button_end }
 						onPress={ ( ) => handlePress( )}
+						style={ styles.game_button_end }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
-					</TouchableOpacity>	
+					</TouchableOpacity>
 				</View>
 
 				{/* Form Validation Error */}

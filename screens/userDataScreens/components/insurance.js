@@ -23,7 +23,7 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 						<TouchableOpacity
 						accessibilityLabel='Expand button'
 						accessibilityHint='Press to view additional details.'
-							style={{ fontSize: 18, flex: 0.1, alignItems: 'flex-end' }}
+							style={ styles.expand_button }
 							onPress={ ( ) =>
 							{
 								setInsuranceIndex( i );

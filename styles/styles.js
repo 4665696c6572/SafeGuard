@@ -70,9 +70,7 @@ const styles = StyleSheet.create({
 	game_column:
 	{
 		flex: 1, 
-		// flexDirection: 'row', 
 		gap: '5%',
-		// backgroundColor: 'pink',
 		paddingBottom: '10%',
 		marginBottom: 0,
 		paddingTop: 0,
@@ -359,6 +357,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		paddingLeft: 10,
 		paddingRight: 10
+	},
+	 expand_button:
+	{
+		alignItems: 'flex-end',
+		fontSize: 18, 
+		flex: 0.1
+	},
+	checkbox_row:
+	{ 
+		flexDirection: 'row', 
+		justifyContent: 'space-between',
+		marginBottom: 30, 
+		marginTop: 30 
 	}
 });
 
