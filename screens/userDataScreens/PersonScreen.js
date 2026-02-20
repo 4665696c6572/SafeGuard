@@ -67,7 +67,7 @@ const PersonScreen = ({ navigation, route }) =>
 				id = await insertEmergencyData( table, data, db );
 			}
 
-			// if ( shouldNavigate ) handleNavigation( id, data.entity_name )
+			if ( shouldNavigate )    handleNavigation( id, data.entity_name );
 		}
 	loadData( );
 	}

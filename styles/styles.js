@@ -4,16 +4,16 @@ const screen_width = Dimensions.get('screen').width;
 const button_size = Dimensions.get('screen').width * 0.33;
 
 const styles = StyleSheet.create({
-	container: 
-	{ 
+	container:
+	{
 		flex: 1,
-		backgroundColor: '#d1dce4ff', 
+		backgroundColor: '#d1dce4ff',
 		paddingTop: '10%'
 	},
 	edit_container:
 	{
 		flex: 1,
-		backgroundColor: '#d1dce4ff', 
+		backgroundColor: '#d1dce4ff',
 		paddingTop: '2%'
 	},
 	data_container:
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 		marginLeft: '4%',
 		marginRight: '4%',
 	},
-	game_area: 
+	game_area:
 	{
 		marginBottom: '10%',
 		justifyContent: 'center',
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
 	game_box_small: // 2 columns
 	{
 		borderRadius: 20,
-		width: '45%', 
-		height: '80%', 
+		width: '45%',
+		height: '80%',
 		justifyContent: 'center',
 		alignItems: 'center',
 		paddingBottom: 0,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 	{
 		borderRadius: 20,
 
-		height: '17%', 
+		height: '17%',
 		// width: '90%',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -65,12 +65,14 @@ const styles = StyleSheet.create({
 	},
 	game_box_active:
 	{
-		backgroundColor: '#2f73ccff', 
+		backgroundColor: '#2f73ccff',
 	},
 	game_column:
 	{
-		flex: 1, 
+		flex: 1,
+		// flexDirection: 'row',
 		gap: '5%',
+		// backgroundColor: 'pink',
 		paddingBottom: '10%',
 		marginBottom: 0,
 		paddingTop: 0,
@@ -78,8 +80,8 @@ const styles = StyleSheet.create({
 	},
 	game_row:
 	{
-		flex: 1, 
-		flexDirection: 'row', 
+		flex: 1,
+		flexDirection: 'row',
 		gap: '10%',
 		paddingBottom: 0,
 		marginBottom: 0,
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
 	},
 	game_box_selected:
 	{
-		backgroundColor: '#1152a7ff', 
+		backgroundColor: '#1152a7ff',
 		opacity: 1,
 		borderColor: 'white',
 		borderWidth: 2
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		marginBottom: '5%',
 		gap: '25%'
-	}, 
+	},
 	multiple_choice_question:
 	{
 		justifyContent: 'flex-start',
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
 		fontSize: 26,
 		fontWeight: '900',
 	},
-	category: 
+	category:
 	{
 		marginBottom: 10,
 		fontSize: 18,
@@ -163,14 +165,14 @@ const styles = StyleSheet.create({
 		width: button_size,
 		borderRadius: '50%',
 		backgroundColor: 'blue',
-		justifyContent: 'center', 
+		justifyContent: 'center',
 		alignContent: 'center',
 		
 	},
 	game_button_center:
 	{
 		flexDirection: 'row',
-		justifyContent: 'center', 
+		justifyContent: 'center',
 			// alignContent: 'center',
 		// alignSelf: 'center'
 		// backgroundColor: 'pink',
@@ -182,11 +184,6 @@ const styles = StyleSheet.create({
 	{
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
-		// alignSelf: 'flex-end'
-		// alignContent: 'flex_end',
-		// alignItems: 'flex-end'
-		// backgroundColor: 'orange'
-		
 	},
 	game_button_text:
 	{
@@ -204,7 +201,7 @@ const styles = StyleSheet.create({
 	},
 	blue_01:
 	{
-		backgroundColor: '#63edffff', 
+		backgroundColor: '#63edffff',
 	},
 	blue_02:
 	{
@@ -212,52 +209,51 @@ const styles = StyleSheet.create({
 	},
 	progress_bar:
 	{
-		paddingLeft: screen_width * 0.10,
-		// paddingRight: screen_width * 0.05,
+		paddingLeft: screen_width * 0.10
 	},
 	progress_bar_container: // Games
 	{
-		flexDirection:'row', 
+		flexDirection:'row',
 		height: 25,
 		justifyContent: 'space-between'
 	},
 	scroll_bar: // Emergency Data Form
 	{
 		flexDirection: 'row',
-		flex: 0.1, 
-		backgroundColor: '#DBE2E9', 
-		alignContent: 'flex-end', 
-		marginBottom: '12%' 
+		flex: 0.1,
+		backgroundColor: '#DBE2E9',
+		alignContent: 'flex-end',
+		marginBottom: '12%'
 	},
-	scroll_bar_button: 
+	scroll_bar_button:
 	{
-		width: screen_width / 3, 
-		justifyContent: 'center', 
-		borderColor: 'blue', 
+		width: screen_width / 3,
+		justifyContent: 'center',
+		borderColor: 'blue',
 		borderWidth: 2,
-		paddingLeft: 2, 
+		paddingLeft: 2,
 		paddingRight: 2
-	}, 
+	},
 	accordion_list:
 	{
 		backgroundColor: '#d1dce4ff',
-		marginLeft: '10%', 
+		marginLeft: '10%',
 		width: '80%',
-		fontSize: 30		
+		fontSize: 30
 	},
 	picker_view:
 	{
 		backgroundColor: '#d1dce4ff',
-		borderBottomWidth: 0.75,  
+		borderBottomWidth: 0.75, 
 		paddingLeft: 22,
 		paddingRight: 15,
 	},
 	picker:
 	{
 		color: '#454545',
-		width: '95%' 
+		width: '95%'
 	},
-	allergy_alert:
+	alert:
 	{
 		color: 'rgb(126, 4, 4)',
 		fontWeight: 900
@@ -265,25 +261,25 @@ const styles = StyleSheet.create({
 	menu:
 	{
 		backgroundColor: '#d1dce4ff',
-		borderBottomWidth: 0.75,		
+		borderBottomWidth: 0.75,
 		paddingBottom: 20,
 		paddingLeft: 15,
 		paddingTop: 15,
 	},
 	menu_text:
 	{
-		color: '#454545' 
+		color: '#454545'
 	},
 	text_input:
 	{
 		backgroundColor: '#d1dce4ff',
-		color: '#000', 
-		fontSize: 17, 
+		color: '#000',
+		fontSize: 17,
 		fontWeight: 400,
 		paddingLeft: 15
 		
 	},
-	text_line: 
+	text_line:
 	{
 		paddingBottom: 20,
 		paddingLeft: 15,
@@ -303,9 +299,9 @@ const styles = StyleSheet.create({
 	},
 	title_bar:
 	{
-		borderBottomWidth: 2, 
+		borderBottomWidth: 2,
 		borderColor: 'blue',
-		fontSize: 22, 
+		fontSize: 22,
 		marginBottom: 10,
 		paddingBottom: 2
 	},
@@ -319,16 +315,16 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		marginBottom: 3
 	},
-	heading_row: 
+	heading_row:
 	{
-		flexDirection: 'row', justifyContent: 'space-between'
+		flexDirection: 'row',
+		justifyContent: 'space-between'
 	},
 	save_row:
 	{
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		gap: 5,
-		justifyContent: 'space-between', 
-		// justifyContent: 'space-around', ~~~
+		justifyContent: 'space-between',
 		marginTop: 20,
 		marginLeft: 20,
 		marginRight: 20
@@ -338,7 +334,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		marginTop: 20,
 	},
-	row_height: 
+	row_height:
 	{
 		height: 40
 	},
@@ -351,6 +347,7 @@ const styles = StyleSheet.create({
 	},
 	text_list:
 	{
+		alignItems: 'center',
 		borderBottomWidth: 0.75,
 		flexDirection: 'row',
 		height: 50,
@@ -358,23 +355,32 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		paddingRight: 10
 	},
-	 expand_button:
+	expand_button:
 	{
 		alignItems: 'flex-end',
-		fontSize: 18, 
-		flex: 0.1
+		fontSize: 18,
+		flex: 0.1,
+		marginRight: 5
+	},
+	contact_button:
+	{
+		marginBottom: 5,
+		marginTop: 5,
+		paddingBottom: 5,
+		paddingTop: 5
+	},
+	alert_row:
+	{
+		alignItems: 'center',
+		paddingTop: 20
 	},
 	checkbox_row:
 	{ 
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 30, 
-		marginTop: 30 
+		marginBottom: 30,
+		marginTop: 30
 	}
 });
-
-
-
-
 
 export default styles;

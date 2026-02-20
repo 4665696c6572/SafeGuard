@@ -20,8 +20,8 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 						{
 							medication.is_life_sustaining == 1 ?
 							<View style={{flex:0.9}}>
-								<Text style={[ styles.text, styles.allergy_alert ]}>Life Sustaining Medication</Text>
-								{ medication?.medication_name ? <Text style={[ styles.text, styles.allergy_alert ]}>{ medication.medication_name } {medication?.strength}</Text> : null }
+								<Text style={[ styles.text, styles.alert ]}>Life Sustaining Medication</Text>
+								{ medication?.medication_name ? <Text style={[ styles.text, styles.alert ]}>{ medication.medication_name } {medication?.strength}</Text> : null }
 							</View>
 							:
 							<View style={{flex:0.9}}>
@@ -37,7 +37,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 								setMedicationIndex( i );
 							}}
 						>
-							<Text style={[ styles.text, { paddingRight: 5 }]}>{'< >'}</Text>
+							<Text style={ styles.text }>{'< >'}</Text>
 						</TouchableOpacity>
 					{/* </Cell> */}
 					</View>
@@ -68,8 +68,8 @@ export const ViewMedication = ({
 				{
 					medicationData?.[medicationIndex].is_life_sustaining == 1 ?
 					<View>
-						<Text style={[ styles.heading_text, styles.allergy_alert ]}>Life Sustaining Medication</Text>
-						{ medicationData?.[medicationIndex].medication_name ? <Text style={[ styles.heading_text, styles.allergy_alert ]}>{ medicationData?.[medicationIndex].medication_name }</Text> : null }
+						<Text style={[ styles.heading_text, styles.alert ]}>Life Sustaining Medication</Text>
+						{ medicationData?.[medicationIndex].medication_name ? <Text style={[ styles.heading_text, styles.alert ]}>{ medicationData?.[medicationIndex].medication_name }</Text> : null }
 					</View>
 					:
 					<View>
@@ -349,8 +349,8 @@ export const EditMedication = ({
 				{/* Form Validation Error */}
 				{
 					showValidationError ?
-					<View style={{ alignItems: 'center'}}>
-						<Text style={ styles.allergy_alert }>{ errors.medicationName }</Text>
+					<View style={ styles.alert_row }>
+						<Text style={ styles.alert }>{ errors.medicationName }</Text>
 					</View>
 				: null
 				}

@@ -5,7 +5,6 @@ import { TextInput } from 'react-native-paper';
 
 import styles from "../../../styles/styles.js";
 
-const underlay_color = '#d1dce4ff';
 
 export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setViewDoctorVisible }) =>
 {
@@ -28,7 +27,7 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 								setViewDoctorVisible( true );
 							}}
 						>
-							<Text style={[ styles.text, { paddingRight: 5 }]}>{'< >'}</Text>
+							<Text style={ styles.text }>{'< >'}</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -111,7 +110,7 @@ export const ViewDoctor = ({
 						setViewDoctorVisible( false );
 					}}
 				>
-					<Text style={ styles.save_button_text }>View facility details</Text>
+					<Text style={ styles.save_button_text }>View contact details</Text>
 				</TouchableOpacity>
 				</View>
 			</View>
@@ -281,8 +280,8 @@ export const EditDoctor = ({
 				{/* Form Validation Error */}
 				{
 					showValidationError ?
-					<View style={{ alignItems: 'center'}}>
-						<Text style={ styles.allergy_alert }>{ errors.doctorName }</Text>
+					<View style={ styles.alert_row }>
+						<Text style={ styles.alert }>{ errors.doctorName }</Text>
 					</View>
 				: null
 				}

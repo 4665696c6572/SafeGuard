@@ -76,8 +76,8 @@ export const Medication = ({doctorData, medicationData }) =>
 						{
 							medication.is_life_sustaining == 1 ?
 							<View>
-								<Text style={[ styles.text, styles.allergy_alert ]}>Life Sustaining Medication</Text>
-								{ medication?.medication_name ? <Text style={[ styles.heading_text, styles.allergy_alert ]}>{ medication.medication_name }</Text> : null }
+								<Text style={[ styles.text, styles.alert ]}>Life Sustaining Medication</Text>
+								{ medication?.medication_name ? <Text style={[ styles.heading_text, styles.alert ]}>{ medication.medication_name }</Text> : null }
 							</View>
 							:
 							<View>
@@ -123,8 +123,8 @@ export const Allergy = ({allergyData }) =>
 					{
 						allergy.severity == 'Life Threatening' ?
 						<View>
-							{ allergy.severity ? <Text style={[ styles.text, styles.allergy_alert ]}>{ allergy.severity } Allergy</Text> : null }
-							{ allergy.allergen ? <Text style={[ styles.text, styles.allergy_alert ]}>{ allergy.allergen }</Text> : null }
+							{ allergy.severity ? <Text style={[ styles.text, styles.alert ]}>{ allergy.severity } Allergy</Text> : null }
+							{ allergy.allergen ? <Text style={[ styles.text, styles.alert ]}>{ allergy.allergen }</Text> : null }
 						</View>
 						:
 						<View>

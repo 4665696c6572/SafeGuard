@@ -1,3 +1,5 @@
+import splitData from "../splitData";
+
 export default async function selectEmergencyData( db, table, condition )
 {
 	try
@@ -23,7 +25,7 @@ export default async function selectEmergencyData( db, table, condition )
 
 		if ( table == 'Contact' )
 		{	
-			var contact = await db.getAllAsync(
+			var contact =	 await db.getAllAsync(
 			`
 			SELECT
 				Entity.entity_id AS entity_id,
@@ -200,11 +202,11 @@ export default async function selectEmergencyData( db, table, condition )
 
 
 		if ( table == 'Allergy' )    return allergy;
-		if ( table == 'Contact' )    return contact;
+		if ( table == 'Contact' )    return splitData( contact, condition );
 		if ( table == 'Doctor' || table == 'Doctor_Name' )    return doctor;
 		if ( table == 'Insurance' )    return insurance;
 		if ( table == 'Medical_Condition' )    return medical_condition;
-		if ( table == 'Medication' || table == 'Medication_Name' )    return medication;
+		if ( table == 'Medication' ||  table == 'Medication_Name' )    return medication;
 		if ( table == 'Person' ) return person;
 
 

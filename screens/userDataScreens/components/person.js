@@ -185,8 +185,8 @@ export const EditPerson = ({
 							onChangeText={ ( text ) =>
 							{
 								setEntityName( text );
-								setTempEntityData( prev => ({ ...prev, 'entity_name': text }))
-								setTempEntityData( prev => ({ ...prev, 'entity_name': text }))
+								setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
+								setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
 							}}
 						/>
 
@@ -349,8 +349,8 @@ export const EditPerson = ({
 				{/* Form Validation Error */}
 				{
 					showValidationError ?
-					<View style={{ alignItems: 'center'}}>
-						<Text style={ styles.allergy_alert }>{ errors.entityName }</Text>
+					<View style={ styles.alert_row }>
+						<Text style={ styles.alert }>{ errors.entityName }</Text>
 					</View>
 				: null
 				}

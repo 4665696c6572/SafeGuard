@@ -30,7 +30,7 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 								setViewInsuranceVisible( true );
 							}}
 						>
-							<Text style={[ styles.text, { paddingRight: 5 }]}>{'< >'}</Text>
+							<Text style={ styles.text }>{'< >'}</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -290,11 +290,8 @@ export const EditInsurance = ({
 				{/* Form Validation Error */}
 				{
 					showValidationError ?
-					<View
-						accessibilityLabel='Form error.'
-						style={{ alignItems: 'center'}}
-					>
-						<Text style={ styles.allergy_alert }>{ errors.companyName }</Text>
+					<View style={ styles.alert_row }>
+						<Text style={ styles.alert }>{ errors.companyName }</Text>
 					</View>
 				: null
 				}

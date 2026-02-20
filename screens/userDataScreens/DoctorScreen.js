@@ -22,7 +22,7 @@ const DoctorScreen = ({ navigation, route }) =>
 	const [ editDoctorVisible, setEditDoctorVisible ] = useState( params?.visible ?? false );
 	const [ viewDoctorVisible, setViewDoctorVisible ] = useState( false );
 
-	const [ doctorIndex, setDoctorIndex ] = useState( null )
+	const [ doctorIndex, setDoctorIndex ] = useState( null );
 	const [ tempDoctorData, setTempDoctorData ] = useState( );
 
 	const [ isFormValid, setIsFormValid ] = useState( false );
@@ -50,7 +50,7 @@ const DoctorScreen = ({ navigation, route }) =>
 		}
 		loadDoctorData( );
 
-		if ( shouldNavigate ) handleNavigation( id, data.entity_name, data?.facility_name )
+		if ( shouldNavigate )    handleNavigation( id, data.entity_name, data?.facility_name );
 	}
 
 

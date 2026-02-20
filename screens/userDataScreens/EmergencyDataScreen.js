@@ -22,7 +22,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 		{
 			if ( isFocused )
 			{
-				loadEmergencyData();
+				loadEmergencyData( );
 			}
 	}, [ isFocused ]);
 

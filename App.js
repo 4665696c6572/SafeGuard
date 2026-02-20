@@ -15,6 +15,7 @@ import HomeScreen from './screens/HomeScreen.js';
 import EmergencyDataScreen from './screens/userDataScreens/EmergencyDataScreen.js';
 
 import AllergyScreen from './screens/userDataScreens/AllergyScreen.js';
+import ContactScreen from './screens/userDataScreens/ContactScreen.js';
 import DoctorScreen from './screens/userDataScreens/DoctorScreen.js';
 import InsuranceScreen from './screens/userDataScreens/InsuranceScreen.js';
 import MedicalConditionScreen from './screens/userDataScreens/MedicalConditionScreen.js';
@@ -81,7 +82,7 @@ function TabNavigator()
 						<MaterialCommunityIcons name="account" size={size} color={color} />
 					),
 				}}
-			/>		
+			/>
 		</Tab.Navigator>
 		
 	)
@@ -115,10 +116,11 @@ export default function App()
 					<Stack.Screen name="MultipleChoiceScreen" component={ MultipleChoiceScreen }/>
 					<Stack.Screen name="TrueFalseScreen" component={ TrueFalseScreen }/>
 
-					<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>					
+					<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>
 					<Stack.Screen name="EmergencyDataFormScreen" component={ TabNavigator }/>
 
 					<Stack.Screen name="AllergyScreen" component={ AllergyScreen }/>
+					<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
 					<Stack.Screen name="InsuranceScreen" component={ InsuranceScreen }/>
 					<Stack.Screen name="DoctorScreen" component={ DoctorScreen }/>
 					<Stack.Screen name="PersonScreen" component={ PersonScreen }/>
