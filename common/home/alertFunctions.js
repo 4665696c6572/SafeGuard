@@ -8,8 +8,8 @@ export async function fetchAlertZone( location )
 	// ______________________________________________________________________
 
 	//  ____ US ____
-	// const lat =  location.coords.latitude;	//  ~~~~~~ in US ~~~~~~ 		
-	// const lon = location.coords.longitude;  //  ~~~~~~ in US ~~~~~~ 		
+	// const lat =  location.coords.latitude;	//  ~~~~~~ in US ~~~~~~ 	
+	// const lon = location.coords.longitude;  //  ~~~~~~ in US ~~~~~~ 	
 
 	// ____ Non-US ____
 
@@ -17,7 +17,7 @@ export async function fetchAlertZone( location )
 	const lon = -82.763710;
 
 	const url_zone = `https://api.weather.gov/points/${lat},${lon}`;
-	const result_zone = await fetch( url_zone ); 
+	const result_zone = await fetch( url_zone );
 	const zone = ( await result_zone.json())?.properties.forecastZone.slice( -6 );
 	return zone;
 }
@@ -25,19 +25,19 @@ export async function fetchAlertZone( location )
 
 export async function fetchAlertData( zone )
 {
-	// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`; 
+	// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`;
 
 	// By State is only for demonstration ( zone may not have any active alerts )
 	const url_alert =`https://api.weather.gov/alerts/active/area/FL`;  // State  /area/FL
 
 	const result_alert = await fetch( url_alert );
 
-	if ( !result_alert )  
-	{	
+	if ( !result_alert ) 
+	{
 		return false;
 	}
 
-	const alert_data = await result_alert.json();	
+	const alert_data = await result_alert.json();
 
 	return alert_data;
 }
@@ -57,7 +57,7 @@ export function findHighestSeverity( alert_data )
 		{
 			max_severity = severity[ alert_data.features[i].properties.severity ];
 			priority_alert_number = i;
-		}	
+		}
 	}
 
 	const alert_title = alert_data.features[ priority_alert_number ].properties.severity;
@@ -67,14 +67,14 @@ export function findHighestSeverity( alert_data )
 }
 
 
-export async function scheduleAlertNotification( alertData ) 
+export async function scheduleAlertNotification( alertData )
 {
 	await Notifications.scheduleNotificationAsync (
 	{
-		content: 
+		content:
 		{
 			title: alertData[0],
-			body: alertData[1]				
+			body: alertData[1]			
 		},
 		trigger: { seconds: 2, channelId: 'default' },
 	});

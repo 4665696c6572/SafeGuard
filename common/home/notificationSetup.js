@@ -6,7 +6,7 @@ export function notificationHandlerSetup()
 {
 	Notifications.setNotificationHandler (
 	{
-		handleNotification: async () => 
+		handleNotification: async () =>
 		({
 			shouldShowBanner: true,
 			shouldShowList: true,
@@ -20,7 +20,7 @@ export async function requestNotificationPermission()
 {
 	const { status } = await Notifications.requestPermissionsAsync();
 
-	if ( status !== 'granted' ) 
+	if ( status !== 'granted' )
 	{
 		console.log( 'Permission not granted' );
 		return;
@@ -30,9 +30,9 @@ export async function requestNotificationPermission()
 
 export async function setNotificationChannel()
 {
-	if ( Platform.OS === 'android' ) 
+	if ( Platform.OS === 'android' )
 	{
-		await Notifications.setNotificationChannelAsync( "default", 
+		await Notifications.setNotificationChannelAsync( "default",
 		{
 			name: "default",
 			importance: Notifications.AndroidImportance.MAX,

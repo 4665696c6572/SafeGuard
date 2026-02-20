@@ -8,7 +8,7 @@ export default function useLoadGameData( db )
 	const [ loadingData, setLoadingData ] = useState( true );
 
 	const loadData = useCallback(async () =>
-	{		
+	{	
 		try
 		{
 			const game_data = await selectGameData( db );

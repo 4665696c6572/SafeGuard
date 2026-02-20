@@ -39,7 +39,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 			emergencyData.email_id
 		],
 
-		Entity: 
+		Entity:
 		[
 			emergencyData.entity_name,
 			emergencyData.entity_id ?? emergencyData.insurance_id
@@ -56,7 +56,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 		Insurance:
 		[
 			emergencyData.policy_number,
-			emergencyData.start_date, 
+			emergencyData.start_date,
 			emergencyData.insurance_note,
 			emergencyData.insurance_type,
 			emergencyData.insurance_id
@@ -64,7 +64,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 
 		Medical_Condition:
 		[
-			emergencyData.condition_name, 
+			emergencyData.condition_name,
 			emergencyData.diagnosis_date,
 			emergencyData.doctor_id,
 			emergencyData.condition_note,
@@ -73,8 +73,8 @@ export default async function updateEmergencyData( table, emergencyData, db )
 
 		Medication:
 		[
-			emergencyData.doctor_id, 
-			emergencyData.condition_id, 
+			emergencyData.doctor_id,
+			emergencyData.condition_id,
 			emergencyData.medication_name,
 			emergencyData.strength,
 			emergencyData.frequency,
@@ -84,7 +84,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 			emergencyData.medication_id
 		],
 
-		Person: 
+		Person:
 		[
 			emergencyData.dob,
 			emergencyData.sex,
@@ -115,7 +115,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 				state = ?,
 				post_code = ?,
 				country = ?,
-				address_note = ? 
+				address_note = ?
 			WHERE address_id = ?
 		`,
 
@@ -181,7 +181,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 			UPDATE Medication
 			SET
 				doctor_id = ?,
-				condition_id = ?, 
+				condition_id = ?,
 				medication_name = ?,
 				strength = ?,
 				frequency = ?,
@@ -194,7 +194,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 		Person:
 		`
 			UPDATE Person
-			SET 
+			SET
 				dob = ?,
 				sex = ?,
 				height = ?,

@@ -9,38 +9,40 @@ import styles from "../../../styles/styles.js";
 export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setViewDoctorVisible }) =>
 {
 	return (
-		<ScrollView style={ styles.container }>
+		<View style={ styles.container }>
 			<View style={styles.data_container }>
 				<Text style={ styles.title_bar }>Doctors</Text>
-				{
-					doctorData.map(( doctor, i) =>
-					<View key={doctor.entity_id} style={ styles.text_list }>
-						<View style={{flex:0.9}}>
-								{ doctor?.entity_name ? <Text style={ styles.text }>{ doctor.entity_name }</Text> : null}
+					<ScrollView>
+					{
+						doctorData.map(( doctor, i) =>
+						<View key={doctor.entity_id} style={ styles.text_list }>
+							<View style={{flex:0.9}}>
+									{ doctor?.entity_name ? <Text style={ styles.text }>{ doctor.entity_name }</Text> : null}
+							</View>
+
+							<TouchableOpacity
+								style={ styles.expand_button }
+								onPress={ ( ) =>
+								{
+									setDoctorIndex( i );
+									setViewDoctorVisible( true );
+								}}
+							>
+								<Text style={ styles.text }>{'< >'}</Text>
+							</TouchableOpacity>
 						</View>
-
-						<TouchableOpacity
-							style={ styles.expand_button }
-							onPress={ ( ) =>
-							{
-								setDoctorIndex( i );
-								setViewDoctorVisible( true );
-							}}
-						>
-							<Text style={ styles.text }>{'< >'}</Text>
-						</TouchableOpacity>
-					</View>
-				)}
+					)}
 
 
-				<TouchableOpacity
-					onPress={ ( ) => setEditDoctorVisible( true )}
-					style={ styles.data_button_size }
-				>
-					<Text style={styles.text_button}>Add new doctor</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						onPress={ ( ) => setEditDoctorVisible( true )}
+						style={ styles.data_button_size }
+					>
+						<Text style={styles.text_button}>Add new doctor</Text>
+					</TouchableOpacity>
+				</ScrollView>
 			</View>
-		</ScrollView>
+		</View>
 	);
 };
 
@@ -55,22 +57,7 @@ export const ViewDoctor = ({
 	return (
 		<View style={ styles.container }>
 			<View style={ styles.data_container }>
-				<View style={ styles.heading_row }>
-					{ doctorData?.[doctorIndex]?.entity_name ? <Text style={ styles.heading_text }>{ doctorData[doctorIndex].entity_name }</Text> : null }
-
-					<TouchableOpacity
-						style={ styles.game_button_end }
-						onPress={ ( ) =>
-						{
-							setEditDoctorVisible( true );
-							setTempDoctorData({ ...doctorData[doctorIndex] });
-							setViewDoctorVisible( false );
-						}}
-					>
-						<Text style={[ styles.text_button, { paddingLeft: 5, paddingRight: 5 }]}>Edit</Text>
-					</TouchableOpacity>
-				</View>
-
+				{ doctorData?.[doctorIndex]?.entity_name ? <Text style={ styles.heading_text }>{ doctorData[doctorIndex].entity_name }</Text> : null }
 				{ doctorData?.[doctorIndex]?.specialty ? <Text style={ styles.text }>Specialty: { doctorData[doctorIndex].specialty }</Text> : null }
 				{ doctorData?.[doctorIndex]?.facility_name ? <Text style={ styles.text }>Facility name: { doctorData[doctorIndex].facility_name }</Text> : null }
 				{
@@ -87,31 +74,49 @@ export const ViewDoctor = ({
 				}
 
 
-				
-				{/* Close/View Button Row */}
-				<View style={ styles.save_row }>
-				{/* Close Button */}
 				<TouchableOpacity
-					style={ styles.game_button_end }
-					onPress={ ( ) =>
-					{
-						setDoctorIndex( null );
-						setViewDoctorVisible( false );
-					}}
-				>
-					<Text style={ styles.save_button_text }>Close</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					style={ styles.game_button_end }
+					accessibilityLabel='Contact details button'
+					accessibilityHint='Press to view insurance contact details.'
+					style={ styles.contact_button }
 					onPress={ ( ) =>
 					{
 						handleNavigation( doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name, doctorData?.[doctorIndex]?.facility_name );
 						setViewDoctorVisible( false );
 					}}
 				>
-					<Text style={ styles.save_button_text }>View contact details</Text>
+					<Text style={ styles.text_button }>View contact details</Text>
 				</TouchableOpacity>
+
+
+				{/* Close/Edit Button Row */}
+				<View style={ styles.save_row }>
+					{/* Close Button */}
+					<TouchableOpacity
+						accessibilityLabel='Close button'
+						accessibilityHint='Press to close doctor details screen.'
+						style={ styles.game_button_end }
+						onPress={ ( ) =>
+						{
+							setDoctorIndex( null );
+							setViewDoctorVisible( false );
+						}}
+					>
+						<Text style={ styles.save_button_text }>Close</Text>
+					</TouchableOpacity>
+
+					<TouchableOpacity
+						accessibilityLabel='Edit button'
+						accessibilityHint='Press to edit health insurance details.'
+						style={ styles.game_button_end }
+						onPress={ ( ) =>
+						{
+							setEditDoctorVisible( true );
+							setTempDoctorData({ ...doctorData[doctorIndex] });
+							setViewDoctorVisible( false );
+						}}
+					>
+						<Text style={ styles.save_button_text }>Edit</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
 		</View>
@@ -121,8 +126,8 @@ export const ViewDoctor = ({
 
 
 export const EditDoctor = ({
-								doctorData, doctorIndex, isFormValid, saveToDB, 
-								setEditDoctorVisible, setDoctorIndex, setIsFormValid, 
+								doctorData, doctorIndex, isFormValid, saveToDB,
+								setEditDoctorVisible, setDoctorIndex, setIsFormValid,
 								setTempDoctorData, setViewDoctorVisible, tempDoctorData
 							}) =>
 {
@@ -142,7 +147,7 @@ export const EditDoctor = ({
 
 
 	const validateForm = ( ) =>
-	{	
+	{
 		let errors = {};
 
 	// Validate name field
@@ -161,7 +166,7 @@ export const EditDoctor = ({
 		{
 			// View -> Edit -> Cancel / Save without changes ( reloads view )
 			if ( doctorData?.[doctorIndex]?.facility_id )    setViewDoctorVisible( true );
-			
+		
 			// New -> Cancel
 			else    setDoctorIndex( null );
 
@@ -174,7 +179,7 @@ export const EditDoctor = ({
 		// New / Edit -> Save / Next
 		if ( isFormValid )
 		{
-			
+		
 			saveToDB( tempDoctorData, shouldNavigate );
 			setDoctorName( '' );
 			setEditDoctorVisible( false );
@@ -211,7 +216,7 @@ export const EditDoctor = ({
 							style={ styles.text_input }
 						/>
 
-						
+					
 						<TextInput
 							accessibilityLabel='Facility name'
 							accessibilityHint='Enter the name of the facility that the doctor works at.'
@@ -223,11 +228,11 @@ export const EditDoctor = ({
 
 
 						<View style={ styles.checkbox_row }>
-							<Text style={ styles.text }> This is a doctor I am currently seeing:</Text>
+							<Text style={ styles.text }>This is a doctor I am currently seeing:</Text>
 							<Checkbox
 								accessibilityLabel='Current doctor'
-								accessibilityHint='Check the box if this is a doctor that you are currently a patient of.'								
-								color={ currentDr ? '#3087eb' : undefined}
+								accessibilityHint='Check the box if this is a doctor that you are currently a patient of.'							
+								color={ currentDr ? '#3087eb' : undefined }
 								value={ currentDr }
 								onValueChange={ ( ) =>
 								{
@@ -250,7 +255,7 @@ export const EditDoctor = ({
 						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
-					
+				
 					{/* Save Button */}
 					<TouchableOpacity
 						accessibilityLabel='Save button'
@@ -274,7 +279,7 @@ export const EditDoctor = ({
 						</TouchableOpacity>
 					: null
 					}
-					
+				
 				</View>
 
 				{/* Form Validation Error */}

@@ -14,12 +14,12 @@ export default function useLoadLevelData( db, screen_name, questions_per_level )
 		const formatted_data = await selectLevelData( db, screen_name, questions_per_level );
 
 		setLoadedData( formatted_data )
-		} 
+		}
 		catch ( error )
 		{
 		console.error( error );
-		} 
-		finally 
+		}
+		finally
 		{
 		setLoadingData( false );
 		}

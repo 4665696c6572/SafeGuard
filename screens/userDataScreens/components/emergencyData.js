@@ -5,16 +5,16 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import styles from "../../../styles/styles";
 
 
-export const Person = ({entityData, nav }) => 
+export const Person = ({entityData, nav }) =>
 {
 	return (
 		<View style={{ marginVertical: 8 }}>
-		{ 
-			entityData[0]?.entity_name ? 
+		{
+			entityData[0]?.entity_name ?
 			<View>
 				<Text style={ styles.title_bar }>Personal Information</Text>
 				{
-					entityData.map( person => 
+					entityData.map( person =>
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
 							{ person?.entity_name ? <Text style={ styles.heading_text }>{person.entity_name }</Text> : null }
 							{ person?.dob ? <Text style={ styles.text }>Date of birth: {person.dob}</Text> : null }
@@ -26,14 +26,14 @@ export const Person = ({entityData, nav }) =>
 					)
 				}
 			</View>
-		: 
+		:
 			<View>
 				<TouchableOpacity
 					onPress={ nav }
 					style={{ flex: 1/3}}
 				>
 					<Text style={styles.text_button}>Add Emergency Details</Text>
-				</TouchableOpacity> 
+				</TouchableOpacity>
 			</View>
 		}
 		</View>
@@ -49,10 +49,10 @@ export const MedicalCondition = ({conditionData }) =>
 			<View>
 				<Text style={ styles.title_bar }>Medical Conditions</Text>
 				{
-					conditionData.map( condition =>				
+					conditionData.map( condition =>			
 					<View key={ condition.condition_id } style={{ marginBottom: 10 }}>
 						<Text style={ styles.text } > { condition.condition_name }</Text>
-					</View>					
+					</View>				
 				)}
 			</View>
 			: null
@@ -61,18 +61,18 @@ export const MedicalCondition = ({conditionData }) =>
 	);
 };
 
-export const Medication = ({doctorData, medicationData }) => 
+export const Medication = ({doctorData, medicationData }) =>
 {
 	return (
 		<View>
-		{ 
+		{
 			medicationData[0]?.medication_id ?
 			<View style={{ marginVertical: 8 }}>
 				<Text style={ styles.title_bar }>Medications</Text>
-				{ 
+				{
 					medicationData.map(( medication, i) =>
 					<View key={ medication.medication_id } style={{ marginBottom: 10 }}>
-						
+					
 						{
 							medication.is_life_sustaining == 1 ?
 							<View>
@@ -89,13 +89,13 @@ export const Medication = ({doctorData, medicationData }) =>
 						{ medication?.strength ? <Text style={ styles.text }>{ medication.strength }</Text> : null}
 						{ medication?.frequency ? <Text style={ styles.text }>{ medication.frequency }</Text> : null}
 						{ medication?.start_date ? <Text style={ styles.text }>Start date: { medication.start_date }</Text> : null}
-						{ 
+						{
 							doctorData?.map ( doctor =>
 							<Fragment key={ doctor.entity_id } >
 							{
 								doctor.entity_id == medication.doctor_id ?
 								<Text style={ styles.text }>Prescribing doctor: { doctor.entity_name }</Text>
-								: null 
+								: null
 							}
 							</Fragment>
 						)}
@@ -118,7 +118,7 @@ export const Allergy = ({allergyData }) =>
 			<View>
 				<Text style={ styles.title_bar }>Allergies</Text>
 				{
-					allergyData.map( allergy => 
+					allergyData.map( allergy =>
 					<View key={ allergy.allergy_id } style={{ marginBottom: 10 }}>
 					{
 						allergy.severity == 'Life Threatening' ?
@@ -150,9 +150,9 @@ export const HealthInsurance = ({insuranceData }) =>
 			<View>
 				<Text style={ styles.title_bar }>Health Insurance</Text>
 				{
-					insuranceData.map( insurance => 
+					insuranceData.map( insurance =>
 					<View key={ insurance.insurance_id } style={{ marginBottom: 10 }}>
-					
+				
 						{ insurance.entity_name ? <Text style={ styles.heading_text }>{ insurance. entity_name } insurance</Text> : null }
 						{ insurance.policy_number ? <Text style={ styles.text }>Policy number: { insurance.policy_number }</Text> : null }
 						{ insurance.start_date ? <Text style={ styles.text }>Start date: { insurance.start_date } insurance</Text> : null }

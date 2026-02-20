@@ -3,7 +3,7 @@ const weather_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const API_Key = 'a7d2d44c1023b2f2fc9dec96f12b617d';
 const units = 'imperial';
 
-export default async function fetchWeatherData( location ) 
+export default async function fetchWeatherData( location )
 {
 	if (!location)
 	{

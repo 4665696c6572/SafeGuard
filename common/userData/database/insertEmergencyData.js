@@ -17,7 +17,7 @@ export default async function insertEmergencyData( table, emergencyData, db )
 		],
 
 		Allergy:
-		[	
+		[
 			emergencyData?.allergen ? emergencyData?.allergen : null,
 			emergencyData?.severity ? emergencyData?.severity : null
 		],
@@ -205,7 +205,7 @@ export default async function insertEmergencyData( table, emergencyData, db )
 		}
 
 		if ( table == 'Allergy' )
-		{	
+		{
 			const result = await db.runAsync( queries.Allergy_1, [ 'Allergy', 1 ]);
 			await db.runAsync( queries.Allergy_2, [ result.lastInsertRowId, ...data.Allergy ]);
 			if (result.changes != 0)    return result.lastInsertRowId;

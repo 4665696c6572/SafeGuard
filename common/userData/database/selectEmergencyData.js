@@ -5,7 +5,7 @@ export default async function selectEmergencyData( db, table, condition )
 	try
 	{
 		if ( table == 'Allergy' || table == 'All' )
-		{	
+		{
 			var allergy = await db.getAllAsync(
 			`
 				SELECT
@@ -18,25 +18,25 @@ export default async function selectEmergencyData( db, table, condition )
 					Medical_Condition.condition_note AS condition_note
 				FROM Allergy
 				LEFT JOIN Medical_Condition
-				ON Medical_Condition.condition_id = Allergy.allergy_id				
+				ON Medical_Condition.condition_id = Allergy.allergy_id			
 				ORDER BY severity ASC, allergen ASC;
 			`);
 		}
 
 		if ( table == 'Contact' )
-		{	
+		{
 			var contact =	 await db.getAllAsync(
 			`
 			SELECT
 				Entity.entity_id AS entity_id,
-				entity_name, 
+				entity_name,
 				address_id,
 				address_line_one,
 				address_line_two,
 				city,
 				state,
 				post_code,
-				country,				
+				country,			
 				address_note,
 				Office.phone_number_id AS phone_number_id,
 				Office.phone_number AS phone_number,
@@ -58,7 +58,7 @@ export default async function selectEmergencyData( db, table, condition )
 			LEFT JOIN Phone AS Fax
 				ON Fax.entity_id = Entity.entity_id
 				AND Fax.number_type = 'Fax'
-			LEFT JOIN Email 
+			LEFT JOIN Email
 				ON Email.entity_id = Entity.entity_id
 			WHERE Entity.entity_id = ?
 			GROUP By Entity.entity_id`,
@@ -70,8 +70,8 @@ export default async function selectEmergencyData( db, table, condition )
 		{
 			var doctor = await db.getAllAsync(
 			`
-				SELECT 
-					entity_id, 
+				SELECT
+					entity_id,
 					entity_name,
 					facility_name,
 					specialty,
@@ -80,22 +80,22 @@ export default async function selectEmergencyData( db, table, condition )
 				LEFT JOIN Entity
 					ON Entity.entity_id = Doctor.doctor_id
 				WHERE Entity.entity_type = ?
-				ORDER BY entity_name`,	
+				ORDER BY entity_name`,
 				[ 'Doctor' ]
 			);
 		}
 
 		if ( table == 'Doctor_Name' || table == 'All')
-		{	
+		{
 			{
 				var doctor = await db.getAllAsync(
 				`
-					SELECT 
-						entity_id, 
+					SELECT
+						entity_id,
 						entity_name
 					FROM Entity
 					WHERE entity_type = ?
-					ORDER BY entity_name`,	
+					ORDER BY entity_name`,
 					[ 'Doctor' ]
 				);
 			}
@@ -105,9 +105,9 @@ export default async function selectEmergencyData( db, table, condition )
 		{
 			var insurance = await db.getAllAsync(
 			`
-				SELECT 
+				SELECT
 					insurance_id,
-					Entity.entity_name AS entity_name, 
+					Entity.entity_name AS entity_name,
 					policy_number,
 					start_date,
 					insurance_note,
@@ -122,13 +122,13 @@ export default async function selectEmergencyData( db, table, condition )
 					AND Office.number_type = 'Office'
 				WHERE insurance_type = ?
 				GROUP BY insurance_id
-				ORDER BY entity_name`, 
+				ORDER BY entity_name`,
 				[ condition ]
 			);
 		}
 
 		if ( table == 'Medical_Condition' || table == 'All' )
-		{	
+		{
 			var medical_condition = await db.getAllAsync(
 			`
 				SELECT
@@ -148,31 +148,46 @@ export default async function selectEmergencyData( db, table, condition )
 			);
 		}
 
+		if ( table == 'Medical_Condition_Name' )
+		{
+			var medical_condition = await db.getAllAsync(
+			`
+				SELECT
+					condition_id,
+					condition_name,
+					allergen
+				FROM Medical_Condition
+				LEFT JOIN Allergy
+				ON Medical_Condition.condition_id = Allergy.allergy_id
+				GROUP BY Medical_Condition.condition_id
+				ORDER BY condition_name;`,
+			);
+		}
 
 		if ( table == 'Medication' || table == 'All' )
-		{	
+		{
 			var medication = await db.getAllAsync(
 			`
-				SELECT 
+				SELECT
 					medication_id,
 					medication_name,
 					condition_id,
-					strength, 
+					strength,
 					frequency,
-					start_date,					
+					start_date,				
 					is_life_sustaining,
 					medication_note,
 					doctor_id
-					FROM Medication				
+					FROM Medication			
 				ORDER BY is_life_sustaining DESC, medication_name;
 			`);
 		}
 
 		if ( table == 'Medication_Name' )
-		{	
+		{
 			var medication = await db.getAllAsync(
 			`
-				SELECT 
+				SELECT
 					medication_id,
 					medication_name,
 					condition_id
@@ -181,7 +196,7 @@ export default async function selectEmergencyData( db, table, condition )
 		}
 
 		if ( table == 'Person' || table == 'All' )
-		{	
+		{
 			var person = await db.getAllAsync(
 			`
 				SELECT
@@ -205,7 +220,7 @@ export default async function selectEmergencyData( db, table, condition )
 		if ( table == 'Contact' )    return splitData( contact, condition );
 		if ( table == 'Doctor' || table == 'Doctor_Name' )    return doctor;
 		if ( table == 'Insurance' )    return insurance;
-		if ( table == 'Medical_Condition' )    return medical_condition;
+		if ( table == 'Medical_Condition' || table == 'Medical_Condition_Name' )    return medical_condition;
 		if ( table == 'Medication' ||  table == 'Medication_Name' )    return medication;
 		if ( table == 'Person' ) return person;
 

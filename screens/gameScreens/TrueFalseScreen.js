@@ -34,7 +34,7 @@ export default function TrueFalseScreen({ navigation, route })
 
 
 	const isFocused = useIsFocused();
-		
+	
 	useEffect(() =>
 		{
 			if ( isFocused )
@@ -50,11 +50,11 @@ export default function TrueFalseScreen({ navigation, route })
 			const new_score = route?.params?.score + levelScore;
 
 			updateGameData( new_score, db );
-			setTimeout(function() 
+			setTimeout(function()
 			{
 				navigation.dispatch(StackActions.pop());
 				navigation.navigate("GameScreen", {score: new_score});
-			}, 1200) 
+			}, 1200)
 		}
 	}), [ levelComplete ]
 
@@ -71,7 +71,7 @@ export default function TrueFalseScreen({ navigation, route })
 		{
 			setLevelComplete( true );
 		}
-		
+	
 		setCurrentNumber( prev => prev + 1 );
 		setRoundStartIndex( prev => prev + 1 );
 		updateLevelData( db, 'TrueFalseScreen', question_id );
@@ -88,9 +88,9 @@ export default function TrueFalseScreen({ navigation, route })
 					<View style={ styles.game_area }>
 
 						<View>
-							<Text style={ styles.score_text } >Final score</Text>	
-							<Text style={ styles.score_text } >{ levelScore }</Text>	
-						</View> 
+							<Text style={ styles.score_text } >Final score</Text>
+							<Text style={ styles.score_text } >{ levelScore }</Text>
+						</View>
 
 						<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 					</View>
@@ -100,9 +100,9 @@ export default function TrueFalseScreen({ navigation, route })
 				{/* Progress and Score */}
 				<View style={ styles.progress_bar_container } >
 					<View style={ styles.progress_bar }>
-						<Progress.Bar 
+						<Progress.Bar
 							progress={( currentNumber / questions_per_level )}
-							height= '20' 
+							height= '20'
 							width={ screen_width * 0.6 }
 							color='#66a1efff'
 							borderRadius={5}
@@ -117,9 +117,9 @@ export default function TrueFalseScreen({ navigation, route })
 				</View>
 
 				<View>
-						<Text style={ styles.score_text } >Score</Text>	
-						<Text style={ styles.score_text } >{ levelScore }</Text>	
-				</View> 
+						<Text style={ styles.score_text } >Score</Text>
+						<Text style={ styles.score_text } >{ levelScore }</Text>
+				</View>
 
 
 				{
@@ -151,7 +151,7 @@ export default function TrueFalseScreen({ navigation, route })
 							</TouchableHighlight>
 
 
-							<TouchableHighlight 
+							<TouchableHighlight
 								testID={`match_question_box_${i}`}
 								style=
 								{[

@@ -160,24 +160,24 @@ export const ViewContact = ({
 		}
 
 
-		<View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: 5}}>
-			<TouchableOpacity
-				accessibilityLabel='Close button'
-				accessibilityHint='Press to return to previous screen.'
-				onPress={ ( ) =>
-				{
-					setViewContactVisible( false );
-					handleNavigation( );
-				}}
-			>
-				<Text style={ styles.save_button_text }>Close</Text>
-			</TouchableOpacity>
-			
+			<View style={ styles.save_row }>
+				<TouchableOpacity
+					accessibilityLabel='Close button'
+					accessibilityHint='Press to return to previous screen.'
+					onPress={ ( ) =>
+					{
+						setViewContactVisible( false );
+						handleNavigation( );
+					}}
+				>
+					<Text style={ styles.save_button_text }>Close</Text>
+				</TouchableOpacity>
+
 				<TouchableOpacity
 					accessibilityLabel='Add / Edit button'
 					accessibilityHint='Press to add or edit contact details.'
 					onPress={ ( ) =>
-					{	
+					{
 						setEditContactVisible( true );
 						setTempAddressData( contactData?.address );
 						setTempEmailData( contactData?.email );
@@ -186,16 +186,15 @@ export const ViewContact = ({
 					}}
 				>
 					{
-						( 
-							contactData?.address.address_id || contactData?.email.email_id || 
-							contactData?.fax.fax_id || contactData?.phone.phone_id 
+						(
+							contactData?.address.address_id || contactData?.email.email_id ||
+							contactData?.fax.fax_id || contactData?.phone.phone_id
 						) ?
 						<Text style={ styles.save_button_text }>Edit</Text>
 					:
 						<Text style={ styles.save_button_text }>Add details </Text>
 					}
 				</TouchableOpacity>
-
 			</View>
 		</View>
 	);
@@ -273,7 +272,7 @@ export const EditContact = ({
 
 	function handlePress( close )
 	{
-		
+	
 		// If no changes have been made, close the edit Modal
 		if  (
 				( JSON.stringify( contactData.address ) === JSON.stringify( tempAddressData )) &&
@@ -286,8 +285,8 @@ export const EditContact = ({
 			handleNavigation( );
 			return;
 		}
-		
-		
+	
+	
 		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
 
 		if ( JSON.stringify( contactData.address ) !== JSON.stringify( tempAddressData ) && tempAddressData != { } && isAddressValid )
@@ -309,7 +308,7 @@ export const EditContact = ({
 		{
 			saveToDB( 'Phone', tempPhoneData );
 		}
-		
+	
 		if (close == true)    setEditContactVisible( false );
 	}
 
@@ -481,7 +480,7 @@ export const EditContact = ({
 							<TouchableOpacity
 								accessibilityLabel='Save button'
 								accessibilityHint='Press to save address.'
-								
+							
 								onPress={ ( ) =>
 								{
 									if ( isAddressValid )
@@ -707,7 +706,7 @@ export const EditContact = ({
 								<TouchableOpacity
 									accessibilityLabel='Save button'
 									accessibilityHint='Press to save email address.'
-									
+								
 									onPress={ ( ) =>
 									{
 										if ( isEmailValid )
@@ -767,7 +766,7 @@ export const EditContact = ({
 									setAddEmailVisible( false );
 									setAddFaxVisible( true );
 									setAddPhoneVisible( false )}
-									
+								
 								}
 							>
 							{

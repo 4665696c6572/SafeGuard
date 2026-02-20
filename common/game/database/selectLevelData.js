@@ -60,12 +60,12 @@ const queries =
 	`
 		SELECT
 			question_id,
-			question,				
+			question,			
 			last_seen_date,
 			answer_correct,
 			answer_one_incorrect,
 			answer_two_incorrect,
-			answer_three_incorrect				
+			answer_three_incorrect			
 		FROM Multiple_Choice_Data
 		GROUP BY question_id
 		ORDER BY last_seen_date

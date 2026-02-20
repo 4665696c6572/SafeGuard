@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 		// gap: '50%',
 		// marginLeft: '10%',
 		// marginRight: '10%'
-		
+	
 	},
 	game_box_large: // 1 column
 	{
@@ -153,12 +153,12 @@ const styles = StyleSheet.create({
 		fontSize: 26,
 		fontWeight: '900',
 	},
-	category:
-	{
-		marginBottom: 10,
-		fontSize: 18,
-	},
-	
+	// category:
+	// {
+	// 	marginBottom: 10,
+	// 	fontSize: 18,
+	// },
+
 	game_button:
 	{
 		height: button_size,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'blue',
 		justifyContent: 'center',
 		alignContent: 'center',
-		
+	
 	},
 	game_button_center:
 	{
@@ -250,8 +250,7 @@ const styles = StyleSheet.create({
 	},
 	picker:
 	{
-		color: '#454545',
-		width: '95%'
+		color: '#454545'
 	},
 	alert:
 	{
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: 400,
 		paddingLeft: 15
-		
+	
 	},
 	text_line:
 	{
@@ -307,6 +306,7 @@ const styles = StyleSheet.create({
 	},
 	text:
 	{
+		flexShrink: 1,
 		fontSize: 16,
 		marginBottom: 2
 	},
@@ -326,13 +326,18 @@ const styles = StyleSheet.create({
 		gap: 5,
 		justifyContent: 'space-between',
 		marginTop: 20,
-		marginLeft: 20,
-		marginRight: 20
+		// marginLeft: 20,
+		// marginRight: 20
 	},
 	section:
 	{
 		marginBottom: 20,
 		marginTop: 20,
+	},
+	section_small:
+	{
+		marginBottom: 10,
+		marginTop: 10,
 	},
 	row_height:
 	{
@@ -375,7 +380,8 @@ const styles = StyleSheet.create({
 		paddingTop: 20
 	},
 	checkbox_row:
-	{ 
+	{ 		
+		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginBottom: 30,

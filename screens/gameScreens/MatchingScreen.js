@@ -18,10 +18,10 @@ import styles from '../../styles/styles.js';
 const screen_width = Dimensions.get('screen').width;
 const imgUri = require( '../../assets/frog.png' );
 
-const questions_per_round = 3; 
+const questions_per_round = 3;
 const questions_per_level = 12;
 
-export default function MatchingScreen({ navigation, route }) 
+export default function MatchingScreen({ navigation, route })
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
@@ -41,7 +41,7 @@ export default function MatchingScreen({ navigation, route })
 
 
 		const isFocused = useIsFocused();
-		
+	
 	useEffect(() =>
 		{
 			if ( isFocused )
@@ -53,7 +53,7 @@ export default function MatchingScreen({ navigation, route })
 	useEffect( () =>
 	{
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
-		{	
+		{
 			setAnsweredCorrectly( setResultArray( questions_per_round ));
 			setAnswerOrder( calcAnswerOrder( questions_per_round ));
 			setRoundStartIndex( prev => prev + questions_per_round );
@@ -61,10 +61,10 @@ export default function MatchingScreen({ navigation, route })
 			if ( ( roundStartIndex == questions_per_level / 4 ) )
 			{
 				setCheerVisible( true );
-				setTimeout( function( ) 
+				setTimeout( function( )
 				{
 					setCheerVisible( false )
-				}, 1000 ); 
+				}, 1000 );
 			}
 			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
 		}
@@ -78,24 +78,24 @@ export default function MatchingScreen({ navigation, route })
 			const new_score = route?.params?.score + levelScore;
 
 			updateGameData( new_score, db );
-			setTimeout(function( ) 
+			setTimeout(function( )
 			{
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen", { score: new_score });
-			}, 1200) 
+			}, 1200)
 		}
 	}), [ levelComplete ]
 
 
 	function handleAnswerCheck( question_id, answer_id, question_row )
-	{ 
+	{
 		if (checkAnswer( question_id, answer_id ))
 		{
 			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ));
 		}
 		else Haptics.selectionAsync();
 		if ( answer_id != question_id )    return;
-			
+		
 		setAnswerButtonsDisabled( true );
 		setCurrentNumber( prev => prev + 1 );
 		setLevelScore( prev => prev + 1 )
@@ -111,8 +111,8 @@ export default function MatchingScreen({ navigation, route })
 					<View style={ styles.game_area }>
 
 						<View>
-							<Text style={ styles.score_text } >Final score</Text>	
-							<Text style={ styles.score_text } >{ levelScore }</Text>	
+							<Text style={ styles.score_text } >Final score</Text>
+							<Text style={ styles.score_text } >{ levelScore }</Text>
 						</View>
 
 						<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
@@ -121,7 +121,7 @@ export default function MatchingScreen({ navigation, route })
 
 				{/*  Cheer Modal */}
 				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
-					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>					
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>				
 				</Modal>
 
 				{/*  Progress and Score  */}
@@ -144,8 +144,8 @@ export default function MatchingScreen({ navigation, route })
 				</View>
 
 				<View>
-					<Text style={ styles.score_text } >Score</Text>	
-					<Text style={ styles.score_text } >{ levelScore }</Text>	
+					<Text style={ styles.score_text } >Score</Text>
+					<Text style={ styles.score_text } >{ levelScore }</Text>
 				</View>
 
 
@@ -164,7 +164,7 @@ export default function MatchingScreen({ navigation, route })
 						onPress={ () =>
 						{
 							setQuestionSelected( entry.question_id );
-							setAnswerButtonsDisabled( false ); 
+							setAnswerButtonsDisabled( false );
 						}}
 						underlayColor={ underlay }
 						activeOpacity={ 1 }

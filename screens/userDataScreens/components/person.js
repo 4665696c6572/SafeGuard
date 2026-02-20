@@ -12,27 +12,27 @@ const underlay_color = '#d1dce4ff';
 
 export const Person = ({entityData, setEditPersonVisible, setTempEntityData, showEditButton }) =>
 {
-	return ( 
+	return (
 		<View style={[ styles.container, { flex: 1/3 }]}>
 			<View style={ styles.data_container }>
 			<Text style={ styles.title_bar }>Personal Information</Text>
 			{
 				entityData[0]?.entity_name != null ?
-				<Fragment> 	
+				<Fragment>
 				{
 					entityData.map( person =>
 					(
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}> 
-								{ 
-									person?.entity_name != null ? 
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
+								{
+									person?.entity_name != null ?
 									<Text style={ styles.heading_text }>
 											{person.entity_name}
-									</Text> 
-								: null 
+									</Text>
+								: null
 								}
 								{
-									showEditButton ? 
+									showEditButton ?
 									<TouchableOpacity
 										accessibilityLabel='Edit button'
 										accessibilityHint='Press to edit user information.'
@@ -110,10 +110,10 @@ export const Person = ({entityData, setEditPersonVisible, setTempEntityData, sho
 
 
 
-export const EditPerson = ({ 
-								entityData, isFormValid, loadEntityData, 
-								saveToDB, setEditPersonVisible, setIsFormValid, 
-								setTempEntityData, tempEntityData 
+export const EditPerson = ({
+								entityData, isFormValid, loadEntityData,
+								saveToDB, setEditPersonVisible, setIsFormValid,
+								setTempEntityData, tempEntityData
 							}) =>
 {
 	// Date Picker
@@ -141,7 +141,7 @@ export const EditPerson = ({
 	}, [entityName ]);
 
 	const validateForm = ( ) =>
-	{	
+	{
 		let errors = {};
 
 		// Validate name field
@@ -154,7 +154,7 @@ export const EditPerson = ({
 
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
-	{		
+	{	
 		// Don't save if changes have not been made
 		if (JSON.stringify( entityData ) === JSON.stringify( tempEntityData ) || close == true )
 		{
@@ -200,7 +200,7 @@ export const EditPerson = ({
 						>
 							<Text style={[ styles.text_input, styles.menu_text ]}>{ tempEntityData?.dob ? tempEntityData.dob : 'Date of birth' }</Text>
 						</TouchableHighlight>
-						
+					
 						<DateTimePickerModal
 							isVisible={ datePickerVisible }
 							mode='date'
@@ -256,7 +256,7 @@ export const EditPerson = ({
 							placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
 							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
 						/>
-						
+					
 
 
 						<View style={ styles.picker_view }>
@@ -343,8 +343,8 @@ export const EditPerson = ({
 						onPress={ () => handlePress( false )}
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
-					</TouchableOpacity>	
-				</View>	
+					</TouchableOpacity>
+				</View>
 
 				{/* Form Validation Error */}
 				{

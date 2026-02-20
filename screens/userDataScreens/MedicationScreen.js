@@ -9,7 +9,7 @@ import insertEmergencyData from '../../common/userData/database/insertEmergencyD
 
 import styles from '../../styles/styles.js';
 
-import { Medication, EditMedication, ViewMedication } from './components/medication.js';
+import { EditMedication, Medication, ViewMedication } from './components/medication.js';
 
 
 const MedicationScreen = ({ navigation, route  }) =>
@@ -19,6 +19,8 @@ const MedicationScreen = ({ navigation, route  }) =>
 
 	const [ medicationData,  setMedicationData, loadingMedicationData , loadMedicationData] = useLoadEmergencyData( db, 'Medication' );
 	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor_Name' );
+	const [ conditionData, setConditionData, loadingConditionData, loadConditionData ] = useLoadEmergencyData( db, 'Medical_Condition_Name' );
+
 
 	const [ medicationIndex, setMedicationIndex ] = useState( params?.condition ? params.condition : 0 );
 	const [ tempMedicationData, setTempMedicationData ] = useState( );
@@ -30,22 +32,22 @@ const MedicationScreen = ({ navigation, route  }) =>
 
 
 	const isFocused = useIsFocused();
-	
+
 	useEffect(() =>
 		{
 			if ( isFocused )
 			{
-				loadDoctorData();
-				loadMedicationData();
+				loadConditionData( );
+				loadDoctorData( );
+				loadMedicationData( );
 			}
 	}, [ isFocused ]);
-
 
 
 		async function saveToDB( tempMedicationData )
 		{
 			if ( tempMedicationData.medication_id )
-			{	
+			{
 				await updateEmergencyData( 'Medication', tempMedicationData, db );
 			}
 			else
@@ -70,6 +72,7 @@ const MedicationScreen = ({ navigation, route  }) =>
 
 			<Modal animationType='slide' color='#d1dce4ff' visible={ viewMedicationVisible }>
 				<ViewMedication
+					conditionData={ conditionData }
 					doctorData={ doctorData }
 					medicationData={ medicationData }
 					medicationIndex={ medicationIndex }
@@ -82,6 +85,7 @@ const MedicationScreen = ({ navigation, route  }) =>
 
 			<Modal animationType='slide' color='#d1dce4ff' visible={editMedicationVisible }>
 				<EditMedication
+					conditionData={ conditionData }
 					doctorData={ doctorData }
 					isFormValid={ isFormValid }
 					medicationData={medicationData}

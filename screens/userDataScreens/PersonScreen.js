@@ -9,8 +9,8 @@ import insertEmergencyData from '../../common/userData/database/insertEmergencyD
 
 import styles from '../../styles/styles.js';
 
-import { Person, EditPerson } from './components/person';
-import { Insurance, EditInsurance, ViewInsurance } from './components/insurance.js';
+import { EditInsurance, Insurance, ViewInsurance } from './components/insurance.js';
+import { EditPerson, Person } from './components/person';
 
 
 const PersonScreen = ({ navigation, route }) =>
@@ -31,10 +31,10 @@ const PersonScreen = ({ navigation, route }) =>
 
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const isFocused = useIsFocused();
-	
-	useEffect(() => 
+
+	useEffect( ( ) =>
 	{
-		if ( isFocused ) 
+		if ( isFocused )
 		{
 			loadEntityData( );
 			loadInsuranceData( );
@@ -48,7 +48,7 @@ const PersonScreen = ({ navigation, route }) =>
 		if (table == 'Person')
 		{
 			if ( data.entity_id )
-			{									
+			{								
 				await updateEmergencyData( table, data, db, data.entity_id );
 			}
 			else
@@ -82,7 +82,7 @@ const PersonScreen = ({ navigation, route }) =>
 
 	return (
 		<View style={ styles.container }>
-			<Person 
+			<Person
 				entityData={ entityData }
 				setEditPersonVisible={ setEditPersonVisible }
 				setTempEntityData={ setTempEntityData }
@@ -119,9 +119,9 @@ const PersonScreen = ({ navigation, route }) =>
 					setInsuranceIndex={ setInsuranceIndex }
 					setTempInsuranceData={ setTempInsuranceData }
 					setViewInsuranceVisible={ setViewInsuranceVisible }
-					
-				/>
 				
+				/>
+			
 			</Modal>
 
 			<Modal animationType='slide' color='#d1dce4ff' visible={ editInsuranceVisible }>
@@ -138,7 +138,7 @@ const PersonScreen = ({ navigation, route }) =>
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 					tempInsuranceData={ tempInsuranceData }
 				/>
-				
+			
 			</Modal>
 		</View>
 	);

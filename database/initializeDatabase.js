@@ -6,7 +6,7 @@ export default async function initializeDatabase( db )
 {
 	try
 	{
-		await db.execAsync( 
+		await db.execAsync(
 		`
 			DROP TABLE IF EXISTS Address;
 			DROP TABLE IF EXISTS Phone;
@@ -31,37 +31,37 @@ export default async function initializeDatabase( db )
 
 
 			CREATE TABLE IF NOT EXISTS    Entity
-			( 
+			(
 				entity_id    INTEGER    PRIMARY KEY,
 				entity_name    TEXT    NOT NULL    UNIQUE,
 				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ) )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
-			( 
+			(
 				person_id    INTEGER    PRIMARY KEY,
 				dob    TEXT,
 				sex    TEXT,
 				height    TEXT,
-				weight    TEXT,				
+				weight    TEXT,			
 				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' ) ),
 				FOREIGN KEY ( person_id )    REFERENCES Entity( entity_id )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Doctor
-			( 
+			(
 				doctor_id    INTEGER     PRIMARY KEY,
 				facility_name    TEXT,
 				specialty    TEXT,
 				current    INTEGER,
 				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
-			); 
+			);
 
 			CREATE TABLE IF NOT EXISTS    Medical_Condition
-			( 
+			(
 				condition_id    INTEGER    PRIMARY KEY,
 				condition_name    TEXT    NOT NULL,
-				doctor_id    INTEGER, 				
+				doctor_id    INTEGER, 			
 				diagnosis_date    TEXT,
 				condition_note    TEXT,
 				is_allergy    INTEGER    NOT NULL,
@@ -69,10 +69,10 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Medication
-			( 
+			(
 				medication_id    INTEGER    PRIMARY KEY,
-				doctor_id    INTEGER, 
-				condition_id    INTEGER, 
+				doctor_id    INTEGER,
+				condition_id    INTEGER,
 				medication_name    TEXT    NOT NULL,
 				strength    TEXT,
 				frequency    TEXT,
@@ -84,7 +84,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Allergy
-			( 
+			(
 				allergy_id    INTEGER    PRIMARY KEY,
 				allergen    TEXT,
 				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
@@ -92,9 +92,9 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Insurance
-			( 
+			(
 				insurance_id   INTEGER    PRIMARY KEY,
-				policy_number    TEXT,	
+				policy_number    TEXT,
 				start_date    TEXT,
 				insurance_note    TEXT,
 				insurance_type    TEXT    CHECK ( insurance_type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' )),
@@ -102,7 +102,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Phone
-			( 
+			(
 				phone_number_id    INTEGER    PRIMARY KEY,
 				entity_id    INTEGER,
 				phone_number    TEXT    NOT NULL,
@@ -112,7 +112,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Address
-			( 
+			(
 				address_id    INTEGER    PRIMARY KEY,
 				entity_id    INTEGER,
 				address_line_one    TEXT,
@@ -126,7 +126,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Email
-			( 
+			(
 				email_id    INTEGER    PRIMARY KEY,
 				entity_id    INTEGER,
 				email,
@@ -135,14 +135,14 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Game_Data
-			( 
+			(
 				user_id    INTEGER    PRIMARY KEY,
 				score    INTEGER    DEFAULT ( 0 ),
 				level_status    TEXT
 			);
 
 			CREATE TABLE IF NOT EXISTS    Matching_Data
-			( 
+			(
 				question_id    INTEGER    PRIMARY KEY,
 				question    TEXT,
 				answer    TEXT,
@@ -150,7 +150,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Multiple_Choice_Data
-			( 
+			(
 				question_id    INTEGER    PRIMARY KEY,
 				question    TEXT,
 				answer_correct    TEXT,
@@ -161,7 +161,7 @@ export default async function initializeDatabase( db )
 			);
 
 			CREATE TABLE IF NOT EXISTS    True_False_Data
-			( 
+			(
 				question_id    INTEGER    PRIMARY KEY,
 				question    TEXT,
 				answer    TEXT,
@@ -202,7 +202,7 @@ export default async function initializeDatabase( db )
 		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 3, 'Nickel', 'Life Threatening' ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Medical_Condition (  doctor_id, condition_name, is_allergy ) VALUES ( ?, ?, ? )', [ 3, 'Allergy', 1 ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 4, 'Apple allergy', 'Mild' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Allergy ( allergy_id, allergen, severity ) VALUES ( ?, ?, ? )', [ 4, 'Apple', 'Mild' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ? )', [ 3, 4, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03', 0 ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'ABC Insurance', 'Business' ]);
@@ -228,8 +228,8 @@ export default async function initializeDatabase( db )
 	}
 }
 
-const match_data = 
-[ 
+const match_data =
+[
 	[ 5, 'question 1', 'answer 1' ],
 	[ 6, 'question 2', 'answer 2' ],
 	[ 7, 'question 3', 'answer 3' ],
@@ -244,15 +244,15 @@ const match_data =
 	[ 16, 'question 12', 'answer 12' ]
 ];
 
-const match_insert = 
+const match_insert =
 `
-	INSERT OR IGNORE INTO Matching_Data  
-	( question_id, question, answer ) 
+	INSERT OR IGNORE INTO Matching_Data 
+	( question_id, question, answer )
 	VALUES ( ?, ?, ? );
 `;
 
-const mc_data = 
-[ 
+const mc_data =
+[
 	[ 'question 1', 'answer 1c', 'answer 1i1', 'answer 1i2', 'answer 1i3' ],
 	[ 'question 2', 'answer 2c', 'answer 2i1', 'answer 2i2', 'answer 2i3' ],
 	[ 'question 3', 'answer 3c', 'answer 3i1', 'answer 3i2', 'answer 3i3' ],
@@ -265,15 +265,15 @@ const mc_data =
 	[ 'question 10', 'answer 10c', 'answer 10i1', 'answer 10i2', 'answer 10i3' ],
 ];
 
-const mc_insert = 
+const mc_insert =
 `
 	INSERT OR IGNORE INTO Multiple_Choice_Data
 	( question, answer_correct, answer_one_Incorrect, answer_two_Incorrect, answer_three_Incorrect )
 	VALUES ( ?, ?, ?, ?, ? );
 `;
 
-const tf_data = 
-[ 
+const tf_data =
+[
 	[ 'question 1',  'True' ],
 	[ 'question 2',  'True' ],
 	[ 'question 3',  'True' ],
@@ -290,10 +290,10 @@ const tf_data =
 	[ 'question 13',  'True' ],
 	[ 'question 14', 'False' ],
 	[ 'question 15', 'False' ],
-	[ 'question 16',  'True' ]	
+	[ 'question 16',  'True' ]
 ];
 
-const tf_insert = 
+const tf_insert =
 `
 	INSERT OR IGNORE INTO True_False_Data
 	( question, answer )

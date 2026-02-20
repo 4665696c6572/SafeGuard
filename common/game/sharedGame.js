@@ -2,8 +2,8 @@
 export function calcAnswerOrder ( length )
 {
 	let array = Array.from({length }, ( _, i ) => i );
-	for ( let i = array.length - 1; i > 0; i-- ) 
-	{ 
+	for ( let i = array.length - 1; i > 0; i-- )
+	{
 		const j = Math.floor( Math.random() * ( i + 1 ));
 
 		const temp = array[i];
@@ -31,9 +31,9 @@ export function checkLevelComplete( roundStartIndex, questions_per_level, questi
 }
 
 
-// Matching Screen is the only screen where a round has more than one question 
+// Matching Screen is the only screen where a round has more than one question
 export  function checkRoundComplete( answeredCorrectly, questions_per_round )
-{	
+{
 	console.log( 'checkRoundComplete' )
 	if ( answeredCorrectly.length != questions_per_round ) return false;
 	return answeredCorrectly.every( Boolean );
@@ -46,8 +46,8 @@ export function setResultArray( questions_per_round )
 }
 
 
-// Matching Screen is the only screen where a round has more than one question 
-export function updateResultArray ( answeredCorrectly, question_row ) 
+// Matching Screen is the only screen where a round has more than one question
+export function updateResultArray ( answeredCorrectly, question_row )
 {
 	return answeredCorrectly.with(  question_row, true );
 }

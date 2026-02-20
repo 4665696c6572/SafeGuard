@@ -19,7 +19,7 @@ const HomeScreen = ({ navigation }) =>
 	const [ alertData, setAlertData ] = useState( );
 	const [ errorMessage, setErrorMessage ] = useState( );
 	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
-	const [ locationData, setLocationData ] = useState( );	
+	const [ locationData, setLocationData ] = useState( );
 	const [ userData, setUserData ] = useState( [ ] );
 	const [ weatherData, setWeatherData ] = useState( );
 
@@ -35,15 +35,15 @@ const HomeScreen = ({ navigation }) =>
 
 
 	////// Load Location \\\\\\
-	useEffect( () => 
+	useEffect( () =>
 	{
-		async function getLocation() 
+		async function getLocation()
 		{
-			
+		
 			let { status } = await Location.requestForegroundPermissionsAsync();
-			if (status !== 'granted') 
+			if (status !== 'granted')
 			{
-				
+			
 				setErrorMsg('Permission to access location was denied');
 				return;
 			}
@@ -58,25 +58,25 @@ const HomeScreen = ({ navigation }) =>
 
 
 		////// Load Alert \\\\\\
-		useEffect( () => 
+		useEffect( () =>
 		{
-			async function fetchAlert( locationData ) 
+			async function fetchAlert( locationData )
 			{
-				try 
+				try
 				{
 					const alert_zone = await fetchAlertZone( locationData );
 					const alert_data = await fetchAlertData( alert_zone );
 					if ( alert_data )
-					{ 
+					{
 						setAlertData( findHighestSeverity( alert_data ));
 					}
 					else    return;
-				} 
-				catch ( error ) 
+				}
+				catch ( error )
 				{
 					console.error( error );
-				} 
-				finally 
+				}
+				finally
 				{
 					setLoadingAlertData( false );
 				}
@@ -86,13 +86,13 @@ const HomeScreen = ({ navigation }) =>
 
 
 	////// Load Weather \\\\\\
-	useEffect( ( ) => 
+	useEffect( ( ) =>
 	{
 		if( locationData )
 		{
-			async function fetchWeather( locationData ) 
+			async function fetchWeather( locationData )
 			{
-				try 
+				try
 				{
 					const weather_data = await fetchWeatherData( locationData );
 					if(weather_data)
@@ -101,11 +101,11 @@ const HomeScreen = ({ navigation }) =>
 						console.log('Weather Data Loaded.')
 					}
 					else    return
-				} 
-				catch ( error ) 
+				}
+				catch ( error )
 				{
 					console.error( error );
-				} 
+				}
 			}
 			fetchWeather( locationData );
 		}
@@ -116,16 +116,16 @@ const HomeScreen = ({ navigation }) =>
 		<SafeAreaProvider style={ styles.container }>
 			{ errorMessage != null ? <Text>{ errorMessage }</Text> : null }
 			<TableView style={{ marginTop : '12%' }}>
-				{   loadingAlertData == false ? 
-			
-					<TouchableOpacity 
+				{   loadingAlertData == false ?
+		
+					<TouchableOpacity
 						onPress={() => { scheduleAlertNotification( alertData )}}
 						style={styles.button_chrome_grey}
 					>
 						<Text style={styles.text_button}>Load Demo Alert</Text>
-					</TouchableOpacity>  
+					</TouchableOpacity> 
 					: null
-				} 
+				}
 
 				<TouchableOpacity
 					onPress={ ( ) =>  { navigation.navigate("EmergencyDataScreen"); }}
@@ -149,9 +149,9 @@ const HomeScreen = ({ navigation }) =>
 				</TouchableOpacity>
 
 			</TableView>
-			{ weatherData && 
-			
-				<View>  
+			{ weatherData &&
+		
+				<View> 
 					{ weatherData?.weather[0].main != null ? <Text>Weather condition: {weatherData.weather[0].description.slice(0,1).toUpperCase() + weatherData.weather[0].description.slice(1)}.</Text> : null }
 					{ weatherData?.main.humidity != null ? <Text>Humidity: {weatherData.main.humidity}%</Text> : null }
 					{ weatherData?.main.temp_max != null ? <Text>High temperature: {Math.round(weatherData.main.temp_max)}°</Text> : null }
@@ -170,8 +170,8 @@ const selectEntityData = async ( db, setUserData ) =>
 	{
 		const result = await db.getAllAsync(
 		`
-			SELECT * FROM Entity, Person 
-			WHERE Person_ID = ? AND Entity_ID = ?;`, 
+			SELECT * FROM Entity, Person
+			WHERE Person_ID = ? AND Entity_ID = ?;`,
 			[ 1, 1 ]
 		);
 

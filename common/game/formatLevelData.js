@@ -2,13 +2,13 @@ export default function formatLevelData( results, screen_name )
 {
 	if (screen_name == 'MultipleChoiceScreen')
 	{
-		const multiple_choice_data = results.map(function(result) 
+		const multiple_choice_data = results.map(function(result)
 		{
 			return {
 				id: result.Question_ID,
 				question: result.Question,
 				answers:
-				[ 
+				[
 					result.Answer_Correct,
 					result.Incorrect_Answer_One,
 					result.Incorrect_Answer_Two,
@@ -21,7 +21,7 @@ export default function formatLevelData( results, screen_name )
 	}
 	else if (screen_name == 'MatchingScreen')
 	{
-		const matching_data = results.map(function(result) 
+		const matching_data = results.map(function(result)
 		{
 			return {
 				id: result.Question_ID,
@@ -31,12 +31,12 @@ export default function formatLevelData( results, screen_name )
 				correct: false
 			}
 		})
-		
+	
 		return matching_data;
 	}
 	else if (screen_name == 'TrueFalseScreen')
 	{
-		const true_false_data = results.map(function(result) 
+		const true_false_data = results.map(function(result)
 		{
 			return {
 				id: result.Question_ID,
@@ -49,5 +49,5 @@ export default function formatLevelData( results, screen_name )
 			}
 		})
 		return true_false_data;
-	}	
+	}
 }

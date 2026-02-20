@@ -17,9 +17,9 @@ const GameScreen = ({ navigation }) =>
 
 	const isFocused = useIsFocused();
 
-	useEffect(() => 
+	useEffect(() =>
 		{
-			if ( isFocused ) 
+			if ( isFocused )
 			{
 				loadData( );
 			}
@@ -31,10 +31,10 @@ const GameScreen = ({ navigation }) =>
 	return (
 		<View style={ styles.container }>
 			<View style={ styles.game_area }>
-				
+			
 				<View>
-							<Text style={ styles.score_text } >Score</Text>	
-							<Text style={ styles.score_text } >{ totalScore } </Text>	
+							<Text style={ styles.score_text } >Score</Text>
+							<Text style={ styles.score_text } >{ totalScore } </Text>
 				</View>
 
 				<ScrollView>

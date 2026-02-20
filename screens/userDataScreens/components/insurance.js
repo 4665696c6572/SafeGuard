@@ -11,8 +11,9 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 {
 	return (
 		<View style={[ styles.container, { flex: 2/3 } ]}>
-			<ScrollView style={ styles.data_container }>
+			<View style={ styles.data_container }>
 				<Text style={ styles.title_bar }>Health Insurance</Text>
+				<ScrollView>
 				{
 					insuranceData.map(( insurance, i) =>
 					<View key={insurance.insurance_id} style={ styles.text_list }>
@@ -35,15 +36,16 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 					</View>
 				)}
 
-				<TouchableOpacity
-					accessibilityLabel='Add button'
-					accessibilityHint='Press to add new health insurance details.'
-					onPress={ ( ) => setEditInsuranceVisible( true )}
-					style={ styles.data_button_size }
-				>
-					<Text style={styles.text_button}>Add new insurance</Text>
-				</TouchableOpacity>
-			</ScrollView>
+					<TouchableOpacity
+						accessibilityLabel='Add button'
+						accessibilityHint='Press to add new health insurance details.'
+						onPress={ ( ) => setEditInsuranceVisible( true )}
+						style={ styles.data_button_size }
+					>
+						<Text style={styles.text_button}>Add new insurance</Text>
+					</TouchableOpacity>
+				</ScrollView>
+			</View>
 		</View>
 	);
 };
@@ -119,14 +121,14 @@ export const ViewInsurance = ({
 
 
 
-export const EditInsurance = ({ 
+export const EditInsurance = ({
 								insuranceData, insuranceIndex, isFormValid, loadInsuranceData,
 								saveToDB, setEditInsuranceVisible, setInsuranceIndex, setIsFormValid,
 								setTempInsuranceData, setViewInsuranceVisible, tempInsuranceData
 							}) =>
 {
 	// Date Picker
-	const [ isDatePickerVisible, setDatePickerVisibility ] = useState( false );	
+	const [ isDatePickerVisible, setDatePickerVisibility ] = useState( false );
 	const showDatePicker = () => setDatePickerVisibility(true);
 	const hideDatePicker = () => setDatePickerVisibility(false);
 
@@ -204,7 +206,7 @@ export const EditInsurance = ({
 					style={ styles.text_input}
 					placeholder={ tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : 'Insurance company name' }
 					onChangeText={( text ) =>
-					{	
+					{
 						setCompanyName( text );
 						setTempInsuranceData( prev => ({ ...prev,  'entity_name': text }));
 						setTempInsuranceData( prev => ({ ...prev,  'insurance_type': 'Health' }));
@@ -238,7 +240,7 @@ export const EditInsurance = ({
 					mode='date'
 					onConfirm={ handleConfirm }
 					onCancel={ hideDatePicker }
-				/>	
+				/>
 
 
 				<TextInput
@@ -262,7 +264,7 @@ export const EditInsurance = ({
 						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
-					
+				
 					{/* Save Button */}
 					<TouchableOpacity
 						accessibilityLabel='Save button'
@@ -271,7 +273,7 @@ export const EditInsurance = ({
 						onPress={ ( ) => handlePress( false, false )}
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
-					</TouchableOpacity>	
+					</TouchableOpacity>
 
 					{/* Next Button */}
 					{ !insuranceData?.[insuranceIndex]?.insurance_id ?

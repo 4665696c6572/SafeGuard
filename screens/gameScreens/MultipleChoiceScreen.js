@@ -22,7 +22,7 @@ const questions_per_level = 10;
 const screen_width = Dimensions.get('screen').width;
 const imgUri = require( '../../assets/frog.png' );
 
-export default function MultipleChoiceScreen({ navigation, route }) 
+export default function MultipleChoiceScreen({ navigation, route })
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
@@ -54,11 +54,11 @@ export default function MultipleChoiceScreen({ navigation, route })
 			const new_score = route?.params?.score + levelScore;
 
 			updateGameData( new_score, db );
-			setTimeout(function() 
+			setTimeout(function()
 			{
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen", { score: new_score });
-			}, 1200) 
+			}, 1200)
 		}
 	}), [ levelComplete ]
 
@@ -68,7 +68,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 		if ( checkAnswer( correct_answer,  user_answer ))
 		{
 			setAnswerOrder( calcAnswerOrder( answers_per_round ));
-			setLevelScore( prev => prev + 1 );			
+			setLevelScore( prev => prev + 1 );		
 		}
 		else Haptics.selectionAsync();
 		setCurrentNumber( prev => prev + 1 );
@@ -82,7 +82,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 				setCheerVisible( false )
 			}, 1000 );
 		}
-		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );	
+		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
 	}
 
 
@@ -95,9 +95,9 @@ export default function MultipleChoiceScreen({ navigation, route })
 					<View style={ styles.game_area }>
 
 						<View>
-							<Text style={ styles.score_text } >Final score</Text>	
-							<Text style={ styles.score_text } >{ levelScore }</Text>	
-						</View> 
+							<Text style={ styles.score_text } >Final score</Text>
+							<Text style={ styles.score_text } >{ levelScore }</Text>
+						</View>
 
 						<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 					</View>
@@ -105,7 +105,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 				{/*  Cheer Modal */}
 				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
-					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>					
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>				
 				</Modal>
 
 				{/*  Progress and Score  */}
@@ -128,20 +128,20 @@ export default function MultipleChoiceScreen({ navigation, route })
 				</View>
 
 				<View>
-					<Text style={ styles.score_text } >Score</Text>	
-					<Text style={ styles.score_text } >{ levelScore }</Text>	
-				</View> 
+					<Text style={ styles.score_text } >Score</Text>
+					<Text style={ styles.score_text } >{ levelScore }</Text>
+				</View>
 
 				{
 					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) =>
 					<View style={ styles.game_column } key={entry.question_id}>
-						
+					
 
 						<View style={[ styles.game_box_large, styles.multiple_choice_question ]}>
 							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
 						</View>
 
-						{	
+						{
 							answerOrder.map((index) =>
 							<TouchableHighlight
 								key = {index}
