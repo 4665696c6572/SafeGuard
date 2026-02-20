@@ -17,8 +17,8 @@ const MedicationScreen = ({ navigation, route  }) =>
 	const db = useSQLiteContext();
 	const params = route?.params;
 
-	const [ medicationData,  setMedicationData, loadingMedicationData , loadMedicationData] = useLoadEmergencyData( db, 'Medication', 'Select' );
-	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor_Name', 'Select' );
+	const [ medicationData,  setMedicationData, loadingMedicationData , loadMedicationData] = useLoadEmergencyData( db, 'Medication' );
+	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor_Name' );
 
 	const [ medicationIndex, setMedicationIndex ] = useState( params?.condition ? params.condition : 0 );
 	const [ tempMedicationData, setTempMedicationData ] = useState( );
@@ -42,7 +42,7 @@ const MedicationScreen = ({ navigation, route  }) =>
 
 
 
-		async function saveToDB( medicationData, setMedicationData, tempMedicationData )
+		async function saveToDB( tempMedicationData )
 		{
 			if ( tempMedicationData.medication_id )
 			{	

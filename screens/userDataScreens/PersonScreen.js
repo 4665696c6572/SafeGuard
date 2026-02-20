@@ -18,11 +18,11 @@ const PersonScreen = ({ navigation, route }) =>
 	const db = useSQLiteContext();
 	const params = route?.params;
 
-	const [ entityData, setEntityData, loadingEntityData, loadEntityData ] = useLoadEmergencyData( db, 'Person', 'Select' );
+	const [ entityData, setEntityData, loadingEntityData, loadEntityData ] = useLoadEmergencyData( db, 'Person' );
 	const [ editPersonVisible, setEditPersonVisible ] = useState( false );
 	const [ tempEntityData, setTempEntityData ] = useState( );
 
-	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Select', 'Health' );
+	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Health' );
 	const [ tempInsuranceData, setTempInsuranceData ] = useState( );
 	const [ insuranceIndex, setInsuranceIndex ] = useState( params?.condition ? params.condition : null );
 	const [ viewInsuranceVisible, setViewInsuranceVisible ] = useState( false );
@@ -55,7 +55,6 @@ const PersonScreen = ({ navigation, route }) =>
 			{
 				await insertEmergencyData( table, data, db );
 			}
-			loadData( );
 		}
 		else if (table == 'Insurance')
 		{
@@ -68,9 +67,7 @@ const PersonScreen = ({ navigation, route }) =>
 				id = await insertEmergencyData( table, data, db );
 			}
 
-			loadData( );
-
-			if ( shouldNavigate ) handleNavigation( id, data.entity_name )
+			// if ( shouldNavigate ) handleNavigation( id, data.entity_name )
 		}
 	loadData( );
 	}

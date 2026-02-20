@@ -212,7 +212,7 @@ export const EditPerson = ({
 						<View style={ styles.picker_view }>
 							<Picker
 								accessibilityLabel='Sex menu'
-								accessibilityHint='Select you sex.'
+								accessibilityHint='Select your sex.'
 								style={ styles.picker }
 								selectedValue={ tempEntityData?.sex ? tempEntityData.sex : 'Sex' }
 								onValueChange={( itemValue ) =>setTempEntityData( prev => ({ ...prev, 'sex': itemValue }))}

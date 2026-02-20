@@ -12,7 +12,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 {
 	return (
 		<View style={ styles.container }>
-			<View style={ styles.data_container }>
+			<View style={ styles.data_container }> 
 				<Text style={ styles.title_bar }>Medications</Text>
 				{
 					medicationData.map(( medication, i) =>
@@ -55,6 +55,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 	);
 };
 
+
 export const ViewMedication = ({ 
 									doctorData, medicationData, medicationIndex, setEditMedicationVisible,
 									setMedicationIndex, setTempMedicationData, setViewMedicationVisible 
@@ -63,16 +64,16 @@ export const ViewMedication = ({
 	return (
 		<View style={ styles.container }>
 			<View style={ styles.data_container }>
-				<View>
+				<View style={ styles.heading_row }>	
 				{
 					medicationData?.[medicationIndex].is_life_sustaining == 1 ?
 					<View>
-						<Text style={[ styles.text, styles.allergy_alert ]}>Life Sustaining Medication</Text>
-						{ medicationData?.[medicationIndex].medication_name ? <Text style={[ styles.text, styles.allergy_alert ]}>{ medicationData?.[medicationIndex].medication_name }</Text> : null }
+						<Text style={[ styles.heading_text, styles.allergy_alert ]}>Life Sustaining Medication</Text>
+						{ medicationData?.[medicationIndex].medication_name ? <Text style={[ styles.heading_text, styles.allergy_alert ]}>{ medicationData?.[medicationIndex].medication_name }</Text> : null }
 					</View>
 					:
 					<View>
-						{ medicationData?.[medicationIndex].medication_name ? <Text style={ styles.text }>{ medicationData?.[medicationIndex].medication_name }</Text> : null}
+						{ medicationData?.[medicationIndex].medication_name ? <Text style={ styles.heading_text }>{ medicationData?.[medicationIndex].medication_name }</Text> : null}
 					</View>
 				}
 					<TouchableOpacity
@@ -89,17 +90,17 @@ export const ViewMedication = ({
 				</View>
 
 				<View key={ medicationData?.[medicationIndex].medication_id }>
-					{ medicationData?.[medicationIndex]?.strength ? <Text style={{ fontSize: 18 }}>Strength: { medicationData?.[medicationIndex].strength }</Text> : null }
-					{ medicationData?.[medicationIndex]?.frequency ? <Text style={{ fontSize: 18 }}>Frequency: { medicationData?.[medicationIndex].frequency }</Text> : null }
-					{ medicationData?.[medicationIndex]?.start_date ? <Text style={{ fontSize: 18 }}>Start date: { medicationData?.[medicationIndex].start_date }</Text> : null }
-					{ medicationData?.[medicationIndex]?.medication_note? <Text style={{ fontSize: 18 }}>Note: { medicationData?.[medicationIndex].medication_note }</Text> : null }
+					{ medicationData?.[medicationIndex]?.strength ? <Text style={ styles.text }>Strength: { medicationData?.[medicationIndex].strength }</Text> : null }
+					{ medicationData?.[medicationIndex]?.frequency ? <Text style={ styles.text }>Frequency: { medicationData?.[medicationIndex].frequency }</Text> : null }
+					{ medicationData?.[medicationIndex]?.start_date ? <Text style={ styles.text }>Start date: { medicationData?.[medicationIndex].start_date }</Text> : null }
+					{ medicationData?.[medicationIndex]?.medication_note? <Text style={ styles.text }>Note: { medicationData?.[medicationIndex].medication_note }</Text> : null }
 
 					{
 						doctorData.map (doctor =>
 						<View key={doctor.entity_id} >
 						{
 							doctor.entity_id == medicationData[medicationIndex].doctor_id ?
-							<Text style={{ fontSize: 18 }}>Doctor: { doctor.entity_name}</Text>
+							<Text style={ styles.text }>Doctor: { doctor.entity_name}</Text>
 							: null
 						}
 						</View>
@@ -137,18 +138,16 @@ export const EditMedication = ({
 	const [ lifeSustaining, setLifeSustaining ] = useState( tempMedicationData?.is_life_sustaining ? tempMedicationData?.is_life_sustaining : false)
 
 	// Date Picker
-	const [ isDatePickerVisible, setDatePickerVisibility ] = useState( false );
+	const [ datePickerVisible, setDatePickerVisibility ] = useState( false );
 
 	const showDatePicker = () => setDatePickerVisibility( true );
 	const hideDatePicker = () => setDatePickerVisibility( false );
 
 	const handleConfirm = ( date ) =>
 	{
-		setTempMedicationData( prev => ({ ...prev, 'diagnosis_date': date.toISOString().slice( 0,10)}));
+		setTempMedicationData( prev => ({ ...prev, 'start_date': date.toISOString().slice( 0,10)}));
 		hideDatePicker();
 	};
-
-
 
 
 	// Form Validation ( Must (minimally) have a name ) 
@@ -178,7 +177,7 @@ export const EditMedication = ({
 
 
 
-// Close / Save button handler for Edit modal
+	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{	
 		// If no changes have been made or user presses cancel button, close the edit Modal
@@ -196,7 +195,7 @@ export const EditMedication = ({
 		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
 		if ( isFormValid)
 		{
-			saveToDB( medicationData, setMedicationData, tempMedicationData );
+			saveToDB( tempMedicationData );
 			setEditMedicationVisible( false );
 			setMedicationIndex( null );
 			setMedicationName( '' );
@@ -204,7 +203,6 @@ export const EditMedication = ({
 		}
 		else    setShowValidationError( true );
 	}
-
 
 
 	return (
@@ -238,61 +236,61 @@ export const EditMedication = ({
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'frequency': text }))}
 				/>
 
-				
-					{/* Select existing Doctor */}
-					{
-						doctorData?.length > 0 ?
-						<View style={ styles.picker_view }>
-							<Picker
-								accessibilityLabel='Doctor menu'
-								accessibilityHint='Select previously entered doctor.'
-								selectedValue={ tempMedicationData?.doctor_id ? tempMedicationData.doctor_id : selectedDoctor }
-								style={ styles.picker }
-								onValueChange={ itemValue =>
-										{
-											setSelectedDoctor( itemValue );
-											setTempMedicationData( prev => ({ ...prev, 'doctor_id': itemValue}))
-										}
+
+				{/* Select existing Doctor */}
+				{
+					doctorData?.length > 0 ?
+					<View style={ styles.picker_view }>
+						<Picker
+							accessibilityLabel='Doctor menu'
+							accessibilityHint='Select previously entered doctor.'
+							selectedValue={ tempMedicationData?.doctor_id ? tempMedicationData.doctor_id : selectedDoctor }
+							style={ styles.picker }
+							onValueChange={ itemValue =>
+									{
+										setSelectedDoctor( itemValue );
+										setTempMedicationData( prev => ({ ...prev, 'doctor_id': itemValue}))
 									}
-								>
-								<Picker.Item 
-									color='black' 
-									enabled={ false } 
-									label='Doctor' 
-									value='' 
+								}
+							>
+							<Picker.Item 
+								color='black' 
+								enabled={ false } 
+								label='Doctor' 
+								value='' 
+							/>
+							{
+								doctorData.map(doctor =>
+								<Picker.Item
+									accessibilityLabel='menuitem'
+									key={doctor.entity_id}
+									label={doctor.entity_name}
+									value={doctor.entity_id}
 								/>
-								{
-									doctorData.map(doctor =>
-									<Picker.Item
-										accessibilityLabel='menuitem'
-										key={doctor.entity_id}
-										label={doctor.entity_name}
-										value={doctor.entity_id}
-									/>
-								)}
-							</Picker>
-						</View>
-					: null
-					}
+							)}
+						</Picker>
+					</View>
+				: null
+				}
 
 
-					<TouchableHighlight
-						accessibilityLabel="Date picker"
-						accessibilityHint="Touch to open date picker for start date of medication."
-						onPress={ showDatePicker }
-						style={ styles.menu }
-						underlayColor={ underlay_color }
-					>
-						<Text style={[ styles.text_input, styles.menu_text ]}>{ tempMedicationData?.start_date ? tempMedicationData.start_date : 'Start date:' }</Text>
-					</TouchableHighlight>
+				<TouchableHighlight
+					accessibilityLabel="Date picker"
+					accessibilityHint="Touch to open date picker for start date of medication."
+					onPress={ showDatePicker }
+					style={ styles.menu }
+					underlayColor={ underlay_color }
+				>
+					<Text style={[ styles.text_input, styles.menu_text ]}>{ tempMedicationData?.start_date ? tempMedicationData.start_date : 'Start date:' }</Text>
+				</TouchableHighlight>
 
 
-					<DateTimePickerModal
-						isVisible={ isDatePickerVisible }
-						mode="date"
-						onConfirm={ handleConfirm }
-						onCancel={ hideDatePicker }					
-					/>
+				<DateTimePickerModal
+					isVisible={ datePickerVisible }
+					mode="date"
+					onConfirm={ handleConfirm }
+					onCancel={ hideDatePicker }					
+				/>
 
 
 				<TextInput
@@ -300,7 +298,7 @@ export const EditMedication = ({
 					accessibilityHint='Enter medication relevant notes.'
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
-					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'note' : text }))}
+					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
 				/>
 
 

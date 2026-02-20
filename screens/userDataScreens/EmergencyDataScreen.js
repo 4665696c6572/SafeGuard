@@ -2,7 +2,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 import styles from '../../styles/styles';
 
@@ -14,7 +14,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
 
-	const [ emergencyData, setEmergencyData, loadingData, loadEmergencyData ] = useLoadEmergencyData( db, 'All' );
+	const [ emergencyData, setEmergencyData, loadingData, loadEmergencyData ] = useLoadEmergencyData( db, 'All', 'Health' );
 
 	const isFocused = useIsFocused();
 

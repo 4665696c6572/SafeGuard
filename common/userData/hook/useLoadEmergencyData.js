@@ -2,9 +2,8 @@ import { useCallback, useState } from 'react';
 
 import selectEmergencyData from '../database/selectEmergencyData.js';
 
-export default function useLoadEmergencyData( db, table, action, condition )
+export default function useLoadEmergencyData( db, table, condition )
 {
-
 	const [ loadedData, setLoadedData ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
 
@@ -12,14 +11,14 @@ export default function useLoadEmergencyData( db, table, action, condition )
 		{	
 			try 
 			{
-				const data = await selectEmergencyData( db, table, action, condition );
+				const data = await selectEmergencyData( db, table, condition );
 				setLoadedData( data )
 			} 
 			catch ( error ) 
 			{
 				console.error( error );
 			} 
-			finally 
+			finally
 			{
 				setLoadingData( false );
 			}

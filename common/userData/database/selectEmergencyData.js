@@ -1,6 +1,4 @@
-// import splitData from "../splitData";
-
-export default async function selectEmergencyData( db, table, action, condition )
+export default async function selectEmergencyData( db, table, condition )
 {
 	try
 	{
@@ -9,13 +7,13 @@ export default async function selectEmergencyData( db, table, action, condition 
 			var allergy = await db.getAllAsync(
 			`
 				SELECT
-					allergy_id,
+					condition_id,
 					allergen,
 					severity,
 					diagnosis_date,
 					Medical_Condition.condition_name AS condition_name,
-					Medical_Condition.doctor_id AS condition_doctor_id,
-					Medical_Condition.condition_note AS allergy_note
+					Medical_Condition.doctor_id AS doctor_id,
+					Medical_Condition.condition_note AS condition_note
 				FROM Allergy
 				LEFT JOIN Medical_Condition
 				ON Medical_Condition.condition_id = Allergy.allergy_id				
@@ -25,7 +23,7 @@ export default async function selectEmergencyData( db, table, action, condition 
 
 		if ( table == 'Contact' )
 		{	
-			var contact =	 await db.getAllAsync(
+			var contact = await db.getAllAsync(
 			`
 			SELECT
 				Entity.entity_id AS entity_id,
@@ -102,7 +100,6 @@ export default async function selectEmergencyData( db, table, action, condition 
 
 		if ( table == 'Insurance' || table == 'All' )
 		{
-			if(table =='All')    condition = 'Health';
 			var insurance = await db.getAllAsync(
 			`
 				SELECT 
@@ -147,7 +144,8 @@ export default async function selectEmergencyData( db, table, action, condition 
 			);
 		}
 
-		if (( table == 'Medication' || table == 'All' ) && action != 'Update' )
+
+		if ( table == 'Medication' || table == 'All' )
 		{	
 			var medication = await db.getAllAsync(
 			`
@@ -163,6 +161,18 @@ export default async function selectEmergencyData( db, table, action, condition 
 					doctor_id
 					FROM Medication				
 				ORDER BY is_life_sustaining DESC, medication_name;
+			`);
+		}
+
+		if ( table == 'Medication_Name' )
+		{	
+			var medication = await db.getAllAsync(
+			`
+				SELECT 
+					medication_id,
+					medication_name,
+					condition_id
+				FROM Medication;
 			`);
 		}
 
@@ -188,11 +198,11 @@ export default async function selectEmergencyData( db, table, action, condition 
 
 
 		if ( table == 'Allergy' )    return allergy;
-		// if ( table == 'Contact' )    return splitData( contact );
-		if ( table == 'Doctor_Name' || table == 'Doctor' )    return doctor;
+		if ( table == 'Contact' )    return contact;
+		if ( table == 'Doctor' || table == 'Doctor_Name' )    return doctor;
 		if ( table == 'Insurance' )    return insurance;
 		if ( table == 'Medical_Condition' )    return medical_condition;
-		if ( table == 'Medication' )    return medication;
+		if ( table == 'Medication' || table == 'Medication_Name' )    return medication;
 		if ( table == 'Person' ) return person;
 
 
