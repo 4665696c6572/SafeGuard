@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Progress from 'react-native-progress';
-import {  StackActions, useIsFocused } from '@react-navigation/native';
+import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer,  checkLevelComplete, checkRoundComplete, setResultArray, updateResultArray } from '../../common/game/sharedGame.js';
+import { calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete, setResultArray, updateResultArray } from '../../common/game/sharedGame.js';
 
 
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -98,7 +98,7 @@ export default function MatchingScreen({ navigation, route })
 		
 		setAnswerButtonsDisabled( true );
 		setCurrentNumber( prev => prev + 1 );
-		setLevelScore( prev => prev + 1 )
+		setLevelScore( prev => prev + 1 );
 		updateLevelData ( db, 'MatchingScreen', question_id );
 	}
 
@@ -119,12 +119,12 @@ export default function MatchingScreen({ navigation, route })
 					</View>
 				</Modal>
 
-				{/*  Cheer Modal */}
+				{/* Cheer Modal */}
 				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
-					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>				
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 				</Modal>
 
-				{/*  Progress and Score  */}
+				{/* Progress and Score */}
 				<View style={ styles.progress_bar_container } >
 					<View style={ styles.progress_bar }>
 						<Progress.Bar
@@ -187,7 +187,7 @@ export default function MatchingScreen({ navigation, route })
 							answerButtonsDisabled ? styles.game_box_disabled : null
 						]}
 						onPress={ () =>
-						{	////	question id, answer (question) id, answeredCorrectly index
+						{	// question id, answer (question) id, answeredCorrectly index
 							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].question_id, answerOrder[i] );
 						}}
 						underlayColor={ underlay }

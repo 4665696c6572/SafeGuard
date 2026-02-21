@@ -1,7 +1,8 @@
+import { Checkbox } from 'expo-checkbox';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Checkbox, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 
 import styles from "../../../styles/styles.js";
@@ -82,24 +83,24 @@ export const ViewMedication = ({
 			{
 				medicationData?.[medicationIndex].is_life_sustaining == 1 ?
 				<View>
+				{ 
+					medicationData?.[medicationIndex].medication_name ? 
+					<Text style={ styles.title_bar }>
+						{ medicationData?.[medicationIndex].medication_name }
+					</Text> 
+				: null 
+				}
 					<Text style={[ styles.heading_text, styles.alert ]}>Life Sustaining Medication</Text>
-					{ 
-						medicationData?.[medicationIndex].medication_name ? 
-						<Text style={[ styles.heading_text, styles.alert ]}>
-							{ medicationData?.[medicationIndex].medication_name }
-						</Text> 
-					: null 
-					}
 				</View>
 				:
 				<View>
-					{ 
-						medicationData?.[medicationIndex].medication_name ? 
-						<Text style={ styles.heading_text }>
-							{ medicationData?.[medicationIndex].medication_name }
-						</Text> 
-					: null 
-					}
+				{ 
+					medicationData?.[medicationIndex].medication_name ? 
+					<Text style={ styles.title_bar }>
+						{ medicationData?.[medicationIndex].medication_name }
+					</Text> 
+				: null 
+				}
 				</View>
 			}
 
@@ -180,7 +181,7 @@ export const ViewMedication = ({
 				</View>
 
 
-				{/* Close/Edit Button Row */}
+				{/* Close/Edit button row */}
 				<View style={ styles.save_row }>
 					{/* Close Button */}
 					<TouchableOpacity
@@ -219,13 +220,6 @@ export const EditMedication = ({
 									setMedicationIndex, setTempMedicationData, tempMedicationData
 								}) =>
 {
-
-	// Doctor Picker
-	const [ selectedDoctor, setSelectedDoctor ] = useState( '' );
-
-	// Condition Picker
-	const [ selectedCondition, setSelectedCondition ] = useState( '' );
-
 	const [ lifeSustaining, setLifeSustaining ] = useState( tempMedicationData?.is_life_sustaining ? tempMedicationData.is_life_sustaining : false)
 
 	// Date Picker
@@ -300,7 +294,7 @@ export const EditMedication = ({
 			<View style={ styles.data_container }>
 				<TextInput
 					accessibilityLabel='Medication name'
-					accessibilityHint='Enter name of medication.'
+					accessibilityHint='Type in name of medication.'
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.medication_name ? tempMedicationData.medication_name : 'Medication name' }
 					onChangeText={( text ) =>
@@ -312,7 +306,7 @@ export const EditMedication = ({
 
 				<TextInput
 					accessibilityLabel='Medication strength'
-					accessibilityHint='Enter strength of medication (example: 500 or 500mg).'
+					accessibilityHint='Type in strength of medication (example: 500 or 500mg).'
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.strength ? tempMedicationData.strength : 'Strength' }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'strength': text }))}
@@ -320,7 +314,7 @@ export const EditMedication = ({
 
 				<TextInput
 					accessibilityLabel='Medication frequency'
-					accessibilityHint='Enter dosage frequency (example: every eight hours).'
+					accessibilityHint='Type in dosage frequency (example: every eight hours).'
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.frequency ? tempMedicationData.frequency : 'Frequency' }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'frequency': text }))}
@@ -334,14 +328,12 @@ export const EditMedication = ({
 						<Picker
 							accessibilityLabel='Doctor menu'
 							accessibilityHint='Select previously entered doctor.'
-							selectedValue={ tempMedicationData?.doctor_id ? tempMedicationData.doctor_id : selectedDoctor }
+							selectedValue={ tempMedicationData?.doctor_id ? tempMedicationData.doctor_id : 'Doctor' }
 							style={ styles.picker }
 							onValueChange={ itemValue =>
-									{
-										setSelectedDoctor( itemValue );
-										setTempMedicationData( prev => ({ ...prev, 'doctor_id': itemValue}))
-									}
-								}
+							{
+								setTempMedicationData( prev => ({ ...prev, 'doctor_id': itemValue}))
+							}}
 							>
 							<Picker.Item
 								color='black'
@@ -390,12 +382,11 @@ export const EditMedication = ({
 						<Picker
 							accessibilityLabel='Medical condition menu'
 							accessibilityHint='Select a medical condition.'
-							selectedValue={ tempMedicationData?.condition_id  ? tempMedicationData.condition_id  : selectedCondition }
+							selectedValue={ tempMedicationData?.condition_id ? tempMedicationData.condition_id : 'Condition name' }
 							style={ styles.picker }
 							onValueChange={ itemValue =>
 							{
-								setSelectedCondition( itemValue );
-								setTempMedicationData( prev => ({ ...prev,  'condition_id': itemValue }));
+								setTempMedicationData( prev => ({ ...prev, 'condition_id': itemValue }));
 							}}
 							>
 							<Picker.Item color='black' enabled={ false } label='Condition' value='' />
@@ -404,19 +395,19 @@ export const EditMedication = ({
 								<Picker.Item
 									accessibilityLabel='menuitem'
 									key={ condition.condition_id }
-									label={ condition.allergen ? 'Allergy: ' + condition.allergen :  condition.condition_name}
+									label={ condition.allergen ? 'Allergy: ' + condition.allergen : condition.condition_name}
 									value={ condition.condition_id }
 								/>)
 							}
 						</Picker>
 					</View>
-					: null
+				: null
 				}
 
 
 				<TextInput
 					accessibilityLabel='Notes'
-					accessibilityHint='Enter medication relevant notes.'
+					accessibilityHint='Type in medication relevant notes.'
 					style={ styles.text_input }
 					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
@@ -428,8 +419,8 @@ export const EditMedication = ({
 					<Checkbox
 						accessibilityLabel='Life-sustaining medication'
 						accessibilityHint='Check the box if this is a life-sustaining medication.'
-						color={ lifeSustaining  ? '#3087eb' : undefined }
-						value={ lifeSustaining  }
+						color={ lifeSustaining ? '#3087eb' : undefined }
+						value={ lifeSustaining }
 						onValueChange={ ( ) =>
 						{
 							setLifeSustaining( !lifeSustaining );
@@ -438,15 +429,8 @@ export const EditMedication = ({
 					/>
 				</View>
 
-				<TouchableOpacity // ~~~
-					onPress={ ( ) => { navigation.navigate( "DoctorScreen" ); }}
-					style={{ flex: 1/3}}
-				>
-					<Text style={styles.text_button}>Add new Doctor</Text>
-				</TouchableOpacity>
 
-
-				{/* Close/Save Button Row */}
+				{/* Close/Save button row */}
 				<View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: 5}}>
 					{/* Close Button */}
 					<TouchableOpacity

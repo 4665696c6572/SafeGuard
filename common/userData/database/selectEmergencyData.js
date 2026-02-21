@@ -18,14 +18,14 @@ export default async function selectEmergencyData( db, table, condition )
 					Medical_Condition.condition_note AS condition_note
 				FROM Allergy
 				LEFT JOIN Medical_Condition
-				ON Medical_Condition.condition_id = Allergy.allergy_id			
+				ON Medical_Condition.condition_id = Allergy.allergy_id
 				ORDER BY severity ASC, allergen ASC;
 			`);
 		}
 
 		if ( table == 'Contact' )
 		{
-			var contact =	 await db.getAllAsync(
+			var contact = await db.getAllAsync(
 			`
 			SELECT
 				Entity.entity_id AS entity_id,
@@ -36,7 +36,7 @@ export default async function selectEmergencyData( db, table, condition )
 				city,
 				state,
 				post_code,
-				country,			
+				country,
 				address_note,
 				Office.phone_number_id AS phone_number_id,
 				Office.phone_number AS phone_number,
@@ -174,11 +174,11 @@ export default async function selectEmergencyData( db, table, condition )
 					condition_id,
 					strength,
 					frequency,
-					start_date,				
+					start_date,
 					is_life_sustaining,
 					medication_note,
 					doctor_id
-					FROM Medication			
+					FROM Medication
 				ORDER BY is_life_sustaining DESC, medication_name;
 			`);
 		}

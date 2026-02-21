@@ -71,7 +71,7 @@ const DoctorScreen = ({ navigation, route }) =>
 				setViewDoctorVisible={ setViewDoctorVisible }
 			/>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ viewDoctorVisible }>
+			<Modal animationType='slide' visible={ viewDoctorVisible }>
 				<ViewDoctor
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }
@@ -83,7 +83,7 @@ const DoctorScreen = ({ navigation, route }) =>
 				/>
 			</Modal>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ editDoctorVisible }>
+			<Modal animationType='slide' visible={ editDoctorVisible }>
 				<EditDoctor
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }

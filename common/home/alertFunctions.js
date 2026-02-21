@@ -1,19 +1,19 @@
 import * as Notifications from 'expo-notifications';
 
-//  Zone ID 2 letter state, the letter Z, 3 number zone  example: FLZ050	Florida Zone 050
+// Zone ID 2 letter state, the letter Z, 3 number zone example: FLZ050 Florida Zone 050
 export async function fetchAlertZone( location )
 {
 	// ______________________________________________________________________
-	//   Latitude & Longitude
+	// Latitude & Longitude
 	// ______________________________________________________________________
 
-	//  ____ US ____
-	// const lat =  location.coords.latitude;	//  ~~~~~~ in US ~~~~~~ 	
-	// const lon = location.coords.longitude;  //  ~~~~~~ in US ~~~~~~ 	
+	// ____ US ____
+	// const lat = location.coords.latitude; // ~~~~~~ in US ~~~~~~
+	// const lon = location.coords.longitude; // ~~~~~~ in US ~~~~~~
 
 	// ____ Non-US ____
 
-	const lat =  28.078072; // Palm Harbor, Florida
+	const lat = 28.078072; // Palm Harbor, Florida
 	const lon = -82.763710;
 
 	const url_zone = `https://api.weather.gov/points/${lat},${lon}`;
@@ -28,7 +28,7 @@ export async function fetchAlertData( zone )
 	// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`;
 
 	// By State is only for demonstration ( zone may not have any active alerts )
-	const url_alert =`https://api.weather.gov/alerts/active/area/FL`;  // State  /area/FL
+	const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State /area/FL
 
 	const result_alert = await fetch( url_alert );
 
@@ -47,7 +47,7 @@ export async function fetchAlertData( zone )
 
 export function findHighestSeverity( alert_data )
 {
-	const severity =  {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
+	const severity = {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
 	let priority_alert_number = 0;
 	let max_severity = 5;
 
@@ -61,7 +61,7 @@ export function findHighestSeverity( alert_data )
 	}
 
 	const alert_title = alert_data.features[ priority_alert_number ].properties.severity;
-	const alert_body =  alert_data.features[ priority_alert_number ].properties.description;
+	const alert_body = alert_data.features[ priority_alert_number ].properties.description;
 
 	return [ alert_title, alert_body ];
 }
@@ -74,7 +74,7 @@ export async function scheduleAlertNotification( alertData )
 		content:
 		{
 			title: alertData[0],
-			body: alertData[1]			
+			body: alertData[1]
 		},
 		trigger: { seconds: 2, channelId: 'default' },
 	});

@@ -12,7 +12,7 @@ import styles from '../../styles/styles.js';
 import { EditMedication, Medication, ViewMedication } from './components/medication.js';
 
 
-const MedicationScreen = ({ navigation, route  }) =>
+const MedicationScreen = ({ route }) =>
 {
 	const db = useSQLiteContext();
 	const params = route?.params;
@@ -70,7 +70,7 @@ const MedicationScreen = ({ navigation, route  }) =>
 				setViewMedicationVisible={setViewMedicationVisible}
 			/>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ viewMedicationVisible }>
+			<Modal animationType='slide' visible={ viewMedicationVisible }>
 				<ViewMedication
 					conditionData={ conditionData }
 					doctorData={ doctorData }
@@ -83,7 +83,7 @@ const MedicationScreen = ({ navigation, route  }) =>
 				/>
 			</Modal>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={editMedicationVisible }>
+			<Modal animationType='slide' visible={editMedicationVisible }>
 				<EditMedication
 					conditionData={ conditionData }
 					doctorData={ doctorData }

@@ -58,34 +58,52 @@ export const ViewInsurance = ({
 {
 	return (
 		<View style={ styles.container }>
-			<View style={ styles.data_container }>
-				<View style={ styles.heading_row }>
-					{ insuranceData?.[insuranceIndex]?.entity_name ? <Text style={ styles.heading_text }>{ insuranceData?.[insuranceIndex]?.entity_name }</Text> : null }
+			<View style={[ styles.data_container, { flex: 3/4 }]}>
+				{
+					insuranceData?.[insuranceIndex]?.entity_name ?
+						<Text style={ styles.title_bar }>{ insuranceData?.[insuranceIndex]?.entity_name }</Text>
+				: null
+				}
 
-					<TouchableOpacity
-						accessibilityLabel='Edit button'
-						accessibilityHint='Press to edit health insurance details.'
-						style={ styles.game_button_end }
-						onPress={ ( ) =>
-						{
-							setEditInsuranceVisible( true );
-							setTempInsuranceData({...insuranceData[insuranceIndex] });
-							setViewInsuranceVisible( false );
-						}}
-					>
-						<Text style={[ styles.text_button, { paddingLeft: 5, paddingRight: 5 }]}>Edit</Text>
-					</TouchableOpacity>
-				</View>
+				{
+					insuranceData?.[insuranceIndex]?.policy_number ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Policy Number</Text>
+						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].policy_number }</Text>
+					</View>
+				: null
+				}
 
-				{ insuranceData?.[insuranceIndex]?.policy_number ? <Text style={ styles.text }>Policy Number: { insuranceData?.[insuranceIndex].policy_number }</Text> : null }
-				{ insuranceData?.[insuranceIndex]?.start_date ? <Text style={ styles.text }>Policy start date: { insuranceData?.[insuranceIndex].start_date }</Text> : null }
-				{ insuranceData?.[insuranceIndex]?.insurance_note ? <Text style={ styles.text }>Note: { insuranceData?.[insuranceIndex].insurance_note }</Text> : null }
-				{ insuranceData?.[insuranceIndex]?.phone_number ? <Text style={ styles.text }>Phone number: { insuranceData?.[insuranceIndex].phone_number }</Text> : null }
+				{
+					insuranceData?.[insuranceIndex]?.start_date ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Policy start date</Text>
+						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].start_date }</Text>
+					</View>
+				: null
+				}
+
+				{
+					insuranceData?.[insuranceIndex]?.insurance_note ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Note</Text>
+						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].insurance_note }</Text>
+					</View>
+				: null
+				}
+
+				{
+					insuranceData?.[insuranceIndex]?.phone_number ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Phone number</Text>
+						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].phone_number }</Text>
+					</View>
+				: null
+				}
 
 
-
-				{/* Close/View Button Row */}
-				<View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: 5}}>
+				{/* Close/View button row */}
+				<View style={ styles.save_row }>
 				{/* Close Button */}
 				<TouchableOpacity
 					accessibilityLabel='Close button'
@@ -101,23 +119,39 @@ export const ViewInsurance = ({
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					accessibilityLabel='Contact details button'
-					accessibilityHint='Press to view insurance contact details.'
+					accessibilityLabel='Edit button'
+					accessibilityHint='Press to edit health insurance details.'
 					style={ styles.game_button_end }
 					onPress={ ( ) =>
 					{
-						handleNavigation( insuranceData?.[insuranceIndex]?.insurance_id, insuranceData?.[insuranceIndex]?.entity_name );
+						setEditInsuranceVisible( true );
+						setTempInsuranceData({...insuranceData[insuranceIndex] });
 						setViewInsuranceVisible( false );
 					}}
 				>
-					<Text style={ styles.save_button_text }>View contact details</Text>
+					<Text style={ styles.save_button_text }>Edit</Text>
 				</TouchableOpacity>
 				</View>
 			</View>
+
+
+				{/* Contact details */}
+				<View style={ styles.contact_button }>
+					<TouchableOpacity
+						accessibilityLabel='Contact details button'
+						accessibilityHint='Press to view insurance contact details.'
+						onPress={ ( ) =>
+						{
+							handleNavigation( insuranceData?.[insuranceIndex]?.insurance_id, insuranceData?.[insuranceIndex]?.entity_name );
+							setViewInsuranceVisible( false );
+						}}
+					>
+						<Text style={ styles.save_button_text }>View contact details</Text>
+					</TouchableOpacity>
+				</View>
 		</View>
 	);
 };
-
 
 
 
@@ -252,7 +286,7 @@ export const EditInsurance = ({
 				/>
 
 
-				{/* Cancel/Save Button Row */}
+				{/* Cancel/Save button row */}
 				<View style={ styles.save_row }>
 					{/* Cancel Button */}
 					<TouchableOpacity

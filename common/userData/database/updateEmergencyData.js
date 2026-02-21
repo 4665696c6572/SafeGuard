@@ -1,8 +1,6 @@
 
 export default async function updateEmergencyData( table, emergencyData, db )
 {
-	console.log('Update Function')
-
 	const data =
 	{
 		Address:

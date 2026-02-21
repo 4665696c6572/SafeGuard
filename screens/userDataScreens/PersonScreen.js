@@ -96,7 +96,7 @@ const PersonScreen = ({ navigation, route }) =>
 				setViewInsuranceVisible={ setViewInsuranceVisible }
 			/>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ editPersonVisible }>
+			<Modal animationType='slide' visible={ editPersonVisible }>
 				<EditPerson
 					entityData={ entityData }
 					isFormValid={ isFormValid }
@@ -110,7 +110,7 @@ const PersonScreen = ({ navigation, route }) =>
 			</Modal>
 
 			{/* ****************************************************** */}
-			<Modal animationType='slide' color='#d1dce4ff' visible={ viewInsuranceVisible }>
+			<Modal animationType='slide' visible={ viewInsuranceVisible }>
 				<ViewInsurance
 					handleNavigation={ handleNavigation }
 					insuranceData={ insuranceData }
@@ -124,7 +124,7 @@ const PersonScreen = ({ navigation, route }) =>
 			
 			</Modal>
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ editInsuranceVisible }>
+			<Modal animationType='slide' visible={ editInsuranceVisible }>
 				<EditInsurance
 					insuranceData={ insuranceData }
 					insuranceIndex={ insuranceIndex }

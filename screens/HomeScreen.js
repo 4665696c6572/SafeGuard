@@ -97,8 +97,7 @@ const HomeScreen = ({ navigation }) =>
 					const weather_data = await fetchWeatherData( locationData );
 					if(weather_data)
 					{
-						setWeatherData( weather_data )
-						console.log('Weather Data Loaded.')
+						setWeatherData( weather_data );
 					}
 					else    return
 				}

@@ -16,7 +16,6 @@ import EmergencyDataScreen from './screens/userDataScreens/EmergencyDataScreen.j
 
 import ContactScreen from './screens/userDataScreens/ContactScreen.js';
 import DoctorScreen from './screens/userDataScreens/DoctorScreen.js';
-import InsuranceScreen from './screens/userDataScreens/InsuranceScreen.js';
 import MedicalConditionScreen from './screens/userDataScreens/MedicalConditionScreen.js';
 import MedicationScreen from './screens/userDataScreens/MedicationScreen.js';
 import PersonScreen from './screens/userDataScreens/PersonScreen.js';
@@ -73,7 +72,6 @@ function TabNavigator()
 				}}
 			/>
 		</Tab.Navigator>
-	
 	)
 }
 
@@ -82,17 +80,17 @@ notificationHandlerSetup();
 
 
 
-export default function App()
+export default function App( )
 {
 	useEffect( ( ) =>
 	{(
-		async () =>
+		async ( ) =>
 		{
-			await requestNotificationPermission();
+			await requestNotificationPermission( );
 			await setNotificationChannel();
 		}
-	)();
-	}, []);
+	)( );
+	}, [ ]);
 
 	return (
 		<SQLiteProvider databaseName='Safe.db' onInit={ initializeDatabase }>
@@ -109,7 +107,6 @@ export default function App()
 					<Stack.Screen name="EmergencyDataFormScreen" component={ TabNavigator }/>
 
 					<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
-					<Stack.Screen name="InsuranceScreen" component={ InsuranceScreen }/>
 					<Stack.Screen name="DoctorScreen" component={ DoctorScreen }/>
 					<Stack.Screen name="PersonScreen" component={ PersonScreen }/>
 					<Stack.Screen name="MedicalConditionScreen" component={ MedicalConditionScreen }/>

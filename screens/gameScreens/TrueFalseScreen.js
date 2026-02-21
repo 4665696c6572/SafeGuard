@@ -71,7 +71,7 @@ export default function TrueFalseScreen({ navigation, route })
 		{
 			setLevelComplete( true );
 		}
-	
+
 		setCurrentNumber( prev => prev + 1 );
 		setRoundStartIndex( prev => prev + 1 );
 		updateLevelData( db, 'TrueFalseScreen', question_id );

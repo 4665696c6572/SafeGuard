@@ -148,53 +148,53 @@ export const ViewContact = ({
 				</View>
 			: null
 			}
-		</View>
 
 
-		{
-			( !contactData?.address.address_id && !contactData?.email.email_id && !contactData?.fax.fax_number_id && !contactData?.phone.phone_number_id ) ?
-			<View style={{ alignItems: 'center' }}>
-				<Text style={[ styles.heading_text, { paddingBottom: 20, paddingTop: 20 }]}>No contact details found.</Text>
-			</View>
-		: null
-		}
+			{
+				( !contactData?.address.address_id && !contactData?.email.email_id && !contactData?.fax.fax_number_id && !contactData?.phone.phone_number_id ) ?
+				<View style={{ alignItems: 'center' }}>
+					<Text style={[ styles.heading_text, { paddingBottom: 20, paddingTop: 20 }]}>No contact details found.</Text>
+				</View>
+			: null
+			}
 
 
-			<View style={ styles.save_row }>
-				<TouchableOpacity
-					accessibilityLabel='Close button'
-					accessibilityHint='Press to return to previous screen.'
-					onPress={ ( ) =>
-					{
-						setViewContactVisible( false );
-						handleNavigation( );
-					}}
-				>
-					<Text style={ styles.save_button_text }>Close</Text>
-				</TouchableOpacity>
+				<View style={ styles.save_row }>
+					<TouchableOpacity
+						accessibilityLabel='Close button'
+						accessibilityHint='Press to return to previous screen.'
+						onPress={ ( ) =>
+						{
+							setViewContactVisible( false );
+							handleNavigation( );
+						}}
+					>
+						<Text style={ styles.save_button_text }>Close</Text>
+					</TouchableOpacity>
 
-				<TouchableOpacity
-					accessibilityLabel='Add / Edit button'
-					accessibilityHint='Press to add or edit contact details.'
-					onPress={ ( ) =>
-					{
-						setEditContactVisible( true );
-						setTempAddressData( contactData?.address );
-						setTempEmailData( contactData?.email );
-						setTempFaxData( contactData?.fax );
-						setTempPhoneData( contactData?.phone );
-					}}
-				>
-					{
-						(
-							contactData?.address.address_id || contactData?.email.email_id ||
-							contactData?.fax.fax_id || contactData?.phone.phone_id
-						) ?
-						<Text style={ styles.save_button_text }>Edit</Text>
-					:
-						<Text style={ styles.save_button_text }>Add details </Text>
-					}
-				</TouchableOpacity>
+					<TouchableOpacity
+						accessibilityLabel='Add / Edit button'
+						accessibilityHint='Press to add or edit contact details.'
+						onPress={ ( ) =>
+						{
+							setEditContactVisible( true );
+							setTempAddressData( contactData?.address );
+							setTempEmailData( contactData?.email );
+							setTempFaxData( contactData?.fax );
+							setTempPhoneData( contactData?.phone );
+						}}
+					>
+						{
+							(
+								contactData?.address.address_id || contactData?.email.email_id ||
+								contactData?.fax.fax_id || contactData?.phone.phone_id
+							) ?
+							<Text style={ styles.save_button_text }>Edit</Text>
+						:
+							<Text style={ styles.save_button_text }>Add details </Text>
+						}
+					</TouchableOpacity>
+				</View>
 			</View>
 		</View>
 	);

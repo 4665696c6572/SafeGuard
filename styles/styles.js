@@ -369,10 +369,10 @@ const styles = StyleSheet.create({
 	},
 	contact_button:
 	{
-		marginBottom: 5,
-		marginTop: 5,
-		paddingBottom: 5,
-		paddingTop: 5
+		alignItems: 'center',
+		flex: 1/4,
+		justifyContent: 'flex-end',
+		paddingBottom: 25,
 	},
 	alert_row:
 	{
@@ -386,7 +386,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		marginBottom: 30,
 		marginTop: 30
-	}
+	},
+	
 });
 
 export default styles;

@@ -17,6 +17,5 @@ export default async function fetchWeatherData( location )
 	const result = await fetch(url);
 	const weather_data = await result.json();
 
-	console.log( 'Weather data loaded.');
 	return weather_data;
 };																		

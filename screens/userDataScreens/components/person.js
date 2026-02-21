@@ -5,10 +5,10 @@ import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
 
-
 import styles from "../../../styles/styles";
 
 const underlay_color = '#d1dce4ff';
+
 
 export const Person = ({entityData, setEditPersonVisible, setTempEntityData, showEditButton }) =>
 {
@@ -244,6 +244,7 @@ export const EditPerson = ({
 
 						<TextInput
 							accessibilityLabel='Height'
+							accessibilityHint='Type in your height.'
 							style={ styles.text_input }
 							placeholder={ tempEntityData?.height?tempEntityData.height :'height' }
 							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'height': text }))}
@@ -252,6 +253,7 @@ export const EditPerson = ({
 
 						<TextInput
 							accessibilityLabel='Weight'
+							accessibilityHint='Type in your weight.'
 							style={ styles.text_input }
 							placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
 							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
@@ -323,7 +325,7 @@ export const EditPerson = ({
 					</View>
 
 
-				{/* Cancel/Save Button Row */}
+				{/* Cancel/Save button row */}
 				<View style={ styles.save_row }>
 					{/* Cancel Button */}
 					<TouchableOpacity

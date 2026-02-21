@@ -43,7 +43,7 @@ export default async function initializeDatabase( db )
 				dob    TEXT,
 				sex    TEXT,
 				height    TEXT,
-				weight    TEXT,			
+				weight    TEXT,
 				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' ) ),
 				FOREIGN KEY ( person_id )    REFERENCES Entity( entity_id )
 			);
@@ -61,7 +61,7 @@ export default async function initializeDatabase( db )
 			(
 				condition_id    INTEGER    PRIMARY KEY,
 				condition_name    TEXT    NOT NULL,
-				doctor_id    INTEGER, 			
+				doctor_id    INTEGER,
 				diagnosis_date    TEXT,
 				condition_note    TEXT,
 				is_allergy    INTEGER    NOT NULL,

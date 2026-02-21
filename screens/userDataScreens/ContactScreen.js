@@ -91,7 +91,7 @@ const ContactScreen = ({ navigation, route }) =>
 			</TouchableOpacity>
 
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ viewContactVisible }>
+			<Modal animationType='slide' visible={ viewContactVisible }>
 				<ViewContact
 					contactData={ contactData }
 					handleNavigation={ handleNavigation }
@@ -106,7 +106,7 @@ const ContactScreen = ({ navigation, route }) =>
 			</Modal>
 
 
-			<Modal animationType='slide' color='#d1dce4ff' visible={ editContactVisible }>
+			<Modal animationType='slide' visible={ editContactVisible }>
 					<EditContact
 						contactData={ contactData }
 						handleNavigation={ handleNavigation }

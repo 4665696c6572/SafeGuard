@@ -48,7 +48,6 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 
 
 
-
 export const ViewDoctor = ({
 								doctorData, doctorIndex, handleNavigation, setEditDoctorVisible,
 								setDoctorIndex, setTempDoctorData, setViewDoctorVisible
@@ -56,13 +55,34 @@ export const ViewDoctor = ({
 {
 	return (
 		<View style={ styles.container }>
-			<View style={ styles.data_container }>
-				{ doctorData?.[doctorIndex]?.entity_name ? <Text style={ styles.heading_text }>{ doctorData[doctorIndex].entity_name }</Text> : null }
-				{ doctorData?.[doctorIndex]?.specialty ? <Text style={ styles.text }>Specialty: { doctorData[doctorIndex].specialty }</Text> : null }
-				{ doctorData?.[doctorIndex]?.facility_name ? <Text style={ styles.text }>Facility name: { doctorData[doctorIndex].facility_name }</Text> : null }
+			<View style={[ styles.data_container, { flex: 3/4 }]}>
+				{ 
+					doctorData?.[doctorIndex]?.entity_name ?
+						<Text style={ styles.title_bar }>{ doctorData[doctorIndex].entity_name }</Text>
+				: null 
+				}
+
+				{ 
+					doctorData?.[doctorIndex]?.specialty ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Specialty</Text>
+						<Text style={ styles.text }>{ doctorData[doctorIndex].specialty }</Text>
+					</View>
+				: null 
+				}
+
+				{ 
+					doctorData?.[doctorIndex]?.facility_name ?
+					<View style={ styles.section_small }>
+						<Text style={ styles.heading_text }>Facility name</Text>
+						<Text style={ styles.text }>{ doctorData[doctorIndex].facility_name }</Text>
+					</View>
+				: null 
+				}
+
 				{
 					doctorData?.[doctorIndex]?.current != null ?
-					<View>
+					<View style={ styles.section_small }>
 						{
 							doctorData?.[doctorIndex].current == true ?
 							<Text style={ styles.text }>I am currently seeing this doctor.</Text>
@@ -74,21 +94,7 @@ export const ViewDoctor = ({
 				}
 
 
-				<TouchableOpacity
-					accessibilityLabel='Contact details button'
-					accessibilityHint='Press to view insurance contact details.'
-					style={ styles.contact_button }
-					onPress={ ( ) =>
-					{
-						handleNavigation( doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name, doctorData?.[doctorIndex]?.facility_name );
-						setViewDoctorVisible( false );
-					}}
-				>
-					<Text style={ styles.text_button }>View contact details</Text>
-				</TouchableOpacity>
-
-
-				{/* Close/Edit Button Row */}
+				{/* Close/Edit button row */}
 				<View style={ styles.save_row }>
 					{/* Close Button */}
 					<TouchableOpacity
@@ -118,6 +124,22 @@ export const ViewDoctor = ({
 						<Text style={ styles.save_button_text }>Edit</Text>
 					</TouchableOpacity>
 				</View>
+			</View>
+
+
+			{/* Contact details */}
+			<View style={ styles.contact_button }>
+				<TouchableOpacity
+					accessibilityLabel='Contact details button'
+					accessibilityHint='Press to view insurance contact details.'
+					onPress={ ( ) =>
+					{
+						handleNavigation( doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name, doctorData?.[doctorIndex]?.facility_name );
+						setViewDoctorVisible( false );
+					}}
+				>
+					<Text style={ styles.save_button_text }>View contact details</Text>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -197,7 +219,7 @@ export const EditDoctor = ({
 			<View style={ styles.data_container }>
 						<TextInput
 							accessibilityLabel="Doctor's name"
-							accessibilityHint='Enter name of doctor.'
+							accessibilityHint='Type in name of doctor.'
 							placeholder={ tempDoctorData?.entity_name ? tempDoctorData.entity_name : "Doctor's name" }
 							style={ styles.text_input }
 							onChangeText={ ( text ) =>
@@ -219,7 +241,7 @@ export const EditDoctor = ({
 					
 						<TextInput
 							accessibilityLabel='Facility name'
-							accessibilityHint='Enter the name of the facility that the doctor works at.'
+							accessibilityHint='Type in the name of the facility that the doctor works at.'
 							style={ styles.text_input }
 							onChangeText={ ( text ) => setTempDoctorData( prev => ({ ...prev, 'facility_name': text }))}
 							placeholder={ tempDoctorData?.facility_name ? tempDoctorData.facility_name : 'Facility name' }
@@ -243,7 +265,7 @@ export const EditDoctor = ({
 						</View>
 
 
-				{/* Cancel/Save Button Row */}
+				{/* Cancel/Save button row */}
 				<View style={ styles.save_row }>
 					{/* Cancel Button */}
 					<TouchableOpacity

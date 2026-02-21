@@ -33,7 +33,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 
 	return (
 		<View style={ styles.container }>
-			<ScrollView style={ styles.data_container }>
+			<ScrollView style={[ styles.data_container, { marginBottom: 40 }]}>
 				<Person
 					entityData={ emergencyData?.person }
 					nav={ ( ) => { navigation.navigate( "EmergencyDataFormScreen" )}}

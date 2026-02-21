@@ -110,14 +110,7 @@ export default async function insertEmergencyData( table, emergencyData, db )
 			VALUES ( ?, ?, ?, ?, ?, ?, ?, ? );
 		`,
 
-		Allergy_1:
-		`
-			INSERT OR IGNORE INTO Medical_Condition
-			( condition_name, is_allergy )
-			VALUES ( ?, ? );
-		`,
-
-		Allergy_2:
+		Allergy:
 		`
 			INSERT OR IGNORE INTO Allergy
 			( allergy_id, allergen, severity )
@@ -206,8 +199,10 @@ export default async function insertEmergencyData( table, emergencyData, db )
 
 		if ( table == 'Allergy' )
 		{
-			const result = await db.runAsync( queries.Allergy_1, [ 'Allergy', 1 ]);
-			await db.runAsync( queries.Allergy_2, [ result.lastInsertRowId, ...data.Allergy ]);
+			const result = await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
+			console.log(result)
+			const result2 = await db.runAsync( queries.Allergy, [ result.lastInsertRowId, ...data.Allergy ]);
+			console.log(result2)
 			if (result.changes != 0)    return result.lastInsertRowId;
 		}
 
@@ -242,15 +237,6 @@ export default async function insertEmergencyData( table, emergencyData, db )
 			if (result.changes != 0)    return result.lastInsertRowId;
 		}
 
-		if ( table == "Person" )
-		{
-			const result = await db.runAsync( queries.Entity, data.Entity );
-			if ( Object.keys( emergencyData ).length > 1 )
-			{
-				await db.runAsync( queries.Person, [ result.lastInsertRowId, ...data.Person ]);
-			}
-		}
-
 		if ( table == 'Medical_Condition' )
 		{
 			const result = await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
@@ -261,6 +247,16 @@ export default async function insertEmergencyData( table, emergencyData, db )
 		{
 			const result = await db.runAsync( queries.Medication, data.Medication );
 			if (result.changes != 0)     return result.lastInsertRowId;
+		}
+
+		
+		if ( table == "Person" )
+		{
+			const result = await db.runAsync( queries.Entity, data.Entity );
+			if ( Object.keys( emergencyData ).length > 1 )
+			{
+				await db.runAsync( queries.Person, [ result.lastInsertRowId, ...data.Person ]);
+			}
 		}
 
 		if ( table == 'Phone' )

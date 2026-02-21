@@ -12,7 +12,7 @@ export default function useLoadGameData( db )
 		try
 		{
 			const game_data = await selectGameData( db );
-			setTotalScore( game_data[0].score )
+			setTotalScore( game_data[0].score );
 		}
 		catch ( error )
 		{

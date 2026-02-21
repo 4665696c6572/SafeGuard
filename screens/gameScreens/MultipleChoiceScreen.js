@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {  StackActions, useIsFocused } from '@react-navigation/native';
+import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer,  checkLevelComplete } from '../../common/game/sharedGame.js';
+import { calcAnswerOrder, checkAnswer, checkLevelComplete } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
@@ -63,12 +63,12 @@ export default function MultipleChoiceScreen({ navigation, route })
 	}), [ levelComplete ]
 
 
-	function handleAnswerCheck( correct_answer,  user_answer, question_id )
+	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
-		if ( checkAnswer( correct_answer,  user_answer ))
+		if ( checkAnswer( correct_answer, user_answer ))
 		{
 			setAnswerOrder( calcAnswerOrder( answers_per_round ));
-			setLevelScore( prev => prev + 1 );		
+			setLevelScore( prev => prev + 1 );
 		}
 		else Haptics.selectionAsync();
 		setCurrentNumber( prev => prev + 1 );
@@ -103,12 +103,12 @@ export default function MultipleChoiceScreen({ navigation, route })
 					</View>
 				</Modal>
 
-				{/*  Cheer Modal */}
+				{/* Cheer Modal */}
 				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
-					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>				
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 				</Modal>
 
-				{/*  Progress and Score  */}
+				{/* Progress and Score */}
 				<View style={ styles.progress_bar_container }>
 					<View style={ styles.progress_bar }>
 						<Progress.Bar
