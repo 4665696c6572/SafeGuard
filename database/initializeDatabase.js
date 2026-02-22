@@ -34,7 +34,7 @@ export default async function initializeDatabase( db )
 			(
 				entity_id    INTEGER    PRIMARY KEY,
 				entity_name    TEXT    NOT NULL    UNIQUE,
-				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ) )
+				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ))
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
@@ -44,7 +44,7 @@ export default async function initializeDatabase( db )
 				sex    TEXT,
 				height    TEXT,
 				weight    TEXT,
-				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' ) ),
+				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' )),
 				FOREIGN KEY ( person_id )    REFERENCES Entity( entity_id )
 			);
 
@@ -87,7 +87,7 @@ export default async function initializeDatabase( db )
 			(
 				allergy_id    INTEGER    PRIMARY KEY,
 				allergen    TEXT,
-				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
+				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' )),
 				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
 			);
 
@@ -246,7 +246,7 @@ const match_data =
 
 const match_insert =
 `
-	INSERT OR IGNORE INTO Matching_Data 
+	INSERT OR IGNORE INTO Matching_Data
 	( question_id, question, answer )
 	VALUES ( ?, ?, ? );
 `;

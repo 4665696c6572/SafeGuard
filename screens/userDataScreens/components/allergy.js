@@ -191,9 +191,8 @@ export const ViewAllergy = ({
 
 
 export const EditAllergy = ({
-								allergyData, allergyIndex, doctorData, isFormValid,
-								loadAllergyData, saveToDB, setAllergyIndex, setEditAllergyVisible,
-								setIsFormValid, setTempAllergyData, tempAllergyData
+								allergyData, allergyIndex, doctorData, save, setAllergyIndex,
+								setEditAllergyVisible, setTempAllergyData, tempAllergyData
 							}) =>
 {
 	// Date Picker
@@ -210,8 +209,9 @@ export const EditAllergy = ({
 
 	// Form Validation ( Allergies must have an allergen name )
 	const [ allergenName, setAllergenName ] = useState( tempAllergyData?.allergen ? tempAllergyData.allergen : '' );
-	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState(false);
+	const [ showValidationError, setShowValidationError ] = useState( false );
 
 		useEffect(() =>
 		{
@@ -250,7 +250,7 @@ export const EditAllergy = ({
 		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
 		if ( isFormValid )
 		{
-			saveToDB( 'Allergy', tempAllergyData, loadAllergyData );
+			save( 'Allergy', tempAllergyData, 'condition_id' );
 			setAllergyIndex( null );
 			setAllergenName( '' );
 			setEditAllergyVisible( false );

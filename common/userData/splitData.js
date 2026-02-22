@@ -1,4 +1,4 @@
-export default function splitData( entityData, condition )
+export default function splitData( entityData )
 {
 	let address =
 	{

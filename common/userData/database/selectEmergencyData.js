@@ -19,7 +19,11 @@ export default async function selectEmergencyData( db, table, condition )
 				FROM Allergy
 				LEFT JOIN Medical_Condition
 				ON Medical_Condition.condition_id = Allergy.allergy_id
-				ORDER BY severity ASC, allergen ASC;
+				ORDER BY
+				CASE
+					WHEN severity = 'Life Threatening' THEN 1
+					ELSE 2
+				END, allergen ASC;
 			`);
 		}
 

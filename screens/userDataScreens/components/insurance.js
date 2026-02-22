@@ -156,8 +156,7 @@ export const ViewInsurance = ({
 
 
 export const EditInsurance = ({
-								insuranceData, insuranceIndex, isFormValid, loadInsuranceData,
-								saveToDB, setEditInsuranceVisible, setInsuranceIndex, setIsFormValid,
+								insuranceData, insuranceIndex, save, setEditInsuranceVisible, setInsuranceIndex,
 								setTempInsuranceData, setViewInsuranceVisible, tempInsuranceData
 							}) =>
 {
@@ -174,9 +173,10 @@ export const EditInsurance = ({
 
 
 	// Form Validation
-	const [ companyName, setCompanyName ] = useState( tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : '' );
-	const [ showValidationError, setShowValidationError ] = useState( false );
+	const [ companyName, setCompanyName ] = useState( tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : '' );	
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState( false );
+	const [ showValidationError, setShowValidationError ] = useState( false );
 
 	useEffect(() =>
 	{
@@ -197,7 +197,6 @@ export const EditInsurance = ({
 			setErrors( errors );
 			setIsFormValid(Object.keys( errors ).length === 0);
 	}
-
 
 
 	const handlePress = ( close, shouldNavigate ) =>
@@ -221,7 +220,8 @@ export const EditInsurance = ({
 		// New / Edit -> Save / Next
 		if ( isFormValid )
 		{
-			saveToDB( 'Insurance', tempInsuranceData, loadInsuranceData, shouldNavigate );
+			save(  'Insurance', tempInsuranceData, 'insurance_id', shouldNavigate );
+
 			setCompanyName( '' );
 			setEditInsuranceVisible( false );
 			setInsuranceIndex( null );

@@ -24,17 +24,17 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 							medication.is_life_sustaining == 1 ?
 							<View style={{flex:0.9}}>
 								<Text style={[ styles.text, styles.alert ]}>Life Sustaining Medication</Text>
-								{ 
+								{
 									medication?.medication_name ?
 									<Text style={[ styles.text, styles.alert ]}>
 										{ medication.medication_name } {medication?.strength}
 									</Text>
-								: null 
+								: null
 								}
 							</View>
 							:
 							<View style={{flex:0.9}}>
-								{ 
+								{
 									medication?.medication_name ?
 									<Text style={ styles.text }>
 										{ medication.medication_name } {medication?.strength}
@@ -83,23 +83,23 @@ export const ViewMedication = ({
 			{
 				medicationData?.[medicationIndex].is_life_sustaining == 1 ?
 				<View>
-				{ 
-					medicationData?.[medicationIndex].medication_name ? 
+				{
+					medicationData?.[medicationIndex].medication_name ?
 					<Text style={ styles.title_bar }>
 						{ medicationData?.[medicationIndex].medication_name }
-					</Text> 
-				: null 
+					</Text>
+				: null
 				}
 					<Text style={[ styles.heading_text, styles.alert ]}>Life Sustaining Medication</Text>
 				</View>
 				:
 				<View>
-				{ 
-					medicationData?.[medicationIndex].medication_name ? 
+				{
+					medicationData?.[medicationIndex].medication_name ?
 					<Text style={ styles.title_bar }>
 						{ medicationData?.[medicationIndex].medication_name }
-					</Text> 
-				: null 
+					</Text>
+				: null
 				}
 				</View>
 			}
@@ -215,8 +215,8 @@ export const ViewMedication = ({
 
 
 export const EditMedication = ({
-									conditionData, doctorData, isFormValid, medicationData, medicationIndex,
-									saveToDB, setEditMedicationVisible, setIsFormValid,
+									conditionData, doctorData, medicationData,
+									medicationIndex, save, setEditMedicationVisible,
 									setMedicationIndex, setTempMedicationData, tempMedicationData
 								}) =>
 {
@@ -236,10 +236,11 @@ export const EditMedication = ({
 
 
 	// Form Validation ( Must (minimally) have a name )
-	const [ medicationName, setMedicationName ] = useState( tempMedicationData?.medication_name ? tempMedicationData.medication_name : '' );
-
-	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState( false );
+	const [ medicationName, setMedicationName ] = useState( tempMedicationData?.medication_name ? tempMedicationData.medication_name : '' );
+	const [ showValidationError, setShowValidationError ] = useState( false );
+
 
 		useEffect(() =>
 		{
@@ -257,8 +258,6 @@ export const EditMedication = ({
 		setErrors( errors );
 		setIsFormValid(Object.keys( errors ).length === 0);
 	};
-
-
 
 
 	// Close / Save button handler for Edit modal
@@ -279,7 +278,8 @@ export const EditMedication = ({
 		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
 		if ( isFormValid)
 		{
-			saveToDB( tempMedicationData );
+			save( 'Medication', tempMedicationData,'medication_id' );
+
 			setEditMedicationVisible( false );
 			setMedicationIndex( null );
 			setMedicationName( '' );

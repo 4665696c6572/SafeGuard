@@ -1,7 +1,5 @@
 export default async function insertEmergencyData( table, emergencyData, db )
 {
-	console.log('Insert Function')
-
 	const data =
 	{
 		Address:
@@ -200,9 +198,7 @@ export default async function insertEmergencyData( table, emergencyData, db )
 		if ( table == 'Allergy' )
 		{
 			const result = await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
-			console.log(result)
-			const result2 = await db.runAsync( queries.Allergy, [ result.lastInsertRowId, ...data.Allergy ]);
-			console.log(result2)
+			await db.runAsync( queries.Allergy, [ result.lastInsertRowId, ...data.Allergy ]);
 			if (result.changes != 0)    return result.lastInsertRowId;
 		}
 

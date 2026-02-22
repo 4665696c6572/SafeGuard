@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
 	picker_view:
 	{
 		backgroundColor: '#d1dce4ff',
-		borderBottomWidth: 0.75, 
+		borderBottomWidth: 0.75,
 		paddingLeft: 22,
 		paddingRight: 15,
 	},

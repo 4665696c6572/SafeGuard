@@ -171,9 +171,8 @@ export const ViewMedicalCondition = ({
 
 
 export const EditMedicalCondition = ({
-										conditionData, conditionIndex, doctorData, isFormValid,
-										loadConditionData, saveToDB, setConditionIndex, setEditConditionVisible,
-										setIsFormValid, setTempConditionData, tempConditionData
+										conditionData, conditionIndex, doctorData, save, setConditionIndex,
+										setEditConditionVisible, setTempConditionData, tempConditionData
 									}) =>
 {
 	// Date Picker
@@ -190,8 +189,10 @@ export const EditMedicalCondition = ({
 
 	// Form Validation ( Conditions must have an condition name )
 	const [ conditionName, setConditionName ] = useState( tempConditionData?.condition_name ? tempConditionData.condition_name : '' );
-	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState(false);
+	const [ showValidationError, setShowValidationError ] = useState( false );
+
 
 		useEffect(() =>
 		{
@@ -235,7 +236,8 @@ export const EditMedicalCondition = ({
 		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
 		if ( isFormValid )
 		{
-			saveToDB( 'Medical_Condition', tempConditionData, loadConditionData );
+			save( 'Medical_Condition', tempConditionData, 'condition_id' );
+
 			setConditionIndex( null );
 			setConditionName( '' );
 			setEditConditionVisible( false );

@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import updateEmergencyData from '../../common/userData/database/updateEmergencyData.js';
+import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
-import insertEmergencyData from '../../common/userData/database/insertEmergencyData.js';
 
 import styles from '../../styles/styles.js';
 
@@ -28,9 +27,8 @@ const PersonScreen = ({ navigation, route }) =>
 	const [ viewInsuranceVisible, setViewInsuranceVisible ] = useState( false );
 	const [ editInsuranceVisible, setEditInsuranceVisible ] = useState( false );
 
-
-	const [ isFormValid, setIsFormValid ] = useState( false );
 	const isFocused = useIsFocused();
+
 
 	useEffect( ( ) =>
 	{
@@ -42,35 +40,23 @@ const PersonScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
-	async function saveToDB( table, data, loadData, shouldNavigate )
+	async function save( table, data, id, shouldNavigate )
 	{
-		let id
-		if (table == 'Person')
-		{
-			if ( data.entity_id )
-			{								
-				await updateEmergencyData( table, data, db, data.entity_id );
-			}
-			else
-			{
-				await insertEmergencyData( table, data, db );
-			}
-		}
-		else if (table == 'Insurance')
-		{
-			if ( data?.insurance_id )
-			{
-				await updateEmergencyData( table, data, db, data.insurance_id );
-			}
-			else
-			{
-				id = await insertEmergencyData( table, data, db );
-			}
+		let loadData;
+		if ( table == 'Person' ) loadData = loadEntityData;
+		else loadData = loadInsuranceData;
 
-			if ( shouldNavigate )    handleNavigation( id, data.entity_name );
+		if ( shouldNavigate )
+		{
+			const new_id = await saveToDB( table, data, db, id, loadData, shouldNavigate );
+			handleNavigation( new_id, data[id] );
 		}
-	loadData( );
+		else
+		{
+			await saveToDB( table, data, db, id, loadData );
+		}
 	}
+
 
 	function handleNavigation( id, name )
 	{
@@ -99,17 +85,13 @@ const PersonScreen = ({ navigation, route }) =>
 			<Modal animationType='slide' visible={ editPersonVisible }>
 				<EditPerson
 					entityData={ entityData }
-					isFormValid={ isFormValid }
-					loadEntityData={ loadEntityData }
-					saveToDB={ saveToDB }
+					save={ save }
 					setEditPersonVisible={setEditPersonVisible}
-					setIsFormValid={ setIsFormValid }
 					setTempEntityData={ setTempEntityData }
 					tempEntityData={ tempEntityData }
 				/>
 			</Modal>
 
-			{/* ****************************************************** */}
 			<Modal animationType='slide' visible={ viewInsuranceVisible }>
 				<ViewInsurance
 					handleNavigation={ handleNavigation }
@@ -119,7 +101,6 @@ const PersonScreen = ({ navigation, route }) =>
 					setInsuranceIndex={ setInsuranceIndex }
 					setTempInsuranceData={ setTempInsuranceData }
 					setViewInsuranceVisible={ setViewInsuranceVisible }
-				
 				/>
 			
 			</Modal>
@@ -128,12 +109,9 @@ const PersonScreen = ({ navigation, route }) =>
 				<EditInsurance
 					insuranceData={ insuranceData }
 					insuranceIndex={ insuranceIndex }
-					isFormValid={ isFormValid }
-					loadInsuranceData={ loadInsuranceData }
-					saveToDB={ saveToDB }
+					save={ save }
 					setEditInsuranceVisible={ setEditInsuranceVisible }
 					setInsuranceIndex={ setInsuranceIndex }
-					setIsFormValid={ setIsFormValid }
 					setTempInsuranceData={ setTempInsuranceData }
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 					tempInsuranceData={ tempInsuranceData }

@@ -32,7 +32,7 @@ export async function fetchAlertData( zone )
 
 	const result_alert = await fetch( url_alert );
 
-	if ( !result_alert ) 
+	if ( !result_alert )
 	{
 		return false;
 	}

@@ -203,9 +203,7 @@ export const ViewContact = ({
 
 
 export const EditContact = ({
-								contactData, handleNavigation, isAddressValid, isEmailValid,
-								isFaxValid, isPhoneValid, params, saveToDB, setEditContactVisible,
-								setIsAddressValid, setIsEmailValid, setIsFaxValid, setIsPhoneValid,
+								contactData, handleNavigation, params, save, setEditContactVisible,
 								setTempAddressData, setTempEmailData, setTempFaxData, setTempPhoneData,
 								tempAddressData, tempEmailData, tempFaxData, tempPhoneData
 							}) =>
@@ -225,6 +223,11 @@ export const EditContact = ({
 	const [ emailItem, setEmailItem ] = useState( tempEmailData?.email ? tempEmailData.email : '' );
 	const [ faxItem, setFaxItem ] = useState( tempFaxData?.fax_number ? tempFaxData.fax_number : '' );
 	const [ phoneItem, setPhoneItem ] = useState( tempPhoneData?.phone_number ? tempPhoneData.phone_number : '' );
+
+	const [ isAddressValid, setIsAddressValid ] = useState( false );
+	const [ isEmailValid, setIsEmailValid ] = useState( false );
+	const [ isFaxValid, setIsFaxValid ] = useState( false );
+	const [ isPhoneValid, setIsPhoneValid ] = useState( false );
 
 	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
@@ -291,24 +294,24 @@ export const EditContact = ({
 
 		if ( JSON.stringify( contactData.address ) !== JSON.stringify( tempAddressData ) && tempAddressData != { } && isAddressValid )
 		{
-			saveToDB( 'Address', tempAddressData );
+			save( 'Address', tempAddressData, 'address_id' );
 		}
 
 		if ( JSON.stringify( contactData.email ) !== JSON.stringify( tempEmailData ) && tempEmailData != { } && isEmailValid )
 		{
-			saveToDB( 'Email', tempEmailData );
+			save( 'Email', tempEmailData, 'email_id' );
 		}
 
 		if ( JSON.stringify( contactData.fax ) !== JSON.stringify( tempFaxData ) && tempFaxData != { } && isFaxValid )
 		{
-			saveToDB( 'Fax', tempFaxData );
+			save( 'Fax', tempFaxData, 'fax_number_id' );
 		}
 
 		if ( JSON.stringify( contactData.phone ) !== JSON.stringify( tempPhoneData ) && tempPhoneData != { } && isPhoneValid )
 		{
-			saveToDB( 'Phone', tempPhoneData );
+			save( 'Phone', tempPhoneData, 'phone_number_id' );
 		}
-	
+
 		if (close == true)    setEditContactVisible( false );
 	}
 

@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import updateEmergencyData from '../../common/userData/database/updateEmergencyData.js';
+import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
-import insertEmergencyData from '../../common/userData/database/insertEmergencyData.js';
 
 import styles from '../../styles/styles.js';
 
@@ -21,17 +20,14 @@ const MedicationScreen = ({ route }) =>
 	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor_Name' );
 	const [ conditionData, setConditionData, loadingConditionData, loadConditionData ] = useLoadEmergencyData( db, 'Medical_Condition_Name' );
 
-
 	const [ medicationIndex, setMedicationIndex ] = useState( params?.condition ? params.condition : 0 );
 	const [ tempMedicationData, setTempMedicationData ] = useState( );
 
 	const [ viewMedicationVisible, setViewMedicationVisible ] = useState( false );
 	const [ editMedicationVisible, setEditMedicationVisible ] = useState( false );
 
-	const [ isFormValid, setIsFormValid ] = useState( false );
-
-
 	const isFocused = useIsFocused();
+
 
 	useEffect(() =>
 		{
@@ -44,22 +40,13 @@ const MedicationScreen = ({ route }) =>
 	}, [ isFocused ]);
 
 
-		async function saveToDB( tempMedicationData )
-		{
-			if ( tempMedicationData.medication_id )
-			{
-				await updateEmergencyData( 'Medication', tempMedicationData, db );
-			}
-			else
-			{
-				await insertEmergencyData( 'Medication', tempMedicationData, db );
-			}
-
-			loadMedicationData();
-		}
+	async function save( table, data, id )
+	{
+		await saveToDB( table, data, db, id, loadMedicationData );
+	}
 
 
-		if ( loadingMedicationData )    return <ActivityIndicator/>;
+	if ( loadingMedicationData )    return <ActivityIndicator/>;
 
 	return(
 		<View style={ styles.container }>
@@ -87,12 +74,10 @@ const MedicationScreen = ({ route }) =>
 				<EditMedication
 					conditionData={ conditionData }
 					doctorData={ doctorData }
-					isFormValid={ isFormValid }
 					medicationData={medicationData}
 					medicationIndex={ medicationIndex }
-					saveToDB={ saveToDB }
+					save={ save }
 					setEditMedicationVisible={ setEditMedicationVisible }
-					setIsFormValid={ setIsFormValid }
 					setMedicationData={ setMedicationData}
 					setMedicationIndex={ setMedicationIndex }
 					setTempMedicationData={ setTempMedicationData }

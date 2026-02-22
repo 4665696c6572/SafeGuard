@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import updateEmergencyData from '../../common/userData/database/updateEmergencyData.js';
+import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
-import insertEmergencyData from '../../common/userData/database/insertEmergencyData.js';
 
 import styles from '../../styles/styles.js';
 
@@ -25,8 +24,8 @@ const DoctorScreen = ({ navigation, route }) =>
 	const [ doctorIndex, setDoctorIndex ] = useState( null );
 	const [ tempDoctorData, setTempDoctorData ] = useState( );
 
-	const [ isFormValid, setIsFormValid ] = useState( false );
 	const isFocused = useIsFocused();
+
 
 	useEffect(() =>
 	{
@@ -37,20 +36,17 @@ const DoctorScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
-	async function saveToDB( data, shouldNavigate )
+	async function save( table, data, id, shouldNavigate )
 	{
-		let id;
-		if (data?.entity_id )
+		if ( shouldNavigate )
 		{
-			await updateEmergencyData( 'Doctor', data, db );
+			const new_id = await saveToDB( table, data, db, id, loadDoctorData, shouldNavigate );
+			handleNavigation( new_id, data.entity_name, data?.facility_name );
 		}
 		else
 		{
-			id = await insertEmergencyData( 'Doctor', data, db );
+			await saveToDB( table, data, db, id, loadDoctorData );
 		}
-		loadDoctorData( );
-
-		if ( shouldNavigate )    handleNavigation( id, data.entity_name, data?.facility_name );
 	}
 
 
@@ -87,11 +83,9 @@ const DoctorScreen = ({ navigation, route }) =>
 				<EditDoctor
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }
-					isFormValid={ isFormValid }
-					saveToDB={ saveToDB }
+					save={ save }
 					setEditDoctorVisible={ setEditDoctorVisible }
 					setDoctorIndex={ setDoctorIndex }
-					setIsFormValid={ setIsFormValid }
 					setTempDoctorData={ setTempDoctorData }
 					setViewDoctorVisible={ setViewDoctorVisible }
 					tempDoctorData={ tempDoctorData }

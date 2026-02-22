@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, ScrollView, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import updateEmergencyData from '../../common/userData/database/updateEmergencyData.js';
+import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
-import insertEmergencyData from '../../common/userData/database/insertEmergencyData.js';
 
 import styles from '../../styles/styles.js';
 
@@ -34,9 +33,6 @@ const MedicalConditionScreen = ( ) =>
 	const [ editAllergyVisible, setEditAllergyVisible ] = useState( false );
 	const [ viewAllergyVisible, setViewAllergyVisible ] = useState( false );
 
-	// Form Validation ( Medical Conditions & allergens must have an name )
-	const [ isFormValid, setIsFormValid ] = useState(false);
-
 	const isFocused = useIsFocused();
 
 	useEffect(() =>
@@ -51,18 +47,15 @@ const MedicalConditionScreen = ( ) =>
 	}, [ isFocused ]);
 
 
-	async function saveToDB( table, data, loadData )
+	async function save( table, data, id )
 	{
-		if ( data.condition_id )
-		{
-			await updateEmergencyData( table, data, db );
-		}
-		else
-		{
-			await insertEmergencyData( table, data, db );
-		}
-		loadData( );
+		let loadData;
+		if ( table == 'Allergy' ) loadData = loadAllergyData;
+		else loadData = loadConditionData;
+
+		await saveToDB( table, data, db, id, loadData );
 	}
+
 
 	if
 	(
@@ -127,12 +120,9 @@ const MedicalConditionScreen = ( ) =>
 						conditionData={ conditionData}
 						conditionIndex={ conditionIndex }
 						doctorData={ doctorData }
-						isFormValid={ isFormValid }
-						loadConditionData={ loadConditionData } 
-						saveToDB={ saveToDB }
+						save={ save }
 						setConditionIndex={ setConditionIndex }
 						setEditConditionVisible={ setEditConditionVisible }
-						setIsFormValid={ setIsFormValid }
 						setTempConditionData={ setTempConditionData }
 						tempConditionData={ tempConditionData }
 					/>
@@ -144,12 +134,9 @@ const MedicalConditionScreen = ( ) =>
 						allergyData={ allergyData}
 						allergyIndex={ allergyIndex }
 						doctorData={ doctorData }
-						isFormValid={ isFormValid }
-						loadAllergyData={ loadAllergyData }
-						saveToDB={ saveToDB }
+						save={ save }
 						setAllergyIndex={ setAllergyIndex }
 						setEditAllergyVisible={ setEditAllergyVisible }
-						setIsFormValid={ setIsFormValid }
 						setTempAllergyData={ setTempAllergyData }
 						tempAllergyData={ tempAllergyData }
 					/>

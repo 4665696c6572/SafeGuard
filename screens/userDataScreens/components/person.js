@@ -110,11 +110,7 @@ export const Person = ({entityData, setEditPersonVisible, setTempEntityData, sho
 
 
 
-export const EditPerson = ({
-								entityData, isFormValid, loadEntityData,
-								saveToDB, setEditPersonVisible, setIsFormValid,
-								setTempEntityData, tempEntityData
-							}) =>
+export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEntityData, tempEntityData }) =>
 {
 	// Date Picker
 	const [ datePickerVisible, setDatePickerVisible ] = useState( false );
@@ -131,14 +127,16 @@ export const EditPerson = ({
 
 	// Form Validation ( Must (minimally) have a name )
 	const [ entityName, setEntityName ] = useState( tempEntityData?.entity_name ? tempEntityData.entity_name : '' );
-
-	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState( false );
+	const [ showValidationError, setShowValidationError ] = useState( false );
+
 
 	useEffect(() =>
 	{
 		validateForm();
 	}, [entityName ]);
+
 
 	const validateForm = ( ) =>
 	{
@@ -165,7 +163,8 @@ export const EditPerson = ({
 
 		if ( isFormValid )
 		{
-			saveToDB( 'Person', tempEntityData, loadEntityData, false );
+			save( 'Person', tempEntityData, 'entity_id' );
+
 			setEditPersonVisible( false );
 			setEntityName( '' );
 			setTempEntityData( );

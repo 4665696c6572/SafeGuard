@@ -56,28 +56,28 @@ export const ViewDoctor = ({
 	return (
 		<View style={ styles.container }>
 			<View style={[ styles.data_container, { flex: 3/4 }]}>
-				{ 
+				{
 					doctorData?.[doctorIndex]?.entity_name ?
 						<Text style={ styles.title_bar }>{ doctorData[doctorIndex].entity_name }</Text>
-				: null 
+				: null
 				}
 
-				{ 
+				{
 					doctorData?.[doctorIndex]?.specialty ?
 					<View style={ styles.section_small }>
 						<Text style={ styles.heading_text }>Specialty</Text>
 						<Text style={ styles.text }>{ doctorData[doctorIndex].specialty }</Text>
 					</View>
-				: null 
+				: null
 				}
 
-				{ 
+				{
 					doctorData?.[doctorIndex]?.facility_name ?
 					<View style={ styles.section_small }>
 						<Text style={ styles.heading_text }>Facility name</Text>
 						<Text style={ styles.text }>{ doctorData[doctorIndex].facility_name }</Text>
 					</View>
-				: null 
+				: null
 				}
 
 				{
@@ -148,8 +148,7 @@ export const ViewDoctor = ({
 
 
 export const EditDoctor = ({
-								doctorData, doctorIndex, isFormValid, saveToDB,
-								setEditDoctorVisible, setDoctorIndex, setIsFormValid,
+								doctorData, doctorIndex, save, setDoctorIndex, setEditDoctorVisible,
 								setTempDoctorData, setViewDoctorVisible, tempDoctorData
 							}) =>
 {
@@ -158,10 +157,11 @@ export const EditDoctor = ({
 
 	// Form Validation ( Must (minimally) have a name )
 	const [ doctorName, setDoctorName ] = useState( tempDoctorData?.entity_name ? tempDoctorData.entity_name : '' );
-	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+	const [ isFormValid, setIsFormValid ] = useState( false );
+	const [ showValidationError, setShowValidationError ] = useState( false );
 
-
+	
 	useEffect(() =>
 	{
 		validateForm( );
@@ -201,8 +201,8 @@ export const EditDoctor = ({
 		// New / Edit -> Save / Next
 		if ( isFormValid )
 		{
-		
-			saveToDB( tempDoctorData, shouldNavigate );
+			save( 'Doctor', tempDoctorData, 'entity_id', shouldNavigate );
+
 			setDoctorName( '' );
 			setEditDoctorVisible( false );
 			setDoctorIndex( null );

@@ -122,7 +122,7 @@ const HomeScreen = ({ navigation }) =>
 						style={styles.button_chrome_grey}
 					>
 						<Text style={styles.text_button}>Load Demo Alert</Text>
-					</TouchableOpacity> 
+					</TouchableOpacity>
 					: null
 				}
 
@@ -150,7 +150,7 @@ const HomeScreen = ({ navigation }) =>
 			</TableView>
 			{ weatherData &&
 		
-				<View> 
+				<View>
 					{ weatherData?.weather[0].main != null ? <Text>Weather condition: {weatherData.weather[0].description.slice(0,1).toUpperCase() + weatherData.weather[0].description.slice(1)}.</Text> : null }
 					{ weatherData?.main.humidity != null ? <Text>Humidity: {weatherData.main.humidity}%</Text> : null }
 					{ weatherData?.main.temp_max != null ? <Text>High temperature: {Math.round(weatherData.main.temp_max)}°</Text> : null }
