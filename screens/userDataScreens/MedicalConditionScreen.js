@@ -68,7 +68,7 @@ const MedicalConditionScreen = ( ) =>
 
 
 	return(
-		<View style={ styles.container }>
+		<View style={ styles.bottom_tab_container }>
 			<ScrollView>
 				{/* Medical Condition */}
 				<MedicalCondition

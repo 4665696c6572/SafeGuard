@@ -67,9 +67,10 @@ const PersonScreen = ({ navigation, route }) =>
 
 
 	return (
-		<View style={ styles.container }>
+		<View style={ styles.bottom_tab_container }>
 			<Person
 				entityData={ entityData }
+				params={ params }
 				setEditPersonVisible={ setEditPersonVisible }
 				setTempEntityData={ setTempEntityData }
 				showEditButton={ true }
@@ -116,7 +117,6 @@ const PersonScreen = ({ navigation, route }) =>
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 					tempInsuranceData={ tempInsuranceData }
 				/>
-			
 			</Modal>
 		</View>
 	);

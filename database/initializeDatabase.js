@@ -216,7 +216,7 @@ export default async function initializeDatabase( db )
 		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, 'A13989', 'Health' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-4444', 'Office', 'Office number' ]);
 
-		for ( const row of match_data ) { await db.runAsync(  match_insert, row ); }
+		for ( const row of match_data ) { await db.runAsync( match_insert, row ); }
 		for ( const row of mc_data ) { await db.runAsync( mc_insert, row ); }
 		for ( const row of tf_data ) { await db.runAsync( tf_insert, row ); }
 

@@ -1,261 +1,279 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
+const screen_height = Dimensions.get('screen').height;
 const screen_width = Dimensions.get('screen').width;
 const button_size = Dimensions.get('screen').width * 0.33;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(
+{
+	alert:
+	{
+		color: 'rgb(126, 4, 4)',
+		fontWeight: 900
+	},
+	alert_row:
+	{
+		alignItems: 'center',
+		paddingTop: 20
+	},
+	button_chrome_grey:
+	{
+		backgroundColor: '#DBE2E9',
+		marginBottom: 10,
+		marginTop: 10
+	},
+	checkbox_row:
+	{
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 30,
+		marginTop: 30
+	},
+	contact_button:
+	{
+		alignItems: 'center',
+		// flex: 1/4,
+		// justifyContent: 'flex-end',
+		paddingBottom: 25,
+	},
 	container:
 	{
-		flex: 1,
 		backgroundColor: '#d1dce4ff',
-		paddingTop: '10%'
-	},
-	edit_container:
-	{
 		flex: 1,
-		backgroundColor: '#d1dce4ff',
-		paddingTop: '2%'
+		marginBottom: 45, 
+		marginTop: 45,
 	},
-	data_container:
+	bottom_tab_container:
 	{
-		marginLeft: '4%',
-		marginRight: '4%',
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		marginTop: 45,
+	},
+	data_container_inner:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingLeft: '4%',
+		paddingRight: '4%',
+	},
+	data_container_outer:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingTop: '4%',
+		paddingLeft: '4%',
+		paddingRight: '4%',
+	},
+	data_container_edit:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingTop: '4%',
+		paddingLeft: '4%',
+		paddingRight: '4%',
+	},
+	data_container_view:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingTop: '10%',
+		paddingLeft: '4%',
+		paddingRight: '4%',
+	},
+	count_text:
+	{
+		color: '#0b3e82ff',
+		textAlign: 'right',
+		fontSize: 16,
+		fontWeight: '900'
+	},
+	data_button_size:
+	{
+		marginBottom: 20,
+		marginTop: 20,
+		paddingBottom: 20,
+		paddingTop: 20
+	},	
+	data_condition_height:
+	{
+		height: screen_height * 0.37
+	},
+	data_section:
+	{
+		marginBottom: 20,
+		marginTop: 20,
+	},
+	data_section_small:
+	{
+		marginBottom: 10,
+		marginTop: 10,
+	},
+	expand_button:
+	{
+		alignItems: 'flex-end',
+		// flex: 0.1,
+		fontSize: 18,
+		marginRight: 5
 	},
 	game_area:
 	{
-		marginBottom: '10%',
+		gap: 1,
 		justifyContent: 'center',
-		marginTop: '5%',
-		gap: '5%',
+		marginBottom: '10%',
 		marginLeft: '5%',
 		marginRight: '5%',
-	},
-	game_box_small: // 2 columns
-	{
-		borderRadius: 20,
-		width: '45%',
-		height: '80%',
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingBottom: 0,
-		marginBottom: 0,
-		paddingTop: 0,
-		marginTop: 0,
-		// backgroundColor: 'red'
-		// gap: '50%',
-		// marginLeft: '10%',
-		// marginRight: '10%'
-	
-	},
-	game_box_large: // 1 column
-	{
-		borderRadius: 20,
-
-		height: '17%',
-		// width: '90%',
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingBottom: 0,
-		marginBottom: 0,
-		paddingTop: 0,
-		marginTop: 0,
-		// marginLeft: '10%',
-		// marginRight: '10%'
-
+		marginTop: '5%',
+		
 	},
 	game_box_active:
 	{
 		backgroundColor: '#2f73ccff',
 	},
-	game_column:
+	game_box_small: // 2 columns
 	{
-		flex: 1,
-		// flexDirection: 'row',
-		gap: '5%',
-		// backgroundColor: 'pink',
-		paddingBottom: '10%',
+		alignItems: 'center',
+		borderRadius: 20,
+		height: '80%',
+		justifyContent: 'center',
 		marginBottom: 0,
-		paddingTop: 0,
 		marginTop: 0,
-	},
-	game_row:
-	{
-		flex: 1,
-		flexDirection: 'row',
-		gap: '10%',
 		paddingBottom: 0,
-		marginBottom: 0,
 		paddingTop: 0,
+		width: '45%'
+	},
+	game_box_large: // 1 column
+	{
+		alignItems: 'center',
+		borderRadius: 20,
+		height: '17%',
+		justifyContent: 'center',
+		marginBottom: 0,
 		marginTop: 0,
-	},
-	game_text:
-	{
-		color: 'white',
-		fontWeight: 'bold',
-		fontSize: 18
-	},
-	game_box_selected:
-	{
-		backgroundColor: '#1152a7ff',
-		opacity: 1,
-		borderColor: 'white',
-		borderWidth: 2
+		paddingBottom: 0,
+		paddingTop: 0
 	},
 	game_box_disabled:
 	{
 		opacity: 0.7
 	},
-	count_text :
+	game_box_selected:
 	{
-		color: '#0b3e82ff',
-		fontSize: 16,
-		fontWeight: '900',
-		textAlign: 'right'
+		backgroundColor: '#1152a7ff',
+		borderColor: 'white',
+		borderWidth: 2,
+		opacity: 1
 	},
-	score_text:
-	{
-		color: '#0b3e82ff',
-		fontSize: 26,
-		fontWeight: '900',
-		textAlign: 'center'
-	},
-	score:
-	{
-		alignContent: 'center'
-	},
-	score_row:
-	{
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: '5%',
-		gap: '25%'
-	},
-	multiple_choice_question:
-	{
-		justifyContent: 'flex-start',
-		alignItems: 'flex-start'
-	},
-	text_button:
-	{
-		color: 'black',
-		fontSize: 20,
-		textAlign: 'center'
-	},
-	button_chrome_grey:
-	{
-		backgroundColor: '#DBE2E9',
-		marginTop: 10,
-		marginBottom: 10
-	},
-	multiple_choice_question_text:
-	{
-		color: '#0b3e82ff',
-		fontSize: 26,
-		fontWeight: '900',
-	},
-	// category:
-	// {
-	// 	marginBottom: 10,
-	// 	fontSize: 18,
-	// },
-
 	game_button:
 	{
-		height: button_size,
-		width: button_size,
-		borderRadius: '50%',
-		backgroundColor: 'blue',
-		justifyContent: 'center',
 		alignContent: 'center',
-	
+		backgroundColor: 'blue',
+		borderRadius: '50%',
+		height: button_size,
+		justifyContent: 'center',
+		width: button_size
 	},
 	game_button_center:
 	{
 		flexDirection: 'row',
-		justifyContent: 'center',
-			// alignContent: 'center',
-		// alignSelf: 'center'
-		// backgroundColor: 'pink',
-		// marginLeft: 0,
-
-
+		justifyContent: 'center'
 	},
 	game_button_end:
 	{
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 	},
+	game_button_start:
+	{
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+	},
 	game_button_text:
 	{
-		textAlign: 'center',
-		verticalAlign: 'middle',
 		color: 'white',
-		fontWeight: 'bold',
 		fontSize: 18,
-		// backgroundColor: 'red'
+		fontWeight: 'bold',
+		textAlign: 'center',
+		verticalAlign: 'middle'
+	},
+	game_column:
+	{
+		flex: 1,
+		gap: '5%',
+		marginBottom: 0,
+		marginTop: 0,
+		paddingBottom: '10%',
+		paddingTop: 0
+	},
+	game_level_area:
+	{
+		gap: '5%',
+		justifyContent: 'center',
+		marginBottom: '15%',
+		marginLeft: '5%',
+		marginRight: '5%',
+		marginTop: '5%'
+	},
+	game_row:
+	{
+		flex: 1,
+		flexDirection: 'row',
+		gap: '10%',
+		marginBottom: 0,
+		marginTop: 0,
+		paddingBottom: 0,
+		paddingTop: 0
+	},
+	game_text:
+	{
+		color: 'white',
+		fontSize: 18,
+		fontWeight: 'bold'
+	},
+	heading_text:
+	{
+		fontSize: 18,
+		marginBottom: 3
+	},
+	home_button:
+	{
+		backgroundColor: '#e7ecf4',
+		height: screen_width * 0.45 ,
+		width: screen_width * 0.45 ,
+		justifyContent: 'center'
+	},
+	home_container:
+	{
+		gap: screen_width * 0.05, 
+		height: screen_height * 0.5,
+		paddingTop: screen_height * 0.035, 
+	},
+	home_extra_margin:
+	{
+		marginTop: 100 
+	},
+	
+	home_container_weather:
+	{
+		height: screen_height * 0.3,
+	},
+	home_container_alert:
+	{
+		height: screen_height * 0.1,
+		justifyContent: 'flex-end',
+		paddingBottom: screen_height * 0.03
+	},
+	home_row:
+	{
+		flexDirection: 'row',  
+		gap: screen_width * 0.05,
+		paddingLeft: 10,
+		paddingRight: 10,
 	},
 	image:
 	{
-		backgroundColor: 'orange',
 		alignSelf: 'center',
-	},
-	blue_01:
-	{
-		backgroundColor: '#63edffff',
-	},
-	blue_02:
-	{
-		backgroundColor: '#639affff'
-	},
-	progress_bar:
-	{
-		paddingLeft: screen_width * 0.10
-	},
-	progress_bar_container: // Games
-	{
-		flexDirection:'row',
-		height: 25,
-		justifyContent: 'space-between'
-	},
-	scroll_bar: // Emergency Data Form
-	{
-		flexDirection: 'row',
-		flex: 0.1,
-		backgroundColor: '#DBE2E9',
-		alignContent: 'flex-end',
-		marginBottom: '12%'
-	},
-	scroll_bar_button:
-	{
-		width: screen_width / 3,
-		justifyContent: 'center',
-		borderColor: 'blue',
-		borderWidth: 2,
-		paddingLeft: 2,
-		paddingRight: 2
-	},
-	accordion_list:
-	{
-		backgroundColor: '#d1dce4ff',
-		marginLeft: '10%',
-		width: '80%',
-		fontSize: 30
-	},
-	picker_view:
-	{
-		backgroundColor: '#d1dce4ff',
-		borderBottomWidth: 0.75,
-		paddingLeft: 22,
-		paddingRight: 15,
-	},
-	picker:
-	{
-		color: '#454545'
-	},
-	alert:
-	{
-		color: 'rgb(126, 4, 4)',
-		fontWeight: 900
+		backgroundColor: 'orange'
 	},
 	menu:
 	{
@@ -269,20 +287,37 @@ const styles = StyleSheet.create({
 	{
 		color: '#454545'
 	},
-	text_input:
+	multiple_choice_question:
+	{
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start'
+	},
+	multiple_choice_question_text:
+	{
+		color: '#0b3e82ff',
+		fontSize: 26,
+		fontWeight: '900'
+	},
+	picker:
+	{
+		color: '#454545'
+	},
+	picker_view:
 	{
 		backgroundColor: '#d1dce4ff',
-		color: '#000',
-		fontSize: 17,
-		fontWeight: 400,
-		paddingLeft: 15
-	
+		borderBottomWidth: 0.75,
+		paddingLeft: 22,
+		paddingRight: 15,
 	},
-	text_line:
+	progress_bar:
 	{
-		paddingBottom: 20,
-		paddingLeft: 15,
-		paddingTop: 15
+		paddingLeft: screen_width * 0.10
+	},
+	progress_bar_container: // Games
+	{
+		flexDirection:'row',
+		height: 25,
+		justifyContent: 'space-between'
 	},
 	save_button_text:
 	{
@@ -290,19 +325,23 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: '900',
 	},
-	modal:
+	save_row:
 	{
-		flex: 1,
-		backgroundColor: '#D8DFE6',
-		paddingTop: '5%'
+		flexDirection: 'row',
+		gap: 5,
+		justifyContent: 'space-between',
+		marginTop: 20
 	},
-	title_bar:
+	score:
 	{
-		borderBottomWidth: 2,
-		borderColor: 'blue',
-		fontSize: 22,
-		marginBottom: 10,
-		paddingBottom: 2
+		alignContent: 'center'
+	},
+	score_text:
+	{
+		color: '#0b3e82ff',
+		textAlign: 'center',
+		fontSize: 26,
+		fontWeight: '900'
 	},
 	text:
 	{
@@ -310,45 +349,19 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginBottom: 2
 	},
-	heading_text:
+	text_button:
 	{
-		fontSize: 18,
-		marginBottom: 3
+		color: 'black',
+		fontSize: 20,
+		textAlign: 'center'
 	},
-	heading_row:
+	text_input:
 	{
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	save_row:
-	{
-		flexDirection: 'row',
-		gap: 5,
-		justifyContent: 'space-between',
-		marginTop: 20,
-		// marginLeft: 20,
-		// marginRight: 20
-	},
-	section:
-	{
-		marginBottom: 20,
-		marginTop: 20,
-	},
-	section_small:
-	{
-		marginBottom: 10,
-		marginTop: 10,
-	},
-	row_height:
-	{
-		height: 40
-	},
-	data_button_size:
-	{
-		marginBottom: 20,
-		marginTop: 20,
-		paddingBottom: 20,
-		paddingTop: 20
+		backgroundColor: '#d1dce4ff',
+		color: '#000',
+		fontSize: 17,
+		fontWeight: 400,
+		paddingLeft: 15
 	},
 	text_list:
 	{
@@ -360,34 +373,25 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		paddingRight: 10
 	},
-	expand_button:
+	title_bar:
 	{
-		alignItems: 'flex-end',
-		fontSize: 18,
-		flex: 0.1,
-		marginRight: 5
+		borderBottomWidth: 2,
+		borderColor: 'blue',
+		fontSize: 22,
+		marginBottom: 10,
+		paddingBottom: 2
 	},
-	contact_button:
-	{
-		alignItems: 'center',
-		flex: 1/4,
-		justifyContent: 'flex-end',
-		paddingBottom: 25,
-	},
-	alert_row:
+	weather_forecast:
 	{
 		alignItems: 'center',
-		paddingTop: 20
+		flexDirection: 'column',
+		width: screen_width * 0.45 , 
 	},
-	checkbox_row:
-	{ 		
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: 30,
-		marginTop: 30
+	weather_image:
+	{
+		height: 50,
+		width: 50
 	},
-	
 });
 
 export default styles;

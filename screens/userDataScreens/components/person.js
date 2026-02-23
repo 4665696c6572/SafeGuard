@@ -10,18 +10,16 @@ import styles from "../../../styles/styles";
 const underlay_color = '#d1dce4ff';
 
 
-export const Person = ({entityData, setEditPersonVisible, setTempEntityData, showEditButton }) =>
+export const Person = ({entityData, params, setEditPersonVisible, setTempEntityData, showEditButton }) =>
 {
 	return (
-		<View style={[ styles.container, { flex: 1/3 }]}>
-			<View style={ styles.data_container }>
+		<View style={[ styles.data_container_view, { flex: 1 }]}>
 			<Text style={ styles.title_bar }>Personal Information</Text>
 			{
 				entityData[0]?.entity_name != null ?
 				<Fragment>
 				{
-					entityData.map( person =>
-					(
+					entityData.map( person => 
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
 								{
@@ -84,26 +82,25 @@ export const Person = ({entityData, setEditPersonVisible, setTempEntityData, sho
 							: null
 							}
 						</View>
-					))
+					)
 				}
 				</Fragment>
 				:
 				<View>
-					{
-						screen == 'EmergencyDataScreen' ? null :
-						<TouchableOpacity
-							accessibilityLabel='Add information button'
-							accessibilityHint='Press to add user information.'
-							onPress={ () => setEditPersonVisible( true )}
-							style={ styles.data_button_size }
-						>
-							<Text style={ styles.text_button }>Add information</Text>
-						</TouchableOpacity>
-					}
+				{
+					params?.screen == 'EmergencyDataScreen' ? null :
+					<TouchableOpacity
+						accessibilityLabel='Add information button'
+						accessibilityHint='Press to add user information.'
+						onPress={ () => setEditPersonVisible( true )}
+						style={ styles.data_button_size }
+					>
+						<Text style={ styles.text_button }>Add information</Text>
+					</TouchableOpacity>
+				}
 				</View>
 			}
 			</View>
-		</View>
 	);
 };
 
@@ -154,7 +151,7 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 	function handlePress( close )
 	{	
 		// Don't save if changes have not been made
-		if (JSON.stringify( entityData ) === JSON.stringify( tempEntityData ) || close == true )
+		if ( JSON.stringify( entityData ) === JSON.stringify( tempEntityData ) || close == true )
 		{
 			setEditPersonVisible( false );
 			setEntityName( '' );
@@ -174,188 +171,185 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 
 
 	return(
-		<View style={ styles.edit_container }>
-			<View style={ styles.data_container }>
-					<View>
-						<TextInput
-							accessibilityLabel='Full user name'
-							style={ styles.text_input }
-							placeholder={ tempEntityData?.entity_name ? tempEntityData.entity_name : 'Full Name' }
-							onChangeText={ ( text ) =>
-							{
-								setEntityName( text );
-								setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
-								setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
-							}}
-						/>
+		<View style={ styles.data_container_edit }>
+			<View>
+				<TextInput
+					accessibilityLabel='Full user name'
+					style={ styles.text_input }
+					placeholder={ tempEntityData?.entity_name ? tempEntityData.entity_name : 'Full Name' }
+					onChangeText={ ( text ) =>
+					{
+						setEntityName( text );
+						setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
+						setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
+					}}
+				/>
 
 
-						<TouchableHighlight
-							accessibilityLabel='Date picker'
-							accessibilityHint='Touch to open date picker for date of birth.'
-							onPress={ showDatePicker }
-							style={ styles.menu }
-							underlayColor={ underlay_color }
-						>
-							<Text style={[ styles.text_input, styles.menu_text ]}>{ tempEntityData?.dob ? tempEntityData.dob : 'Date of birth' }</Text>
-						</TouchableHighlight>
-					
-						<DateTimePickerModal
-							isVisible={ datePickerVisible }
-							mode='date'
-							onConfirm={ handleConfirm }
-							onCancel={ hideDatePicker }
-						/>
+				<TouchableHighlight
+					accessibilityLabel='Date picker'
+					accessibilityHint='Touch to open date picker for date of birth.'
+					onPress={ showDatePicker }
+					style={ styles.menu }
+					underlayColor={ underlay_color }
+				>
+					<Text style={[ styles.text_input, styles.menu_text ]}>{ tempEntityData?.dob ? tempEntityData.dob : 'Date of birth' }</Text>
+				</TouchableHighlight>
+
+				<DateTimePickerModal
+					isVisible={ datePickerVisible }
+					mode='date'
+					onConfirm={ handleConfirm }
+					onCancel={ hideDatePicker }
+				/>
 
 
-						<View style={ styles.picker_view }>
-							<Picker
-								accessibilityLabel='Sex menu'
-								accessibilityHint='Select your sex.'
-								style={ styles.picker }
-								selectedValue={ tempEntityData?.sex ? tempEntityData.sex : 'Sex' }
-								onValueChange={( itemValue ) =>setTempEntityData( prev => ({ ...prev, 'sex': itemValue }))}
-							>
-								<Picker.Item
-									color='black'
-									enabled={ false }
-									label='Sex'
-									value=''
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='Male'
-									value='Male'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='Female'
-									value='Female'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='Prefer not to say.'
-									value='Prefer not to say.'
-								/>
-							</Picker>
-						</View>
-
-
-						<TextInput
-							accessibilityLabel='Height'
-							accessibilityHint='Type in your height.'
-							style={ styles.text_input }
-							placeholder={ tempEntityData?.height?tempEntityData.height :'height' }
-							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'height': text }))}
-						/>
-
-
-						<TextInput
-							accessibilityLabel='Weight'
-							accessibilityHint='Type in your weight.'
-							style={ styles.text_input }
-							placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
-							onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
-						/>
-					
-
-
-						<View style={ styles.picker_view }>
-							<Picker
-								accessibilityLabel='Blood type menu.'
-								accessibilityHint='Select your blood type.'
-								selectedValue={ tempEntityData?.blood_type? tempEntityData.blood_type : '' }
-								style={ styles.picker }
-								onValueChange={( itemValue ) => setTempEntityData( prev => ({ ...prev, 'blood_type': itemValue }))}
-							>
-								<Picker.Item
-									color='black'
-									enabled={ false }
-									label='Blood Type'
-									value=''
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='A+'
-									value='A+'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='A-'
-									value='A-'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='B+'
-									value='B+'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='B-'
-									value='B-'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='AB+'
-									value='AB+'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='AB-'
-									value='AB-'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='O+'
-									value='O+'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='O-'
-									value='O-'
-								/>
-								<Picker.Item
-									accessibilityLabel='menuitem'
-									label='Unknown'
-									value='Unknown'
-								/>
-							</Picker>
-						</View>
-					</View>
-
-
-				{/* Cancel/Save button row */}
-				<View style={ styles.save_row }>
-					{/* Cancel Button */}
-					<TouchableOpacity
-						accessibilityLabel='Cancel button'
-						accessibilityHint='Press to cancel editing.'
-						style={ styles.game_button_end }
-						onPress={ () => handlePress( true )}
+				<View style={ styles.picker_view }>
+					<Picker
+						accessibilityLabel='Sex menu'
+						accessibilityHint='Select your sex.'
+						style={ styles.picker }
+						selectedValue={ tempEntityData?.sex ? tempEntityData.sex : 'Sex' }
+						onValueChange={( itemValue ) =>setTempEntityData( prev => ({ ...prev, 'sex': itemValue }))}
 					>
-						<Text style={ styles.save_button_text }>Cancel</Text>
-					</TouchableOpacity>
-
-					{/* Save Button */}
-					<TouchableOpacity
-						accessibilityLabel='Save button'
-						accessibilityHint='Press to save.'
-						style={ styles.game_button_end }
-						onPress={ () => handlePress( false )}
-					>
-						<Text style={ styles.save_button_text }>Save</Text>
-					</TouchableOpacity>
+						<Picker.Item
+							color='black'
+							enabled={ false }
+							label='Sex'
+							value=''
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='Male'
+							value='Male'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='Female'
+							value='Female'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='Prefer not to say.'
+							value='Prefer not to say.'
+						/>
+					</Picker>
 				</View>
 
-				{/* Form Validation Error */}
-				{
-					showValidationError ?
-					<View style={ styles.alert_row }>
-						<Text style={ styles.alert }>{ errors.entityName }</Text>
-					</View>
-				: null
-				}
+
+				<TextInput
+					accessibilityLabel='Height'
+					accessibilityHint='Type in your height.'
+					style={ styles.text_input }
+					placeholder={ tempEntityData?.height?tempEntityData.height :'height' }
+					onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'height': text }))}
+				/>
+
+
+				<TextInput
+					accessibilityLabel='Weight'
+					accessibilityHint='Type in your weight.'
+					style={ styles.text_input }
+					placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
+					onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
+				/>
+
+
+				<View style={ styles.picker_view }>
+					<Picker
+						accessibilityLabel='Blood type menu.'
+						accessibilityHint='Select your blood type.'
+						selectedValue={ tempEntityData?.blood_type? tempEntityData.blood_type : '' }
+						style={ styles.picker }
+						onValueChange={( itemValue ) => setTempEntityData( prev => ({ ...prev, 'blood_type': itemValue }))}
+					>
+						<Picker.Item
+							color='black'
+							enabled={ false }
+							label='Blood Type'
+							value=''
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='A+'
+							value='A+'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='A-'
+							value='A-'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='B+'
+							value='B+'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='B-'
+							value='B-'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='AB+'
+							value='AB+'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='AB-'
+							value='AB-'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='O+'
+							value='O+'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='O-'
+							value='O-'
+						/>
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							label='Unknown'
+							value='Unknown'
+						/>
+					</Picker>
+				</View>
 			</View>
+
+
+			{/* Cancel/Save button row */}
+			<View style={ styles.save_row }>
+				{/* Cancel Button */}
+				<TouchableOpacity
+					accessibilityLabel='Cancel button'
+					accessibilityHint='Press to cancel editing.'
+					style={ styles.game_button_end }
+					onPress={ () => handlePress( true )}
+				>
+					<Text style={ styles.save_button_text }>Cancel</Text>
+				</TouchableOpacity>
+
+				{/* Save Button */}
+				<TouchableOpacity
+					accessibilityLabel='Save button'
+					accessibilityHint='Press to save.'
+					style={ styles.game_button_end }
+					onPress={ () => handlePress( false )}
+				>
+					<Text style={ styles.save_button_text }>Save</Text>
+				</TouchableOpacity>
+			</View>
+
+			{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.alert_row }>
+					<Text style={ styles.alert }>{ errors.entityName }</Text>
+				</View>
+			: null
+			}
 		</View>
 	)
 }

@@ -32,32 +32,30 @@ const EmergencyDataScreen = ({ navigation }) =>
 
 
 	return (
-		<View style={ styles.container }>
-			<ScrollView style={[ styles.data_container, { marginBottom: 40 }]}>
-				<Person
-					entityData={ emergencyData?.person }
-					nav={ ( ) => { navigation.navigate( "EmergencyDataFormScreen" )}}
-				/>
+		<ScrollView style={[ styles.container, styles.data_container_view ]}>
+			<Person
+				entityData={ emergencyData?.person }
+				nav={ ( ) => { navigation.navigate( "PersonScreen", { screen: 'EmergencyDataScreen' })}}
+			/>
 
-				<Allergy
-					doctorData={ emergencyData?.doctor }
-					allergyData={ emergencyData?.allergy }				
-				/>
+			<Allergy
+				doctorData={ emergencyData?.doctor }
+				allergyData={ emergencyData?.allergy }
+			/>
 
-				<MedicalCondition
-					conditionData={ emergencyData?.medical_condition }			
-				/>
+			<MedicalCondition
+				conditionData={ emergencyData?.medical_condition }
+			/>
 
-				<Medication
-					doctorData={ emergencyData?.doctor }
-					medicationData={ emergencyData?.medication }				
-				/>
+			<Medication
+				doctorData={ emergencyData?.doctor }
+				medicationData={ emergencyData?.medication }
+			/>
 
-				<HealthInsurance
-					insuranceData={ emergencyData?.insurance }			
-				/>
-			</ScrollView>
-		</View>
+			<HealthInsurance
+				insuranceData={ emergencyData?.insurance }
+			/>
+		</ScrollView>
 	);
 }
 

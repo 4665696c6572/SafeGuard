@@ -59,7 +59,7 @@ const DoctorScreen = ({ navigation, route }) =>
 	if ( loadingDoctorData )    return <ActivityIndicator/>;
 
 	return (
-		<View style={ styles.container }>
+		<View style={ styles.bottom_tab_container }>
 			<Doctor
 				doctorData={ doctorData }
 				setEditDoctorVisible={ setEditDoctorVisible }

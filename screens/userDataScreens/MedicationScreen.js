@@ -49,7 +49,7 @@ const MedicationScreen = ({ route }) =>
 	if ( loadingMedicationData )    return <ActivityIndicator/>;
 
 	return(
-		<View style={ styles.container }>
+		<View style={ styles.bottom_tab_container }>
 			<Medication
 				medicationData={ medicationData }
 				setEditMedicationVisible={ setEditMedicationVisible }

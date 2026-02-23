@@ -28,13 +28,14 @@ import TrueFalseScreen from './screens/gameScreens/TrueFalseScreen.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+notificationHandlerSetup( );
 
 function TabNavigator()
 {
 	return (
 		<Tab.Navigator screenOptions={{ headerShown: false }} >
 			<Tab.Screen
-				name='Personal'
+				name='Person'
 				component={ PersonScreen }
 				options={{
 							tabBarIcon: ({ color, size }) => (
@@ -42,6 +43,7 @@ function TabNavigator()
 							),
 				}}
 			/>
+
 			<Tab.Screen
 				name='Conditions'
 				component={ MedicalConditionScreen }
@@ -49,9 +51,9 @@ function TabNavigator()
 							tabBarIcon: ({ color, size }) => (
 								<MaterialCommunityIcons name="account" size={size} color={color} />
 							),
-				}}
-			
+				}}			
 			/>
+
 			<Tab.Screen
 				name='Medication'
 				component={ MedicationScreen }
@@ -76,12 +78,10 @@ function TabNavigator()
 }
 
 
-notificationHandlerSetup();
-
-
-
 export default function App( )
 {
+
+
 	useEffect( ( ) =>
 	{(
 		async ( ) =>
@@ -104,12 +104,10 @@ export default function App( )
 					<Stack.Screen name="TrueFalseScreen" component={ TrueFalseScreen }/>
 
 					<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>
-					<Stack.Screen name="EmergencyDataFormScreen" component={ TabNavigator }/>
-
+					<Stack.Screen name="PersonScreen" component={ TabNavigator }/>
 					<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
-					<Stack.Screen name="DoctorScreen" component={ DoctorScreen }/>
-					<Stack.Screen name="PersonScreen" component={ PersonScreen }/>
-					<Stack.Screen name="MedicalConditionScreen" component={ MedicalConditionScreen }/>
+
+					{/* <Stack.Screen name="LearningHomeScreen" component={ LearningHomeScreen }/> */}
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SQLiteProvider>
