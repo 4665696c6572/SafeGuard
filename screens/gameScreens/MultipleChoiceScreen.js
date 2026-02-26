@@ -1,12 +1,12 @@
 import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
-import * as Progress from 'react-native-progress';
+import { ActivityIndicator, Dimensions, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
+import { CheerModal, EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
@@ -14,13 +14,10 @@ import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
 
-
 const questions_per_round = 1;
 const answers_per_round = 4;
 const questions_per_level = 10;
 
-const screen_width = Dimensions.get('screen').width;
-const imgUri = require( '../../assets/frog.png' );
 
 export default function MultipleChoiceScreen({ navigation, route })
 {
@@ -96,46 +93,21 @@ export default function MultipleChoiceScreen({ navigation, route })
 	return (
 		<View style={ styles.container }>
 			<SafeAreaProvider style={[ styles.game_level_area, {marginBottom: '15%'} ]}>
-				<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
-					<View style={ styles.game_level_area }>
+				<CheerModal
+					cheerVisible={ cheerVisible }
+				/>
 
-						<View>
-							<Text style={ styles.score_text } >Final score</Text>
-							<Text style={ styles.score_text } >{ levelScore }</Text>
-						</View>
+				<EndLevelModal
+					levelComplete={ levelComplete }
+					levelScore={ levelScore }
+				/>
 
-						<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
-					</View>
-				</Modal>
+				<ProgressAndScore
+					currentNumber={ currentNumber }
+					levelScore={ levelScore }
+					questions_per_level={ questions_per_level }
+				/>
 
-				{/* Cheer Modal */}
-				<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
-					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
-				</Modal>
-
-				{/* Progress and Score */}
-				<View style={ styles.progress_bar_container }>
-					<View style={ styles.progress_bar }>
-						<Progress.Bar
-							progress={( currentNumber / questions_per_level )}
-							height= '20'
-							width={screen_width * 0.6}
-							color='#66a1efff'
-							borderRadius={5}
-							unfilledColor='#bacfeaff'
-							borderColor='#DBE2E9'
-						/>
-					</View>
-
-						<Text style={ styles.count_text }>
-							{ Math.min( currentNumber, questions_per_level )} / { questions_per_level }
-						</Text>
-				</View>
-
-				<View>
-					<Text style={ styles.score_text } >Score</Text>
-					<Text style={ styles.score_text } >{ levelScore }</Text>
-				</View>
 
 				{
 					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) =>
