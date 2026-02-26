@@ -1,8 +1,10 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import { countStreak } from '../../common/game/sharedGame.js';
+import { GamePath } from './components/gamePath.js'
 import useLoadGameData from '../../common/game/hook/useLoadGameData.js';
 
 import styles from '../../styles/styles.js';
@@ -10,12 +12,14 @@ import styles from '../../styles/styles.js';
 const GameScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext();
-	const [ levelData, setLevelData ] = useState();
-	const underlay = '#0b3e82ff';
+	const [ gameData, loadingData, loadData ] = useLoadGameData( db );
 
-    const [ totalScore, setTotalScore, loadingData, loadData ] = useLoadGameData( db );
+	const [ currentLevel, setCurrentLevel ] = useState( 1 );
+	const [ streakLength, setStreakLength ] = useState( 0 );
+	const [ totalScore, setTotalScore ] = useState( 0 );
 
 	const isFocused = useIsFocused();
+
 
 	useEffect(() =>
 		{
@@ -26,79 +30,37 @@ const GameScreen = ({ navigation }) =>
 	}, [ isFocused ]);
 
 
+	useEffect(() =>
+	{
+		if( gameData )
+		{
+			setStreakLength( countStreak( gameData?.streak_history ?? [ ] ));
+			setCurrentLevel( gameData?.game_data[0]?.current_level ?? 1 );
+			setTotalScore( gameData?.game_data[0]?.score ?? 0 );
+		}
+	}, [ gameData ]);
+
+
+	function handleNavigation( screen, loadedLevel )
+	{
+		navigation.navigate( screen, { currentLevel: currentLevel, loadedLevel: loadedLevel	});
+	}
+
+
 	if (loadingData)    return <ActivityIndicator/>;
 
 	return (
-		<View style={ styles.container }>
-			<View style={ styles.game_area }>
-			
-				<View>
-							<Text style={ styles.score_text } >Score</Text>
-							<Text style={ styles.score_text } >{ totalScore } </Text>
-				</View>
-
-				<ScrollView>
-					<View style={styles.game_button_start}>
-						<TouchableHighlight style={ styles.game_button }
-							onPress={ ( ) =>  { navigation.navigate("TrueFalseScreen",  { score: totalScore }); }}
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_button_text }> True / False </Text>
-						</TouchableHighlight>
-					</View>
-
-					<View style={styles.game_button_center}>
-						<TouchableHighlight style={ styles.game_button }
-							onPress={( ) =>  { navigation.navigate("MultipleChoiceScreen",  { score: totalScore }); }}
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_button_text }>MC</Text>
-						</TouchableHighlight>
-					</View>
-
-					<View style={styles.game_button_end}>
-						<TouchableHighlight style={ styles.game_button }
-							onPress={ ( ) =>  { navigation.navigate("MatchingScreen", { score: totalScore }); }}
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_button_text }> Matching </Text>
-						</TouchableHighlight>
-					</View>
-
-					<View style={styles.game_button_center}>
-					<TouchableHighlight style={ styles.game_button }
-						onPress={( ) =>  { navigation.navigate("MultipleChoiceScreen",  { score: totalScore }); }}
-						underlayColor={ underlay }
-						activeOpacity={ 1 }
-					>
-						<Text style={ styles.game_button_text }>MC</Text>
-					</TouchableHighlight>
-					</View>
-
-					<View style={styles.game_button_start}>
-					<TouchableHighlight style={ styles.game_button }
-						onPress={ ( ) =>  { navigation.navigate("MatchingScreen",  { score: totalScore }); }}
-						underlayColor={ underlay }
-						activeOpacity={ 1 }
-					>
-						<Text style={ styles.game_button_text }> Matching </Text>
-					</TouchableHighlight>
-					</View>
-
-					<View style={styles.game_button_center}>
-						<TouchableHighlight style={ styles.game_button }
-							onPress={( ) =>  { navigation.navigate("MultipleChoiceScreen",  { score: totalScore }); }}
-							underlayColor={ underlay }
-							activeOpacity={ 1 }
-						>
-							<Text style={ styles.game_button_text }>MC</Text>
-						</TouchableHighlight>
-					</View>
-				</ScrollView>
+		<View style={ styles.game_area }>
+			<View style={[ styles.data_section]}>
+				<Text style={[ styles.score_text, {	color: 'rgb(144, 226, 152)' }]} >Score</Text>
+				<Text style={[ styles.score_text, {	color: 'rgb(144, 226, 152)' }]} >{ totalScore } </Text>
 			</View>
+
+			<GamePath
+				currentLevel={ currentLevel }
+				handleNavigation={ handleNavigation }
+				totalScore={ totalScore }
+			/>
 		</View>
 	)
 }

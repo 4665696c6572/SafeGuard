@@ -54,7 +54,7 @@ const PersonScreen = ({ navigation, route }) =>
 		else
 		{
 			await saveToDB( table, data, db, id, loadData );
-		}
+		}	
 	}
 
 
@@ -70,7 +70,6 @@ const PersonScreen = ({ navigation, route }) =>
 		<View style={ styles.bottom_tab_container }>
 			<Person
 				entityData={ entityData }
-				params={ params }
 				setEditPersonVisible={ setEditPersonVisible }
 				setTempEntityData={ setTempEntityData }
 				showEditButton={ true }
@@ -117,6 +116,7 @@ const PersonScreen = ({ navigation, route }) =>
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 					tempInsuranceData={ tempInsuranceData }
 				/>
+			
 			</Modal>
 		</View>
 	);

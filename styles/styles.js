@@ -41,14 +41,14 @@ const styles = StyleSheet.create(
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
-		marginBottom: 45, 
-		marginTop: 45,
+		marginBottom: 45,
+		marginTop: 38,
 	},
 	bottom_tab_container:
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
-		marginTop: 45,
+		marginTop: 38,
 	},
 	data_container_inner:
 	{
@@ -118,12 +118,13 @@ const styles = StyleSheet.create(
 	},
 	game_area:
 	{
-		gap: 1,
+		backgroundColor: 'green',
+		flex: 1,
 		justifyContent: 'center',
-		marginBottom: '10%',
-		marginLeft: '5%',
-		marginRight: '5%',
-		marginTop: '5%',
+		marginBottom: 45,
+		marginTop: 38,
+		paddingLeft: '5%',
+		paddingRight: '5%',
 		
 	},
 	game_box_active:
@@ -167,7 +168,6 @@ const styles = StyleSheet.create(
 	game_button:
 	{
 		alignContent: 'center',
-		backgroundColor: 'blue',
 		borderRadius: '50%',
 		height: button_size,
 		justifyContent: 'center',
@@ -214,6 +214,35 @@ const styles = StyleSheet.create(
 		marginRight: '5%',
 		marginTop: '5%'
 	},
+	game_lily:
+	{
+		left: 0,
+		position: 'absolute',
+		top: 0,
+	},
+	game_frog:
+	{
+		left: 0,
+		position: 'absolute',
+		top: 0,
+	},
+	game_lily_container:
+	{
+		height: '100%',
+		width: '100%'
+	},
+	game_opacity_zero:
+	{
+		opacity: 0
+	},
+	game_opacity_half:
+	{
+		opacity: 0.5
+	},
+	game_opacity_one:
+	{
+		opacity: 1
+	},
 	game_row:
 	{
 		flex: 1,
@@ -230,6 +259,12 @@ const styles = StyleSheet.create(
 		fontSize: 18,
 		fontWeight: 'bold'
 	},
+	grass:
+	{
+		height: 50,
+		marginTop: -40,
+		width: screen_width * 0.9
+	},
 	heading_text:
 	{
 		fontSize: 18,
@@ -244,13 +279,13 @@ const styles = StyleSheet.create(
 	},
 	home_container:
 	{
-		gap: screen_width * 0.05, 
+		gap: screen_width * 0.05,
 		height: screen_height * 0.5,
-		paddingTop: screen_height * 0.035, 
+		paddingTop: screen_height * 0.035,
 	},
 	home_extra_margin:
 	{
-		marginTop: 100 
+		marginTop: 100
 	},
 	
 	home_container_weather:
@@ -265,7 +300,7 @@ const styles = StyleSheet.create(
 	},
 	home_row:
 	{
-		flexDirection: 'row',  
+		flexDirection: 'row', 
 		gap: screen_width * 0.05,
 		paddingLeft: 10,
 		paddingRight: 10,
@@ -319,6 +354,16 @@ const styles = StyleSheet.create(
 		height: 25,
 		justifyContent: 'space-between'
 	},
+	river:
+	{
+		backgroundColor: 'blue',
+		borderTopLeftRadius: 50,
+		borderTopRightRadius: 50,
+		borderWidth: 0,
+		paddingTop: 20,
+		paddingLeft: 5,
+		paddingRight: 5
+	},
 	save_button_text:
 	{
 		color: '#0b3e82ff',
@@ -338,9 +383,9 @@ const styles = StyleSheet.create(
 	},
 	score_text:
 	{
-		color: '#0b3e82ff',
+		color: 'blue',
 		textAlign: 'center',
-		fontSize: 26,
+		fontSize: 24,
 		fontWeight: '900'
 	},
 	text:
@@ -385,7 +430,7 @@ const styles = StyleSheet.create(
 	{
 		alignItems: 'center',
 		flexDirection: 'column',
-		width: screen_width * 0.45 , 
+		width: screen_width * 0.45 ,
 	},
 	weather_image:
 	{

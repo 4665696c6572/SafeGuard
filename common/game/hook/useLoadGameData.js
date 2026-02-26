@@ -4,7 +4,7 @@ import selectGameData from '../database/selectGameData.js';
 
 export default function useLoadGameData( db )
 {
-	const [ totalScore, setTotalScore ] = useState( );
+	const [ loadedData, setLoadedData ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
 
 	const loadData = useCallback(async () =>
@@ -12,7 +12,7 @@ export default function useLoadGameData( db )
 		try
 		{
 			const game_data = await selectGameData( db );
-			setTotalScore( game_data[0].score );
+			setLoadedData(game_data)
 		}
 		catch ( error )
 		{
@@ -24,5 +24,5 @@ export default function useLoadGameData( db )
 		}
 	}, [ db ]);
 
-	return [ totalScore, setTotalScore, loadingData, loadData ];
+	return [ loadedData, loadingData, loadData ];
 }

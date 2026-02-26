@@ -1,15 +1,28 @@
-export default async function updateGameData ( new_score, db )
+export default async function updateGameData ( new_level, new_score, db )
 {
 	try
 	{
-		await db.runAsync(
-		`
-			UPDATE Game_Data
-			SET score = ?
-			WHERE user_id = ?;
-		`, [ new_score, 1 ] );
+		if ( new_score )
+		{
+			await db.runAsync(
+			`
+				UPDATE Game_Data
+				SET
+					current_level = ?,
+					score = score + ?
+				WHERE user_id = ?;
+			`, [ new_level, new_score, 1 ] );
+		}
 
-		console.log( `Score updated in database` );
+		const result = await db.runAsync(
+		`
+			INSERT OR IGNORE
+			INTO Streak_History
+			( streak_id, date_played )
+			VALUES ( ?, ? )
+		`, [ now.toISOString( ).slice( 0, 10 ), now.toISOString( ) ] );
+
+		console.log( `Game data updated.` );
 	}
 	catch ( error )
 	{

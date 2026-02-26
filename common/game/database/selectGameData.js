@@ -5,15 +5,24 @@ export default async function selectGameData ( db )
 		const game_data = await db.getAllAsync(
 		`
 			SELECT
-				score,
-				level_status
-			FROM Game_Data
-			WHERE user_id = ?;
-		`, [ 1 ]
+				current_level,
+				score
+			FROM Game_Data;
+		`
 		);
+
+		const streak_history = await db.getAllAsync(
+		`
+			SELECT
+				date_played
+			FROM Streak_History
+			ORDER by date_played Desc;
+		`
+		);
+
 		console.log( 'Game data loaded' );
 
-		return game_data;
+		return { game_data: game_data, streak_history: streak_history };
 	}
 	catch ( error )
 	{

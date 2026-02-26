@@ -6,7 +6,7 @@ import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer, checkLevelComplete } from '../../common/game/sharedGame.js';
+import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
@@ -26,6 +26,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
+	const params = route?.params;
 
 	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( answers_per_round ) );
 	const [ currentNumber, setCurrentNumber ] = useState( 1 );
@@ -51,13 +52,14 @@ export default function MultipleChoiceScreen({ navigation, route })
 	{
 		if ( levelComplete )
 		{
-			const new_score = route?.params?.score + levelScore;
+			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
-			updateGameData( new_score, db );
+			updateGameData( new_level, levelScore,  db );
 			setTimeout(function()
 			{
 				navigation.dispatch( StackActions.pop( ));
-				navigation.navigate( "GameScreen", { score: new_score });
+				navigation.navigate( "GameScreen", { currentLevel: new_level, levelScore: levelScore });
+
 			}, 1200)
 		}
 	}), [ levelComplete ]
@@ -65,23 +67,26 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
+		if ( ( roundStartIndex == questions_per_level * 0.4 ) )
+		{
+			setCheerVisible( true );
+			setTimeout( function( )
+			{
+				setCheerVisible( false );
+			}, 1000 );
+		}
+
 		if ( checkAnswer( correct_answer, user_answer ))
 		{
 			setAnswerOrder( calcAnswerOrder( answers_per_round ));
 			setLevelScore( prev => prev + 1 );
 		}
 		else Haptics.selectionAsync();
+
 		setCurrentNumber( prev => prev + 1 );
 		setRoundStartIndex( prev => prev + 1 );
-		updateLevelData( db, 'TrueFalseScreen', question_id );
-		if ( ( roundStartIndex == questions_per_level * 0.4 ) )
-		{
-			setCheerVisible( true );
-			setTimeout( function( )
-			{
-				setCheerVisible( false )
-			}, 1000 );
-		}
+		updateLevelData( db, 'MultipleChoiceScreen', question_id );
+
 		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
 	}
 
@@ -90,9 +95,9 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '15%'} ]}>
-				<Modal animationType='fade' color='#d1dce4ff' visible={ levelComplete }>
-					<View style={ styles.game_area }>
+			<SafeAreaProvider style={[ styles.game_level_area, {marginBottom: '15%'} ]}>
+				<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
+					<View style={ styles.game_level_area }>
 
 						<View>
 							<Text style={ styles.score_text } >Final score</Text>
@@ -104,7 +109,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 				</Modal>
 
 				{/* Cheer Modal */}
-				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
+				<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
 					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 				</Modal>
 
@@ -146,11 +151,15 @@ export default function MultipleChoiceScreen({ navigation, route })
 							<TouchableHighlight
 								key = {index}
 								style={[ styles.game_box_large, styles.game_box_active ]}
-								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.ID)}
+								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.question_id)}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
-								<Text style={ styles.game_text }>{ entry.answers[answerOrder[index]] }</Text>
+								<View>
+									
+									<Text style={ styles.game_text }>{ entry.answers[answerOrder[index]] }</Text>
+								</View>
+								
 							</TouchableHighlight>
 
 						)}

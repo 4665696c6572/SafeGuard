@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Progress from 'react-native-progress';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete, setResultArray, updateResultArray } from '../../common/game/sharedGame.js';
+import { calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete, setResultArray, updateLevel, updateResultArray } from '../../common/game/sharedGame.js';
 
 
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -24,7 +24,8 @@ const questions_per_level = 12;
 export default function MatchingScreen({ navigation, route })
 {
 	const db = useSQLiteContext();
-	const underlay = '#0b3e82ff'
+	const underlay = '#0b3e82ff'	
+	const params = route?.params;
 
 	const [ answerButtonsDisabled, setAnswerButtonsDisabled ] = useState( true );
 	const [ answeredCorrectly, setAnsweredCorrectly ] = useState( setResultArray( questions_per_round ));
@@ -40,8 +41,9 @@ export default function MatchingScreen({ navigation, route })
 	const [ levelData, loadingData, loadData ] = useLoadLevelData(db, 'MatchingScreen', questions_per_level);
 
 
-		const isFocused = useIsFocused();
-	
+	const isFocused = useIsFocused();
+
+
 	useEffect(() =>
 		{
 			if ( isFocused )
@@ -50,14 +52,11 @@ export default function MatchingScreen({ navigation, route })
 			}
 	}, [ isFocused ]);
 
+
 	useEffect( () =>
 	{
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{
-			setAnsweredCorrectly( setResultArray( questions_per_round ));
-			setAnswerOrder( calcAnswerOrder( questions_per_round ));
-			setRoundStartIndex( prev => prev + questions_per_round );
-
 			if ( ( roundStartIndex == questions_per_level / 4 ) )
 			{
 				setCheerVisible( true );
@@ -66,6 +65,11 @@ export default function MatchingScreen({ navigation, route })
 					setCheerVisible( false )
 				}, 1000 );
 			}
+
+			setAnsweredCorrectly( setResultArray( questions_per_round ));
+			setAnswerOrder( calcAnswerOrder( questions_per_round ));
+			setRoundStartIndex( prev => prev + questions_per_round );
+
 			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
 		}
 	}, [ answeredCorrectly ] );
@@ -75,40 +79,50 @@ export default function MatchingScreen({ navigation, route })
 	{
 		if ( levelComplete )
 		{
-			const new_score = route?.params?.score + levelScore;
+			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
-			updateGameData( new_score, db );
+			updateGameData( new_level, levelScore, db );
 			setTimeout(function( )
 			{
 				navigation.dispatch( StackActions.pop( ));
-				navigation.navigate( "GameScreen", { score: new_score });
+				navigation.navigate( "GameScreen", { currentLevel: new_level, levelScore: levelScore });
 			}, 1200)
 		}
 	}), [ levelComplete ]
 
 
 	function handleAnswerCheck( question_id, answer_id, question_row )
-	{
+	{	
+		if(( roundStartIndex == questions_per_level * 0.4 && score >= 3))
+		{
+			setCheerVisible( true );
+			setTimeout( function( )
+			{
+				setCheerVisible( false );
+			}, 1000 );
+		}
+
 		if (checkAnswer( question_id, answer_id ))
 		{
 			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ));
 		}
 		else Haptics.selectionAsync();
 		if ( answer_id != question_id )    return;
-		
+
 		setAnswerButtonsDisabled( true );
 		setCurrentNumber( prev => prev + 1 );
 		setLevelScore( prev => prev + 1 );
 		updateLevelData ( db, 'MatchingScreen', question_id );
 	}
 
+
 	if ( loadingData )    return <ActivityIndicator/>;
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_area, {marginBottom: '25%'} ]}>
-				<Modal animationType='fade' color='#d1dce4ff' visible={ levelComplete } >
-					<View style={ styles.game_area }>
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: '25%' } ]}>
+				<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
+					<View style={ styles.game_level_area }>
 
 						<View>
 							<Text style={ styles.score_text } >Final score</Text>
@@ -120,7 +134,7 @@ export default function MatchingScreen({ navigation, route })
 				</Modal>
 
 				{/* Cheer Modal */}
-				<Modal animationType='fade' color='#d1dce4ff' visible={ cheerVisible }>
+				<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
 					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
 				</Modal>
 

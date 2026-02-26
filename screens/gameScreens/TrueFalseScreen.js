@@ -6,7 +6,7 @@ import * as Progress from 'react-native-progress';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import {checkAnswer, checkLevelComplete } from '../../common/game/sharedGame.js';
+import { checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
@@ -14,7 +14,7 @@ import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
 
-const questions_per_level = 6;
+const questions_per_level = 6; 
 const questions_per_round = 1;
 
 const imgUri = require( '../../assets/frog.png' );
@@ -24,11 +24,14 @@ export default function TrueFalseScreen({ navigation, route })
 {
 	const db = useSQLiteContext();
 	const underlay = '#0b3e82ff'
+	const params = route?.params;
 
 	const [ currentNumber, setCurrentNumber ] = useState( 1 );
 	const [ levelComplete, setLevelComplete ] = useState( false );
 	const [ levelScore, setLevelScore ] = useState( 0 );
 	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
+
+	const [ cheerVisible, setCheerVisible ] = useState( false );
 
 	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'TrueFalseScreen', questions_per_level );
 
@@ -47,13 +50,13 @@ export default function TrueFalseScreen({ navigation, route })
 	{
 		if ( levelComplete )
 		{
-			const new_score = route?.params?.score + levelScore;
+			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
-			updateGameData( new_score, db );
+			updateGameData( new_level, levelScore, db );
 			setTimeout(function()
 			{
 				navigation.dispatch(StackActions.pop());
-				navigation.navigate("GameScreen", {score: new_score});
+				navigation.navigate("GameScreen", { currentLevel: new_level, levelScore: levelScore });
 			}, 1200)
 		}
 	}), [ levelComplete ]
@@ -61,12 +64,22 @@ export default function TrueFalseScreen({ navigation, route })
 
 	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
+		if(( roundStartIndex == questions_per_level * 0.4 && score >= questions_per_round * 2 ))
+		{
+			setCheerVisible( true );
+			setTimeout( function( )
+			{
+				setCheerVisible( false );
+			}, 1000 );
+		}
+
 		if ( checkAnswer( correct_answer, user_answer ))
 		{
 			console.log( 'Correct' );
 			setLevelScore( prev => prev + 1 );
 		}
 		else Haptics.selectionAsync();
+
 		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
 		{
 			setLevelComplete( true );
@@ -83,9 +96,9 @@ export default function TrueFalseScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_area, { marginBottom: '10%' }]}>
-			<Modal animationType='fade' color='#d1dce4ff' visible={ levelComplete }>
-					<View style={ styles.game_area }>
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: '10%' }]}>
+			<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete }>
+					<View style={ styles.game_level_area }>
 
 						<View>
 							<Text style={ styles.score_text } >Final score</Text>
@@ -96,6 +109,10 @@ export default function TrueFalseScreen({ navigation, route })
 					</View>
 				</Modal>
 
+				{/* Cheer Modal */}
+				<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
+					<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
+				</Modal>
 
 				{/* Progress and Score */}
 				<View style={ styles.progress_bar_container } >

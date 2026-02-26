@@ -10,7 +10,7 @@ import styles from "../../../styles/styles";
 const underlay_color = '#d1dce4ff';
 
 
-export const Person = ({entityData, params, setEditPersonVisible, setTempEntityData, showEditButton }) =>
+export const Person = ({ entityData, screen, setEditPersonVisible, setTempEntityData, showEditButton }) =>
 {
 	return (
 		<View style={[ styles.data_container_view, { flex: 1 }]}>
@@ -19,7 +19,8 @@ export const Person = ({entityData, params, setEditPersonVisible, setTempEntityD
 				entityData[0]?.entity_name != null ?
 				<Fragment>
 				{
-					entityData.map( person => 
+					entityData.map( person =>
+					(
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
 								{
@@ -82,13 +83,13 @@ export const Person = ({entityData, params, setEditPersonVisible, setTempEntityD
 							: null
 							}
 						</View>
-					)
+					))
 				}
 				</Fragment>
 				:
 				<View>
 				{
-					params?.screen == 'EmergencyDataScreen' ? null :
+					screen == 'EmergencyDataScreen' ? null :
 					<TouchableOpacity
 						accessibilityLabel='Add information button'
 						accessibilityHint='Press to add user information.'
@@ -181,7 +182,7 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 					{
 						setEntityName( text );
 						setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
-						setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
+						setTempEntityData( prev => ({ ...prev, 'entity_type': 'Person' }));
 					}}
 				/>
 

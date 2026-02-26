@@ -54,15 +54,7 @@ const ContactScreen = ({ navigation, route }) =>
 	if ( loadingContactData )    return <ActivityIndicator/>;
 
 	return(
-		<View style={ styles.container }>
-			<TouchableOpacity
-				style={ styles.game_button_end }
-				onPress={ ( ) => setEditContactVisible( true )}
-			>
-				<Text style={ styles.save_button_text }>Edit</Text>
-			</TouchableOpacity>
-
-
+		<View> 
 			<Modal animationType='slide' visible={ viewContactVisible }>
 				<ViewContact
 					contactData={ contactData }

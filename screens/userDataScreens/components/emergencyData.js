@@ -32,7 +32,7 @@ export const Person = ({entityData, nav }) =>
 					onPress={ nav }
 					style={{ flex: 1/3}}
 				>
-					<Text style={styles.text_button}>Add Emergency Details</Text>
+					<Text style={[ styles.home_extra_margin, styles.text_button ]}>Add Emergency Details</Text>
 				</TouchableOpacity>
 			</View>
 		}

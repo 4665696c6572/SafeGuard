@@ -16,6 +16,7 @@ export default async function initializeDatabase( db )
 			DROP TABLE IF EXISTS Multiple_Choice_Data;
 			DROP TABLE IF EXISTS Matching_Data;
 			DROP TABLE IF EXISTS Game_Data;
+			DROP TABLE IF EXISTS Streak_History;
 
 			DROP TABLE IF EXISTS Insurance;
 			DROP TABLE IF EXISTS Allergy;
@@ -34,7 +35,7 @@ export default async function initializeDatabase( db )
 			(
 				entity_id    INTEGER    PRIMARY KEY,
 				entity_name    TEXT    NOT NULL    UNIQUE,
-				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ))
+				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ) )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Person
@@ -44,7 +45,7 @@ export default async function initializeDatabase( db )
 				sex    TEXT,
 				height    TEXT,
 				weight    TEXT,
-				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' )),
+				blood_type    TEXT    CHECK ( blood_type IN ( 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown' ) ),
 				FOREIGN KEY ( person_id )    REFERENCES Entity( entity_id )
 			);
 
@@ -87,7 +88,7 @@ export default async function initializeDatabase( db )
 			(
 				allergy_id    INTEGER    PRIMARY KEY,
 				allergen    TEXT,
-				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' )),
+				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
 				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
 			);
 
@@ -134,11 +135,20 @@ export default async function initializeDatabase( db )
 				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
 			);
 
+
+
 			CREATE TABLE IF NOT EXISTS    Game_Data
 			(
 				user_id    INTEGER    PRIMARY KEY,
+				current_level    TEXT    DEFAULT ( 1 )    UNIQUE,
 				score    INTEGER    DEFAULT ( 0 ),
-				level_status    TEXT
+				FOREIGN KEY ( user_id )    REFERENCES Entity( entity_id )
+			);
+
+			CREATE Table IF NOT EXISTS Streak_History
+			(
+				streak_id     TEXT    PRIMARY KEY,
+				date_played    TEXT
 			);
 
 			CREATE TABLE IF NOT EXISTS    Matching_Data
@@ -172,9 +182,12 @@ export default async function initializeDatabase( db )
 		` );
 		// User setup
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Full Name', 'Person' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id ) VALUES ( ? )', [ 1 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id, current_level, score ) VALUES ( ?, ?, ? )', [ 1, 1, 0 ]);
 
-
+		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-20', '2026-02-20T16:33:44.214Z' ]);
+		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-23', '2026-02-23T16:33:44.214Z' ]);
+		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-24', '2026-02-24T16:33:44.214Z' ]);
+		
 		// Demo Data
 		await db.runAsync( 'UPDATE Entity SET entity_name = ? WHERE entity_id = ?;', [ 'Michael S. Baker', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Person ( person_id, dob, height, weight ) VALUES ( ?, ?, ?, ? )', [ 1, '1995-12-13', '181 cm', '83 kg' ]);
@@ -216,7 +229,7 @@ export default async function initializeDatabase( db )
 		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, 'A13989', 'Health' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ? )', [ 5, '1 (800) 555-4444', 'Office', 'Office number' ]);
 
-		for ( const row of match_data ) { await db.runAsync( match_insert, row ); }
+		for ( const row of match_data ) { await db.runAsync(  match_insert, row ); }
 		for ( const row of mc_data ) { await db.runAsync( mc_insert, row ); }
 		for ( const row of tf_data ) { await db.runAsync( tf_insert, row ); }
 

@@ -9,9 +9,9 @@ export const ViewContact = ({
 								contactData, handleNavigation, params, setEditContactVisible, setTempAddressData,
 								setTempEmailData, setTempFaxData, setTempPhoneData, setViewContactVisible
 							}) =>
-{
+{console.log(contactData)
 	return (
-		<View style={ styles.data_container_edit }>
+		<View style={ styles.data_container_view }>
 		{
 			( contactData?.contact_name ?? params.contact_name ) ?
 			<Text style={ styles.title_bar }>
@@ -318,7 +318,6 @@ export const EditContact = ({
 
 	return (
 		<View style={ styles.data_container_edit }>
-		{/* <ScrollView> */}
 		{
 			viewNameVisible ?
 			<View>
@@ -330,58 +329,58 @@ export const EditContact = ({
 			: null
 			}
 
-			<View style={ styles.data_section }>
-				<View>
-				{
-					!addContactDetailsVisible ?
-					<TouchableOpacity
-						accessibilityLabel='Add or Edit button'
-						accessibilityHint='Press to add or edit address.'
-						style={ styles.contact_button }
-						onPress={ ( ) =>
-						{
-							setAddAddressVisible( true );
-							setViewNameVisible( false );
-						}}
-					>
+				<View style={ styles.data_section }>
+					<View>
 					{
-						( tempAddressData?.address_line_one || tempAddressData?.city ) ?
-						<Text style={ styles.text_button }>Edit address</Text>
-					:
-						<Text style={ styles.text_button }>Add address</Text>
+						!addContactDetailsVisible ?
+						<TouchableOpacity
+							accessibilityLabel='Add or Edit button'
+							accessibilityHint='Press to add or edit address.'
+							style={ styles.contact_button }
+							onPress={ ( ) =>
+							{
+								setAddAddressVisible( true );
+								setViewNameVisible( false );
+							}}
+						>
+						{
+							( tempAddressData?.address_line_one || tempAddressData?.city ) ?
+							<Text style={ styles.text_button }>Edit address</Text>
+						:
+							<Text style={ styles.text_button }>Add address</Text>
+						}
+						</TouchableOpacity>
+						: null
 					}
-					</TouchableOpacity>
-					: null
-				}
-				</View>
+					</View>
 
-				<View>
-				{
-					!addAddressVisible ?
-					<TouchableOpacity
-						accessibilityLabel='Add or Edit button'
-						accessibilityHint='Press to add or edit contact details.'
-						style={ styles.contact_button }
-						onPress={ ( ) =>
-						{
-							setAddContactDetailsVisible( true );
-							setViewNameVisible( false );
-						}}
-					>
+					<View>
 					{
-						tempPhoneData?.phone_number ?
-						<Text style={ styles.text_button }>Edit contact details</Text>
-					:
-						<Text style={ styles.text_button }>Add contact details</Text>
+						!addAddressVisible ?
+						<TouchableOpacity
+							accessibilityLabel='Add or Edit button'
+							accessibilityHint='Press to add or edit contact details.'
+							style={ styles.contact_button }
+							onPress={ ( ) =>
+							{
+								setAddContactDetailsVisible( true );
+								setViewNameVisible( false );
+							}}
+						>
+						{
+							tempPhoneData?.phone_number ?
+							<Text style={ styles.text_button }>Edit contact details</Text>
+						:
+							<Text style={ styles.text_button }>Add contact details</Text>
+						}
+						</TouchableOpacity>
+					: null
 					}
-					</TouchableOpacity>
-				: null
-				}
+					</View>
 				</View>
 			</View>
-		</View>
-	: null
-	}
+		: null
+		}
 
 
 	{
@@ -512,344 +511,344 @@ export const EditContact = ({
 	}
 
 
-{/* Contact */}
-{
-	addContactDetailsVisible ?
-	<View>
-	{/* Phone Form */}
+	{/* Contact */}
 	{
-		addPhoneVisible ?
+		addContactDetailsVisible ?
 		<View>
-			<TextInput
-				accessibilityLabel='Office phone number'
-				accessibilityHint='Type in office phone number.'
-				keyboardType='numeric'
-				placeholder={ tempPhoneData?.phone_number ? tempPhoneData.phone_number : 'Office phone number' }
-				style={ styles.text_input }
-				textContentType='telephoneNumber'
-				onChangeText={ ( text ) =>
-				{
-					setPhoneItem( text );
-					setTempPhoneData( prev => ({ ...prev, 'phone_number': text }));
-					setTempPhoneData( prev => ({ ...prev, 'phone_number_type': 'Office' }));
-				}}
-			/>
-
-			<TextInput
-				accessibilityLabel='Text input'
-				accessibilityHint='Type in phone note.'
-				onChangeText={ ( text ) => setTempPhoneData( prev => ({ ...prev, 'phone_number_note': text }))}
-				placeholder={ tempPhoneData?.phone_number_note ? tempPhoneData.phone_number_note : 'Phone number note' }
-				style={ styles.text_input }
-			/>
-
-			{/* Cancel / Save Phone */}
-			<View style={ styles.save_row }>
-				<TouchableOpacity
-					accessibilityLabel='Cancel button'
-					accessibilityHint='Press to cancel adding or editing phone number.'
-					onPress={ ( ) =>
+		{/* Phone Form */}
+		{
+			addPhoneVisible ?
+			<View>
+				<TextInput
+					accessibilityLabel='Office phone number'
+					accessibilityHint='Type in office phone number.'
+					keyboardType='numeric'
+					placeholder={ tempPhoneData?.phone_number ? tempPhoneData.phone_number : 'Office phone number' }
+					style={ styles.text_input }
+					textContentType='telephoneNumber'
+					onChangeText={ ( text ) =>
 					{
-						setAddPhoneVisible( false );
-						setShowValidationError( false );
-						setTempPhoneData( contactData.phone );
-						setPhoneItem( '' );
+						setPhoneItem( text );
+						setTempPhoneData( prev => ({ ...prev, 'phone_number': text }));
+						setTempPhoneData( prev => ({ ...prev, 'phone_number_type': 'Office' }));
 					}}
-				>
-					<Text style={ styles.text_button }>Cancel</Text>
-				</TouchableOpacity>
+				/>
 
-				<TouchableOpacity
-					accessibilityLabel='Save button'
-					accessibilityHint='Press to save phone number.'
-					onPress={ ( ) =>
-					{
-						if ( isPhoneValid )
+				<TextInput
+					accessibilityLabel='Text input'
+					accessibilityHint='Type in phone note.'
+					onChangeText={ ( text ) => setTempPhoneData( prev => ({ ...prev, 'phone_number_note': text }))}
+					placeholder={ tempPhoneData?.phone_number_note ? tempPhoneData.phone_number_note : 'Phone number note' }
+					style={ styles.text_input }
+				/>
+
+				{/* Cancel / Save Phone */}
+				<View style={ styles.save_row }>
+					<TouchableOpacity
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing phone number.'
+						onPress={ ( ) =>
 						{
-							handlePress( false );
 							setAddPhoneVisible( false );
-						}
-						else    setShowValidationError( true );
-					}}
-				>
-					<Text style={ styles.text_button }>Save phone number</Text>
-				</TouchableOpacity>
+							setShowValidationError( false );
+							setTempPhoneData( contactData.phone );
+							setPhoneItem( '' );
+						}}
+					>
+						<Text style={ styles.text_button }>Cancel</Text>
+					</TouchableOpacity>
 
-			</View>
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={[ styles.alert, styles.text ]}>{ errors.phone }</Text>
-				</View>
-			: null
-			}
-		</View>
-		: null
-	}
-
-
-	{/* Fax Form */}
-	{
-		addFaxVisible ?
-		<View>
-			<TextInput
-				accessibilityLabel='Text Input'
-				accessibilityHint='Type in fax number.'
-				keyboardType='numeric'
-				placeholder={ tempFaxData?.fax_number ? tempFaxData.fax_number : 'Fax number' }
-				textContentType='telephoneNumber'
-				style={ styles.text_input }
-				onChangeText={ ( text ) =>
-				{
-					setFaxItem( text );
-					setTempFaxData( prev => ({ ...prev, 'fax_number': text }));
-					setTempFaxData( prev => ({ ...prev, 'fax_number_type': 'Fax' }));
-				}
-				}
-			/>
-			<TextInput
-				accessibilityLabel='Text input'
-				accessibilityHint='Type in fax note.'
-				onChangeText={ ( text ) => setTempFaxData( prev => ({ ...prev, 'fax_note': text }))}
-				placeholder={ tempFaxData?.fax_note ? tempFaxData.fax_note : 'Fax note' }
-				style={ styles.text_input }
-			/>
-
-			{/* Cancel / Save fax */}
-			<View style={ styles.save_row }>
-				<TouchableOpacity
-					accessibilityLabel='Cancel button'
-					accessibilityHint='Press to cancel adding or editing fax number.'
-					onPress={ ( ) =>
-					{
-						setAddFaxVisible( false );
-						setTempFaxData( contactData.fax );
-						setShowValidationError( false );
-						setFaxItem( '' );
-					}}
-				>
-					<Text style={ styles.text_button }>Cancel</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					accessibilityLabel='Save fax info button'
-					accessibilityHint='Press to save fax number.'
-					onPress={ ( ) =>
-					{
-						if ( isFaxValid )
+					<TouchableOpacity
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save phone number.'
+						onPress={ ( ) =>
 						{
-							handlePress( false );
-							setAddFaxVisible( false );
-						}
-						else    setShowValidationError( true );
-					}}
-				>
-					<Text style={ styles.text_button }>Save fax number</Text>
-				</TouchableOpacity>
-			</View>
+							if ( isPhoneValid )
+							{
+								handlePress( false );
+								setAddPhoneVisible( false );
+							}
+							else    setShowValidationError( true );
+						}}
+					>
+						<Text style={ styles.text_button }>Save phone number</Text>
+					</TouchableOpacity>
 
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={[ styles.alert, styles.text ]}>{ errors.fax }</Text>
 				</View>
-			: null
-			}
-		</View>
-	: null
-	}
-
-
-	{/* Email Form */}
-	{
-		addEmailVisible ?
-		<View>
-			<TextInput
-				accessibilityLabel='Text input'
-				accessibilityHint='Type in email address.'
-				autoCapitalize='none'
-				autoComplete='email'
-				keyboardType='email-address'
-				placeholder={ tempEmailData?.email ? tempEmailData.email : 'E-mail' }
-				style={ styles.text_input }
-				textContentType='emailAddress'
-				onChangeText={ (text) =>
+				{/* Form Validation Error */}
 				{
-					setEmailItem( text );
-					setTempEmailData( prev => ({ ...prev, 'email': text }))}
+					showValidationError ?
+					<View style={ styles.alert_row }>
+						<Text style={[ styles.alert, styles.text ]}>{ errors.phone }</Text>
+					</View>
+				: null
 				}
-			/>
+			</View>
+			: null
+		}
 
-			<TextInput
-				accessibilityLabel='Text input'
-				accessibilityHint='Type in email note.'
-				onChangeText={ ( text ) => setTempEmailData( prev => ({ ...prev, 'email_note': text }))}
-				placeholder={ tempEmailData?.email_note ? tempEmailData.email_note : 'E-mail note' }
-				style={ styles.text_input }
-			/>
 
-			{/* Cancel / Save Email */}
-			<View style={ styles.save_row }>
+		{/* Fax Form */}
+		{
+			addFaxVisible ?
+			<View>
+				<TextInput
+					accessibilityLabel='Text Input'
+					accessibilityHint='Type in fax number.'
+					keyboardType='numeric'
+					placeholder={ tempFaxData?.fax_number ? tempFaxData.fax_number : 'Fax number' }
+					textContentType='telephoneNumber'
+					style={ styles.text_input }
+					onChangeText={ ( text ) =>
+					{
+						setFaxItem( text );
+						setTempFaxData( prev => ({ ...prev, 'fax_number': text }));
+						setTempFaxData( prev => ({ ...prev, 'fax_number_type': 'Fax' }));
+					}
+					}
+				/>
+				<TextInput
+					accessibilityLabel='Text input'
+					accessibilityHint='Type in fax note.'
+					onChangeText={ ( text ) => setTempFaxData( prev => ({ ...prev, 'fax_note': text }))}
+					placeholder={ tempFaxData?.fax_note ? tempFaxData.fax_note : 'Fax note' }
+					style={ styles.text_input }
+				/>
+
+				{/* Cancel / Save fax */}
+				<View style={ styles.save_row }>
+					<TouchableOpacity
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing fax number.'
+						onPress={ ( ) =>
+						{
+							setAddFaxVisible( false );
+							setTempFaxData( contactData.fax );
+							setShowValidationError( false );
+							setFaxItem( '' );
+						}}
+					>
+						<Text style={ styles.text_button }>Cancel</Text>
+					</TouchableOpacity>
+
+					<TouchableOpacity
+						accessibilityLabel='Save fax info button'
+						accessibilityHint='Press to save fax number.'
+						onPress={ ( ) =>
+						{
+							if ( isFaxValid )
+							{
+								handlePress( false );
+								setAddFaxVisible( false );
+							}
+							else    setShowValidationError( true );
+						}}
+					>
+						<Text style={ styles.text_button }>Save fax number</Text>
+					</TouchableOpacity>
+				</View>
+
+				{/* Form Validation Error */}
+				{
+					showValidationError ?
+					<View style={ styles.alert_row }>
+						<Text style={[ styles.alert, styles.text ]}>{ errors.fax }</Text>
+					</View>
+				: null
+				}
+			</View>
+		: null
+		}
+
+
+		{/* Email Form */}
+		{
+			addEmailVisible ?
+			<View>
+				<TextInput
+					accessibilityLabel='Text input'
+					accessibilityHint='Type in email address.'
+					autoCapitalize='none'
+					autoComplete='email'
+					keyboardType='email-address'
+					placeholder={ tempEmailData?.email ? tempEmailData.email : 'E-mail' }
+					style={ styles.text_input }
+					textContentType='emailAddress'
+					onChangeText={ (text) =>
+					{
+						setEmailItem( text );
+						setTempEmailData( prev => ({ ...prev, 'email': text }))}
+					}
+				/>
+
+				<TextInput
+					accessibilityLabel='Text input'
+					accessibilityHint='Type in email note.'
+					onChangeText={ ( text ) => setTempEmailData( prev => ({ ...prev, 'email_note': text }))}
+					placeholder={ tempEmailData?.email_note ? tempEmailData.email_note : 'E-mail note' }
+					style={ styles.text_input }
+				/>
+
+				{/* Cancel / Save Email */}
+				<View style={ styles.save_row }>
+					<TouchableOpacity
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing email address.'
+						onPress={ ( ) =>
+						{
+							setAddEmailVisible( false );
+							setEmailItem( '' );
+							setShowValidationError( false );
+							setTempEmailData( contactData.email );
+						}}
+					>
+						<Text style={ styles.text_button }>Cancel</Text>
+					</TouchableOpacity>
+
+					<TouchableOpacity
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save email address.'
+					
+						onPress={ ( ) =>
+						{
+							if ( isEmailValid )
+							{
+								handlePress( false );
+								setAddEmailVisible( false );
+							}
+							else    setShowValidationError( true );
+						}}
+					>
+						<Text style={ styles.text_button }>Save email</Text>
+					</TouchableOpacity>
+				</View>
+
+				{/* Form Validation Error */}
+				{
+					showValidationError ?
+					<View style={ styles.alert_row }>
+						<Text style={[ styles.alert, styles.text ]}>{ errors.email }</Text>
+					</View>
+				: null
+				}
+			</View>
+		: null
+		}
+
+
+		{/* Text Buttons */}
+		{
+			( !addEmailVisible && !addFaxVisible && !addPhoneVisible ) ?
+			<View>
 				<TouchableOpacity
-					accessibilityLabel='Cancel button'
-					accessibilityHint='Press to cancel adding or editing email address.'
+					accessibilityLabel='Add or Edit button'
+					accessibilityHint='Press to add or edit phone information.'
+					style={ styles.contact_button }
 					onPress={ ( ) =>
 					{
 						setAddEmailVisible( false );
-						setEmailItem( '' );
-						setShowValidationError( false );
-						setTempEmailData( contactData.email );
-					}}
+						setAddFaxVisible( false );
+						setAddPhoneVisible( true )}
+					}
 				>
-					<Text style={ styles.text_button }>Cancel</Text>
+				{
+					tempPhoneData?.phone_number ?
+					<Text style={ styles.text_button }>Edit office phone number</Text>
+				:
+					<Text style={ styles.text_button }>Add office phone number</Text>
+				}
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					accessibilityLabel='Save button'
-					accessibilityHint='Press to save email address.'
-				
+					accessibilityLabel='Add or Edit button'
+					accessibilityHint='Press to add or edit fax information.'
+					style={ styles.contact_button }
 					onPress={ ( ) =>
 					{
-						if ( isEmailValid )
+						setAddEmailVisible( false );
+						setAddFaxVisible( true );
+						setAddPhoneVisible( false )}
+					
+					}
+				>
+				{
+					tempFaxData?.fax_number ?
+					<Text style={ styles.text_button }>Edit fax number</Text>
+				:
+					<Text style={ styles.text_button }>Add fax number</Text>
+				}
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					accessibilityLabel='Add or Edit button'
+					accessibilityHint='Press to add or edit email address.'
+					style={ styles.contact_button }
+					onPress={ ( ) =>
+					{
+						setAddEmailVisible( true );
+						setAddFaxVisible( false );
+						setAddPhoneVisible( false );
+					}}
+				>
+				{
+					tempEmailData?.email ?
+					<Text style={ styles.text_button }>Edit email address</Text>
+				:
+					<Text style={ styles.text_button }>Add email address</Text>
+				}
+				</TouchableOpacity>
+
+
+				<View style={[ styles.expand_button, { paddingRight: 20 }]}>
+					<TouchableOpacity
+						accessibilityLabel='Close button'
+						accessibilityHint='Press to close.'
+						onPress={ ( ) =>
 						{
-							handlePress( false );
-							setAddEmailVisible( false );
-						}
-						else    setShowValidationError( true );
-					}}
-				>
-					<Text style={ styles.text_button }>Save email</Text>
-				</TouchableOpacity>
-			</View>
-
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={[ styles.alert, styles.text ]}>{ errors.email }</Text>
+							setShowValidationError( false );
+							closeAll( );
+							setErrors({ });
+						}}>
+						<Text style={ styles.text_button }>Close</Text>
+					</TouchableOpacity>
 				</View>
-			: null
-			}
-		</View>
-	: null
-	}
-
-
-	{/* Text Buttons */}
-	{
-		( !addEmailVisible && !addFaxVisible && !addPhoneVisible ) ?
-		<View>
-			<TouchableOpacity
-				accessibilityLabel='Add or Edit button'
-				accessibilityHint='Press to add or edit phone information.'
-				style={ styles.contact_button }
-				onPress={ ( ) =>
-				{
-					setAddEmailVisible( false );
-					setAddFaxVisible( false );
-					setAddPhoneVisible( true )}
-				}
-			>
-			{
-				tempPhoneData?.phone_number ?
-				<Text style={ styles.text_button }>Edit office phone number</Text>
-			:
-				<Text style={ styles.text_button }>Add office phone number</Text>
-			}
-			</TouchableOpacity>
-
-			<TouchableOpacity
-				accessibilityLabel='Add or Edit button'
-				accessibilityHint='Press to add or edit fax information.'
-				style={ styles.contact_button }
-				onPress={ ( ) =>
-				{
-					setAddEmailVisible( false );
-					setAddFaxVisible( true );
-					setAddPhoneVisible( false )}
-				
-				}
-			>
-			{
-				tempFaxData?.fax_number ?
-				<Text style={ styles.text_button }>Edit fax number</Text>
-			:
-				<Text style={ styles.text_button }>Add fax number</Text>
-			}
-			</TouchableOpacity>
-
-			<TouchableOpacity
-				accessibilityLabel='Add or Edit button'
-				accessibilityHint='Press to add or edit email address.'
-				style={ styles.contact_button }
-				onPress={ ( ) =>
-				{
-					setAddEmailVisible( true );
-					setAddFaxVisible( false );
-					setAddPhoneVisible( false );
-				}}
-			>
-			{
-				tempEmailData?.email ?
-				<Text style={ styles.text_button }>Edit email address</Text>
-			:
-				<Text style={ styles.text_button }>Add email address</Text>
-			}
-			</TouchableOpacity>
-
-
-			<View style={[ styles.expand_button, { paddingRight: 20 }]}>
-				<TouchableOpacity
-					accessibilityLabel='Close button'
-					accessibilityHint='Press to close.'
-					onPress={ ( ) =>
-					{
-						setShowValidationError( false );
-						closeAll( );
-						setErrors({ });
-					}}>
-					<Text style={ styles.text_button }>Close</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
-	: null
-	}
-	</View>
-: null
-}
-
-
-{
-	viewNameVisible?
-	<View>
-		<View style={{ alignItems: 'flex-end' }}>
-			<TouchableOpacity
-				accessibilityLabel='Close button'
-				accessibilityHint='Press to close.'
-				onPress={ () => handlePress( true )}
-				style={ styles.contact_button }
-			>
-				<Text style={ styles.text_button }>Close</Text>
-			</TouchableOpacity>
-		</View>
-
-		<View>
-		{
-			showValidationError ?
-			<View
-				accessibilityLabel='Form error.'
-				style={{ alignItems: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20}}
-			>
-				<Text style={[ styles.text, styles.alert, {textAlign: 'center'} ]}>{ errors.address }</Text>
 			</View>
 		: null
 		}
 		</View>
-	</View>
 	: null
-}
+	}
+
+
+	{
+		viewNameVisible?
+		<View>
+			<View style={{ alignItems: 'flex-end' }}>
+				<TouchableOpacity
+					accessibilityLabel='Close button'
+					accessibilityHint='Press to close.'
+					onPress={ () => handlePress( true )}
+					style={ styles.contact_button }
+				>
+					<Text style={ styles.text_button }>Close</Text>
+				</TouchableOpacity>
+			</View>
+
+			<View>
+			{
+				showValidationError ?
+				<View
+					accessibilityLabel='Form error.'
+					style={{ alignItems: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20}}
+				>
+					<Text style={[ styles.text, styles.alert, {textAlign: 'center'} ]}>{ errors.address }</Text>
+				</View>
+			: null
+			}
+			</View>
+		</View>
+		: null
+	}
 	</View>
 	);
 }

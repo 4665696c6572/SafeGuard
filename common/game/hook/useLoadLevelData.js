@@ -11,19 +11,18 @@ export default function useLoadLevelData( db, screen_name, questions_per_level )
 	{
 		try
 		{
-		const formatted_data = await selectLevelData( db, screen_name, questions_per_level );
-
-		setLoadedData( formatted_data )
+			const formatted_data = await selectLevelData( db, screen_name, questions_per_level );
+			setLoadedData( formatted_data );
 		}
 		catch ( error )
 		{
-		console.error( error );
+			console.error( error );
 		}
 		finally
 		{
-		setLoadingData( false );
+			setLoadingData( false );
 		}
 	}, [ db ]);
 
-	return  [ loadedData, loadingData, loadData ];
+	return    [ loadedData, loadingData, loadData ];
 }
