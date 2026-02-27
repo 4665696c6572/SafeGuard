@@ -14,7 +14,8 @@ export default async function selectGameData ( db )
 		const streak_history = await db.getAllAsync(
 		`
 			SELECT
-				date_played
+				date_played,
+				streak_seen
 			FROM Streak_History
 			ORDER by date_played Desc;
 		`

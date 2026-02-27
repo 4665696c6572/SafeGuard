@@ -3,51 +3,52 @@ import * as Progress from 'react-native-progress';
 
 import styles from '../../../styles/styles';
 
-const imgUri = require( '../../../assets/frog.png' );
+const frog_1 = require( '../../../assets/frog_jump_1.png' );
+const frog_2 = require( '../../../assets/frog_jump_2.png' );
 
-const screen_width = Dimensions.get('screen').width;
+const screen_width = Dimensions.get('screen').width; 
 
 
-export const EndLevelModal = ( { levelComplete, levelScore }) =>
+export const EndLevelModal = ({ levelComplete, levelScore }) =>
 {
 	return (
 	<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
-		<View style={ styles.game_level_area }>
-
-			<View>
-				<Text style={ styles.score_text } >Final score</Text>
-				<Text style={ styles.score_text } >{ levelScore }</Text>
-			</View>
-			<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
+		<View style={ styles.cheer_container }>
+			<Text style={ styles.score_text } >Final score</Text>
+			<Text style={ styles.score_text } >{ levelScore }</Text>
+			<Image source={ frog_1 } style={ styles.cheer_image }/>
 		</View>
 	</Modal>
 	)
 }
 
-export const CheerModal = ( { cheerVisible }) =>
+
+export const CheerModal = ({ cheerVisible }) =>
 {
 	return (
 		<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
-			<Image source={ imgUri } style={{ height: '50%', width: '100%' }}/>
+			<View style={ styles.cheer_container }>
+				<Image source={ frog_2 } style={ styles.cheer_image }/>
+			</View>
 		</Modal>
 	)
 }
 
 
-export const ProgressAndScore = ( { currentNumber, levelScore, questions_per_level }) =>
+export const ProgressAndScore = ({ currentNumber, levelScore, questions_per_level }) =>
 {
 	return (
 		<View>
 			<View style={ styles.progress_bar_container }>
 				<View style={ styles.progress_bar }>
 					<Progress.Bar
-						progress={( ( currentNumber - 1) / questions_per_level )}
-						height= '20'
-						width={screen_width * 0.6}
-						color='#66a1efff'
-						borderRadius={5}
-						unfilledColor='#bacfeaff'
 						borderColor='#DBE2E9'
+						borderRadius={ 5 }
+						color='#66a1efff'
+						height= '20'
+						progress={( ( currentNumber - 1) / questions_per_level )}
+						unfilledColor='#bacfeaff'
+						width={ screen_width * 0.6 }
 					/>
 				</View>
 
@@ -55,9 +56,10 @@ export const ProgressAndScore = ( { currentNumber, levelScore, questions_per_lev
 					{ Math.min( currentNumber, questions_per_level )} / { questions_per_level }
 				</Text>
 		</View>
+
 		<View>
-				<Text style={ styles.score_text } >Score</Text>
-				<Text style={ styles.score_text } >{ levelScore }</Text>
+			<Text style={ styles.score_text } >Score</Text>
+			<Text style={ styles.score_text } >{ levelScore }</Text>
 		</View>
 	</View>
 	)

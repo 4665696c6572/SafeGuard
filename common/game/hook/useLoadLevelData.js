@@ -11,8 +11,8 @@ export default function useLoadLevelData( db, screen_name, questions_per_level )
 	{
 		try
 		{
-			const formatted_data = await selectLevelData( db, screen_name, questions_per_level );
-			setLoadedData( formatted_data );
+			const level_data = await selectLevelData( db, screen_name, questions_per_level );
+			setLoadedData( level_data );
 		}
 		catch ( error )
 		{

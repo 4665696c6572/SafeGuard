@@ -148,7 +148,8 @@ export default async function initializeDatabase( db )
 			CREATE Table IF NOT EXISTS Streak_History
 			(
 				streak_id     TEXT    PRIMARY KEY,
-				date_played    TEXT
+				date_played    TEXT,
+				streak_seen    INTEGER    DEFAULT ( 0 )
 			);
 
 			CREATE TABLE IF NOT EXISTS    Matching_Data
@@ -177,17 +178,12 @@ export default async function initializeDatabase( db )
 				answer    TEXT,
 				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
-
-
 		` );
+
 		// User setup
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Full Name', 'Person' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id, current_level, score ) VALUES ( ?, ?, ? )', [ 1, 1, 0 ]);
 
-		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-20', '2026-02-20T16:33:44.214Z' ]);
-		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-23', '2026-02-23T16:33:44.214Z' ]);
-		await db.runAsync('INSERT OR IGNORE INTO Streak_History ( streak_id, date_played ) VALUES ( ?, ? )', [ '2026-02-24', '2026-02-24T16:33:44.214Z' ]);
-		
 		// Demo Data
 		await db.runAsync( 'UPDATE Entity SET entity_name = ? WHERE entity_id = ?;', [ 'Michael S. Baker', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Person ( person_id, dob, height, weight ) VALUES ( ?, ?, ?, ? )', [ 1, '1995-12-13', '181 cm', '83 kg' ]);

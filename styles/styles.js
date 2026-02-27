@@ -16,6 +16,12 @@ const styles = StyleSheet.create(
 		alignItems: 'center',
 		paddingTop: 20
 	},
+	bottom_tab_container:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		marginTop: 38 
+	},
 	button_chrome_grey:
 	{
 		backgroundColor: '#DBE2E9',
@@ -30,63 +36,34 @@ const styles = StyleSheet.create(
 		marginBottom: 30,
 		marginTop: 30
 	},
+	cheer_container:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingTop: 100
+	},
+	cheer_image:
+	{
+		alignSelf: 'center'
+	},
 	contact_button:
 	{
 		alignItems: 'center',
-		// flex: 1/4,
-		// justifyContent: 'flex-end',
-		paddingBottom: 25,
+		paddingBottom: 25 
 	},
 	container:
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
 		marginBottom: 45,
-		marginTop: 38,
-	},
-	bottom_tab_container:
-	{
-		backgroundColor: '#d1dce4ff',
-		flex: 1,
-		marginTop: 38,
-	},
-	data_container_inner:
-	{
-		backgroundColor: '#d1dce4ff',
-		flex: 1,
-		paddingLeft: '4%',
-		paddingRight: '4%',
-	},
-	data_container_outer:
-	{
-		backgroundColor: '#d1dce4ff',
-		flex: 1,
-		paddingTop: '4%',
-		paddingLeft: '4%',
-		paddingRight: '4%',
-	},
-	data_container_edit:
-	{
-		backgroundColor: '#d1dce4ff',
-		flex: 1,
-		paddingTop: '4%',
-		paddingLeft: '4%',
-		paddingRight: '4%',
-	},
-	data_container_view:
-	{
-		backgroundColor: '#d1dce4ff',
-		flex: 1,
-		paddingTop: '10%',
-		paddingLeft: '4%',
-		paddingRight: '4%',
+		marginTop: 38 
 	},
 	count_text:
 	{
 		color: '#0b3e82ff',
-		textAlign: 'right',
 		fontSize: 16,
-		fontWeight: '900'
+		fontWeight: '900',
+		textAlign: 'right'
 	},
 	data_button_size:
 	{
@@ -99,20 +76,36 @@ const styles = StyleSheet.create(
 	{
 		height: screen_height * 0.37
 	},
+	
+	data_container_edit:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingLeft: '4%',
+		paddingRight: '4%',
+		paddingTop: '4%'
+	},
+	data_container_view:
+	{
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		paddingLeft: '4%',
+		paddingRight: '4%',
+		paddingTop: '10%'
+	},
 	data_section:
 	{
 		marginBottom: 20,
-		marginTop: 20,
+		marginTop: 20 
 	},
 	data_section_small:
 	{
 		marginBottom: 10,
-		marginTop: 10,
+		marginTop: 10 
 	},
 	expand_button:
 	{
 		alignItems: 'flex-end',
-		// flex: 0.1,
 		fontSize: 18,
 		marginRight: 5
 	},
@@ -129,7 +122,7 @@ const styles = StyleSheet.create(
 	},
 	game_box_active:
 	{
-		backgroundColor: '#2f73ccff',
+		backgroundColor: '#2f73ccff' 
 	},
 	game_box_small: // 2 columns
 	{
@@ -181,12 +174,12 @@ const styles = StyleSheet.create(
 	game_button_end:
 	{
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
+		justifyContent: 'flex-end' 
 	},
 	game_button_start:
 	{
 		flexDirection: 'row',
-		justifyContent: 'flex-start',
+		justifyContent: 'flex-start'
 	},
 	game_button_text:
 	{
@@ -204,6 +197,12 @@ const styles = StyleSheet.create(
 		marginTop: 0,
 		paddingBottom: '10%',
 		paddingTop: 0
+	},	
+	game_frog:
+	{
+		left: 0,
+		position: 'absolute',
+		top: 0 
 	},
 	game_level_area:
 	{
@@ -218,30 +217,12 @@ const styles = StyleSheet.create(
 	{
 		left: 0,
 		position: 'absolute',
-		top: 0,
-	},
-	game_frog:
-	{
-		left: 0,
-		position: 'absolute',
-		top: 0,
+		top: 0 
 	},
 	game_lily_container:
 	{
 		height: '100%',
 		width: '100%'
-	},
-	game_opacity_zero:
-	{
-		opacity: 0
-	},
-	game_opacity_half:
-	{
-		opacity: 0.5
-	},
-	game_opacity_one:
-	{
-		opacity: 1
 	},
 	game_row:
 	{
@@ -252,6 +233,12 @@ const styles = StyleSheet.create(
 		marginTop: 0,
 		paddingBottom: 0,
 		paddingTop: 0
+	},
+	game_screen_container:
+	{
+		flex: 1,
+		marginBottom: 0,
+		marginTop: 38
 	},
 	game_text:
 	{
@@ -281,7 +268,7 @@ const styles = StyleSheet.create(
 	{
 		gap: screen_width * 0.05,
 		height: screen_height * 0.5,
-		paddingTop: screen_height * 0.035,
+		paddingTop: screen_height * 0.035 
 	},
 	home_extra_margin:
 	{
@@ -290,7 +277,7 @@ const styles = StyleSheet.create(
 	
 	home_container_weather:
 	{
-		height: screen_height * 0.3,
+		height: screen_height * 0.3 
 	},
 	home_container_alert:
 	{
@@ -300,15 +287,10 @@ const styles = StyleSheet.create(
 	},
 	home_row:
 	{
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		gap: screen_width * 0.05,
 		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	image:
-	{
-		alignSelf: 'center',
-		backgroundColor: 'orange'
+		paddingRight: 10 
 	},
 	menu:
 	{
@@ -316,7 +298,7 @@ const styles = StyleSheet.create(
 		borderBottomWidth: 0.75,
 		paddingBottom: 20,
 		paddingLeft: 15,
-		paddingTop: 15,
+		paddingTop: 15 
 	},
 	menu_text:
 	{
@@ -342,13 +324,13 @@ const styles = StyleSheet.create(
 		backgroundColor: '#d1dce4ff',
 		borderBottomWidth: 0.75,
 		paddingLeft: 22,
-		paddingRight: 15,
+		paddingRight: 15 
 	},
 	progress_bar:
 	{
 		paddingLeft: screen_width * 0.10
 	},
-	progress_bar_container: // Games
+	progress_bar_container:
 	{
 		flexDirection:'row',
 		height: 25,
@@ -360,15 +342,16 @@ const styles = StyleSheet.create(
 		borderTopLeftRadius: 50,
 		borderTopRightRadius: 50,
 		borderWidth: 0,
-		paddingTop: 20,
+		marginTop: -20,
 		paddingLeft: 5,
-		paddingRight: 5
+		paddingRight: 5,
+		paddingTop: 20
 	},
 	save_button_text:
 	{
 		color: '#0b3e82ff',
 		fontSize: 20,
-		fontWeight: '900',
+		fontWeight: '900' 
 	},
 	save_row:
 	{
@@ -384,9 +367,44 @@ const styles = StyleSheet.create(
 	score_text:
 	{
 		color: 'blue',
-		textAlign: 'center',
 		fontSize: 24,
-		fontWeight: '900'
+		fontWeight: '900',
+		textAlign: 'center'
+	},
+	score_text_green:
+	{
+		color: 'rgb(144, 226, 172)'
+	},
+	streak_columns:
+	{
+		alignItems: "center",
+		justifyContent: 'space-between',
+		marginHorizontal: 2 
+	},
+	streak_container:
+	{
+		alignItems: 'center',
+		backgroundColor: 'blue'
+	},
+	streak_day_text:
+	{
+		fontSize: 16,
+		color: 'rgb(144, 226, 152)',
+		marginTop: 4,
+		textAlign: 'center'
+	},
+	streak_icon_size:
+	{
+		height: screen_width * 0.13, 
+		width: screen_width * 0.13
+	},
+	streak_text:
+	{
+		color: 'rgb(144, 226, 152)',
+		fontSize: 26,
+		fontWeight: '900',
+		marginBottom: 20,
+		textAlign: 'center'
 	},
 	text:
 	{
@@ -430,13 +448,13 @@ const styles = StyleSheet.create(
 	{
 		alignItems: 'center',
 		flexDirection: 'column',
-		width: screen_width * 0.45 ,
+		width: screen_width * 0.45
 	},
 	weather_image:
 	{
 		height: 50,
 		width: 50
-	},
+	}
 });
 
 export default styles;

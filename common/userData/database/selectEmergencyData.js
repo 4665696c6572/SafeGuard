@@ -225,7 +225,7 @@ export default async function selectEmergencyData( db, table, condition )
 		if ( table == 'Doctor' || table == 'Doctor_Name' )    return doctor;
 		if ( table == 'Insurance' )    return insurance;
 		if ( table == 'Medical_Condition' || table == 'Medical_Condition_Name' )    return medical_condition;
-		if ( table == 'Medication' ||  table == 'Medication_Name' )    return medication;
+		if ( table == 'Medication' || table == 'Medication_Name' )    return medication;
 		if ( table == 'Person' ) return person;
 
 

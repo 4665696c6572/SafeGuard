@@ -263,6 +263,6 @@ export default async function insertEmergencyData( table, emergencyData, db )
 	}
 	catch ( error )
 	{
-		console.log( `Error inserting ${table} data:`, error );
+		console.log( `Error inserting ${ table } data:`, error );
 	}
 };

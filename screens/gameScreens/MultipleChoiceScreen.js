@@ -1,12 +1,12 @@
 import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, Text, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 import { CheerModal, EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
+import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
@@ -51,13 +51,12 @@ export default function MultipleChoiceScreen({ navigation, route })
 		{
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
-			updateGameData( new_level, levelScore,  db );
+			updateGameData( 'Game_Data', db, new_level, levelScore );
 			setTimeout(function()
 			{
 				navigation.dispatch( StackActions.pop( ));
-				navigation.navigate( "GameScreen", { currentLevel: new_level, levelScore: levelScore });
-
-			}, 1200)
+				navigation.navigate( "GameScreen" );
+			}, 1200 );
 		}
 	}), [ levelComplete ]
 

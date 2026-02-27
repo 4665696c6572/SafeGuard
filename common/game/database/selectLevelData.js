@@ -2,7 +2,7 @@ export default async function selectLevelData( db, screen_name, questions_per_le
 {
 	try
 	{
-		let level_data = await db.getAllAsync( queries[`${screen_name}`], questions_per_level);
+		let level_data = await db.getAllAsync( queries[`${ screen_name }`], questions_per_level );
 
 		if ( screen_name == 'MultipleChoiceScreen' )
 		{
@@ -23,12 +23,12 @@ export default async function selectLevelData( db, screen_name, questions_per_le
 			})
 		}
 
-		console.log( `${screen_name} Loaded` );
+		console.log( `${ screen_name } Loaded` );
 		return level_data;
 	}
 	catch ( error )
 	{
-		console.log( `Error loading ${screen_name} data:`, error );
+		console.log( `Error loading ${ screen_name } data:`, error );
 	}
 };
 
@@ -60,12 +60,12 @@ const queries =
 	`
 		SELECT
 			question_id,
-			question,			
+			question,
 			last_seen_date,
 			answer_correct,
 			answer_one_incorrect,
 			answer_two_incorrect,
-			answer_three_incorrect			
+			answer_three_incorrect
 		FROM Multiple_Choice_Data
 		GROUP BY question_id
 		ORDER BY last_seen_date
