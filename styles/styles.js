@@ -20,7 +20,7 @@ const styles = StyleSheet.create(
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
-		marginTop: 38 
+		marginTop: 38
 	},
 	button_chrome_grey:
 	{
@@ -49,14 +49,14 @@ const styles = StyleSheet.create(
 	contact_button:
 	{
 		alignItems: 'center',
-		paddingBottom: 25 
+		paddingBottom: 25
 	},
 	container:
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
 		marginBottom: 45,
-		marginTop: 38 
+		marginTop: 38
 	},
 	count_text:
 	{
@@ -71,7 +71,7 @@ const styles = StyleSheet.create(
 		marginTop: 20,
 		paddingBottom: 20,
 		paddingTop: 20
-	},	
+	},
 	data_condition_height:
 	{
 		height: screen_height * 0.37
@@ -96,12 +96,12 @@ const styles = StyleSheet.create(
 	data_section:
 	{
 		marginBottom: 20,
-		marginTop: 20 
+		marginTop: 20
 	},
 	data_section_small:
 	{
 		marginBottom: 10,
-		marginTop: 10 
+		marginTop: 10
 	},
 	expand_button:
 	{
@@ -117,12 +117,11 @@ const styles = StyleSheet.create(
 		marginBottom: 45,
 		marginTop: 38,
 		paddingLeft: '5%',
-		paddingRight: '5%',
-		
+		paddingRight: '5%'
 	},
 	game_box_active:
 	{
-		backgroundColor: '#2f73ccff' 
+		backgroundColor: '#2f73ccff'
 	},
 	game_box_small: // 2 columns
 	{
@@ -174,7 +173,7 @@ const styles = StyleSheet.create(
 	game_button_end:
 	{
 		flexDirection: 'row',
-		justifyContent: 'flex-end' 
+		justifyContent: 'flex-end'
 	},
 	game_button_start:
 	{
@@ -197,12 +196,12 @@ const styles = StyleSheet.create(
 		marginTop: 0,
 		paddingBottom: '10%',
 		paddingTop: 0
-	},	
+	},
 	game_frog:
 	{
 		left: 0,
 		position: 'absolute',
-		top: 0 
+		top: 0
 	},
 	game_level_area:
 	{
@@ -217,7 +216,7 @@ const styles = StyleSheet.create(
 	{
 		left: 0,
 		position: 'absolute',
-		top: 0 
+		top: 0
 	},
 	game_lily_container:
 	{
@@ -259,26 +258,34 @@ const styles = StyleSheet.create(
 	},
 	home_button:
 	{
-		backgroundColor: '#e7ecf4',
+		backgroundColor: '#0054FF',
 		borderRadius: 20,
 		height: screen_width * 0.45 ,
 		width: screen_width * 0.45 ,
 		justifyContent: 'center'
 	},
+	home_button_image:
+	{
+		
+		borderRadius: 20,
+		height: screen_width * 0.44 ,
+		marginLeft: 2,
+		width: screen_width * 0.44,
+		// justifyContent: 'center'
+	},
 	home_container:
 	{
 		gap: screen_width * 0.05,
 		height: screen_height * 0.5,
-		paddingTop: screen_height * 0.035 
+		paddingTop: screen_height * 0.035
 	},
 	home_extra_margin:
 	{
 		marginTop: 100
 	},
-	
 	home_container_weather:
 	{
-		height: screen_height * 0.3 
+		height: screen_height * 0.3
 	},
 	home_container_alert:
 	{
@@ -291,7 +298,7 @@ const styles = StyleSheet.create(
 		flexDirection: 'row',
 		gap: screen_width * 0.05,
 		paddingLeft: 10,
-		paddingRight: 10 
+		paddingRight: 10
 	},
 	menu:
 	{
@@ -299,7 +306,7 @@ const styles = StyleSheet.create(
 		borderBottomWidth: 0.75,
 		paddingBottom: 20,
 		paddingLeft: 15,
-		paddingTop: 15 
+		paddingTop: 15
 	},
 	menu_text:
 	{
@@ -325,7 +332,7 @@ const styles = StyleSheet.create(
 		backgroundColor: '#d1dce4ff',
 		borderBottomWidth: 0.75,
 		paddingLeft: 22,
-		paddingRight: 15 
+		paddingRight: 15
 	},
 	progress_bar:
 	{
@@ -339,7 +346,7 @@ const styles = StyleSheet.create(
 	},
 	river:
 	{
-		backgroundColor: 'blue',
+		backgroundColor: '#0054FF',
 		borderTopLeftRadius: 50,
 		borderTopRightRadius: 50,
 		borderWidth: 0,
@@ -352,7 +359,7 @@ const styles = StyleSheet.create(
 	{
 		color: '#0b3e82ff',
 		fontSize: 20,
-		fontWeight: '900' 
+		fontWeight: '900'
 	},
 	save_row:
 	{
@@ -367,7 +374,7 @@ const styles = StyleSheet.create(
 	},
 	score_text:
 	{
-		color: 'blue',
+		color: '#0054FF',
 		fontSize: 24,
 		fontWeight: '900',
 		textAlign: 'center'
@@ -380,12 +387,12 @@ const styles = StyleSheet.create(
 	{
 		alignItems: "center",
 		justifyContent: 'space-between',
-		marginHorizontal: 2 
+		marginHorizontal: 2
 	},
 	streak_container:
 	{
 		alignItems: 'center',
-		backgroundColor: 'blue'
+		backgroundColor: '#0054FF'
 	},
 	streak_day_text:
 	{
@@ -396,7 +403,7 @@ const styles = StyleSheet.create(
 	},
 	streak_icon_size:
 	{
-		height: screen_width * 0.13, 
+		height: screen_width * 0.13,
 		width: screen_width * 0.13
 	},
 	streak_text:
@@ -440,7 +447,7 @@ const styles = StyleSheet.create(
 	title_bar:
 	{
 		borderBottomWidth: 2,
-		borderColor: 'blue',
+		borderColor: '#0054FF',
 		fontSize: 22,
 		marginBottom: 10,
 		paddingBottom: 2

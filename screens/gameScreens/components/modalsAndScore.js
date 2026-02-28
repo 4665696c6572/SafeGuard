@@ -3,8 +3,7 @@ import * as Progress from 'react-native-progress';
 
 import styles from '../../../styles/styles';
 
-const frog_1 = require( '../../../assets/frog_jump_1.png' );
-const frog_2 = require( '../../../assets/frog_jump_2.png' );
+const frog = require( '../../../assets/frog_jump_1.png' );
 
 const screen_width = Dimensions.get('screen').width; 
 
@@ -16,21 +15,9 @@ export const EndLevelModal = ({ levelComplete, levelScore }) =>
 		<View style={ styles.cheer_container }>
 			<Text style={ styles.score_text } >Final score</Text>
 			<Text style={ styles.score_text } >{ levelScore }</Text>
-			<Image source={ frog_1 } style={ styles.cheer_image }/>
+			<Image source={ frog } style={ styles.cheer_image }/>
 		</View>
 	</Modal>
-	)
-}
-
-
-export const CheerModal = ({ cheerVisible }) =>
-{
-	return (
-		<Modal animationType='slide' color='#d1dce4ff' visible={ cheerVisible }>
-			<View style={ styles.cheer_container }>
-				<Image source={ frog_2 } style={ styles.cheer_image }/>
-			</View>
-		</Modal>
 	)
 }
 

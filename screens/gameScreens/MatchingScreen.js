@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
@@ -13,6 +13,8 @@ import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
+
+const frog = require( '../../assets/frog_jump_2.png' );
 
 const questions_per_round = 3;
 const questions_per_level = 12;
@@ -33,7 +35,7 @@ export default function MatchingScreen({ navigation, route })
 	const [ questionSelected, setQuestionSelected ] = useState( null );
 	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
 
-	const [ cheerVisible, setCheerVisible ] = useState( false );
+	const [ cheerVisible, setCheerVisible ] = useState( false);
 
 	const [ levelData, loadingData, loadData ] = useLoadLevelData(db, 'MatchingScreen', questions_per_level);
 
@@ -54,7 +56,7 @@ export default function MatchingScreen({ navigation, route })
 	{
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{
-			if ( ( roundStartIndex == questions_per_level / 4 ) )
+			if ( roundStartIndex == Math.floor( questions_per_level / 4 ))
 			{
 				setCheerVisible( true );
 				setTimeout( function( )
@@ -117,11 +119,7 @@ export default function MatchingScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: '25%' } ]}>
-				<CheerModal
-					cheerVisible={ cheerVisible }
-				/>
-
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '25%' } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -186,6 +184,12 @@ export default function MatchingScreen({ navigation, route })
 				</View>
 			)}
 			</SafeAreaProvider>
+
+			{ 
+				cheerVisible? 
+				<Image source={ frog } style={ styles.cheer_image }/>
+			: null
+			}
 		</View>
 	);
 }

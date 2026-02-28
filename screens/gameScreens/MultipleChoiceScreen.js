@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
@@ -13,6 +13,8 @@ import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
+
+const frog = require( '../../assets/frog_jump_2.png' );
 
 const questions_per_round = 1;
 const answers_per_round = 4;
@@ -63,7 +65,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
-		if ( ( roundStartIndex == questions_per_level * 0.4 ) )
+		if ( ( roundStartIndex == Math.floor(questions_per_level * 0.4) && levelScore >= 2 ))
 		{
 			setCheerVisible( true );
 			setTimeout( function( )
@@ -91,11 +93,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, {marginBottom: '15%'} ]}>
-				<CheerModal
-					cheerVisible={ cheerVisible }
-				/>
-
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -109,7 +107,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 
 				{
-					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) =>
+					levelData.slice( roundStartIndex, roundStartIndex + 1).map((entry, i) =>
 					<View style={ styles.game_column } key={entry.question_id}>
 					
 
@@ -137,6 +135,12 @@ export default function MultipleChoiceScreen({ navigation, route })
 					</View>
 				)}
 			</SafeAreaProvider>
+
+			{ 
+				cheerVisible ? 
+				<Image source={ frog } style={ styles.cheer_image }/>
+			: null
+			}
 		</View>
 	);
 }
