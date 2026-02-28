@@ -4,13 +4,14 @@ import { ActivityIndicator, Animated, FlatList, Text, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native';
 
 import { GamePath } from './components/gamePath.js'
-import { fillStreakArray, checkStreakCurrent, countStreakLength, pulse } from '../../common/game/sharedGame.js';
+import { checkStreakCurrent, countStreakLength, fillStreakArray, findStreakStart, pulse } from '../../common/game/sharedGame.js';
 import Streak from '../../common/game/streak.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
 import useLoadGameData from '../../common/game/hook/useLoadGameData.js';
 
 import styles from '../../styles/styles.js';
 
+let streak_start;
 const GameScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext();
@@ -42,12 +43,18 @@ const GameScreen = ({ navigation, route }) =>
 			if ( checkStreakCurrent( gameData?.streak_history?.[0]?.date_played ) && gameData?.streak_history?.[0]?.streak_seen == 0 )
 			{
 				updateGameData( 'Streak', db );
-				pulse( pulseAnimation )
-				setStreakVisible( true );
-				setTimeout( function( )
-				{
-					setStreakVisible( false );
-				}, 1500 );
+				streak_start = findStreakStart( gameData?.streak_history );
+
+				if ( streak_start )
+				{	
+					// fillStreakArray( streakLength, streak_start )
+					pulse( pulseAnimation )
+					setStreakVisible( true );
+					setTimeout( function( )
+					{
+						setStreakVisible( false );
+					}, 1500 );
+				}
 			}
 		}
 	}, [ gameData ]);
@@ -78,7 +85,7 @@ const GameScreen = ({ navigation, route }) =>
 					* The streak display resets once full.
 					*/}
 					<FlatList
-						data={ fillStreakArray( streakLength, gameData?.streak_history ) }
+						data={ fillStreakArray( streakLength, streak_start )  }
 						horizontal
 						keyExtractor={ (item) => item.day.toISOString( )}
 						contentContainerStyle={{ flexDirection: "row" }}
@@ -107,8 +114,9 @@ const GameScreen = ({ navigation, route }) =>
 				<View style={[ styles.data_section]}>
 							<Text style={[ styles.score_text, styles.score_text_green ]} >Score</Text>
 							<Text style={[ styles.score_text, styles.score_text_green ]} >{ gameData?.game_data[0]?.score ?? 0 } </Text>
-				</View>
 
+
+				</View>
 				<GamePath
 					currentLevel={ gameData?.game_data[0]?.current_level ?? 1 }
 					handleNavigation={ handleNavigation }

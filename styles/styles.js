@@ -260,6 +260,7 @@ const styles = StyleSheet.create(
 	home_button:
 	{
 		backgroundColor: '#e7ecf4',
+		borderRadius: 20,
 		height: screen_width * 0.45 ,
 		width: screen_width * 0.45 ,
 		justifyContent: 'center'

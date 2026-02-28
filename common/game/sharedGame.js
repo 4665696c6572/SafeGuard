@@ -27,6 +27,7 @@ export function calcAnswerOrder ( length )
 }
 
 
+// Checks if the answer supplied by the user matches the correct answer
 export function checkAnswer( correct_answer, user_answer )
 {
 	if ( correct_answer == user_answer )    return true;
@@ -34,6 +35,7 @@ export function checkAnswer( correct_answer, user_answer )
 }
 
 
+// Checks if the correct number of questions have been completed
 export function checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round )
 {
 	if ( roundStartIndex == questions_per_level - questions_per_round )    return true;
@@ -49,9 +51,13 @@ export function checkRoundComplete( answeredCorrectly, questions_per_round )
 }
 
 
+/*
+ * Accepts the last date in which a level was completed in the format stored in db ( ISOString ),
+ * slices and checks to see if it is today so that the streak can be marked as current.
+ */
 export function checkStreakCurrent( last_entry )
 {
-	if (last_entry == undefined) return false
+	if ( last_entry == undefined || ( typeof last_entry ) != 'string' )    return false;
 
 	if ( last_entry.slice( 0, 10 ) == today.slice( 0, 10 ))    return true;
 	else    return false;
@@ -67,6 +73,8 @@ export function checkStreakCurrent( last_entry )
  * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
  * This function counts the length of the current streak.
+ * Input: an array of objects in format date_played: ISOString
+ * Output: integer
  */
 export function countStreakLength( streak_history )
 {
@@ -74,7 +82,7 @@ export function countStreakLength( streak_history )
 
 	// No streak
 	if (
-			streak_history[0] == undefined ||
+			streak_history?.[0] == undefined ||
 			differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played) ) > 1
 		)    return streak_length;
 
@@ -103,18 +111,20 @@ export function countStreakLength( streak_history )
  *
  * This function returns an array of length 7 containing date and if day was completed
  * uses addDays from date-fns to include future days
+ * Input: length as an integer and a date format 1970-01-01T00:00:00.000Z
+ * Output: [{"day": 1970-01-01T00:00:00.000Z}, "completed": true,...
  */
-export function fillStreakArray( streak_length, streak_history )
+export function fillStreakArray( streak_length, streak_start )
 {
-	const start = new Date( findStreakStart( streak_history ));
+	// Neither of these should happen
+	if ( differenceInCalendarDays( today, streak_start ) != streak_length - 1 )    return false;
+	if ( streak_start.toISOString( ) == '1970-01-01T00:00:00.000Z' )    return false;
 
-	if ( start == null )    return false;
-
-	return ( 
+	return (
 		Array.from({ length: 7 }, ( _, i ) =>
 		({
-			day: addDays( start, i),
-			completed:	i < 
+			day: addDays( streak_start, i),
+			completed:	i <
 			(
 				streak_length % 7 == 0 &&
 				streak_length != 0 ? 7
@@ -133,13 +143,18 @@ export function fillStreakArray( streak_length, streak_history )
  * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
  * This function finds the first day of the current streak.
+ * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1}, ....
+ * Output: date in format 1970-01-01T00:00:00.000Z 
  */
 export function findStreakStart( streak_history )
 {
 	let streak_start = null;
 
-	if ( streak_history.length == 0)    return    streak_start;
-	else if ( streak_history.length == 1)    return    new Date( streak_history[0].date_played );
+	if ( streak_history?.length == 0 || streak_history == undefined )    return streak_start;
+	if ( streak_history?.length == 1 )
+	{
+		if ( streak_history[0].date_played == today )    return new Date( today );
+	}
 
 	for ( let i = 0; i < streak_history.length - 1; i++ )
 	{
@@ -147,7 +162,7 @@ export function findStreakStart( streak_history )
 		const current_day = new Date( streak_history[ i ].date_played );
 
 		if ( differenceInCalendarDays( current_day, previous_day ) == 1 )    streak_start = previous_day;
-		else    break;
+		else    streak_start = current_day;
 	}
 
 	return streak_start;
@@ -187,21 +202,32 @@ export function pulse( pulseAnimation )
 };
 
 
+// Fills an array with false to track answers completed
 export function setResultArray( questions_per_round )
 {
 	return Array( questions_per_round ).fill( false );
 }
 
 
-// Matching Screen is the only screen where a round has more than one question
-export function updateResultArray ( answeredCorrectly, question_row )
+/*
+ * Checks if newly completed level should unlock the next level.
+ * User completing a previously completed level should not.
+ */
+export function updateLevel( loaded_level, current_level )
 {
-	return answeredCorrectly.with( question_row, true );
+	if ( loaded_level == current_level )    return Number( current_level ) + 1;
+	else    return current_level;
 }
 
 
-export function updateLevel( loaded_level, current_level )
+/*
+ * Matching Screen is the only screen where a round has more than one question
+ * accepts an array of length three ( for the three questions )
+ * if none have been answered array should contain only false
+ * array index of correctly answered question should update to true
+ * other values should not be altered. Altered array is returned
+ */
+export function updateResultArray ( answeredCorrectly, question_row )
 {
-	if ( loaded_level == current_level )    return Number(current_level) + 1;
-	else    return current_level;
+	return answeredCorrectly.with( question_row, true );
 }
