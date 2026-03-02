@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
@@ -13,7 +14,7 @@ import { Doctor, EditDoctor, ViewDoctor } from './components/doctor';
 
 const DoctorScreen = ({ navigation, route }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const params = route?.params;
 
 	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor' );
@@ -24,10 +25,10 @@ const DoctorScreen = ({ navigation, route }) =>
 	const [ doctorIndex, setDoctorIndex ] = useState( null );
 	const [ tempDoctorData, setTempDoctorData ] = useState( );
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
 		if ( isFocused )
 		{
@@ -36,23 +37,29 @@ const DoctorScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
-	async function save( table, data, id, shouldNavigate )
+	async function saveEntry( table, data, id, shouldNavigate )
 	{
 		if ( shouldNavigate )
 		{
-			const new_id = await saveToDB( table, data, db, id, loadDoctorData, shouldNavigate );
+			const new_id = await saveToDB( db, table, data, id, loadDoctorData, shouldNavigate );
 			handleNavigation( new_id, data.entity_name, data?.facility_name );
 		}
 		else
 		{
-			await saveToDB( table, data, db, id, loadDoctorData );
+			await saveToDB( db, table, data, id, loadDoctorData );
 		}
+	}
+
+
+	async function deleteEntry( table, id )
+	{
+		deleteFromDB( db, table, id, loadDoctorData );
 	}
 
 
 	function handleNavigation( id, name, facility )
 	{
-		navigation.navigate('ContactScreen', { id: id, contact_name: name, facility: facility, return: true });
+		navigation.navigate( 'ContactScreen', { id: id, contact_name: name, facility: facility, return: true });
 	}
 
 
@@ -81,9 +88,10 @@ const DoctorScreen = ({ navigation, route }) =>
 
 			<Modal animationType='slide' visible={ editDoctorVisible }>
 				<EditDoctor
+					deleteEntry={ deleteEntry }
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }
-					save={ save }
+					saveEntry={ saveEntry }
 					setEditDoctorVisible={ setEditDoctorVisible }
 					setDoctorIndex={ setDoctorIndex }
 					setTempDoctorData={ setTempDoctorData }

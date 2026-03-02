@@ -5,7 +5,7 @@ import styles from '../../../styles/styles';
 
 const frog = require( '../../../assets/frog_jump_1.png' );
 
-const screen_width = Dimensions.get('screen').width; 
+const screen_width = Dimensions.get('screen' ).width;
 
 
 export const EndLevelModal = ({ levelComplete, levelScore }) =>
@@ -33,7 +33,7 @@ export const ProgressAndScore = ({ currentNumber, levelScore, questions_per_leve
 						borderRadius={ 5 }
 						color='#66a1efff'
 						height= '20'
-						progress={( ( currentNumber - 1) / questions_per_level )}
+						progress={( ( currentNumber - 1 ) / questions_per_level )}
 						unfilledColor='#bacfeaff'
 						width={ screen_width * 0.6 }
 					/>

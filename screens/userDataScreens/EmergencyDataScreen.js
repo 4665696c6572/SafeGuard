@@ -13,13 +13,13 @@ import { Allergy, HealthInsurance, MedicalCondition, Medication, Person } from '
 
 const EmergencyDataScreen = ({ navigation }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 
 	const [ emergencyData, setEmergencyData, loadingData, loadEmergencyData ] = useLoadEmergencyData( db, 'All', 'Health' );
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
-	useEffect(() =>
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{

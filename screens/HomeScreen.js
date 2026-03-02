@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
@@ -14,7 +14,7 @@ import styles from '../styles/styles.js';
 
 const HomeScreen = ({ navigation }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 
 	const [ alertData, setAlertData ] = useState( );
 	const [ errorMessage, setErrorMessage ] = useState( );
@@ -29,10 +29,10 @@ const HomeScreen = ({ navigation }) =>
 	{
 		async function getLocation( )
 		{
-			let { status } = await Location.requestForegroundPermissionsAsync();
-			if (status !== 'granted')
+			let { status } = await Location.requestForegroundPermissionsAsync( );
+			if ( status !== 'granted' )
 			{
-				setErrorMsg('Permission to access location was denied');
+				setErrorMsg('Permission to access location was denied' );
 				return;
 			}
 
@@ -41,12 +41,12 @@ const HomeScreen = ({ navigation }) =>
 			console.log( 'location loaded.' );
 			setLocationData( location_data );
 		}
-		getLocation();
+		getLocation( );
 	}, []);
 
 
 	////// Load Alert \\\\\\
-	useEffect( () =>
+	useEffect( ( ) =>
 	{
 		async function fetchAlert( locationData )
 		{
@@ -83,7 +83,7 @@ const HomeScreen = ({ navigation }) =>
 				try
 				{
 					const weather_data = await fetchWeatherData( locationData );
-					if(weather_data)
+					if( weather_data )
 					{
 						setWeatherData( weather_data );
 					}
@@ -134,12 +134,12 @@ const HomeScreen = ({ navigation }) =>
 					<TouchableOpacity
 						onPress={ ( ) => { navigation.navigate( "LearningHomeScreen" )}}
 						style={ styles.home_button }
-					> 
+					>
 						<Text style={ styles.text_button }>Learning Center</Text>
 					</TouchableOpacity>
 
 					<TouchableOpacity
-						onPress={ ( ) => { navigation.navigate( "GameScreen", {score: 0 })}}
+						onPress={ ( ) => { navigation.navigate( "GameScreen", { score: 0 })}}
 						style={ styles.home_button }
 					>
 						<Text style={ styles.text_button }>Game</Text>
@@ -150,7 +150,7 @@ const HomeScreen = ({ navigation }) =>
 			<View style={ styles.home_container_alert }>
 			{
 				loadingAlertData == false ?
-				<TouchableOpacity onPress={() => { scheduleAlertNotification( alertData )}}>
+				<TouchableOpacity onPress={( ) => { scheduleAlertNotification( alertData )}}>
 					<Text style={ styles.text_button }>Load Alert</Text>
 				</TouchableOpacity>
 			: null

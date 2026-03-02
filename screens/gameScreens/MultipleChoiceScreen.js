@@ -5,7 +5,7 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { CheerModal, EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
+import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -23,7 +23,7 @@ const questions_per_level = 10;
 
 export default function MultipleChoiceScreen({ navigation, route })
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const underlay = '#0b3e82ff'
 	const params = route?.params;
 
@@ -37,9 +37,9 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MultipleChoiceScreen', questions_per_level )
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
-	useEffect(() =>
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{
@@ -54,7 +54,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
 			updateGameData( 'Game_Data', db, new_level, levelScore );
-			setTimeout(function()
+			setTimeout( function( )
 			{
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen" );
@@ -65,7 +65,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
-		if ( ( roundStartIndex == Math.floor(questions_per_level * 0.4) && levelScore >= 2 ))
+		if ( ( roundStartIndex == Math.floor( questions_per_level * 0.4 ) && levelScore >= 2 ))
 		{
 			setCheerVisible( true );
 			setTimeout( function( )
@@ -79,7 +79,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 			setAnswerOrder( calcAnswerOrder( answers_per_round ));
 			setLevelScore( prev => prev + 1 );
 		}
-		else Haptics.selectionAsync();
+		else Haptics.selectionAsync( );
 
 		setCurrentNumber( prev => prev + 1 );
 		setRoundStartIndex( prev => prev + 1 );
@@ -89,7 +89,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 	}
 
 
-	if (loadingData)    return <ActivityIndicator/>;
+	if ( loadingData )    return <ActivityIndicator/>;
 
 	return (
 		<View style={ styles.container }>
@@ -107,8 +107,8 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 
 				{
-					levelData.slice( roundStartIndex, roundStartIndex + 1).map((entry, i) =>
-					<View style={ styles.game_column } key={entry.question_id}>
+					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
+					<View style={ styles.game_column } key={ entry.question_id }>
 					
 
 						<View style={[ styles.game_box_large, styles.multiple_choice_question ]}>
@@ -116,11 +116,11 @@ export default function MultipleChoiceScreen({ navigation, route })
 						</View>
 
 						{
-							answerOrder.map((index) =>
+							answerOrder.map(( index ) =>
 							<TouchableHighlight
-								key = {index}
+								key = { index }
 								style={[ styles.game_box_large, styles.game_box_active ]}
-								onPress={ () => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.question_id)}
+								onPress={ ( ) => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.question_id )}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
@@ -136,8 +136,8 @@ export default function MultipleChoiceScreen({ navigation, route })
 				)}
 			</SafeAreaProvider>
 
-			{ 
-				cheerVisible ? 
+			{
+				cheerVisible ?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

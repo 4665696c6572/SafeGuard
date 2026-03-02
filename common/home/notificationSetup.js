@@ -2,11 +2,11 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
 
-export function notificationHandlerSetup()
+export function notificationHandlerSetup( )
 {
 	Notifications.setNotificationHandler (
 	{
-		handleNotification: async () =>
+		handleNotification: async ( ) =>
 		({
 			shouldShowBanner: true,
 			shouldShowList: true,
@@ -16,9 +16,9 @@ export function notificationHandlerSetup()
 	});
 }
 
-export async function requestNotificationPermission()
+export async function requestNotificationPermission( )
 {
-	const { status } = await Notifications.requestPermissionsAsync();
+	const { status } = await Notifications.requestPermissionsAsync( );
 
 	if ( status !== 'granted' )
 	{
@@ -28,7 +28,7 @@ export async function requestNotificationPermission()
 };
 
 
-export async function setNotificationChannel()
+export async function setNotificationChannel( )
 {
 	if ( Platform.OS === 'android' )
 	{

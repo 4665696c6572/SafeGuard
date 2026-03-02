@@ -4,17 +4,17 @@ const units = 'imperial';
 
 export default async function fetchWeatherData( location )
 {
-	if (!location)
+	if ( !location )
 	{
-		console.log('location failed');
+		console.log( 'location failed' );
 		return;
 	}
 
 	const lat = location.coords.latitude;
 	const lon = location.coords.longitude;
-	const url = `${weather_URL}?lat=${lat}&lon=${lon}&units=${units}&cnt=17&appid=${API_Key}`;
-	const result = await fetch(url);
-	const weather_data = await result.json();
+	const url = `${ weather_URL }?lat=${ lat }&lon=${ lon }&units=${ units }&cnt=17&appid=${ API_Key }`;
+	const result = await fetch( url );
+	const weather_data = await result.json( );
 
 	return weather_data;
 };																		

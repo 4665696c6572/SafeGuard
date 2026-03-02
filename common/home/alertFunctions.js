@@ -16,16 +16,16 @@ export async function fetchAlertZone( location )
 	const lat = 28.078072; // Palm Harbor, Florida
 	const lon = -82.763710;
 
-	const url_zone = `https://api.weather.gov/points/${lat},${lon}`;
+	const url_zone = `https://api.weather.gov/points/${ lat },${ lon }`;
 	const result_zone = await fetch( url_zone );
-	const zone = ( await result_zone.json())?.properties.forecastZone.slice( -6 );
+	const zone = ( await result_zone.json( ))?.properties.forecastZone.slice( -6 );
 	return zone;
 }
 
 
 export async function fetchAlertData( zone )
 {
-	// const url_alert = `https://api.weather.gov/alerts/active?zone=${zone}`;
+	// const url_alert = `https://api.weather.gov/alerts/active?zone=${ zone }`;
 
 	// By State is only for demonstration ( zone may not have any active alerts )
 	const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State /area/FL
@@ -37,7 +37,7 @@ export async function fetchAlertData( zone )
 		return false;
 	}
 
-	const alert_data = await result_alert.json();
+	const alert_data = await result_alert.json( );
 
 	return alert_data;
 }
@@ -78,5 +78,5 @@ export async function scheduleAlertNotification( alertData )
 		},
 		trigger: { seconds: 2, channelId: 'default' },
 	});
-	console.log('Alert loaded.')
+	console.log('Alert loaded.' )
 }

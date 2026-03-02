@@ -34,7 +34,7 @@ export default async function initializeDatabase( db )
 			CREATE TABLE IF NOT EXISTS    Entity
 			(
 				entity_id    INTEGER    PRIMARY KEY,
-				entity_name    TEXT    NOT NULL    UNIQUE,
+				entity_name    TEXT,
 				entity_type    TEXT    NOT NULL    CHECK ( entity_type IN ( 'Person', 'Doctor', 'Business' ) )
 			);
 
@@ -55,7 +55,7 @@ export default async function initializeDatabase( db )
 				facility_name    TEXT,
 				specialty    TEXT,
 				current    INTEGER,
-				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
 			CREATE TABLE IF NOT EXISTS    Medical_Condition
@@ -66,7 +66,7 @@ export default async function initializeDatabase( db )
 				diagnosis_date    TEXT,
 				condition_note    TEXT,
 				is_allergy    INTEGER    NOT NULL,
-				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE SET NULL
 			);
 
 			CREATE TABLE IF NOT EXISTS    Medication
@@ -80,8 +80,8 @@ export default async function initializeDatabase( db )
 				start_date    TEXT,
 				is_life_sustaining    Integer     NOT NULL,
 				medication_note    TEXT,
-				FOREIGN KEY ( condition_id )    REFERENCES Medical_Condition( condition_id ),
-				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE RESTRICT
+				FOREIGN KEY ( condition_id )    REFERENCES Medical_Condition( condition_id )    ON DELETE SET NULL,
+				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE SET NULL
 			);
 
 			CREATE TABLE IF NOT EXISTS    Allergy
@@ -89,7 +89,7 @@ export default async function initializeDatabase( db )
 				allergy_id    INTEGER    PRIMARY KEY,
 				allergen    TEXT,
 				severity    TEXT    CHECK ( severity IN ( 'Mild','Moderate','Severe', 'Life Threatening' ) ),
-				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )
+				FOREIGN KEY ( allergy_id )    REFERENCES Medical_Condition( condition_id )    ON DELETE CASCADE
 			);
 
 			CREATE TABLE IF NOT EXISTS    Insurance
@@ -99,7 +99,7 @@ export default async function initializeDatabase( db )
 				start_date    TEXT,
 				insurance_note    TEXT,
 				insurance_type    TEXT    CHECK ( insurance_type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' )),
-				FOREIGN KEY ( insurance_id)    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( insurance_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
 			CREATE TABLE IF NOT EXISTS    Phone
@@ -109,7 +109,7 @@ export default async function initializeDatabase( db )
 				phone_number    TEXT    NOT NULL,
 				number_type    TEXT    NOT NULL    CHECK ( number_type IN ( 'Cell', 'Fax', 'Home', 'Office', 'Other' )),
 				phone_number_note    TEXT,
-				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
 			CREATE TABLE IF NOT EXISTS    Address
@@ -123,7 +123,7 @@ export default async function initializeDatabase( db )
 				post_code    TEXT,
 				country    TEXT,
 				address_note    TEXT,
-				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
 			CREATE TABLE IF NOT EXISTS    Email
@@ -132,7 +132,7 @@ export default async function initializeDatabase( db )
 				entity_id    INTEGER,
 				email,
 				email_note    TEXT,
-				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )
+				FOREIGN KEY ( entity_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
 
@@ -178,8 +178,9 @@ export default async function initializeDatabase( db )
 				answer    TEXT,
 				last_seen_date    TEXT    DEFAULT ( '2025-12-01' )
 			);
-		` );
 
+
+		` );
 		// User setup
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Full Name', 'Person' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id, current_level, score ) VALUES ( ?, ?, ? )', [ 1, 1, 0 ]);

@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
-import styles from '../../styles/styles.js';
 
 import { EditContact, ViewContact } from './components/contact';
 
 
 const ContactScreen = ({ navigation, route }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const params = route?.params;
 
 	const [ contactData, setContactData, loadingContactData, loadContactData ] = useLoadEmergencyData( db, 'Contact', params.id );
@@ -27,10 +27,10 @@ const ContactScreen = ({ navigation, route }) =>
 	const [ tempFaxData, setTempFaxData ] = useState( );
 	const [ tempPhoneData, setTempPhoneData ] = useState( );
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
 		if ( isFocused )
 		{
@@ -45,16 +45,22 @@ const ContactScreen = ({ navigation, route }) =>
 	}
 
 
-	async function save( table, data, id )
+	async function saveEntry( table, data, id )
 	{
-		await saveToDB( table, data, db, id, loadContactData );
+		await saveToDB( db, table, data, id, loadContactData );
+	}
+
+
+	async function deleteEntry( table, id )
+	{
+		deleteFromDB( db, table, id, loadContactData );
 	}
 
 
 	if ( loadingContactData )    return <ActivityIndicator/>;
 
 	return(
-		<View> 
+		<View>
 			<Modal animationType='slide' visible={ viewContactVisible }>
 				<ViewContact
 					contactData={ contactData }
@@ -73,9 +79,10 @@ const ContactScreen = ({ navigation, route }) =>
 			<Modal animationType='slide' visible={ editContactVisible }>
 				<EditContact
 					contactData={ contactData }
+					deleteEntry={ deleteEntry }
 					handleNavigation={ handleNavigation }
 					params={ params }
-					save={ save }
+					saveEntry={ saveEntry }
 					setEditContactVisible={ setEditContactVisible }
 					setTempAddressData={ setTempAddressData }
 					setTempEmailData={ setTempEmailData }

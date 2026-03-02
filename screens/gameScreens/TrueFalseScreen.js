@@ -5,7 +5,7 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { CheerModal, EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
+import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 import { checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -16,13 +16,13 @@ import styles from '../../styles/styles.js';
 
 const frog = require( '../../assets/frog_jump_2.png' );
 
-const questions_per_level = 6; 
+const questions_per_level = 6;
 const questions_per_round = 1;
 
 
 export default function TrueFalseScreen({ navigation, route })
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const underlay = '#0b3e82ff'
 	const params = route?.params;
 
@@ -36,9 +36,9 @@ export default function TrueFalseScreen({ navigation, route })
 	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'TrueFalseScreen', questions_per_level );
 
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 	
-	useEffect(() =>
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{
@@ -53,9 +53,9 @@ export default function TrueFalseScreen({ navigation, route })
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
 			updateGameData( 'Game_Data', db, new_level, levelScore );
-			setTimeout(function()
+			setTimeout( function( )
 			{
-				navigation.dispatch(StackActions.pop());
+				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen" );
 			}, 1200 );
 		}
@@ -78,7 +78,7 @@ export default function TrueFalseScreen({ navigation, route })
 			console.log( 'Correct' );
 			setLevelScore( prev => prev + 1 );
 		}
-		else Haptics.selectionAsync();
+		else Haptics.selectionAsync( );
 
 		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
 		{
@@ -91,7 +91,7 @@ export default function TrueFalseScreen({ navigation, route })
 	}
 
 
-	if (loadingData)    return <ActivityIndicator/>;
+	if ( loadingData )    return <ActivityIndicator/>;
 
 
 	return (
@@ -110,8 +110,8 @@ export default function TrueFalseScreen({ navigation, route })
 
 
 				{
-					levelData.slice(roundStartIndex, roundStartIndex + 1).map((entry, i) =>
-					<View style={ [styles.game_column, { justifyContent: 'space-between' }]} key={entry.question_id}>
+					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
+					<View style={ [styles.game_column, { justifyContent: 'space-between' }]} key={ entry.question_id }>
 						<View style={[ styles.game_box_large, styles.multiple_choice_question, { height: cheerVisible? '73%' : '70%'} ]}>
 							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
 						</View>
@@ -126,7 +126,7 @@ export default function TrueFalseScreen({ navigation, route })
 										height: cheerVisible? '80%' : '60%'
 									}
 								]}
-								onPress={ () =>
+								onPress={ ( ) =>
 								{
 									handleAnswerCheck( entry.answer, 'True', entry.question_id );
 								}}
@@ -146,7 +146,7 @@ export default function TrueFalseScreen({ navigation, route })
 										height: cheerVisible? '80%' : '60%'
 									}
 								]}
-								onPress={ () =>
+								onPress={ ( ) =>
 								{
 									handleAnswerCheck( entry.answer, 'False', entry.question_id );
 								}}
@@ -160,8 +160,8 @@ export default function TrueFalseScreen({ navigation, route })
 				)}
 			</SafeAreaProvider>
 
-			{ 
-				cheerVisible? 
+			{
+				cheerVisible?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

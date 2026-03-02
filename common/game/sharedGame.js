@@ -1,5 +1,5 @@
 import { addDays, differenceInCalendarDays, startOfDay } from "date-fns";
-import { Animated} from 'react-native';
+import { Animated } from 'react-native';
 
 const today = startOfDay( new Date( ) ).toISOString( )
 
@@ -83,7 +83,7 @@ export function countStreakLength( streak_history )
 	// No streak
 	if (
 			streak_history?.[0] == undefined ||
-			differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played) ) > 1
+			differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played ) ) > 1
 		)    return streak_length;
 
 	for ( let i = 0; i < streak_history.length - 1; i++ )
@@ -123,7 +123,7 @@ export function fillStreakArray( streak_length, streak_start )
 	return (
 		Array.from({ length: 7 }, ( _, i ) =>
 		({
-			day: addDays( streak_start, i),
+			day: addDays( streak_start, i ),
 			completed:	i <
 			(
 				streak_length % 7 == 0 &&
@@ -143,8 +143,8 @@ export function fillStreakArray( streak_length, streak_start )
  * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
  * This function finds the first day of the current streak.
- * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1}, ....
- * Output: date in format 1970-01-01T00:00:00.000Z 
+ * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1 }, ....
+ * Output: date in format 1970-01-01T00:00:00.000Z
  */
 export function findStreakStart( streak_history )
 {

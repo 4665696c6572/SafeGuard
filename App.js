@@ -26,11 +26,11 @@ import MultipleChoiceScreen from './screens/gameScreens/MultipleChoiceScreen.js'
 import TrueFalseScreen from './screens/gameScreens/TrueFalseScreen.js';
 
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator( );
+const Tab = createBottomTabNavigator( );
 notificationHandlerSetup( );
 
-function TabNavigator()
+function TabNavigator( )
 {
 	return (
 		<Tab.Navigator screenOptions={{ headerShown: false }} >
@@ -39,7 +39,7 @@ function TabNavigator()
 				component={ PersonScreen }
 				options={{
 							tabBarIcon: ({ color, size }) => (
-								<MaterialCommunityIcons name="account" size={size} color={color} />
+								<MaterialCommunityIcons name="account" size={ size } color={ color } />
 							),
 				}}
 			/>
@@ -49,7 +49,7 @@ function TabNavigator()
 				component={ MedicalConditionScreen }
 				options={{
 							tabBarIcon: ({ color, size }) => (
-								<MaterialCommunityIcons name="account" size={size} color={color} />
+								<MaterialCommunityIcons name="account" size={ size } color={ color } />
 							),
 				}}			
 			/>
@@ -59,7 +59,7 @@ function TabNavigator()
 				component={ MedicationScreen }
 				options={{
 					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={size} color={color} />
+						<MaterialCommunityIcons name="account" size={ size } color={ color } />
 					),
 				}}
 			/>
@@ -69,7 +69,7 @@ function TabNavigator()
 				component={ DoctorScreen }
 				options={{
 					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={size} color={color} />
+						<MaterialCommunityIcons name="account" size={ size } color={ color } />
 					),
 				}}
 			/>
@@ -87,7 +87,7 @@ export default function App( )
 		async ( ) =>
 		{
 			await requestNotificationPermission( );
-			await setNotificationChannel();
+			await setNotificationChannel( );
 		}
 	)( );
 	}, [ ]);

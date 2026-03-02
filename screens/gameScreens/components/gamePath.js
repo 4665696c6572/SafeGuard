@@ -4,9 +4,9 @@ import styles from "../../../styles/styles.js";
 
 const lily_pad = require( '../../../assets/lily_pad.png' );
 const frog = require( '../../../assets/frog_1.png' );
-const grass = require('../../../assets/grass.png');
+const grass = require('../../../assets/grass.png' );
 
-const underlay = 'rgb(37, 85, 230)';
+const underlay = '#2555e6';
 
 
 let levels = [ "MultipleChoiceScreen", "MatchingScreen", "MultipleChoiceScreen", "TrueFalseScreen" ];
@@ -32,8 +32,8 @@ export const GamePath = ({ handleNavigation, currentLevel }) =>
 					<View style={ styles.game_lily_container }>
 						{
 							currentLevel!= ( i + 1 ) ?
-							<Image 
-								source={ lily_pad } 
+							<Image
+								source={ lily_pad }
 								style={[ styles.game_lily, styles.game_lily_container, { opacity: ( i + 1 ) > currentLevel? 0.05 : 0.7 } ]}
 							/>
 						:

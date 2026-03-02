@@ -1,14 +1,14 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-const screen_height = Dimensions.get('screen').height;
-const screen_width = Dimensions.get('screen').width;
-const button_size = Dimensions.get('screen').width * 0.33;
+const screen_height = Dimensions.get('screen' ).height;
+const screen_width = Dimensions.get('screen' ).width;
+const button_size = Dimensions.get('screen' ).width * 0.33;
 
 const styles = StyleSheet.create(
 {
 	alert:
 	{
-		color: 'rgb(126, 4, 4)',
+		color: '#7e0404',
 		fontWeight: 900
 	},
 	alert_row:
@@ -381,7 +381,7 @@ const styles = StyleSheet.create(
 	},
 	score_text_green:
 	{
-		color: 'rgb(144, 226, 172)'
+		color: '#90e2ac'
 	},
 	streak_columns:
 	{
@@ -397,7 +397,7 @@ const styles = StyleSheet.create(
 	streak_day_text:
 	{
 		fontSize: 16,
-		color: 'rgb(144, 226, 152)',
+		color: '#90e298',
 		marginTop: 4,
 		textAlign: 'center'
 	},
@@ -408,7 +408,7 @@ const styles = StyleSheet.create(
 	},
 	streak_text:
 	{
-		color: 'rgb(144, 226, 152)',
+		color: '#90e298',
 		fontSize: 26,
 		fontWeight: '900',
 		marginBottom: 20,

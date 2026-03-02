@@ -89,7 +89,7 @@ export default async function selectEmergencyData( db, table, condition )
 			);
 		}
 
-		if ( table == 'Doctor_Name' || table == 'All')
+		if ( table == 'Doctor_Name' || table == 'All' )
 		{
 			{
 				var doctor = await db.getAllAsync(
@@ -206,7 +206,7 @@ export default async function selectEmergencyData( db, table, condition )
 				SELECT
 					entity_id,
 					entity_name,
-					Entity_type,
+					entity_type,
 					dob,
 					sex,
 					height,

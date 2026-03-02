@@ -15,7 +15,7 @@ export const Weather = ({ weatherData }) =>
 		<View style={{ paddingTop: 20 }}>
 		{
 			weatherData &&
-			<View style={{alignItems: 'center'}}>
+			<View style={{ alignItems: 'center'}}>
 				<View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
 					
 					{
@@ -48,7 +48,7 @@ export const Weather = ({ weatherData }) =>
 
 					{
 						weatherData?.list[0].main.humidity != null ?
-						<View style={{alignItems: 'center', flex: 1/4, justifyContent: 'space-between' }}>
+						<View style={{ alignItems: 'center', flex: 1/4, justifyContent: 'space-between' }}>
 							<Image source={ img_hum } style={{ height: 50, marginTop: 10, width: 50 }}/>
 						<Text style={ styles.heading_text }>{ weatherData.list[0].main.humidity }%</Text>
 						</View>
@@ -61,14 +61,14 @@ export const Weather = ({ weatherData }) =>
 				{
 					[ 0, 8 ].map( i =>
 					weatherData.list[i].weather[0].description != null ?
-					<View key={i}>
-						<View style={ styles.weather_forecast}>
+					<View key={ i }>
+						<View style={ styles.weather_forecast }>
 							<Image source={{ uri: icon + weatherData.list[i].weather[0].icon + ".png" }} style={ styles.weather_image }/>
 
 							<Text style={ styles.text }>
-								{weatherData.list[i].weather[0].description.slice(0,1).toUpperCase() + weatherData.list[i].weather[0].description.slice(1)}
+								{ weatherData.list[i].weather[0].description.slice( 0, 1 ).toUpperCase( ) + weatherData.list[i].weather[0].description.slice( 1 )}
 							</Text>
-							<Text style={ styles.text }>{i == 0 ? "Today" : "Tomorrow"}</Text>
+							<Text style={ styles.text }>{ i == 0 ? "Today" : "Tomorrow"}</Text>
 						</View>
 					</View>
 				: null

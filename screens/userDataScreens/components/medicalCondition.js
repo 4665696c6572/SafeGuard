@@ -42,7 +42,10 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 				</View>
 			: null
 			}
+
 				<TouchableOpacity
+					accessibilityLabel='Add medical conditions button'
+					accessibilityHint={ 'Press to Add new medical condition.'}
 					onPress={ ( ) => setEditConditionVisible( true )}
 					style={ styles.data_button_size }
 				>
@@ -93,7 +96,7 @@ export const ViewMedicalCondition = ({
 					doctor.entity_id == conditionData[conditionIndex].doctor_id ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Doctor</Text>
-						<Text style={ styles.text }>{ doctor.entity_name}</Text>
+						<Text style={ styles.text }>{ doctor.entity_name }</Text>
 					</View>
 					: null
 				}
@@ -129,7 +132,6 @@ export const ViewMedicalCondition = ({
 					</View>
 				)}
 			</View>
-
 
 			{/* Close/Edit button row */}
 			<View style={ styles.save_row }>
@@ -167,32 +169,34 @@ export const ViewMedicalCondition = ({
 
 
 export const EditMedicalCondition = ({
-										conditionData, conditionIndex, doctorData, save, setConditionIndex,
+										conditionData, conditionIndex, deleteEntry, doctorData, saveEntry, setConditionIndex,
 										setEditConditionVisible, setTempConditionData, tempConditionData
 									}) =>
 {
+	const [ deleteConditionVisible, setDeleteConditionVisible ] = useState( false );
+
 	// Date Picker
 	const [ isDatePickerVisible, setDatePickerVisibility ] = useState( false );
-	const showDatePicker = () => setDatePickerVisibility(true);
-	const hideDatePicker = () => setDatePickerVisibility(false);
+	const showDatePicker = ( ) => setDatePickerVisibility( true );
+	const hideDatePicker = ( ) => setDatePickerVisibility( false );
 
 	const handleConfirm = ( date ) =>
 	{
-		setTempConditionData( prev => ({ ...prev, 'diagnosis_date': date.toISOString().slice( 0,10)}));
+		setTempConditionData( prev => ({ ...prev, 'diagnosis_date': date.toISOString( ).slice( 0,10 )}));
 		hideDatePicker( );
 	};
 
 
-	// Form Validation ( Conditions must have an condition name )
+	// Form Validation ( Conditions must have an condition name ).
 	const [ conditionName, setConditionName ] = useState( tempConditionData?.condition_name ? tempConditionData.condition_name : '' );
 	const [ errors, setErrors ] = useState({ });
-	const [ isFormValid, setIsFormValid ] = useState(false);
+	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
-		validateForm();
+		validateForm( );
 	}, [ conditionName ]);
 
 
@@ -201,26 +205,39 @@ export const EditMedicalCondition = ({
 		let errors = {};
 
 		// Validate name field
-		if ( conditionName == '')
+		if ( conditionName == '' )
 		{
 			errors.conditionName = 'Condition name is required.';
 		}
 
 		// Set the errors and update form validity
 		setErrors( errors );
-		setIsFormValid(Object.keys( errors ).length === 0);
+		setIsFormValid( Object.keys( errors ).length === 0 );
+	};
+
+
+	const handleCancel = ( ) =>
+	{
+		setDeleteConditionVisible( false );
+	};
+
+
+	const handleDelete = ( ) =>
+	{
+		deleteEntry( 'Medical_Condition', tempConditionData.condition_id );
+		setDeleteConditionVisible( false );
+		handlePress( true );
 	};
 
 
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{
-
 		// If no changes have been made or user presses cancel button, close the edit Modal
 		if
 		(
-			JSON.stringify( conditionData[conditionIndex] ) === JSON.stringify( tempConditionData ) ||
-			Object.keys( tempConditionData ).length == 1 || close == true
+			JSON.stringify( conditionData[conditionIndex] ) === JSON.stringify( tempConditionData ) 
+			|| close == true
 		)
 		{
 			setConditionIndex( null );
@@ -230,130 +247,144 @@ export const EditMedicalCondition = ({
 			return;
 		}
 
-		// Only triggers save( insert/update ) if min of medication name has been entered (or already exists )
+		// Only triggers save( insert/update ) if min of medication name has been entered ( or already exists ).
 		if ( isFormValid )
 		{
-			save( 'Medical_Condition', tempConditionData, 'condition_id' );
+			saveEntry( 'Medical_Condition', tempConditionData, 'condition_id' );
 
 			setConditionIndex( null );
 			setConditionName( '' );
 			setEditConditionVisible( false );
 			setTempConditionData( );
 		}
-		else    setShowValidationError( true );	
+		else    setShowValidationError( true );
 	}
 
 
 	return (
 		<View style={ styles.data_container_edit }>
-			{/* Condition name */}
-			<TextInput
-				accessibilityLabel='Condition name'
-				accessibilityHint='Type in name of medical condition.'
-				style={ styles.text_input }
-				placeholder={ tempConditionData?.condition_name ? tempConditionData.condition_name : 'Condition Name' }
-				onChangeText={ ( text ) =>
-				{
-					setConditionName( text );
-					setTempConditionData( prev => ({ ...prev, 'condition_name': text }));
-					setTempConditionData( prev => ({ ...prev, 'is_allergy': 0 }));
-				}}
-			/>
-
-			{/* Select existing Doctor */}
-			{
-				doctorData?.length > 0 ?
-				<View style={ styles.picker_view }>	
-					<Picker
-						accessibilityLabel='Doctor menu'
-						accessibilityHint='Select a doctor.'
-						selectedValue={ tempConditionData?.doctor_id ? tempConditionData.doctor_id : 'Doctor' }
-						style={ styles.picker }
-						onValueChange={ itemValue =>
-						{
-							setTempConditionData( prev => ({ ...prev, 'doctor_id': itemValue }));
-						}}
-						>
-						<Picker.Item color='black' enabled={ false } label='Doctor' value='' />
-						{
-							doctorData.map( doctor =>
-							<Picker.Item
-								accessibilityLabel='menuitem'
-								key={ doctor.entity_id }
-								label={ doctor.entity_name}
-								value={ doctor.entity_id }
-							/>
-						)}
-					</Picker>
-				</View>
-				: null
-			}
-			
-
-			{/* Date of Diagnosis */}
-				<TouchableHighlight
-					accessibilityLabel="Date picker"
-					accessibilityHint="Touch to open date picker for diagnosis date."
-					style={ styles.menu }
-					underlayColor={ underlay_color }
-					onPress={ showDatePicker }
-				>
-					<Text style={[ styles.text_input, styles.menu_text ]}>
-						{ tempConditionData?.diagnosis_date ? tempConditionData.diagnosis_date : 'Date of diagnosis' }
-					</Text>
-				</TouchableHighlight>
-
-				<DateTimePickerModal
-					isVisible={ isDatePickerVisible }
-					mode="date"
-					onConfirm={ handleConfirm }
-					onCancel={ hideDatePicker }
+			<View style={{ flex: 3 }}>
+				{/* Condition name */}
+				<TextInput
+					accessibilityLabel='Condition name'
+					accessibilityHint='Type in name of medical condition.'
+					style={ styles.text_input }
+					placeholder={ tempConditionData?.condition_name ? tempConditionData.condition_name : 'Condition Name' }
+					onChangeText={ ( text ) =>
+					{
+						setConditionName( text );
+						setTempConditionData( prev => ({ ...prev, 'condition_name': text }));
+						setTempConditionData( prev => ({ ...prev, 'is_allergy': 0 }));
+					}}
 				/>
 
-			{/* Condition notes */}
-			<TextInput
-				accessibilityLabel='Condition notes'
-				accessibilityHint='Type in medical condition notes.'
-				style={ styles.text_input }
-				placeholder={ tempConditionData?.condition_note ? tempConditionData.condition_note : 'Notes' }
-				onChangeText={ ( text ) =>
+				{/* Select existing Doctor */}
 				{
-					setTempConditionData( prev => ({ ...prev, 'condition_note': text }));
-				}}
-			/>
+					doctorData?.length > 0 ?
+					<View style={ styles.picker_view }>
+						<Picker
+							accessibilityLabel='Doctor menu'
+							accessibilityHint='Select a doctor.'
+							selectedValue={ tempConditionData?.doctor_id ? tempConditionData.doctor_id : 'Doctor' }
+							style={ styles.picker }
+							onValueChange={ itemValue =>
+							{
+								setTempConditionData( prev => ({ ...prev, 'doctor_id': itemValue }));
+							}}
+							>
+							<Picker.Item color='black' enabled={ false } label='Doctor' value='' />
+							{
+								doctorData.map( doctor =>
+								<Picker.Item
+									accessibilityLabel='menuitem'
+									key={ doctor.entity_id }
+									label={ doctor.entity_name }
+									value={ doctor.entity_id }
+								/>
+							)}
+						</Picker>
+					</View>
+					: null
+				}
+				
+
+				{/* Date of Diagnosis */}
+					<TouchableHighlight
+						accessibilityLabel="Date picker"
+						accessibilityHint="Touch to open date picker for diagnosis date."
+						style={ styles.menu }
+						underlayColor={ underlay_color }
+						onPress={ showDatePicker }
+					>
+						<Text style={[ styles.text_input, styles.menu_text ]}>
+							{ tempConditionData?.diagnosis_date ? tempConditionData.diagnosis_date : 'Date of diagnosis' }
+						</Text>
+					</TouchableHighlight>
+
+					<DateTimePickerModal
+						isVisible={ isDatePickerVisible }
+						mode="date"
+						onConfirm={ handleConfirm }
+						onCancel={ hideDatePicker }
+					/>
+
+				{/* Condition notes */}
+				<TextInput
+					accessibilityLabel='Condition notes'
+					accessibilityHint='Type in medical condition notes.'
+					style={ styles.text_input }
+					placeholder={ tempConditionData?.condition_note ? tempConditionData.condition_note : 'Notes' }
+					onChangeText={ ( text ) =>
+					{
+						setTempConditionData( prev => ({ ...prev, 'condition_note': text }));
+					}}
+				/>
 
 
-				{/* Close/Save button row */}
-				<View style={ styles.save_row }>
-				{/* Close Button */}
-				<TouchableOpacity
-					accessibilityLabel='Close button'
-					accessibilityHint='Press to close.'
-					onPress={ ( ) => handlePress( true )}
-					style={ styles.game_button_end }
-				>
-					<Text style={ styles.save_button_text }>Close</Text>
-				</TouchableOpacity>
+					{/* Close/Save button row */}
+					<View style={ styles.save_row }>
+					{/* Close Button */}
+					<TouchableOpacity
+						accessibilityLabel='Close button'
+						accessibilityHint='Press to close.'
+						onPress={ ( ) => handlePress( true )}
+						style={ styles.game_button_end }
+					>
+						<Text style={ styles.save_button_text }>Close</Text>
+					</TouchableOpacity>
 
-				{/* Save Button */}
-				<TouchableOpacity
-					accessibilityLabel='Save button'
-					accessibilityHint='Press to save changes.'
-					onPress={ ( ) => handlePress( )}
-					style={ styles.game_button_end }
-				>
-					<Text style={ styles.save_button_text }>Save</Text>
-				</TouchableOpacity>
+					{/* Save Button */}
+					<TouchableOpacity
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save changes.'
+						onPress={ ( ) => handlePress( ) }
+						style={ styles.game_button_end }
+					>
+						<Text style={ styles.save_button_text }>Save</Text>
+					</TouchableOpacity>
+				</View>
+
+				{/* Form Validation Error */}
+				{
+					showValidationError ?
+					<View style={ styles.alert_row }>
+						<Text style={ styles.alert }>{ errors.conditionName }</Text>
+					</View>
+				: null
+				}
 			</View>
 
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={ styles.alert}>{ errors.conditionName }</Text>
-				</View>
-			: null
-			}
+
+			{/* Delete */}
+			<DeleteDialog
+				buttonVisibleCondition={ tempConditionData?.condition_id }
+				description={ 'condition' }
+				dialogVisible={ deleteConditionVisible }
+				handleCancel={ handleCancel }
+				handleDelete={ handleDelete }
+				setDialogVisible={ setDeleteConditionVisible }
+				title={ tempConditionData?.condition_name }
+			/>
 		</View>
 	);
 }

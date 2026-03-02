@@ -5,7 +5,7 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { CheerModal, EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
+import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 import { calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete, setResultArray, updateLevel, updateResultArray } from '../../common/game/sharedGame.js';
 
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -22,7 +22,7 @@ const questions_per_level = 12;
 
 export default function MatchingScreen({ navigation, route })
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const underlay = '#0b3e82ff'	
 	const params = route?.params;
 
@@ -35,15 +35,15 @@ export default function MatchingScreen({ navigation, route })
 	const [ questionSelected, setQuestionSelected ] = useState( null );
 	const [ roundStartIndex, setRoundStartIndex ] = useState( 0 );
 
-	const [ cheerVisible, setCheerVisible ] = useState( false);
+	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData(db, 'MatchingScreen', questions_per_level);
-
-
-	const isFocused = useIsFocused();
+	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MatchingScreen', questions_per_level );
 
 
-	useEffect(() =>
+	const isFocused = useIsFocused( );
+
+
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{
@@ -52,7 +52,7 @@ export default function MatchingScreen({ navigation, route })
 	}, [ isFocused ]);
 
 
-	useEffect( () =>
+	useEffect( ( ) =>
 	{
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{
@@ -81,7 +81,7 @@ export default function MatchingScreen({ navigation, route })
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
 			updateGameData( 'Game_Data', db, new_level, levelScore );
-			setTimeout(function()
+			setTimeout( function( )
 			{
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen" );
@@ -92,7 +92,7 @@ export default function MatchingScreen({ navigation, route })
 
 	function handleAnswerCheck( question_id, answer_id, question_row )
 	{	
-		if(( roundStartIndex == questions_per_level * 0.4 && score >= 3))
+		if(( roundStartIndex == questions_per_level * 0.4 && score >= 3 ))
 		{
 			setCheerVisible( true );
 			setTimeout( function( )
@@ -101,11 +101,11 @@ export default function MatchingScreen({ navigation, route })
 			}, 1000 );
 		}
 
-		if (checkAnswer( question_id, answer_id ))
+		if ( checkAnswer( question_id, answer_id ))
 		{
 			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ));
 		}
-		else Haptics.selectionAsync();
+		else Haptics.selectionAsync( );
 		if ( answer_id != question_id )    return;
 
 		setAnswerButtonsDisabled( true );
@@ -133,8 +133,8 @@ export default function MatchingScreen({ navigation, route })
 
 
 				{
-				levelData.slice(roundStartIndex, roundStartIndex + 3).map((entry, i ) =>
-				<View style={ styles.game_row } key ={entry.question_id} >
+				levelData.slice( roundStartIndex, roundStartIndex + 3 ).map(( entry, i ) =>
+				<View style={ styles.game_row } key ={ entry.question_id } >
 				{
 					answeredCorrectly[i] === false ?
 
@@ -144,7 +144,7 @@ export default function MatchingScreen({ navigation, route })
 							styles.game_box_small,
 							[ questionSelected === entry.question_id ? styles.game_box_selected : styles.game_box_active ]
 						]}
-						onPress={ () =>
+						onPress={ ( ) =>
 						{
 							setQuestionSelected( entry.question_id );
 							setAnswerButtonsDisabled( false );
@@ -169,8 +169,8 @@ export default function MatchingScreen({ navigation, route })
 							styles.game_box_active,
 							answerButtonsDisabled ? styles.game_box_disabled : null
 						]}
-						onPress={ () =>
-						{	// question id, answer (question) id, answeredCorrectly index
+						onPress={ ( ) =>
+						{	// question id, answer ( question ) id, answeredCorrectly index
 							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].question_id, answerOrder[i] );
 						}}
 						underlayColor={ underlay }
@@ -185,8 +185,8 @@ export default function MatchingScreen({ navigation, route })
 			)}
 			</SafeAreaProvider>
 
-			{ 
-				cheerVisible? 
+			{
+				cheerVisible?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

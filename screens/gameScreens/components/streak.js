@@ -1,10 +1,10 @@
 import { Animated, Image, Text, View } from 'react-native';
 import { format } from "date-fns";
 
-import styles from '../../styles/styles.js';
+import styles from '../../../styles/styles.js';
 
-const lily_pad = require( '../../assets/lily_pad.png' );
-const frog = require( '../../assets/frog_streak.png' );
+const lily_pad = require( '../../../assets//lily_pad.png' );
+const frog = require( '../../../assets/frog_streak.png' );
 
 
 /*
@@ -15,7 +15,7 @@ const frog = require( '../../assets/frog_streak.png' );
  * Code version: unknown
  * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function produces streak indicators for a period of five days.
+ * This function produces streak indicators for a period of seven days.
  * The streak display resets once full.
  */
 export default function Streak ({ index, item, pulseAnimation, streakLength })
@@ -28,9 +28,9 @@ export default function Streak ({ index, item, pulseAnimation, streakLength })
 					<View style={ styles.data_section }>
 					{
 						item.completed ?
-						<Image source={frog} style={ styles.streak_icon_size }/>
+						<Image source={ frog } style={ styles.streak_icon_size }/>
 					:
-						<Image source={lily_pad} style={ styles.streak_icon_size }/>
+						<Image source={ lily_pad } style={ styles.streak_icon_size }/>
 					}
 						<Text style={ styles.streak_day_text }>{ format( item.day, "EEE" )}</Text>
 					</View>

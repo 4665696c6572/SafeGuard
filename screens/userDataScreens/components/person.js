@@ -1,44 +1,47 @@
-import { Fragment } from 'react';
 import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
 
+import { DeleteDialog } from './deleteDialog.js';
+
 import styles from "../../../styles/styles";
 
 const underlay_color = '#d1dce4ff';
 
 
-export const Person = ({ entityData, screen, setEditPersonVisible, setTempEntityData, showEditButton }) =>
+export const Person = ({ personData, screen, setEditPersonVisible, setShowDeleteButton, setTempPersonData, showEditButton }) =>
 {
 	return (
 		<View style={[ styles.data_container_view, { flex: 1 }]}>
 			<Text style={ styles.title_bar }>Personal Information</Text>
 			{
-				entityData[0]?.entity_name != null ?
-				<Fragment>
+				personData[0]?.entity_name != null ?
+				<View>
 				{
-					entityData.map( person =>
+					personData.map( person =>
 					(
 						<View key={ person.entity_id } style={{ marginBottom: 10 }}>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5}}>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5 }}>
 								{
 									person?.entity_name != null ?
 									<Text style={ styles.heading_text }>
-											{person.entity_name}
+											{ person.entity_name }
 									</Text>
 								: null
 								}
+
 								{
 									showEditButton ?
 									<TouchableOpacity
 										accessibilityLabel='Edit button'
 										accessibilityHint='Press to edit user information.'
-										onPress={ () =>
+										onPress={ ( ) =>
 										{
 											setEditPersonVisible( true );
-											setTempEntityData( entityData[0] );
+											setShowDeleteButton( true );
+											setTempPersonData( personData[0] );
 										}}
 									>
 										<Text style={ styles.text_button }>Edit</Text>
@@ -49,43 +52,33 @@ export const Person = ({ entityData, screen, setEditPersonVisible, setTempEntity
 
 							{
 								person?.dob != null ?
-								<Text style={ styles.text }>
-									Date of birth: { person.dob }
-								</Text>
+								<Text style={ styles.text }>Date of birth: { person.dob }</Text>
 							: null
 							}
 							{
 								person?.sex != null ?
-								<Text style={ styles.text }>
-									Sex: {person.sex}
-								</Text>
+								<Text style={ styles.text }>Sex: { person.sex }</Text>
 							: null
 							}
 							{
 								person?.height != null ?
-								<Text style={ styles.text }>
-									Height: {person.height}
-								</Text>
+								<Text style={ styles.text }>Height: { person.height }</Text>
 							: null
 							}
 							{
 								person?.weight != null ?
-								<Text style={ styles.text }>
-									Weight: {person.weight}
-								</Text>
+								<Text style={ styles.text }>Weight: { person.weight }</Text>
 							: null
 							}
 							{
 								person?.blood_type != null ?
-								<Text style={ styles.text }>
-									Blood Type: {person.blood_type}
-								</Text>
+								<Text style={ styles.text }>Blood Type: { person.blood_type }</Text>
 							: null
 							}
 						</View>
 					))
 				}
-				</Fragment>
+				</View>
 				:
 				<View>
 				{
@@ -93,7 +86,11 @@ export const Person = ({ entityData, screen, setEditPersonVisible, setTempEntity
 					<TouchableOpacity
 						accessibilityLabel='Add information button'
 						accessibilityHint='Press to add user information.'
-						onPress={ () => setEditPersonVisible( true )}
+						onPress={ ( ) =>
+						{
+							setEditPersonVisible( true )
+							setTempPersonData( personData[0] );
+						}}
 						style={ styles.data_button_size }
 					>
 						<Text style={ styles.text_button }>Add information</Text>
@@ -107,33 +104,37 @@ export const Person = ({ entityData, screen, setEditPersonVisible, setTempEntity
 
 
 
-
-export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEntityData, tempEntityData }) =>
+export const EditPerson = ({
+								deleteEntry, personData, saveEntry, setEditPersonVisible, setShowDeleteButton,
+								setTempPersonData, showDeleteButton, tempPersonData
+							}) =>
 {
+	const [ deletePersonVisible, setDeletePersonVisible ] = useState( false );
+
 	// Date Picker
 	const [ datePickerVisible, setDatePickerVisible ] = useState( false );
 
-	const showDatePicker = () => setDatePickerVisible( true );
-	const hideDatePicker = () => setDatePickerVisible( false );
+	const showDatePicker = ( ) => setDatePickerVisible( true );
+	const hideDatePicker = ( ) => setDatePickerVisible( false );
 
 	const handleConfirm = ( date ) =>
 	{
-		setTempEntityData( prev => ({ ...prev, 'dob': date.toISOString().slice( 0,10 )}));
-		hideDatePicker();
+		setTempPersonData( prev => ({ ...prev, 'dob': date.toISOString( ).slice( 0,10 )}));
+		hideDatePicker( );
 	};
 
 
-	// Form Validation ( Must (minimally) have a name )
-	const [ entityName, setEntityName ] = useState( tempEntityData?.entity_name ? tempEntityData.entity_name : '' );
+	// Form Validation ( Must ( minimally ) have a name )
+	const [ personName, setPersonName ] = useState( tempPersonData?.entity_name ? tempPersonData.entity_name : '' );
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
-		validateForm();
-	}, [entityName ]);
+		validateForm( );
+	}, [personName ]);
 
 
 	const validateForm = ( ) =>
@@ -141,10 +142,24 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 		let errors = {};
 
 		// Validate name field
-		if ( entityName == '')     errors.entityName = 'Name is required.';
+		if ( personName == '')    errors.personName = 'Name is required.';
 
 		setErrors( errors );
-		setIsFormValid(Object.keys( errors ).length === 0);
+		setIsFormValid( Object.keys( errors ).length === 0 );
+	};
+
+
+	const handleCancel = ( ) =>
+	{
+		setDeletePersonVisible( false );
+	};
+
+
+	const handleDelete = ( ) =>
+	{
+		deleteEntry( 'Person', tempPersonData.entity_id );
+		setDeletePersonVisible( false )
+		handlePress( true );
 	};
 
 
@@ -152,40 +167,41 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 	function handlePress( close )
 	{	
 		// Don't save if changes have not been made
-		if ( JSON.stringify( entityData ) === JSON.stringify( tempEntityData ) || close == true )
+		if ( JSON.stringify( personData ) === JSON.stringify( [ tempPersonData ] ) || close == true )
 		{
 			setEditPersonVisible( false );
-			setEntityName( '' );
-			setTempEntityData( );
+			setPersonName( '' );
+			setShowDeleteButton( false );
+			setTempPersonData( );
+			return;
 		}
 
 		if ( isFormValid )
 		{
-			save( 'Person', tempEntityData, 'entity_id' );
+			saveEntry( 'Person', tempPersonData, 'entity_id' );
 
 			setEditPersonVisible( false );
-			setEntityName( '' );
-			setTempEntityData( );
+			setPersonName( '' );
+			setShowDeleteButton( false );
+			setTempPersonData( );
 		}
 		else    setShowValidationError( true );
 	}
 
-
+console.log( tempPersonData )
 	return(
 		<View style={ styles.data_container_edit }>
-			<View>
+			<View style={{ flex: 3}}>
 				<TextInput
 					accessibilityLabel='Full user name'
 					style={ styles.text_input }
-					placeholder={ tempEntityData?.entity_name ? tempEntityData.entity_name : 'Full Name' }
+					placeholder={ tempPersonData?.entity_name ? tempPersonData.entity_name : 'Full Name' }
 					onChangeText={ ( text ) =>
 					{
-						setEntityName( text );
-						setTempEntityData( prev => ({ ...prev, 'entity_name': text }));
-						setTempEntityData( prev => ({ ...prev, 'entity_type': 'Person' }));
+						setPersonName( text );
+						setTempPersonData( prev => ({ ...prev, 'entity_name': text, 'entity_type': 'Person' }));
 					}}
 				/>
-
 
 				<TouchableHighlight
 					accessibilityLabel='Date picker'
@@ -194,7 +210,9 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 					style={ styles.menu }
 					underlayColor={ underlay_color }
 				>
-					<Text style={[ styles.text_input, styles.menu_text ]}>{ tempEntityData?.dob ? tempEntityData.dob : 'Date of birth' }</Text>
+					<Text style={[ styles.text_input, styles.menu_text ]}>
+						{ tempPersonData?.dob ? tempPersonData.dob : 'Date of birth' }
+					</Text>
 				</TouchableHighlight>
 
 				<DateTimePickerModal
@@ -204,14 +222,16 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 					onCancel={ hideDatePicker }
 				/>
 
-
 				<View style={ styles.picker_view }>
 					<Picker
 						accessibilityLabel='Sex menu'
 						accessibilityHint='Select your sex.'
 						style={ styles.picker }
-						selectedValue={ tempEntityData?.sex ? tempEntityData.sex : 'Sex' }
-						onValueChange={( itemValue ) =>setTempEntityData( prev => ({ ...prev, 'sex': itemValue }))}
+						selectedValue={ tempPersonData?.sex ? tempPersonData.sex : 'Sex' }
+						onValueChange={( itemValue ) => 
+						{
+							setTempPersonData( prev => ({ ...prev, 'sex': itemValue }))
+						}}
 					>
 						<Picker.Item
 							color='black'
@@ -237,32 +257,32 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 					</Picker>
 				</View>
 
-
 				<TextInput
 					accessibilityLabel='Height'
 					accessibilityHint='Type in your height.'
 					style={ styles.text_input }
-					placeholder={ tempEntityData?.height?tempEntityData.height :'height' }
-					onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'height': text }))}
+					placeholder={ tempPersonData?.height?tempPersonData.height :'height' }
+					onChangeText={ ( text ) => setTempPersonData( prev => ({ ...prev, 'height': text }))}
 				/>
-
 
 				<TextInput
 					accessibilityLabel='Weight'
 					accessibilityHint='Type in your weight.'
 					style={ styles.text_input }
-					placeholder={ tempEntityData?.weight?tempEntityData.weight : 'weight' }
-					onChangeText={ ( text ) => setTempEntityData( prev => ({ ...prev, 'weight': text }))}
+					placeholder={ tempPersonData?.weight?tempPersonData.weight : 'weight' }
+					onChangeText={ ( text ) => setTempPersonData( prev => ({ ...prev, 'weight': text }))}
 				/>
-
 
 				<View style={ styles.picker_view }>
 					<Picker
 						accessibilityLabel='Blood type menu.'
 						accessibilityHint='Select your blood type.'
-						selectedValue={ tempEntityData?.blood_type? tempEntityData.blood_type : '' }
+						selectedValue={ tempPersonData?.blood_type? tempPersonData.blood_type : '' }
 						style={ styles.picker }
-						onValueChange={( itemValue ) => setTempEntityData( prev => ({ ...prev, 'blood_type': itemValue }))}
+						onValueChange={( itemValue ) => 
+						{
+							setTempPersonData( prev => ({ ...prev, 'blood_type': itemValue }))
+						}}
 					>
 						<Picker.Item
 							color='black'
@@ -317,40 +337,50 @@ export const EditPerson = ({ entityData, save, setEditPersonVisible, setTempEnti
 						/>
 					</Picker>
 				</View>
-			</View>
 
+				{/* Cancel/Save button row */}
+				<View style={ styles.save_row }>
+					{/* Cancel Button */}
+					<TouchableOpacity
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel editing.'
+						style={ styles.game_button_end }
+						onPress={ ( ) => handlePress( true )}
+					>
+						<Text style={ styles.save_button_text }>Cancel</Text>
+					</TouchableOpacity>
 
-			{/* Cancel/Save button row */}
-			<View style={ styles.save_row }>
-				{/* Cancel Button */}
-				<TouchableOpacity
-					accessibilityLabel='Cancel button'
-					accessibilityHint='Press to cancel editing.'
-					style={ styles.game_button_end }
-					onPress={ () => handlePress( true )}
-				>
-					<Text style={ styles.save_button_text }>Cancel</Text>
-				</TouchableOpacity>
-
-				{/* Save Button */}
-				<TouchableOpacity
-					accessibilityLabel='Save button'
-					accessibilityHint='Press to save.'
-					style={ styles.game_button_end }
-					onPress={ () => handlePress( false )}
-				>
-					<Text style={ styles.save_button_text }>Save</Text>
-				</TouchableOpacity>
-			</View>
-
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={ styles.alert }>{ errors.entityName }</Text>
+					{/* Save Button */}
+					<TouchableOpacity
+						accessibilityLabel='Save button'
+						accessibilityHint='Press to save.'
+						style={ styles.game_button_end }
+						onPress={ ( ) => handlePress( false )}
+					>
+						<Text style={ styles.save_button_text }>Save</Text>
+					</TouchableOpacity>
 				</View>
-			: null
-			}
+
+				{/* Form Validation Error */}
+				{
+					showValidationError ?
+					<View style={ styles.alert_row }>
+						<Text style={[ styles.alert, styles.text ]}>{ errors.personName }</Text>
+					</View>
+				: null
+				}
+			</View>
+
+			{/* Delete */}
+			<DeleteDialog
+				buttonVisibleCondition={ showDeleteButton }
+				description={ 'information' }
+				dialogVisible={ deletePersonVisible }
+				handleCancel={ handleCancel }
+				handleDelete={ handleDelete }
+				setDialogVisible={ setDeletePersonVisible }
+				title={ ' ' }
+			/>
 		</View>
 	)
 }

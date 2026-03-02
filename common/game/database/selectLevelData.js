@@ -2,7 +2,7 @@ export default async function selectLevelData( db, screen_name, questions_per_le
 {
 	try
 	{
-		let level_data = await db.getAllAsync( queries[`${ screen_name }`], questions_per_level );
+		let level_data = await db.getAllAsync( operations[`${ screen_name }`], questions_per_level );
 
 		if ( screen_name == 'MultipleChoiceScreen' )
 		{
@@ -32,7 +32,7 @@ export default async function selectLevelData( db, screen_name, questions_per_le
 	}
 };
 
-const queries =
+const operations =
 {
 	TrueFalseScreen:
 	`

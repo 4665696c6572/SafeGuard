@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, ScrollView, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
@@ -14,7 +15,7 @@ import { EditMedicalCondition, MedicalCondition, ViewMedicalCondition } from "./
 
 const MedicalConditionScreen = ( ) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 
 	const [ allergyData, setAllergyData, loadingAllergyData, loadAllergyData ] = useLoadEmergencyData( db, 'Allergy' );
 	const [ conditionData, setConditionData, loadingConditionData, loadConditionData ] = useLoadEmergencyData( db, 'Medical_Condition' );
@@ -33,9 +34,10 @@ const MedicalConditionScreen = ( ) =>
 	const [ editAllergyVisible, setEditAllergyVisible ] = useState( false );
 	const [ viewAllergyVisible, setViewAllergyVisible ] = useState( false );
 
-	const isFocused = useIsFocused();
 
-	useEffect(() =>
+	const isFocused = useIsFocused( );
+
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{
@@ -47,13 +49,17 @@ const MedicalConditionScreen = ( ) =>
 	}, [ isFocused ]);
 
 
-	async function save( table, data, id )
+	async function saveEntry( table, data, id )
 	{
-		let loadData;
-		if ( table == 'Allergy' ) loadData = loadAllergyData;
-		else loadData = loadConditionData;
+		if ( table == 'Allergy' )    await saveToDB( db, table, data, id, loadAllergyData );
+		else    await saveToDB( db, table, data, id, loadConditionData );
+	}
 
-		await saveToDB( table, data, db, id, loadData );
+
+	async function deleteEntry( table, id )
+	{
+		if ( table == 'Allergy' )    await deleteFromDB( db, table, id, loadAllergyData );
+		else    await deleteFromDB( db, table, id, loadConditionData );
 	}
 
 
@@ -117,10 +123,11 @@ const MedicalConditionScreen = ( ) =>
 				{/* Edit medical condition */}
 				<Modal animationType='slide' visible={ editConditionVisible }>
 					<EditMedicalCondition
-						conditionData={ conditionData}
+						conditionData={ conditionData }
 						conditionIndex={ conditionIndex }
+						deleteEntry={ deleteEntry }
 						doctorData={ doctorData }
-						save={ save }
+						saveEntry={ saveEntry }
 						setConditionIndex={ setConditionIndex }
 						setEditConditionVisible={ setEditConditionVisible }
 						setTempConditionData={ setTempConditionData }
@@ -131,10 +138,11 @@ const MedicalConditionScreen = ( ) =>
 				{/* Edit allergy */}
 				<Modal animationType='slide' visible={ editAllergyVisible }>
 					<EditAllergy
-						allergyData={ allergyData}
+						allergyData={ allergyData }
 						allergyIndex={ allergyIndex }
+						deleteEntry={ deleteEntry }
 						doctorData={ doctorData }
-						save={ save }
+						saveEntry={ saveEntry }
 						setAllergyIndex={ setAllergyIndex }
 						setEditAllergyVisible={ setEditAllergyVisible }
 						setTempAllergyData={ setTempAllergyData }

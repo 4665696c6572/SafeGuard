@@ -4,11 +4,11 @@ import { startOfDay } from "date-fns";
 export default async function updateGameData ( table, db, new_level, new_score )
 {
 	const today = startOfDay( new Date( )).toISOString( );
-	const streak_id = startOfDay(new Date( )).toISOString( ).slice( 0, 10 );
+	const streak_id = startOfDay( new Date( )).toISOString( ).slice( 0, 10 );
 
 	try
 	{
-		if (table == 'Game_Data' )
+		if ( table == 'Game_Data' )
 		{
 			await db.runAsync(
 			`

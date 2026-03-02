@@ -1,5 +1,5 @@
 
-export default async function updateEmergencyData( table, emergencyData, db )
+export default async function updateEmergencyData( db, table, emergencyData )
 {
 	const data =
 	{
@@ -101,7 +101,7 @@ export default async function updateEmergencyData( table, emergencyData, db )
 		]
 	}
 
-	const queries =
+	const operations =
 	{
 		Address:
 		`
@@ -215,68 +215,68 @@ export default async function updateEmergencyData( table, emergencyData, db )
 
 	try
 	{
-		if (table == 'Address' )
+		if ( table == 'Address' )
 		{
-			await db.runAsync( queries.Address, data.Address );
+			await db.runAsync( operations.Address, data.Address );
 		}
 
 		if ( table == 'Allergy' )
 		{
-			await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
-			await db.runAsync( queries.Allergy, data.Allergy );
+			await db.runAsync( operations.Medical_Condition, data.Medical_Condition );
+			await db.runAsync( operations.Allergy, data.Allergy );
 		}
 
-		if (table == 'Email')
+		if ( table == 'Email' )
 		{
-			await db.runAsync( queries.Email, data.Email );
+			await db.runAsync( operations.Email, data.Email );
 		}
 
-		if (table == 'Entity')
+		if ( table == 'Entity' )
 		{
-			await db.runAsync( queries.Entity, data.Entity );
+			await db.runAsync( operations.Entity, data.Entity );
 		}
 
-		if (table == 'Fax')
+		if ( table == 'Fax' )
 		{
-			await db.runAsync( queries.Phone, data.Fax );
+			await db.runAsync( operations.Phone, data.Fax );
 		}
 
 		if ( table == 'Doctor' )
 		{
-			await db.runAsync( queries.Entity, data.Entity );
-			await db.runAsync( queries.Doctor, data.Doctor );
-			console.log( `${table} data updated.` );
+			await db.runAsync( operations.Entity, data.Entity );
+			await db.runAsync( operations.Doctor, data.Doctor );
+			console.log( `${ table } data updated.` );
 		}
 
-		if (table == 'Insurance' )
+		if ( table == 'Insurance' )
 		{
-			await db.runAsync( queries.Entity, data.Entity );
-			await db.runAsync( queries.Insurance, data.Insurance );
+			await db.runAsync( operations.Entity, data.Entity );
+			await db.runAsync( operations.Insurance, data.Insurance );
 		}
 
 		if ( table == 'Medical_Condition' )
 		{
-			await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
+			await db.runAsync( operations.Medical_Condition, data.Medical_Condition );
 		}
 
 		if ( table == 'Medication' )
 		{
-			await db.runAsync( queries.Medication, data.Medication );
+			await db.runAsync( operations.Medication, data.Medication );
 		}
 
-		if (table == 'Person')
+		if ( table == 'Person' )
 		{
-			await db.runAsync( queries.Entity, data.Entity );
-			await db.runAsync( queries.Person, data.Person );
+			await db.runAsync( operations.Entity, data.Entity );
+			await db.runAsync( operations.Person, data.Person );
 		}
 
-		if (table == 'Phone')
+		if ( table == 'Phone' )
 		{
-			await db.runAsync( queries.Phone, data.Phone );
+			await db.runAsync( operations.Phone, data.Phone );
 		}
 	}
 	catch ( error )
 	{
-		console.log( `Error updating ${table} data:`, error );
+		console.log( `Error updating ${ table } data:`, error );
 	}
 };

@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { GamePath } from './components/gamePath.js'
 import { checkStreakCurrent, countStreakLength, fillStreakArray, findStreakStart, pulse } from '../../common/game/sharedGame.js';
-import Streak from '../../common/game/streak.js';
+import Streak from './components/streak.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
 import useLoadGameData from '../../common/game/hook/useLoadGameData.js';
 
@@ -14,7 +14,7 @@ import styles from '../../styles/styles.js';
 let streak_start;
 const GameScreen = ({ navigation, route }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 
 	const [ gameData, loadingData, loadData ] = useLoadGameData( db );
 	const [ streakLength, setStreakLength ] = useState( 0 );
@@ -22,10 +22,10 @@ const GameScreen = ({ navigation, route }) =>
 
 	const pulseAnimation = useRef( new Animated.Value( 1.0 )).current;
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
 		if ( isFocused )
 		{
@@ -34,7 +34,7 @@ const GameScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 	{
 		if( gameData )
 		{
@@ -87,7 +87,7 @@ const GameScreen = ({ navigation, route }) =>
 					<FlatList
 						data={ fillStreakArray( streakLength, streak_start )  }
 						horizontal
-						keyExtractor={ (item) => item.day.toISOString( )}
+						keyExtractor={ ( item ) => item.day.toISOString( )}
 						contentContainerStyle={{ flexDirection: "row" }}
 						renderItem={({ item, index }) =>
 						(

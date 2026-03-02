@@ -7,7 +7,7 @@ export default function useLoadEmergencyData( db, table, condition )
 	const [ loadedData, setLoadedData ] = useState( );
 	const [ loadingData, setLoadingData ] = useState( true );
 
-		const loadData = useCallback(async () =>
+		const loadData = useCallback( async ( ) =>
 		{
 			try
 			{

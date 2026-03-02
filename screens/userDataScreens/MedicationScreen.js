@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
@@ -13,7 +14,7 @@ import { EditMedication, Medication, ViewMedication } from './components/medicat
 
 const MedicationScreen = ({ route }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const params = route?.params;
 
 	const [ medicationData,  setMedicationData, loadingMedicationData , loadMedicationData] = useLoadEmergencyData( db, 'Medication' );
@@ -23,13 +24,13 @@ const MedicationScreen = ({ route }) =>
 	const [ medicationIndex, setMedicationIndex ] = useState( params?.condition ? params.condition : 0 );
 	const [ tempMedicationData, setTempMedicationData ] = useState( );
 
-	const [ viewMedicationVisible, setViewMedicationVisible ] = useState( false );
 	const [ editMedicationVisible, setEditMedicationVisible ] = useState( false );
+	const [ viewMedicationVisible, setViewMedicationVisible ] = useState( false );
 
-	const isFocused = useIsFocused();
+	const isFocused = useIsFocused( );
 
 
-	useEffect(() =>
+	useEffect(( ) =>
 		{
 			if ( isFocused )
 			{
@@ -40,9 +41,14 @@ const MedicationScreen = ({ route }) =>
 	}, [ isFocused ]);
 
 
-	async function save( table, data, id )
+	async function saveEntry( table, data, id )
 	{
-		await saveToDB( table, data, db, id, loadMedicationData );
+		await saveToDB( db, table, data, id, loadMedicationData );
+	}
+
+	async function deleteEntry( table, id )
+	{
+		deleteFromDB( db, table, id, loadMedicationData );		
 	}
 
 
@@ -54,7 +60,7 @@ const MedicationScreen = ({ route }) =>
 				medicationData={ medicationData }
 				setEditMedicationVisible={ setEditMedicationVisible }
 				setMedicationIndex={ setMedicationIndex }
-				setViewMedicationVisible={setViewMedicationVisible}
+				setViewMedicationVisible={ setViewMedicationVisible }
 			/>
 
 			<Modal animationType='slide' visible={ viewMedicationVisible }>
@@ -66,19 +72,20 @@ const MedicationScreen = ({ route }) =>
 					setEditMedicationVisible={ setEditMedicationVisible }
 					setMedicationIndex={ setMedicationIndex }
 					setTempMedicationData={ setTempMedicationData }
-					setViewMedicationVisible={setViewMedicationVisible}
+					setViewMedicationVisible={ setViewMedicationVisible }
 				/>
 			</Modal>
 
-			<Modal animationType='slide' visible={editMedicationVisible }>
+			<Modal animationType='slide' visible={ editMedicationVisible }>
 				<EditMedication
 					conditionData={ conditionData }
+					deleteEntry={ deleteEntry }
 					doctorData={ doctorData }
-					medicationData={medicationData}
+					medicationData={ medicationData }
 					medicationIndex={ medicationIndex }
-					save={ save }
+					saveEntry={ saveEntry }
 					setEditMedicationVisible={ setEditMedicationVisible }
-					setMedicationData={ setMedicationData}
+					setMedicationData={ setMedicationData }
 					setMedicationIndex={ setMedicationIndex }
 					setTempMedicationData={ setTempMedicationData }
 					tempMedicationData={ tempMedicationData }

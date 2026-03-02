@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
@@ -14,47 +15,55 @@ import { EditPerson, Person } from './components/person';
 
 const PersonScreen = ({ navigation, route }) =>
 {
-	const db = useSQLiteContext();
+	const db = useSQLiteContext( );
 	const params = route?.params;
 
-	const [ entityData, setEntityData, loadingEntityData, loadEntityData ] = useLoadEmergencyData( db, 'Person' );
+	const [ personData, setPersonData, loadingPersonData, loadPersonData ] = useLoadEmergencyData( db, 'Person' );
+	const [ tempPersonData, setTempPersonData ] = useState( );
+
 	const [ editPersonVisible, setEditPersonVisible ] = useState( false );
-	const [ tempEntityData, setTempEntityData ] = useState( );
+	const [ showDeleteButton, setShowDeleteButton ] = useState( false );
 
 	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Health' );
-	const [ tempInsuranceData, setTempInsuranceData ] = useState( );
 	const [ insuranceIndex, setInsuranceIndex ] = useState( params?.condition ? params.condition : null );
-	const [ viewInsuranceVisible, setViewInsuranceVisible ] = useState( false );
-	const [ editInsuranceVisible, setEditInsuranceVisible ] = useState( false );
+	const [ tempInsuranceData, setTempInsuranceData ] = useState( );
 
-	const isFocused = useIsFocused();
+	const [ editInsuranceVisible, setEditInsuranceVisible ] = useState( false );
+	const [ viewInsuranceVisible, setViewInsuranceVisible ] = useState( false );
+
+	const isFocused = useIsFocused( );
 
 
 	useEffect( ( ) =>
 	{
 		if ( isFocused )
 		{
-			loadEntityData( );
+			loadPersonData( );
 			loadInsuranceData( );
 		}
 	}, [ isFocused ]);
 
 
-	async function save( table, data, id, shouldNavigate )
+	async function saveEntry( table, data, id, shouldNavigate )
 	{
-		let loadData;
-		if ( table == 'Person' ) loadData = loadEntityData;
-		else loadData = loadInsuranceData;
-
 		if ( shouldNavigate )
 		{
-			const new_id = await saveToDB( table, data, db, id, loadData, shouldNavigate );
+			const new_id = await saveToDB( db, table, data, id, loadInsuranceData, shouldNavigate );
 			handleNavigation( new_id, data[id] );
+			
 		}
 		else
 		{
-			await saveToDB( table, data, db, id, loadData );
-		}	
+			if ( table == 'Person' )    await saveToDB( db, table, data, id, loadPersonData );
+			else    await saveToDB( db, table, data, id, loadInsuranceData );
+		}
+	}
+
+
+	async function deleteEntry( table, id )
+	{
+		if ( table == 'Person' )    await deleteFromDB( db, table, id, loadPersonData );
+		else    await deleteFromDB( db, table, id, loadInsuranceData );
 	}
 
 
@@ -63,15 +72,16 @@ const PersonScreen = ({ navigation, route }) =>
 		navigation.navigate('ContactScreen', { id: id, contact_name: name, return: true });
 	}
 
-	if ( loadingEntityData || loadingInsuranceData )    return <ActivityIndicator/>;
 
+	if ( loadingPersonData || loadingInsuranceData )    return <ActivityIndicator/>;
 
 	return (
 		<View style={ styles.bottom_tab_container }>
 			<Person
-				entityData={ entityData }
+				personData={ personData }
 				setEditPersonVisible={ setEditPersonVisible }
-				setTempEntityData={ setTempEntityData }
+				setShowDeleteButton={ setShowDeleteButton }
+				setTempPersonData={ setTempPersonData }
 				showEditButton={ true }
 			/>
 
@@ -81,16 +91,6 @@ const PersonScreen = ({ navigation, route }) =>
 				setInsuranceIndex={ setInsuranceIndex }
 				setViewInsuranceVisible={ setViewInsuranceVisible }
 			/>
-
-			<Modal animationType='slide' visible={ editPersonVisible }>
-				<EditPerson
-					entityData={ entityData }
-					save={ save }
-					setEditPersonVisible={setEditPersonVisible}
-					setTempEntityData={ setTempEntityData }
-					tempEntityData={ tempEntityData }
-				/>
-			</Modal>
 
 			<Modal animationType='slide' visible={ viewInsuranceVisible }>
 				<ViewInsurance
@@ -102,21 +102,33 @@ const PersonScreen = ({ navigation, route }) =>
 					setTempInsuranceData={ setTempInsuranceData }
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 				/>
-			
+			</Modal>
+
+			<Modal animationType='slide' visible={ editPersonVisible }>
+				<EditPerson
+					deleteEntry={ deleteEntry }
+					personData={ personData }
+					saveEntry={ saveEntry }
+					setEditPersonVisible={ setEditPersonVisible }
+					setShowDeleteButton={ setShowDeleteButton }
+					setTempPersonData={ setTempPersonData }
+					showDeleteButton={ showDeleteButton }
+					tempPersonData={ tempPersonData }
+				/>
 			</Modal>
 
 			<Modal animationType='slide' visible={ editInsuranceVisible }>
 				<EditInsurance
+					deleteEntry={ deleteEntry }
 					insuranceData={ insuranceData }
 					insuranceIndex={ insuranceIndex }
-					save={ save }
+					saveEntry={ saveEntry }
 					setEditInsuranceVisible={ setEditInsuranceVisible }
 					setInsuranceIndex={ setInsuranceIndex }
 					setTempInsuranceData={ setTempInsuranceData }
 					setViewInsuranceVisible={ setViewInsuranceVisible }
 					tempInsuranceData={ tempInsuranceData }
 				/>
-			
 			</Modal>
 		</View>
 	);

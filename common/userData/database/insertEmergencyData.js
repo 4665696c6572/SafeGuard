@@ -1,4 +1,4 @@
-export default async function insertEmergencyData( table, emergencyData, db )
+export default async function insertEmergencyData( db, table, emergencyData )
 {
 	const data =
 	{
@@ -96,7 +96,7 @@ export default async function insertEmergencyData( table, emergencyData, db )
 	}
 
 
-	const queries =
+	const operations =
 	{
 		Address:
 		`
@@ -191,74 +191,74 @@ export default async function insertEmergencyData( table, emergencyData, db )
 	{
 		if ( table == 'Address' )
 		{
-			const result = await db.runAsync( queries.Address, data.Address );
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Address, data.Address );
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == 'Allergy' )
 		{
-			const result = await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
-			await db.runAsync( queries.Allergy, [ result.lastInsertRowId, ...data.Allergy ]);
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Medical_Condition, data.Medical_Condition );
+			await db.runAsync( operations.Allergy, [ result.lastInsertRowId, ...data.Allergy ]);
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == 'Doctor' )
 		{
-			const result = await db.runAsync( queries.Entity, data.Entity );
-			await db.runAsync( queries.Doctor, [ result.lastInsertRowId, ...data.Doctor ]);
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Entity, data.Entity );
+			await db.runAsync( operations.Doctor, [ result.lastInsertRowId, ...data.Doctor ]);
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == 'Email' )
 		{
-			const result = await db.runAsync( queries.Email, data.Email );
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Email, data.Email );
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == "Entity" )
 		{
-			await db.runAsync( queries.Entity, data.Entity );
+			await db.runAsync( operations.Entity, data.Entity );
 		}
 
 		if ( table == 'Fax' )
 		{
-			const result = await db.runAsync( queries.Fax, data.Fax );
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Fax, data.Fax );
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == 'Insurance' )
 		{
-			const result = await db.runAsync( queries.Entity, [ emergencyData.entity_name, 'Business' ]);
-			await db.runAsync( queries.Insurance, [ result.lastInsertRowId, ...data.Insurance ]);
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Entity, [ emergencyData.entity_name, 'Business' ]);
+			await db.runAsync( operations.Insurance, [ result.lastInsertRowId, ...data.Insurance ]);
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 
 		if ( table == 'Medical_Condition' )
 		{
-			const result = await db.runAsync( queries.Medical_Condition, data.Medical_Condition );
-			if (result.changes != 0)    return result.lastInsertRowId
+			const result = await db.runAsync( operations.Medical_Condition, data.Medical_Condition );
+			if ( result.changes != 0 )    return result.lastInsertRowId
 		}
 
 		if ( table == 'Medication' )
 		{
-			const result = await db.runAsync( queries.Medication, data.Medication );
-			if (result.changes != 0)     return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Medication, data.Medication );
+			if ( result.changes != 0 )     return result.lastInsertRowId;
 		}
 
 		
 		if ( table == "Person" )
 		{
-			const result = await db.runAsync( queries.Entity, data.Entity );
+			const result = await db.runAsync( operations.Entity, data.Entity );
 			if ( Object.keys( emergencyData ).length > 1 )
 			{
-				await db.runAsync( queries.Person, [ result.lastInsertRowId, ...data.Person ]);
+				await db.runAsync( operations.Person, [ result.lastInsertRowId, ...data.Person ]);
 			}
 		}
 
 		if ( table == 'Phone' )
 		{
-			const result = await db.runAsync( queries.Phone, data.Phone );
-			if (result.changes != 0)    return result.lastInsertRowId;
+			const result = await db.runAsync( operations.Phone, data.Phone );
+			if ( result.changes != 0 )    return result.lastInsertRowId;
 		}
 	}
 	catch ( error )
