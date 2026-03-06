@@ -290,7 +290,7 @@ export const EditContact = ({
 
 	const handleDelete = ( table ) =>
 	{
-		if ( table == 'Contact')
+		if ( table == 'Contact' )
 		{
 			deleteEntry( table, [
 									tempAddressData.address_id, tempEmailData.email_id,

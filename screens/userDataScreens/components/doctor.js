@@ -29,7 +29,7 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 								setViewDoctorVisible( true );
 							}}
 						>
-							<Text style={ styles.text }>{'< >'}</Text>
+							<Text style={ styles.text }>{ '< >' }</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -100,7 +100,7 @@ export const ViewDoctor = ({
 					<TouchableOpacity
 						accessibilityLabel='Close button'
 						accessibilityHint='Press to close doctor details screen.'
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 						onPress={ ( ) =>
 						{
 							setDoctorIndex( null );
@@ -113,7 +113,7 @@ export const ViewDoctor = ({
 					<TouchableOpacity
 						accessibilityLabel='Edit button'
 						accessibilityHint='Press to edit health insurance details.'
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 						onPress={ ( ) =>
 						{
 							setEditDoctorVisible( true );
@@ -134,9 +134,9 @@ export const ViewDoctor = ({
 					accessibilityHint='Press to view insurance contact details.'
 					onPress={ ( ) =>
 					{
-						handleNavigation( 
-											doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name, 
-											doctorData?.[doctorIndex]?.facility_name 
+						handleNavigation(
+											doctorData?.[doctorIndex]?.entity_id, doctorData?.[doctorIndex]?.entity_name,
+											doctorData?.[doctorIndex]?.facility_name
 										);
 						setViewDoctorVisible( false );
 					}}
@@ -177,7 +177,7 @@ export const EditDoctor = ({
 		let errors = {};
 
 	// Validate name field
-	if ( doctorName == '')     errors.doctorName = 'Name is required.';
+	if ( doctorName == '' )     errors.doctorName = 'Name is required.';
 
 	setErrors( errors );
 	setIsFormValid( Object.keys( errors ).length === 0 );
@@ -281,8 +281,8 @@ export const EditDoctor = ({
 					{/* Cancel Button */}
 					<TouchableOpacity
 						accessibilityLabel='Cancel button'
-						accessibilityHint='Press to cancel changes.'
-						style={ styles.game_button_end }
+						accessibilityHint='Press to cancel adding or editing this doctor information.'
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true, false )}
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
@@ -292,7 +292,7 @@ export const EditDoctor = ({
 					<TouchableOpacity
 						accessibilityLabel='Save button'
 						accessibilityHint='Press to save changes.'
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( false, false )}
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
@@ -304,7 +304,7 @@ export const EditDoctor = ({
 						<TouchableOpacity
 							accessibilityLabel='Contact details button'
 							accessibilityHint='Save and go to add contact detail screen.'
-							style={ styles.game_button_end }
+							style={ styles.button_end }
 							onPress={ ( ) => handlePress( false, true )}
 						>
 							<Text style={ styles.save_button_text }>Next</Text>

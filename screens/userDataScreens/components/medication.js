@@ -53,7 +53,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 							setMedicationIndex( i );
 						}}
 					>
-						<Text style={ styles.text }>{'< >'}</Text>
+						<Text style={ styles.text }>{ '< >' }</Text>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -182,7 +182,7 @@ export const ViewMedication = ({
 			<View style={ styles.save_row }>
 				{/* Close Button */}
 				<TouchableOpacity
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setMedicationIndex( null );
@@ -193,7 +193,7 @@ export const ViewMedication = ({
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditMedicationVisible( true );
@@ -216,10 +216,10 @@ export const EditMedication = ({
 									setMedicationIndex, setTempMedicationData, tempMedicationData
 								}) =>
 {
-	const [ lifeSustaining, setLifeSustaining ] = useState( 
+	const [ lifeSustaining, setLifeSustaining ] = useState(
 																tempMedicationData?.is_life_sustaining ?
 																tempMedicationData.is_life_sustaining
-																: false 
+																: false
 															);
 
 	const [ deleteMedicationVisible, setDeleteMedicationVisible ] = useState( false );
@@ -240,7 +240,7 @@ export const EditMedication = ({
 	// Form Validation ( Must ( minimally ) have a name ).
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
-	const [ medicationName, setMedicationName ] = 
+	const [ medicationName, setMedicationName ] =
 		useState( tempMedicationData?.medication_name ? tempMedicationData.medication_name : '' );
 	const [ showValidationError, setShowValidationError ] = useState( false );
 
@@ -256,7 +256,7 @@ export const EditMedication = ({
 		let errors = {};
 
 		// Validate name field
-		if ( medicationName == '')    errors.medicationName = 'Medication name is required.';
+		if ( medicationName == '' )    errors.medicationName = 'Medication name is required.';
 
 		// Set the errors and update form validity
 		setErrors( errors );
@@ -282,7 +282,7 @@ export const EditMedication = ({
 	function handlePress( close )
 	{
 		// If no changes have been made or user presses cancel button, close the edit Modal
-		if 
+		if
 		(
 			JSON.stringify( medicationData[medicationIndex] ) === JSON.stringify( tempMedicationData ) ||
 			tempMedicationData == undefined || close == true
@@ -445,23 +445,23 @@ export const EditMedication = ({
 				</View>
 
 
-				{/* Close/Save button row */}
-				<View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: 5 }}>
-					{/* Close Button */}
+				{/* Cancel/Save button row */}
+				<View style={ styles.save_row }>
+					{/* Cancel Button */}
 					<TouchableOpacity
-						accessibilityLabel='Close button'
-						accessibilityHint='Press to close medication details screen.'
-						style={ styles.game_button_end }
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing this medication.'
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true )}
 					>
-						<Text style={ styles.save_button_text }>Close</Text>
+						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
 					{/* Save Button */}
 					<TouchableOpacity
 						accessibilityLabel='save button'
 						accessibilityHint='Press to save medication details.'
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( ) }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>

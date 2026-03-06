@@ -5,9 +5,9 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 import { checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
-
+import { EndLevelModal } from './components/levelEnd.js';
+import { ProgressAndScore } from './components/score.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
@@ -19,11 +19,13 @@ const frog = require( '../../assets/frog_jump_2.png' );
 const questions_per_level = 6;
 const questions_per_round = 1;
 
+const underlay = '#0b3e82ff';
+
 
 export default function TrueFalseScreen({ navigation, route })
 {
 	const db = useSQLiteContext( );
-	const underlay = '#0b3e82ff'
+
 	const params = route?.params;
 
 	const [ currentNumber, setCurrentNumber ] = useState( 1 );
@@ -33,7 +35,7 @@ export default function TrueFalseScreen({ navigation, route })
 
 	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'TrueFalseScreen', questions_per_level );
+	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'TrueFalseScreen', params?.level_category ?? 1, questions_per_level );
 
 
 	const isFocused = useIsFocused( );
@@ -45,6 +47,7 @@ export default function TrueFalseScreen({ navigation, route })
 				loadData( );
 			}
 	}, [ isFocused ]);
+
 
 	useEffect(( ) =>
 	{
@@ -96,7 +99,11 @@ export default function TrueFalseScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '30%', justifyContent: 'flex-end' }]}>
+			<SafeAreaProvider style={[ styles.game_level_area, 
+									{
+										marginBottom: cheerVisible? 0 : '30%',
+										justifyContent: 'flex-end'
+									}]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -112,7 +119,11 @@ export default function TrueFalseScreen({ navigation, route })
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
 					<View style={ [styles.game_column, { justifyContent: 'space-between' }]} key={ entry.question_id }>
-						<View style={[ styles.game_box_large, styles.multiple_choice_question, { height: cheerVisible? '73%' : '70%'} ]}>
+						<View style={[
+										styles.game_box_large,
+										styles.multiple_choice_question,
+										{ height: cheerVisible? '73%' : '70%'}
+									]}>
 							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
 						</View>
 
@@ -133,7 +144,7 @@ export default function TrueFalseScreen({ navigation, route })
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
-								<Text style={ styles.game_text }>True</Text>
+								<Text style={ styles.game_button_text }>True</Text>
 							</TouchableHighlight>
 
 
@@ -153,7 +164,7 @@ export default function TrueFalseScreen({ navigation, route })
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
-								<Text style={ styles.game_text }>False</Text>
+								<Text style={ styles.game_button_text }>False</Text>
 							</TouchableHighlight>
 						</View>
 					</View>

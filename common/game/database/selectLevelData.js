@@ -1,8 +1,8 @@
-export default async function selectLevelData( db, screen_name, questions_per_level )
+export default async function selectLevelData( db, screen_name, level_category, questions_per_level )
 {
 	try
 	{
-		let level_data = await db.getAllAsync( operations[`${ screen_name }`], questions_per_level );
+		let level_data = await db.getAllAsync( operations[`${ screen_name }`], [ level_category, questions_per_level] );
 
 		if ( screen_name == 'MultipleChoiceScreen' )
 		{
@@ -42,6 +42,7 @@ const operations =
 			answer,
 			last_seen_date
 		FROM True_False_Data
+		WHERE category_id = ?
 		ORDER BY last_seen_date
 		Limit ?
 	`,
@@ -53,6 +54,7 @@ const operations =
 			answer,
 			last_seen_date
 		FROM Matching_Data
+		WHERE category_id = ?
 		ORDER BY last_seen_date
 		LIMIT ?
 	`,
@@ -67,6 +69,7 @@ const operations =
 			answer_two_incorrect,
 			answer_three_incorrect
 		FROM Multiple_Choice_Data
+		WHERE category_id = ?
 		GROUP BY question_id
 		ORDER BY last_seen_date
 		LIMIT ?

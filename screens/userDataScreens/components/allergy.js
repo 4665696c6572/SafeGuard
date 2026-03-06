@@ -45,7 +45,7 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 								setAllergyIndex( i );
 							}}
 						>
-							<Text style={ styles.text }>{'< >'}</Text>
+							<Text style={ styles.text }>{ '< >' }</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -154,7 +154,7 @@ export const ViewAllergy = ({
 				<TouchableOpacity
 					accessibilityLabel='Close button'
 					accessibilityHint='Press to close allergy details screen.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setAllergyIndex( null );
@@ -167,7 +167,7 @@ export const ViewAllergy = ({
 				<TouchableOpacity
 					accessibilityLabel='Edit button'
 					accessibilityHint='Press to edit allergy details.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditAllergyVisible( true );
@@ -219,7 +219,7 @@ export const EditAllergy = ({
 		let errors = {};
 
 		// Validate name field
-		if ( allergenName == '')    errors.allergenName = 'Allergen name is required.';
+		if ( allergenName == '' )    errors.allergenName = 'Allergen name is required.';
 
 		// Set the errors and update form validity
 		setErrors( errors );
@@ -304,7 +304,7 @@ export const EditAllergy = ({
 						<Picker.Item accessibilityLabel='menuitem' label='Mild' value='Mild' />
 						<Picker.Item accessibilityLabel='menuitem' label='Moderate' value='Moderate' />
 						<Picker.Item accessibilityLabel='menuitem' label='Severe' value='Severe' />
-						<Picker.Item accessibilityLabel='menuitem' label='Life Threatening' value='Life Threatening' />
+						<Picker.Item accessibilityLabel='menuitem' color='#7e0404' label='Life Threatening' value='Life Threatening' />
 					</Picker>
 				</View>
 
@@ -320,7 +320,7 @@ export const EditAllergy = ({
 								setTempAllergyData( prev => ({ ...prev, 'doctor_id': itemValue }));
 							}}
 							>
-							<Picker.Item label='Doctor' value='' color='black' enabled={ false } />
+							<Picker.Item label='Doctor' value='' color='black' enabled={ false }/>
 							{
 								doctorData.map( doctor =>
 								<Picker.Item
@@ -366,16 +366,16 @@ export const EditAllergy = ({
 				/>
 
 
-				{/* Close/Save button row */}
+				{/* Cancel/Save button row */}
 				<View style={ styles.save_row }>
-					{/* Close Button */}
+					{/* Cancel Button */}
 					<TouchableOpacity
-						accessibilityLabel='Close button'
-						accessibilityHint='Press to close.'
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing this allergy.'
 						onPress={ ( ) => handlePress( true )}
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 					>
-						<Text style={ styles.save_button_text }>Close</Text>
+						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
 					{/* Save Button */}
@@ -383,7 +383,7 @@ export const EditAllergy = ({
 						accessibilityLabel='Save button'
 						accessibilityHint='Press to save changes.'
 						onPress={ ( ) => handlePress( ) }
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>
@@ -392,7 +392,7 @@ export const EditAllergy = ({
 				{/* Form Validation Error */}
 				{
 					showValidationError ?
-					<View style={{ alignItems: 'center'}}>
+					<View style={{ alignItems: 'center' }}>
 						<Text style={[ styles.alert, styles.text ]}>{ errors.allergenName }</Text>
 					</View>
 					: null

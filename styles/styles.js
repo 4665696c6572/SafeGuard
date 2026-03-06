@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-const screen_height = Dimensions.get('screen' ).height;
-const screen_width = Dimensions.get('screen' ).width;
-const button_size = Dimensions.get('screen' ).width * 0.33;
+const screen_height = Dimensions.get( 'screen' ).height;
+const screen_width = Dimensions.get( 'screen' ).width;
+const button_size = Dimensions.get( 'screen' ).width * 0.33;
 
 const styles = StyleSheet.create(
 {
@@ -16,17 +16,63 @@ const styles = StyleSheet.create(
 		alignItems: 'center',
 		paddingTop: 20
 	},
+	badge_large:
+	{
+		borderColor: '#ebb221',
+		borderRadius: 60,
+		borderWidth: 3,
+		height: 120,
+		width: 120
+	},
+	badge_small:
+	{
+		borderColor: '#ebb221',
+		borderRadius: 40,
+		borderWidth: 2,
+		height: 80,
+		width: 80
+	},
+	badge_container:
+	{
+		flexDirection: 'column',
+		marginBottom: 30,
+		marginTop: 10
+	},
+	badge_modal_container:
+	{
+		alignItems: 'center',
+		alignSelf: 'center',
+		backgroundColor: '#d1dce4ff',
+		flex: 1,
+		gap: 20,
+		paddingTop: 100
+	},
+	badge_row_lower:
+	{
+		flexDirection: 'row',
+		gap: 20,
+		height: 80,
+		justifyContent: 'space-between',
+		paddingLeft: 10,
+		paddingRight: 10
+	},
+	badge_row_upper:
+	{
+		flexDirection: 'row',
+		gap: 10,
+		height: 60,
+		justifyContent: 'center'
+	},
 	bottom_tab_container:
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
 		marginTop: 38
 	},
-	button_chrome_grey:
+	button_end:
 	{
-		backgroundColor: '#DBE2E9',
-		marginBottom: 10,
-		marginTop: 10
+		flexDirection: 'row',
+		justifyContent: 'flex-end'
 	},
 	checkbox_row:
 	{
@@ -76,7 +122,6 @@ const styles = StyleSheet.create(
 	{
 		height: screen_height * 0.37
 	},
-	
 	data_container_edit:
 	{
 		backgroundColor: '#d1dce4ff',
@@ -102,6 +147,11 @@ const styles = StyleSheet.create(
 	{
 		marginBottom: 10,
 		marginTop: 10
+	},
+	delete:
+	{
+		textAlign: 'center',
+		width: '100%'
 	},
 	expand_button:
 	{
@@ -165,28 +215,20 @@ const styles = StyleSheet.create(
 		justifyContent: 'center',
 		width: button_size
 	},
-	game_button_center:
+	game_button_round:
 	{
-		flexDirection: 'row',
-		justifyContent: 'center'
-	},
-	game_button_end:
-	{
-		flexDirection: 'row',
-		justifyContent: 'flex-end'
-	},
-	game_button_start:
-	{
-		flexDirection: 'row',
-		justifyContent: 'flex-start'
+		borderRadius: 50,
+		flex: 1,
+		height: 65
 	},
 	game_button_text:
 	{
 		color: 'white',
 		fontSize: 18,
 		fontWeight: 'bold',
+		paddingLeft: 10,
+		paddingRight: 10,
 		textAlign: 'center',
-		verticalAlign: 'middle'
 	},
 	game_column:
 	{
@@ -220,8 +262,8 @@ const styles = StyleSheet.create(
 	},
 	game_lily_container:
 	{
-		height: '100%',
-		width: '100%'
+		height: 80,
+		width: 80
 	},
 	game_row:
 	{
@@ -241,9 +283,15 @@ const styles = StyleSheet.create(
 	},
 	game_text:
 	{
-		color: 'white',
+		color: '#0b3e82ff',
 		fontSize: 18,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		textAlign: 'center'
+	},
+	game_text_container:
+	{
+		flex: 4,
+		justifyContent: 'space-evenly'
 	},
 	grass:
 	{
@@ -312,6 +360,13 @@ const styles = StyleSheet.create(
 	{
 		color: '#454545'
 	},
+	multiple_choice_answers:
+	{
+		alignItems: 'center',
+		flex: 1,
+		flexDirection: 'row',
+		gap: 10
+	},
 	multiple_choice_question:
 	{
 		alignItems: 'flex-start',
@@ -320,7 +375,7 @@ const styles = StyleSheet.create(
 	multiple_choice_question_text:
 	{
 		color: '#0b3e82ff',
-		fontSize: 26,
+		fontSize: 20,
 		fontWeight: '900'
 	},
 	picker:
@@ -340,7 +395,7 @@ const styles = StyleSheet.create(
 	},
 	progress_bar_container:
 	{
-		flexDirection:'row',
+		flexDirection: 'row',
 		height: 25,
 		justifyContent: 'space-between'
 	},
@@ -354,6 +409,20 @@ const styles = StyleSheet.create(
 		paddingLeft: 5,
 		paddingRight: 5,
 		paddingTop: 20
+	},
+	river_column:
+	{
+		flex: 0.3,
+		flexDirection:'column',
+		height: 100,
+		marginBottom: 10
+	},
+	river_container:
+	{
+		flex: 1/8,
+		flexDirection:'row',
+		gap: 10,
+		marginBottom: 10
 	},
 	save_button_text:
 	{
@@ -462,6 +531,22 @@ const styles = StyleSheet.create(
 	{
 		height: 50,
 		width: 50
+	},
+	weather_temp_col:
+	{
+		alignItems: 'center',
+		flex: 1/4,
+		justifyContent: 'space-between'
+	},
+	weather_temp_row:
+	{
+		flexDirection:'row',
+		justifyContent: 'space-between'
+	},
+	weather_temp_image:
+	{
+		height: 75,
+		width: 75
 	}
 });
 

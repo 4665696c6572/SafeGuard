@@ -5,26 +5,28 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
 import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
-
+import { EndLevelModal } from './components/levelEnd.js';
+import { ProgressAndScore } from './components/score.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
 
+const flower = require( '../../assets/flower.png' );
 const frog = require( '../../assets/frog_jump_2.png' );
 
 const questions_per_round = 1;
 const answers_per_round = 4;
 const questions_per_level = 10;
 
+const underlay = '#2f73ccff';
+
 
 export default function MultipleChoiceScreen({ navigation, route })
 {
 	const db = useSQLiteContext( );
-	const underlay = '#0b3e82ff'
 	const params = route?.params;
 
 	const [ answerOrder, setAnswerOrder ] = useState( calcAnswerOrder( answers_per_round ) );
@@ -35,9 +37,10 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MultipleChoiceScreen', questions_per_level )
+	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MultipleChoiceScreen', params?.levelCategory ?? 1, questions_per_level )
 
 	const isFocused = useIsFocused( );
+
 
 	useEffect(( ) =>
 		{
@@ -46,6 +49,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 				loadData( );
 			}
 	}, [ isFocused ]);
+
 
 	useEffect(( ) =>
 	{
@@ -93,7 +97,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: 0 } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -108,36 +112,38 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
-					<View style={ styles.game_column } key={ entry.question_id }>
-					
-
-						<View style={[ styles.game_box_large, styles.multiple_choice_question ]}>
+					<View
+						style={ [styles.game_column, { gap: cheerVisible ? 0 : '5%',  paddingBottom: 0 } ]}
+						key={ entry.question_id }
+					>
+						<View style={{ height: 100 }}>
 							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
 						</View>
 
 						{
 							answerOrder.map(( index ) =>
+							<View key={ answerOrder[index] } style={ styles.multiple_choice_answers }>
+								<View style={ styles.game_text_container }>
+									<Text style={ styles.game_text }>{ entry.answers[ answerOrder[index] ] }</Text>
+								</View>
+							
 							<TouchableHighlight
 								key = { index }
-								style={[ styles.game_box_large, styles.game_box_active ]}
-								onPress={ ( ) => handleAnswerCheck( entry.answers[0], entry.answers[answerOrder[index]], entry.question_id )}
+								style={[   styles.game_button_round ]}
+								onPress={ ( ) => handleAnswerCheck( entry.answers[0], entry.answers[ answerOrder[index] ], entry.question_id )}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
-								<View>
-									
-									<Text style={ styles.game_text }>{ entry.answers[answerOrder[index]] }</Text>
-								</View>
-								
+								<Image source={ flower } style={ { height: 70, width: 70} }/>
 							</TouchableHighlight>
-
+							</View>
 						)}
 					</View>
 				)}
 			</SafeAreaProvider>
 
 			{
-				cheerVisible ?
+				cheerVisible?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

@@ -3,22 +3,29 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, FlatList, Text, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import { GamePath } from './components/gamePath.js'
-import { checkStreakCurrent, countStreakLength, fillStreakArray, findStreakStart, pulse } from '../../common/game/sharedGame.js';
-import Streak from './components/streak.js';
-import updateGameData from '../../common/game/database/updateGameData.js';
+
+import { GamePath } from './components/river.js';
+import { ScoreBox } from './components/score.js';
+import {
+			checkStreakCurrent, checkBadgeEarned, countStreakLength,
+			fillStreakArray, findStreakStart, pulse
+		} from '../../common/game/sharedGame.js';
+import { BadgeDialog, Streak } from './components/levelEnd.js';
 import useLoadGameData from '../../common/game/hook/useLoadGameData.js';
+import updateGameData from '../../common/game/database/updateGameData.js';
 
 import styles from '../../styles/styles.js';
 
 let streak_start;
-const GameScreen = ({ navigation, route }) =>
+const GameScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext( );
 
 	const [ gameData, loadingData, loadData ] = useLoadGameData( db );
 	const [ streakLength, setStreakLength ] = useState( 0 );
 	const [ streakVisible, setStreakVisible ] = useState( false );
+	const [ badgeVisible, setBadgeVisible ] = useState( true );
+	const [ badgeInfo, setBadgeInfo ] = useState( null );
 
 	const pulseAnimation = useRef( new Animated.Value( 1.0 )).current;
 
@@ -40,14 +47,23 @@ const GameScreen = ({ navigation, route }) =>
 		{
 			setStreakLength( countStreakLength( gameData?.streak_history ?? [ ] ));
 
+			// Check if badge earned and not yet viewed
+			const result = checkBadgeEarned( gameData?.game_data[0]?.current_level ?? 0 )
+
+			if ( result && ( gameData?.game_data[0]?.last_badge < gameData?.game_data[0]?.current_level ))
+			{
+				setBadgeInfo( result );
+				setBadgeVisible( true );
+				updateGameData( 'Badge', db, gameData?.game_data[0]?.current_level );
+			}
+
 			if ( checkStreakCurrent( gameData?.streak_history?.[0]?.date_played ) && gameData?.streak_history?.[0]?.streak_seen == 0 )
 			{
 				updateGameData( 'Streak', db );
 				streak_start = findStreakStart( gameData?.streak_history );
-
+				console.log(streak_start)
 				if ( streak_start )
-				{	
-					// fillStreakArray( streakLength, streak_start )
+				{
 					pulse( pulseAnimation )
 					setStreakVisible( true );
 					setTimeout( function( )
@@ -60,17 +76,17 @@ const GameScreen = ({ navigation, route }) =>
 	}, [ gameData ]);
 
 
-	function handleNavigation( screen, loadedLevel )
+	function handleNavigation( category, loadedLevel, screen )
 	{
-		navigation.navigate( screen, { currentLevel: gameData?.game_data[0]?.current_level ?? 1, loadedLevel: loadedLevel });
+		navigation.navigate( screen, { currentLevel: gameData?.game_data[0]?.current_level ?? 1, loadedLevel: loadedLevel, levelCategory: category });
 	}
 
 
 	if ( loadingData )    return <ActivityIndicator/>;
 
 	return (
-		<View style={ styles.game_screen_container }>
-			{ 	
+		<View style={[ styles.game_screen_container ]}>
+			{
 				streakVisible ?
 				<View style={ styles.streak_container }>
 					{/*
@@ -85,7 +101,7 @@ const GameScreen = ({ navigation, route }) =>
 					* The streak display resets once full.
 					*/}
 					<FlatList
-						data={ fillStreakArray( streakLength, streak_start )  }
+						data={ fillStreakArray( streakLength, streak_start ) }
 						horizontal
 						keyExtractor={ ( item ) => item.day.toISOString( )}
 						contentContainerStyle={{ flexDirection: "row" }}
@@ -111,17 +127,23 @@ const GameScreen = ({ navigation, route }) =>
 
 
 			<View style={[ styles.game_area, { marginTop: 0 }]}>
-				<View style={[ styles.data_section]}>
-							<Text style={[ styles.score_text, styles.score_text_green ]} >Score</Text>
-							<Text style={[ styles.score_text, styles.score_text_green ]} >{ gameData?.game_data[0]?.score ?? 0 } </Text>
-
-
-				</View>
+				<ScoreBox
+					currentLevel={ gameData?.game_data[0]?.current_level ?? 1 }
+					totalScore={ gameData?.game_data[0]?.score ?? 0 }
+				/>
 				<GamePath
 					currentLevel={ gameData?.game_data[0]?.current_level ?? 1 }
 					handleNavigation={ handleNavigation }
-					totalScore={ gameData?.game_data[0]?.score ?? 0 }
 				/>
+				{
+					badgeVisible ?
+					<BadgeDialog
+						badgeInfo={ badgeInfo }
+						badgeVisible={ badgeVisible }
+						setBadgeVisible={ setBadgeVisible }
+					/>
+				: null
+				}
 			</View>
 		</View>
 	)

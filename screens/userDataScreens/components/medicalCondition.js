@@ -35,7 +35,7 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 								setViewConditionVisible( true );
 							}}
 						>
-							<Text style={ styles.text }>{'< >'}</Text>
+							<Text style={ styles.text }>{ '< >' }</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -45,7 +45,7 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 
 				<TouchableOpacity
 					accessibilityLabel='Add medical conditions button'
-					accessibilityHint={ 'Press to Add new medical condition.'}
+					accessibilityHint={ 'Press to Add new medical condition.' }
 					onPress={ ( ) => setEditConditionVisible( true )}
 					style={ styles.data_button_size }
 				>
@@ -138,7 +138,7 @@ export const ViewMedicalCondition = ({
 				<TouchableOpacity
 					accessibilityLabel='Close button'
 					accessibilityHint='Press to close medical condition details screen.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setConditionIndex( null );
@@ -151,7 +151,7 @@ export const ViewMedicalCondition = ({
 				<TouchableOpacity
 					accessibilityLabel='Edit button'
 					accessibilityHint='Press to edit medical condition details.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditConditionVisible( true );
@@ -236,7 +236,7 @@ export const EditMedicalCondition = ({
 		// If no changes have been made or user presses cancel button, close the edit Modal
 		if
 		(
-			JSON.stringify( conditionData[conditionIndex] ) === JSON.stringify( tempConditionData ) 
+			JSON.stringify( conditionData[conditionIndex] ) === JSON.stringify( tempConditionData )
 			|| close == true
 		)
 		{
@@ -341,16 +341,16 @@ export const EditMedicalCondition = ({
 				/>
 
 
-					{/* Close/Save button row */}
+					{/* Cancel/Save button row */}
 					<View style={ styles.save_row }>
-					{/* Close Button */}
+					{/* Cancel Button */}
 					<TouchableOpacity
-						accessibilityLabel='Close button'
-						accessibilityHint='Press to close.'
+						accessibilityLabel='Cancel button'
+						accessibilityHint='Press to cancel adding or editing this medical condition.'
 						onPress={ ( ) => handlePress( true )}
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 					>
-						<Text style={ styles.save_button_text }>Close</Text>
+						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
 
 					{/* Save Button */}
@@ -358,7 +358,7 @@ export const EditMedicalCondition = ({
 						accessibilityLabel='Save button'
 						accessibilityHint='Press to save changes.'
 						onPress={ ( ) => handlePress( ) }
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>

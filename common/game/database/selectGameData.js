@@ -5,6 +5,7 @@ export default async function selectGameData ( db )
 		const game_data = await db.getAllAsync(
 		`
 			SELECT
+				last_badge,
 				current_level,
 				score
 			FROM Game_Data;

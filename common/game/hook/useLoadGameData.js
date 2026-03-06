@@ -1,6 +1,7 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 
 import selectGameData from '../database/selectGameData.js';
+
 
 export default function useLoadGameData( db )
 {

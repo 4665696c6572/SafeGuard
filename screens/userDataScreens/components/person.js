@@ -142,7 +142,7 @@ export const EditPerson = ({
 		let errors = {};
 
 		// Validate name field
-		if ( personName == '')    errors.personName = 'Name is required.';
+		if ( personName == '' )    errors.personName = 'Name is required.';
 
 		setErrors( errors );
 		setIsFormValid( Object.keys( errors ).length === 0 );
@@ -228,7 +228,7 @@ console.log( tempPersonData )
 						accessibilityHint='Select your sex.'
 						style={ styles.picker }
 						selectedValue={ tempPersonData?.sex ? tempPersonData.sex : 'Sex' }
-						onValueChange={( itemValue ) => 
+						onValueChange={( itemValue ) =>
 						{
 							setTempPersonData( prev => ({ ...prev, 'sex': itemValue }))
 						}}
@@ -279,7 +279,7 @@ console.log( tempPersonData )
 						accessibilityHint='Select your blood type.'
 						selectedValue={ tempPersonData?.blood_type? tempPersonData.blood_type : '' }
 						style={ styles.picker }
-						onValueChange={( itemValue ) => 
+						onValueChange={( itemValue ) =>
 						{
 							setTempPersonData( prev => ({ ...prev, 'blood_type': itemValue }))
 						}}
@@ -343,8 +343,8 @@ console.log( tempPersonData )
 					{/* Cancel Button */}
 					<TouchableOpacity
 						accessibilityLabel='Cancel button'
-						accessibilityHint='Press to cancel editing.'
-						style={ styles.game_button_end }
+						accessibilityHint='Press to cancel editing your information.'
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true )}
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
@@ -354,7 +354,7 @@ console.log( tempPersonData )
 					<TouchableOpacity
 						accessibilityLabel='Save button'
 						accessibilityHint='Press to save.'
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( false )}
 					>
 						<Text style={ styles.save_button_text }>Save</Text>

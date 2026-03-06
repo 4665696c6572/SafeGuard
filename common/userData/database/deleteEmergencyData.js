@@ -81,7 +81,7 @@ export default async function deleteEmergencyData( db, table, condition )
 			await db.runAsync( operations.Phone, condition[2] );
 			await db.runAsync( operations.Phone, condition[3] );
 		}
-		if ( table == 'Email')
+		if ( table == 'Email' )
 		{
 			await db.runAsync( operations.Email, condition );
 		}
@@ -92,7 +92,7 @@ export default async function deleteEmergencyData( db, table, condition )
 			await db.runAsync( operations.Entity, condition );
 		}
 
-		if ( table == 'Fax')
+		if ( table == 'Fax' )
 		{
 			await db.runAsync( operations.Phone, condition );
 		}
@@ -103,13 +103,13 @@ export default async function deleteEmergencyData( db, table, condition )
 		}
 
 		// The only person is the user, who can be cleared but not deleted
-		if ( table == 'Person')
+		if ( table == 'Person' )
 		{
 			await db.runAsync( operations.Person_1, condition );
 			await db.runAsync( operations.Person_2, condition );
 		}
 
-		if ( table == 'Phone')
+		if ( table == 'Phone' )
 		{
 			await db.runAsync( operations.Phone, condition );
 		}

@@ -5,8 +5,8 @@ import Dialog from "react-native-dialog";
 import styles from "../../../styles/styles.js";
 
 
-export const DeleteDialog = ({ 
-								buttonVisibleCondition, description, dialogVisible, handleCancel, 
+export const DeleteDialog = ({
+								buttonVisibleCondition, description, dialogVisible, handleCancel,
 								handleDelete, setDialogVisible, table, title
 							}) =>
 {
@@ -28,12 +28,12 @@ export const DeleteDialog = ({
 
 			<Dialog.Container visible={ dialogVisible }>
 				<Dialog.Title>{ title }</Dialog.Title>
-				<Dialog.Description style={{ width: '100%'}}>
+				<Dialog.Description style={ styles.delete }>
 					Do you want to delete this { description }? { "\n" }
 					You cannot undo this action.
 				</Dialog.Description>
-				<Dialog.Button label="Cancel" onPress={ ( ) => handleCancel( table ?? '' ) }/>
-				<Dialog.Button label="Delete" onPress={ ( ) => handleDelete( table ?? '' ) }/>
+				<Dialog.Button label="Cancel" onPress={ ( ) => handleCancel( table ?? '' ) } style={{color: '#000' }}/>
+				<Dialog.Button label="Delete" onPress={ ( ) => handleDelete( table ?? '' ) } style={{color: '#7e0404' }}/>
 			</Dialog.Container>
 		</View>
 	)

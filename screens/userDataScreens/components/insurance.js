@@ -32,7 +32,7 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 							setViewInsuranceVisible( true );
 						}}
 					>
-						<Text style={ styles.text }>{'< >'}</Text>
+						<Text style={ styles.text }>{ '< >' }</Text>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -107,7 +107,7 @@ export const ViewInsurance = ({
 				<TouchableOpacity
 					accessibilityLabel='Close button'
 					accessibilityHint='Press to close insurance details screen.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setInsuranceIndex( null );
@@ -120,7 +120,7 @@ export const ViewInsurance = ({
 				<TouchableOpacity
 					accessibilityLabel='Edit button'
 					accessibilityHint='Press to edit health insurance details.'
-					style={ styles.game_button_end }
+					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditInsuranceVisible( true );
@@ -141,7 +141,7 @@ export const ViewInsurance = ({
 					accessibilityHint='Press to view insurance contact details.'
 					onPress={ ( ) =>
 					{
-						handleNavigation( 
+						handleNavigation(
 											insuranceData?.[insuranceIndex]?.insurance_id,
 											insuranceData?.[insuranceIndex]?.entity_name
 										);
@@ -308,8 +308,8 @@ export const EditInsurance = ({
 					{/* Cancel Button */}
 					<TouchableOpacity
 						accessibilityLabel='Cancel button'
-						accessibilityHint='Press to cancel changes.'
-						style={ styles.game_button_end }
+						accessibilityHint='Press to cancel adding or editing this insurance information.'
+						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true, false )}
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
@@ -320,7 +320,7 @@ export const EditInsurance = ({
 						accessibilityLabel='Save button'
 						accessibilityHint='Press to save changes.'
 						onPress={ ( ) => handlePress( false, false )}
-						style={ styles.game_button_end }
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>
@@ -331,7 +331,7 @@ export const EditInsurance = ({
 							accessibilityLabel='Contact details button'
 							accessibilityHint='Save and go to add contact detail screen.'
 							onPress={ ( ) => handlePress( false, true )}
-							style={ styles.game_button_end }
+							style={ styles.button_end }
 						>
 							<Text style={ styles.save_button_text }>Next</Text>
 						</TouchableOpacity>

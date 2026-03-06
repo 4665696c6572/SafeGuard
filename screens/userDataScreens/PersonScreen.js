@@ -69,7 +69,7 @@ const PersonScreen = ({ navigation, route }) =>
 
 	function handleNavigation( id, name )
 	{
-		navigation.navigate('ContactScreen', { id: id, contact_name: name, return: true });
+		navigation.navigate( 'ContactScreen', { id: id, contact_name: name, return: true });
 	}
 
 

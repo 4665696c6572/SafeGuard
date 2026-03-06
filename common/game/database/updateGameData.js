@@ -28,6 +28,16 @@ export default async function updateGameData ( table, db, new_level, new_score )
 			`, [ streak_id, today ]);
 		}
 
+		if ( table == 'Badge' )
+		{
+			await db.runAsync(
+			`
+				UPDATE Game_Data
+				SET	last_badge = ?
+				WHERE user_id = ?;
+			`, [ new_level, 1 ]);
+		}
+
 		if ( table == 'Streak' )
 		{
 			await db.runAsync(

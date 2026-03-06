@@ -47,7 +47,7 @@ export async function fetchAlertData( zone )
 
 export function findHighestSeverity( alert_data )
 {
-	const severity = {'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
+	const severity = { 'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
 	let priority_alert_number = 0;
 	let max_severity = 5;
 
@@ -78,5 +78,5 @@ export async function scheduleAlertNotification( alertData )
 		},
 		trigger: { seconds: 2, channelId: 'default' },
 	});
-	console.log('Alert loaded.' )
+	console.log( 'Alert loaded.' )
 }

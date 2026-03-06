@@ -65,6 +65,73 @@ export function checkStreakCurrent( last_entry )
 
 
 /*
+ * Assigns non-current level buttons.
+ * future levels are a lily pad.
+ * Past levels are initially a lily pad.
+ * Upon completion of the category, 
+ * past levels display the category badge.
+ */
+export function selectButtonImage( i, currentLevel )
+{
+	const health = require( '../../assets/badge_health.png' );
+	const temp = require( '../../assets/badge_temp.png' );
+	const water = require( '../../assets/badge_water.png' );
+	const storm = require( '../../assets/badge_storm.png' );
+	const lily_pad = require( '../../assets/lily_pad.png' );
+
+	
+	if ( i < currentLevel && currentLevel >= 4 && i < 4 )    return water;
+	else if ( i < currentLevel && currentLevel >= 7 && i >= 4 && i < 7 )    return storm;
+	else if ( i < currentLevel && currentLevel >= 10 && i >= 7 && i < 10 )    return temp;
+	else if ( i < currentLevel && currentLevel >= 13 && i >= 10 && i < 13 )    return health;
+	else    return lily_pad;
+}
+
+
+/*
+ * Checks players current level and returns the
+ * appropriate badge information.
+ */
+export function checkBadgeEarned ( currentLevel )
+{
+
+	if ( currentLevel == 4 )
+	{
+		return {
+			badgeType: 'hurricane and flood badge',
+			badge: require( '../../assets/badge_water.png' )
+		}
+	}
+
+	else if ( currentLevel == 7 )
+	{
+		return {
+			badgeType: 'tornado and storm badge',
+			badge: require( '../../assets/badge_storm.png' )
+		}
+	}
+
+	else if ( currentLevel == 10 )
+	{
+		return {
+			badgeType: 'extreme temp badge',
+			badge: require( '../../assets/badge_temp.png' )
+		}
+	}
+
+	else if ( currentLevel == 13 )
+	{
+		return {
+			badgeType: 'health badge',
+			badge: require( '../../assets/badge_health.png' )
+		}
+	}
+
+	else    return null;
+}
+
+
+/*
  * The countStreakLength function code is a modified version ( modified by me ) of code not written by me.
  * Title: DailyStreakCounter
  * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
@@ -81,10 +148,11 @@ export function countStreakLength( streak_history )
 	let streak_length = 0;
 
 	// No streak
-	if (
-			streak_history?.[0] == undefined ||
-			differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played ) ) > 1
-		)    return streak_length;
+	if 
+	(
+		streak_history?.[0] == undefined ||
+		differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played ) ) > 1
+	)    return streak_length;
 
 	for ( let i = 0; i < streak_history.length - 1; i++ )
 	{
@@ -124,7 +192,7 @@ export function fillStreakArray( streak_length, streak_start )
 		Array.from({ length: 7 }, ( _, i ) =>
 		({
 			day: addDays( streak_start, i ),
-			completed:	i <
+			completed: i <
 			(
 				streak_length % 7 == 0 &&
 				streak_length != 0 ? 7
@@ -143,7 +211,7 @@ export function fillStreakArray( streak_length, streak_start )
  * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
  * This function finds the first day of the current streak.
- * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1 }, ....
+ * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1}, ....
  * Output: date in format 1970-01-01T00:00:00.000Z
  */
 export function findStreakStart( streak_history )
@@ -158,11 +226,12 @@ export function findStreakStart( streak_history )
 
 	for ( let i = 0; i < streak_history.length - 1; i++ )
 	{
+		
 		const previous_day = new Date( streak_history[ i + 1 ].date_played );
 		const current_day = new Date( streak_history[ i ].date_played );
 
 		if ( differenceInCalendarDays( current_day, previous_day ) == 1 )    streak_start = previous_day;
-		else    streak_start = current_day;
+		else    return current_day;
 	}
 
 	return streak_start;

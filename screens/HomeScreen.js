@@ -20,7 +20,6 @@ const HomeScreen = ({ navigation }) =>
 	const [ errorMessage, setErrorMessage ] = useState( );
 	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
 	const [ locationData, setLocationData ] = useState( );
-	const [ userData, setUserData ] = useState( [ ] );
 	const [ weatherData, setWeatherData ] = useState( );
 
 
@@ -32,7 +31,7 @@ const HomeScreen = ({ navigation }) =>
 			let { status } = await Location.requestForegroundPermissionsAsync( );
 			if ( status !== 'granted' )
 			{
-				setErrorMsg('Permission to access location was denied' );
+				setErrorMsg( 'Permission to access location was denied' );
 				return;
 			}
 

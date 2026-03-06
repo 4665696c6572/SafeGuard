@@ -5,9 +5,12 @@ import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import { EndLevelModal, ProgressAndScore } from './components/modalsAndScore.js';
-import { calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete, setResultArray, updateLevel, updateResultArray } from '../../common/game/sharedGame.js';
-
+import {
+			calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete,
+			setResultArray, updateLevel, updateResultArray
+		} from '../../common/game/sharedGame.js';
+import { EndLevelModal } from './components/levelEnd.js';
+import { ProgressAndScore } from './components/score.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
 import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
@@ -19,11 +22,11 @@ const frog = require( '../../assets/frog_jump_2.png' );
 const questions_per_round = 3;
 const questions_per_level = 12;
 
+const underlay = '#0b3e82ff'	
 
 export default function MatchingScreen({ navigation, route })
 {
 	const db = useSQLiteContext( );
-	const underlay = '#0b3e82ff'	
 	const params = route?.params;
 
 	const [ answerButtonsDisabled, setAnswerButtonsDisabled ] = useState( true );
@@ -37,7 +40,7 @@ export default function MatchingScreen({ navigation, route })
 
 	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MatchingScreen', questions_per_level );
+	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MatchingScreen', params?.level_category ?? 1, questions_per_level );
 
 
 	const isFocused = useIsFocused( );
@@ -56,15 +59,6 @@ export default function MatchingScreen({ navigation, route })
 	{
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{
-			if ( roundStartIndex == Math.floor( questions_per_level / 4 ))
-			{
-				setCheerVisible( true );
-				setTimeout( function( )
-				{
-					setCheerVisible( false )
-				}, 1000 );
-			}
-
 			setAnsweredCorrectly( setResultArray( questions_per_round ));
 			setAnswerOrder( calcAnswerOrder( questions_per_round ));
 			setRoundStartIndex( prev => prev + questions_per_round );
@@ -91,7 +85,7 @@ export default function MatchingScreen({ navigation, route })
 
 
 	function handleAnswerCheck( question_id, answer_id, question_row )
-	{	
+	{
 		if(( roundStartIndex == questions_per_level * 0.4 && score >= 3 ))
 		{
 			setCheerVisible( true );
@@ -119,11 +113,12 @@ export default function MatchingScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '25%' } ]}>
+			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
 				/>
+
 
 				<ProgressAndScore
 					currentNumber={ currentNumber }
@@ -152,10 +147,10 @@ export default function MatchingScreen({ navigation, route })
 						underlayColor={ underlay }
 						activeOpacity={ 1 }
 					>
-						<Text style={ styles.game_text }>{ entry.question }</Text>
+						<Text style={[ styles.game_button_text, {paddingLeft: 10, paddingRight: 10 } ]}>{ entry.question }</Text>
 					</TouchableHighlight>
 
-					: <View style={ styles.game_box_small } />
+					: <View style={ styles.game_box_small }/>
 				}
 
 
@@ -176,10 +171,10 @@ export default function MatchingScreen({ navigation, route })
 						underlayColor={ underlay }
 						activeOpacity={ 1 }
 					>
-						<Text style={ styles.game_text }>{ levelData[roundStartIndex + answerOrder[i]].answer }</Text>
+						<Text style={ styles.game_button_text }>{ levelData[roundStartIndex + answerOrder[i]].answer }</Text>
 					</TouchableHighlight>
 
-					: <View style={ styles.game_box_small } />
+					: <View style={ styles.game_box_small }/>
 				}
 				</View>
 			)}
