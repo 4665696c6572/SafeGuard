@@ -158,6 +158,7 @@ export const ViewInsurance = ({
 
 
 
+// For adding or editing
 export const EditInsurance = ({
 								deleteEntry, insuranceData, insuranceIndex, saveEntry,
 								setEditInsuranceVisible, setInsuranceIndex,

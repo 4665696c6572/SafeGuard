@@ -35,59 +35,6 @@ export function checkAnswer( correct_answer, user_answer )
 }
 
 
-// Checks if the correct number of questions have been completed
-export function checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round )
-{
-	if ( roundStartIndex == questions_per_level - questions_per_round )    return true;
-	return false;
-}
-
-
-// Matching Screen is the only screen where a round has more than one question
-export function checkRoundComplete( answeredCorrectly, questions_per_round )
-{
-	if ( answeredCorrectly.length != questions_per_round )     return false;
-	return answeredCorrectly.every( Boolean );
-}
-
-
-/*
- * Accepts the last date in which a level was completed in the format stored in db ( ISOString ),
- * slices and checks to see if it is today so that the streak can be marked as current.
- */
-export function checkStreakCurrent( last_entry )
-{
-	if ( last_entry == undefined || ( typeof last_entry ) != 'string' )    return false;
-
-	if ( last_entry.slice( 0, 10 ) == today.slice( 0, 10 ))    return true;
-	else    return false;
-}
-
-
-/*
- * Assigns non-current level buttons.
- * future levels are a lily pad.
- * Past levels are initially a lily pad.
- * Upon completion of the category, 
- * past levels display the category badge.
- */
-export function selectButtonImage( i, currentLevel )
-{
-	const health = require( '../../assets/badge_health.png' );
-	const temp = require( '../../assets/badge_temp.png' );
-	const water = require( '../../assets/badge_water.png' );
-	const storm = require( '../../assets/badge_storm.png' );
-	const lily_pad = require( '../../assets/lily_pad.png' );
-
-	
-	if ( i < currentLevel && currentLevel >= 4 && i < 4 )    return water;
-	else if ( i < currentLevel && currentLevel >= 7 && i >= 4 && i < 7 )    return storm;
-	else if ( i < currentLevel && currentLevel >= 10 && i >= 7 && i < 10 )    return temp;
-	else if ( i < currentLevel && currentLevel >= 13 && i >= 10 && i < 13 )    return health;
-	else    return lily_pad;
-}
-
-
 /*
  * Checks players current level and returns the
  * appropriate badge information.
@@ -128,6 +75,35 @@ export function checkBadgeEarned ( currentLevel )
 	}
 
 	else    return null;
+}
+
+
+// Checks if the correct number of questions have been completed
+export function checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round )
+{
+	if ( roundStartIndex == questions_per_level - questions_per_round )    return true;
+	return false;
+}
+
+
+// Matching Screen is the only screen where a round has more than one question
+export function checkRoundComplete( answeredCorrectly, questions_per_round )
+{
+	if ( answeredCorrectly.length != questions_per_round )     return false;
+	return answeredCorrectly.every( Boolean );
+}
+
+
+/*
+ * Accepts the last date in which a level was completed in the format stored in db ( ISOString ),
+ * slices and checks to see if it is today so that the streak can be marked as current.
+ */
+export function checkStreakCurrent( last_entry )
+{
+	if ( last_entry == undefined || ( typeof last_entry ) != 'string' )    return false;
+
+	if ( last_entry.slice( 0, 10 ) == today.slice( 0, 10 ))    return true;
+	else    return false;
 }
 
 
@@ -269,6 +245,33 @@ export function pulse( pulseAnimation )
 		]), { iterations: 2 }
 	).start( );
 };
+
+
+/*
+ * Assigns level buttons.
+ * future levels are a lily pad.
+ * Past levels are initially a lily pad.
+ * Upon completion of the category, 
+ * past levels display the category badge.
+ * The current level is a frog & a lily pad
+ */
+export function selectButtonImage( i, currentLevel )
+{
+	const frog = require( '../../assets/frog_1.png' );
+	const health = require( '../../assets/badge_health.png' );
+	const lily_pad = require( '../../assets/lily_pad.png' );
+	const storm = require( '../../assets/badge_storm.png' );
+	const temp = require( '../../assets/badge_temp.png' );
+	const water = require( '../../assets/badge_water.png' );
+
+
+	if ( i < currentLevel && currentLevel >= 4 && i < 4 )    return water;
+	else if ( i < currentLevel && currentLevel >= 7 && i >= 4 && i < 7 )    return storm;
+	else if ( i < currentLevel && currentLevel >= 10 && i >= 7 && i < 10 )    return temp;
+	else if ( i < currentLevel && currentLevel >= 13 && i >= 10 && i < 13 )    return health;
+	else if ( i == currentLevel )    return[ lily_pad, frog ];
+	else    return lily_pad;
+}
 
 
 // Fills an array with false to track answers completed

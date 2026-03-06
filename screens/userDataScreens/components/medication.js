@@ -210,6 +210,7 @@ export const ViewMedication = ({
 
 
 
+// For adding or editing
 export const EditMedication = ({
 									conditionData, deleteEntry, doctorData, medicationData,
 									medicationIndex, saveEntry, setEditMedicationVisible,

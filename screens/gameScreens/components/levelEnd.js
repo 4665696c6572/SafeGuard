@@ -23,14 +23,14 @@ export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
 	return (
 		<Dialog.Container visible={ badgeVisible }>
 			<Dialog.Title style={[ styles.count_text, styles.delete ]}>Congratulations!</Dialog.Title>
-				<Dialog.Description style={[ styles.count_text, styles.delete ]}>
-					You have earned
-					{ text }{ "\n \n" }
+			<Dialog.Description style={[ styles.count_text, styles.delete ]}>
+				You have earned
+				{ text }{ "\n \n" }
 
-					{ <Image source={ badgeInfo?.badge } style={ styles.badge_large }/> }
-				</Dialog.Description>
-				<Dialog.Button label="Close" onPress={ ( ) => setBadgeVisible( false ) } style={ styles.count_text }/>
-			</Dialog.Container>
+				{ <Image source={ badgeInfo?.badge } style={ styles.badge_large }/> }
+			</Dialog.Description>
+			<Dialog.Button label="Close" onPress={ ( ) => setBadgeVisible( false ) } style={ styles.count_text }/>
+		</Dialog.Container>
 	)
 }
 
@@ -43,9 +43,16 @@ export const EndLevelModal = ({ levelComplete, levelScore }) =>
 	return (
 	<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
 		<View style={ styles.cheer_container }>
-			<Text style={ styles.score_text } >Final score</Text>
-			<Text style={ styles.score_text } >{ levelScore }</Text>
-			<Image source={ frog } style={ styles.cheer_image }/>
+			{ 
+				levelScore != 0 ? 
+				<>
+					<Text style={ styles.score_text }>Final score</Text>
+					<Text style={ styles.score_text }>{ levelScore }</Text>
+					<Image source={ frog } style={ styles.cheer_image }/>
+				</>
+				: 
+				<Text style={ styles.score_text }>Small steps still count. Tomorrow’s another chance.</Text>
+			}
 		</View>
 	</Modal>
 	)
@@ -71,15 +78,15 @@ export function Streak ({ index, item, pulseAnimation, streakLength })
 	return (
 		<View style={ styles.streak_columns }>
 			<Animated.View style={ today ? { transform: [{ scale: pulseAnimation }]} : null }>
-					<View style={ styles.data_section }>
-					{
-						item.completed ?
-						<Image source={ frog_streak } style={ styles.streak_icon_size }/>
-					:
-						<Image source={ lily_pad } style={ styles.streak_icon_size }/>
-					}
-						<Text style={ styles.streak_day_text }>{ format( item.day, "EEE" )}</Text>
-					</View>
+				<View style={ styles.data_section }>
+				{
+					item.completed ?
+					<Image source={ frog_streak } style={ styles.streak_icon_size }/>
+				:
+					<Image source={ lily_pad } style={ styles.streak_icon_size }/>
+				}
+					<Text style={ styles.streak_day_text }>{ format( item.day, "EEE" )}</Text>
+				</View>
 			</Animated.View>
 		</View>
 	);

@@ -168,6 +168,7 @@ export const ViewMedicalCondition = ({
 
 
 
+// For adding or editing
 export const EditMedicalCondition = ({
 										conditionData, conditionIndex, deleteEntry, doctorData, saveEntry, setConditionIndex,
 										setEditConditionVisible, setTempConditionData, tempConditionData

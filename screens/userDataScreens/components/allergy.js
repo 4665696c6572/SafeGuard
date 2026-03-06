@@ -184,6 +184,7 @@ export const ViewAllergy = ({
 
 
 
+// For adding or editing
 export const EditAllergy = ({
 								allergyData, allergyIndex, deleteEntry, doctorData, saveEntry, setAllergyIndex,
 								setEditAllergyVisible, setTempAllergyData, tempAllergyData

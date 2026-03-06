@@ -18,7 +18,7 @@ export async function fetchAlertZone( location )
 
 	const url_zone = `https://api.weather.gov/points/${ lat },${ lon }`;
 	const result_zone = await fetch( url_zone );
-	const zone = ( await result_zone.json( ))?.properties.forecastZone.slice( -6 );
+	const zone = ( await result_zone.json( ))?.properties?.forecastZone.slice( -6 );
 	return zone;
 }
 
@@ -47,11 +47,13 @@ export async function fetchAlertData( zone )
 
 export function findHighestSeverity( alert_data )
 {
-	const severity = { 'Extreme' : 0, 'Severe' : 1,'Moderate': 2,'Minor' : 3, 'Unknown' : 4};
+	if ( alert_data?.features?.length == 0 )    return null;
+
+	const severity = { 'Extreme' : 0, 'Severe' : 1, 'Moderate': 2, 'Minor' : 3, 'Unknown' : 4 };
 	let priority_alert_number = 0;
 	let max_severity = 5;
 
-	for ( var i = 0; i < alert_data.features.length ; i++ )
+	for ( var i = 0; i < alert_data?.features?.length ; i++ )
 	{
 		if ( Number( severity[ alert_data.features[i].properties.severity ]) < Number( max_severity ))
 		{

@@ -11,6 +11,7 @@ import styles from "../../../styles/styles";
 const underlay_color = '#d1dce4ff';
 
 
+
 export const Person = ({ personData, screen, setEditPersonVisible, setShowDeleteButton, setTempPersonData, showEditButton }) =>
 {
 	return (
@@ -103,7 +104,7 @@ export const Person = ({ personData, screen, setEditPersonVisible, setShowDelete
 };
 
 
-
+// Used to edit data or add if none has been added already.
 export const EditPerson = ({
 								deleteEntry, personData, saveEntry, setEditPersonVisible, setShowDeleteButton,
 								setTempPersonData, showDeleteButton, tempPersonData
@@ -188,7 +189,7 @@ export const EditPerson = ({
 		else    setShowValidationError( true );
 	}
 
-console.log( tempPersonData )
+
 	return(
 		<View style={ styles.data_container_edit }>
 			<View style={{ flex: 3}}>

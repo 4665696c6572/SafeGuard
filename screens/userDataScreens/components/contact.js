@@ -201,6 +201,7 @@ export const ViewContact = ({
 
 
 
+// For adding or editing
 export const EditContact = ({
 								contactData, deleteEntry, handleNavigation, params, saveEntry,
 								setEditContactVisible, setTempAddressData, setTempEmailData, setTempFaxData,

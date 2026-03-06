@@ -150,6 +150,7 @@ export const ViewDoctor = ({
 
 
 
+// For adding or editing
 export const EditDoctor = ({
 								deleteEntry, doctorData, doctorIndex, saveEntry, setDoctorIndex,
 								setEditDoctorVisible, setTempDoctorData, tempDoctorData

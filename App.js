@@ -1,7 +1,6 @@
 import { SQLiteProvider } from 'expo-sqlite';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -80,8 +79,6 @@ function TabNavigator( )
 
 export default function App( )
 {
-
-
 	useEffect( ( ) =>
 	{(
 		async ( ) =>

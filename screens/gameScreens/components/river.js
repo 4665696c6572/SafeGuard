@@ -5,10 +5,6 @@ import styles from '../../../styles/styles.js';
 
 let level_type = [ "MultipleChoiceScreen", "MatchingScreen", "TrueFalseScreen" ];
 
-// level buttons
-const frog = require( '../../../assets/frog_1.png' );
-const lily_pad = require( '../../../assets/lily_pad.png' );
-
 // Trophy items
 const trophy = require ( '../../../assets/trophy.png' );
 const empty_trophy = require ( '../../../assets/empty_trophy.png' );
@@ -106,7 +102,7 @@ export function LevelButton ({ currentLevel, i, handleNavigation })
 		<TouchableHighlight style={ styles.game_button }
 			disabled={ ( i + 1 ) > currentLevel ? true : false }
 			// category number, level, screen
-			onPress={ ( ) => handleNavigation( i + 1,  i % 4 + 1, level_type[ i % 3 ] )}
+			onPress={ ( ) => handleNavigation( ( i + 1 ), ( i % 4 + 1 ), level_type[ i % 3 ] )}
 			underlayColor={ underlay }
 			activeOpacity={ 1 }
 		>
@@ -121,8 +117,14 @@ export function LevelButton ({ currentLevel, i, handleNavigation })
 			/>
 		:
 			<View style={ styles.game_lily_container }>
-				<Image source={ lily_pad } style={[ styles.game_lily, styles.game_lily_container ]}/>
-				<Image source={ frog } style={[ styles.game_frog, styles.game_lily_container ]}/>
+				<Image
+					source={ selectButtonImage( i + 1, currentLevel )?.[0] }
+					style={[ styles.game_lily, styles.game_lily_container ]}
+				/>
+				<Image
+					source={ selectButtonImage( i + 1, currentLevel )?.[1] }
+					style={[ styles.game_frog, styles.game_lily_container ]}
+				/>
 			</View>
 		}
 		</TouchableHighlight>
