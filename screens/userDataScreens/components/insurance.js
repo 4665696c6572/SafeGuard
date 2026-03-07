@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
-import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { SquareArrowDiagonal01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
+import { useEffect, useState } from 'react';
+import { Keyboard, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TextInput } from 'react-native-paper';
 
@@ -34,7 +36,12 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
 					>
-						<Text style={ styles.text }>{ '< >' }</Text>
+						<HugeiconsIcon
+							icon={ SquareArrowDiagonal01Icon }
+							size={ 24 }
+							color="black"
+							strokeWidth={ 1.25 }
+						/>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -172,6 +179,7 @@ export const EditInsurance = ({
 								setTempInsuranceData, tempInsuranceData
 							}) =>
 {
+	// Delete dialog visibility control
 	const [ deleteInsuranceVisible, setDeleteInsuranceVisible ] = useState( false );
 
 	// Date Picker
@@ -185,6 +193,28 @@ export const EditInsurance = ({
 		setTempInsuranceData( prev => ({ ...prev, 'start_date': date.toISOString( ).slice( 0,10 )}));
 		hideDatePicker( );
 	};
+
+
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
 
 
 	// Form Validation
@@ -360,15 +390,19 @@ export const EditInsurance = ({
 
 
 			{/* Delete */}
-			<DeleteDialog
-				buttonVisibleCondition={ tempInsuranceData?.insurance_id }
-				description={ 'insurance' }
-				dialogVisible={ deleteInsuranceVisible }
-				handleCancel={ handleCancel }
-				handleDelete={ handleDelete }
-				setDialogVisible={ setDeleteInsuranceVisible }
-				title={ tempInsuranceData?.entity_name }
-			/>
+			{ 
+				!keyboardVisible ?
+				<DeleteDialog
+					buttonVisibleCondition={ tempInsuranceData?.insurance_id }
+					description={ 'insurance' }
+					dialogVisible={ deleteInsuranceVisible }
+					handleCancel={ handleCancel }
+					handleDelete={ handleDelete }
+					setDialogVisible={ setDeleteInsuranceVisible }
+					title={ tempInsuranceData?.entity_name }
+				/>
+			: null
+			}
 		</View>
 	);
 }

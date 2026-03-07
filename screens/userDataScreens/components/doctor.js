@@ -1,7 +1,9 @@
 import { Checkbox } from 'expo-checkbox';
 import * as NavigationBar from 'expo-navigation-bar';
+import { SquareArrowDiagonal01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 import { DeleteDialog } from './deleteDialog.js';
@@ -31,7 +33,12 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
-							<Text style={ styles.text }>{ '< >' }</Text>
+							<HugeiconsIcon
+								icon={ SquareArrowDiagonal01Icon }
+								size={ 24 }
+								color="black"
+								strokeWidth={ 1.25 }
+							/>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -162,9 +169,33 @@ export const EditDoctor = ({
 								setEditDoctorVisible, setTempDoctorData, tempDoctorData
 							}) =>
 {
+	// Delete dialog visibility control
 	const [ deleteDoctorVisible, setDeleteDoctorVisible ] = useState( false );
 
 	const [ currentDr, setCurrentDr ] = useState( tempDoctorData?.current ? tempDoctorData.current : false );
+
+
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
+
 
 	// Form Validation ( Must ( minimally ) have a name ).
 	const [ doctorName, setDoctorName ] = useState( tempDoctorData?.entity_name ? tempDoctorData.entity_name : '' );
@@ -324,15 +355,19 @@ export const EditDoctor = ({
 
 
 			{/* Delete */}
-			<DeleteDialog
-				buttonVisibleCondition={ tempDoctorData?.entity_id }
-				description={ 'doctor' }
-				dialogVisible={ deleteDoctorVisible }
-				handleCancel={ handleCancel }
-				handleDelete={ handleDelete }
-				setDialogVisible={ setDeleteDoctorVisible }
-				title={ tempDoctorData?.entity_name }
-			/>
+			{ 
+				!keyboardVisible ?
+				<DeleteDialog
+					buttonVisibleCondition={ tempDoctorData?.entity_id }
+					description={ 'doctor' }
+					dialogVisible={ deleteDoctorVisible }
+					handleCancel={ handleCancel }
+					handleDelete={ handleDelete }
+					setDialogVisible={ setDeleteDoctorVisible }
+					title={ tempDoctorData?.entity_name }
+				/>
+			: null
+			}
 
 
 			{/* Form Validation Error */}

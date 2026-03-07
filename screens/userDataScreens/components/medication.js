@@ -1,7 +1,9 @@
 import { Checkbox } from 'expo-checkbox';
 import * as NavigationBar from 'expo-navigation-bar';
+import { SquareArrowDiagonal01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Keyboard, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TextInput } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
@@ -55,7 +57,12 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
 					>
-						<Text style={ styles.text }>{ '< >' }</Text>
+						<HugeiconsIcon
+								icon={ SquareArrowDiagonal01Icon }
+								size={ 24 }
+								color="black"
+								strokeWidth={ 1.25 }
+							/>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -224,12 +231,14 @@ export const EditMedication = ({
 									setMedicationIndex, setTempMedicationData, tempMedicationData
 								}) =>
 {
-	const [ lifeSustaining, setLifeSustaining ] = useState(
-																tempMedicationData?.is_life_sustaining ?
-																tempMedicationData.is_life_sustaining
-																: false
-															);
+	const [ lifeSustaining, setLifeSustaining ] = useState
+	(
+		tempMedicationData?.is_life_sustaining ?
+		tempMedicationData.is_life_sustaining
+		: false
+	);
 
+	// Delete dialog visibility control
 	const [ deleteMedicationVisible, setDeleteMedicationVisible ] = useState( false );
 
 	// Date Picker
@@ -243,6 +252,28 @@ export const EditMedication = ({
 		setTempMedicationData( prev => ({ ...prev, 'start_date': date.toISOString( ).slice( 0,10 )}));
 		hideDatePicker( );
 	};
+
+
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
 
 
 	// Form Validation ( Must ( minimally ) have a name ).
@@ -489,15 +520,19 @@ export const EditMedication = ({
 
 
 			{/* Delete */}
-			<DeleteDialog
-				buttonVisibleCondition={ tempMedicationData?.medication_id }
-				description={ 'medication' }
-				dialogVisible={ deleteMedicationVisible }
-				handleCancel={ handleCancel }
-				handleDelete={ handleDelete }
-				setDialogVisible={ setDeleteMedicationVisible }
-				title={ tempMedicationData?.medication_name }
-			/>
+			{ 
+				!keyboardVisible ?
+				<DeleteDialog
+					buttonVisibleCondition={ tempMedicationData?.medication_id }
+					description={ 'medication' }
+					dialogVisible={ deleteMedicationVisible }
+					handleCancel={ handleCancel }
+					handleDelete={ handleDelete }
+					setDialogVisible={ setDeleteMedicationVisible }
+					title={ tempMedicationData?.medication_name }
+				/>
+			: null
+			}
 		</View>
 	);
 }

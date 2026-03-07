@@ -45,7 +45,7 @@ export const Person = ({ entityData, nav }) =>
 export const MedicalCondition = ({ conditionData }) =>
 {
 	return (
-		<View style={{ marginVertical: 8 }}>
+		<View style={{ marginVertical: 10 }}>
 		{
 			conditionData[0]?.condition_id ?
 			<View>
@@ -67,7 +67,7 @@ export const MedicalCondition = ({ conditionData }) =>
 export const Medication = ({ doctorData, medicationData }) =>
 {
 	return (
-		<View style={{ marginVertical: 8 }}>
+		<View style={{ marginVertical: 10 }}>
 		{
 			medicationData[0]?.medication_id ?
 			<View>
@@ -114,7 +114,7 @@ export const Medication = ({ doctorData, medicationData }) =>
 export const Allergy = ({ allergyData }) =>
 {
 	return (
-		<View style={{ marginVertical: 8 }}>
+		<View style={{ marginVertical: 10 }}>
 		{
 			allergyData[0]?.condition_id ?
 			<View>
@@ -147,7 +147,7 @@ export const Allergy = ({ allergyData }) =>
 export const HealthInsurance = ({ insuranceData }) =>
 {
 	return (
-		<View style={{ marginVertical: 8 }}>
+		<View style={{ marginVertical: 10 }}>
 		{
 			insuranceData[0]?.insurance_id ?
 			<View>
@@ -167,4 +167,4 @@ export const HealthInsurance = ({ insuranceData }) =>
 		}
 		</View>
 	);
-};
+}; 

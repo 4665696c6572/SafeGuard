@@ -1,6 +1,8 @@
 import * as NavigationBar from 'expo-navigation-bar';
-import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { SquareArrowDiagonal01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useEffect, useState } from 'react';
+import { Keyboard, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
@@ -39,7 +41,12 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
-							<Text style={ styles.text }>{ '< >' }</Text>
+							<HugeiconsIcon
+								icon={ SquareArrowDiagonal01Icon }
+								size={ 24 }
+								color="black"
+								strokeWidth={ 1.25 }
+							/>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -183,6 +190,7 @@ export const EditMedicalCondition = ({
 										setEditConditionVisible, setTempConditionData, tempConditionData
 									}) =>
 {
+	// Delete dialog visibility control
 	const [ deleteConditionVisible, setDeleteConditionVisible ] = useState( false );
 
 	// Date Picker
@@ -195,6 +203,28 @@ export const EditMedicalCondition = ({
 		setTempConditionData( prev => ({ ...prev, 'diagnosis_date': date.toISOString( ).slice( 0,10 )}));
 		hideDatePicker( );
 	};
+
+
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
 
 
 	// Form Validation ( Conditions must have an condition name ).
@@ -388,15 +418,19 @@ export const EditMedicalCondition = ({
 
 
 			{/* Delete */}
-			<DeleteDialog
-				buttonVisibleCondition={ tempConditionData?.condition_id }
-				description={ 'condition' }
-				dialogVisible={ deleteConditionVisible }
-				handleCancel={ handleCancel }
-				handleDelete={ handleDelete }
-				setDialogVisible={ setDeleteConditionVisible }
-				title={ tempConditionData?.condition_name }
-			/>
+			{ 
+				!keyboardVisible ?
+				<DeleteDialog
+					buttonVisibleCondition={ tempConditionData?.condition_id }
+					description={ 'condition' }
+					dialogVisible={ deleteConditionVisible }
+					handleCancel={ handleCancel }
+					handleDelete={ handleDelete }
+					setDialogVisible={ setDeleteConditionVisible }
+					title={ tempConditionData?.condition_name }
+				/>
+			: null
+			}
 		</View>
 	);
 }

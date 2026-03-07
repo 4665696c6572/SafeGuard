@@ -1,6 +1,8 @@
 import * as NavigationBar from 'expo-navigation-bar';
-import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { SquareArrowDiagonal01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
@@ -47,7 +49,12 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
-							<Text style={ styles.text }>{ '< >' }</Text>
+							<HugeiconsIcon
+								icon={ SquareArrowDiagonal01Icon }
+								size={ 24 }
+								color="black"
+								strokeWidth={ 1.25 }
+							/>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -197,6 +204,7 @@ export const EditAllergy = ({
 								setEditAllergyVisible, setTempAllergyData, tempAllergyData
 							}) =>
 {
+	// Delete dialog visibility control
 	const [ deleteAllergyVisible, setDeleteAllergyVisible ] = useState( false );
 
 	// Date Picker

@@ -1,6 +1,6 @@
 import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
-import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
@@ -111,6 +111,7 @@ export const EditPerson = ({
 								setTempPersonData, showDeleteButton, tempPersonData
 							}) =>
 {
+	// Delete dialog visibility control
 	const [ deletePersonVisible, setDeletePersonVisible ] = useState( false );
 
 	// Date Picker
@@ -126,12 +127,33 @@ export const EditPerson = ({
 	};
 
 
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
+
+
 	// Form Validation ( Must ( minimally ) have a name )
 	const [ personName, setPersonName ] = useState( tempPersonData?.entity_name ? tempPersonData.entity_name : '' );
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
-
 
 	useEffect(( ) =>
 	{
@@ -375,16 +397,21 @@ export const EditPerson = ({
 				}
 			</View>
 
+
 			{/* Delete */}
-			<DeleteDialog
-				buttonVisibleCondition={ showDeleteButton }
-				description={ 'information' }
-				dialogVisible={ deletePersonVisible }
-				handleCancel={ handleCancel }
-				handleDelete={ handleDelete }
-				setDialogVisible={ setDeletePersonVisible }
-				title={ ' ' }
-			/>
+			{ 
+				!keyboardVisible ?
+				<DeleteDialog
+					buttonVisibleCondition={ showDeleteButton }
+					description={ 'information' }
+					dialogVisible={ deletePersonVisible }
+					handleCancel={ handleCancel }
+					handleDelete={ handleDelete }
+					setDialogVisible={ setDeletePersonVisible }
+					title={ ' ' }
+				/>
+			: null
+			}
 		</View>
 	)
 }

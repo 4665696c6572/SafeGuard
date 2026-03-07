@@ -1,6 +1,6 @@
 import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
 
 import { AddressForm, EmailForm, FaxForm, PhoneForm } from './contactForms.js';
 import { DeleteDialog } from './deleteDialog.js';
@@ -210,20 +210,43 @@ export const EditContact = ({
 								setTempPhoneData, tempAddressData, tempEmailData, tempFaxData, tempPhoneData
 							}) =>
 {
-	// Dialog Controls
+	// Delete dialog visibility controls
 	const [ deleteAddressVisible, setDeleteAddressVisible ] = useState( false );
 	const [ deleteContactVisible, setDeleteContactVisible ] = useState( false );
 	const [ deleteEmailVisible, setDeleteEmailVisible ] = useState( false );
 	const [ deleteFaxVisible, setDeleteFaxVisible ] = useState( false );
 	const [ deletePhoneVisible, setDeletePhoneVisible ] = useState( false );
 
-	// Modal controls
+	// Modal visibility controls
 	const [ addAddressVisible, setAddAddressVisible ] = useState( false );
 	const [ addContactDetailsVisible, setAddContactDetailsVisible ] = useState( false );
 	const [ addEmailVisible, setAddEmailVisible ] = useState( false );
 	const [ addFaxVisible, setAddFaxVisible ] = useState( false );
 	const [ addPhoneVisible, setAddPhoneVisible ] = useState( false );
 	const [ viewNameVisible, setViewNameVisible ] = useState( true );
+
+
+	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+	useEffect( ( ) => 
+	{
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		{
+			setKeyboardVisible( true );
+		});
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		{
+			setKeyboardVisible( false );
+		});
+
+		return ( ) =>
+		{
+			showSubscription.remove( );
+			hideSubscription.remove( );
+		};
+	}, []);
+
 
 	// Form Validation
 	const [ addressItem, setAddressItem ] = useState( tempAddressData?.address_line_one ?? tempAddressData?.city ?? '' );
@@ -497,20 +520,27 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				<DeleteDialog
-					buttonVisibleCondition={ viewNameVisible &&
-											(
-												tempAddressData?.address_id || tempEmailData?.email_id ||
-												tempFaxData?.fax_number_id || tempPhoneData?.phone_number_id
-											)}
-					description={ 'all details' }
-					dialogVisible={ deleteContactVisible }
-					handleCancel={ handleCancel }
-					handleDelete={ handleDelete }
-					setDialogVisible={ setDeleteContactVisible }
-					table={ 'Contact' }
-					title={ params?.contact_name ?? params?.facility }
-				/>
+				{ 
+					!keyboardVisible ?
+					<DeleteDialog
+						buttonVisibleCondition=
+						{ 
+							viewNameVisible &&
+							(
+								tempAddressData?.address_id || tempEmailData?.email_id ||
+								tempFaxData?.fax_number_id || tempPhoneData?.phone_number_id
+							)
+						}
+						description={ 'all details' }
+						dialogVisible={ deleteContactVisible }
+						handleCancel={ handleCancel }
+						handleDelete={ handleDelete }
+						setDialogVisible={ setDeleteContactVisible }
+						table={ 'Contact' }
+						title={ params?.contact_name ?? params?.facility }
+					/>
+				: null
+				}
 			</View>
 		: null
 		}
@@ -574,16 +604,20 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				<DeleteDialog
-					buttonVisibleCondition={ addAddressVisible && tempAddressData.address_id }
-					description={ 'Address' }
-					dialogVisible={ deleteAddressVisible }
-					handleCancel={ handleCancel }
-					handleDelete={ handleDelete }
-					setDialogVisible={ setDeleteAddressVisible }
-					table={ 'Address' }
-					title={ "Address" }
-				/>
+				{ 
+					!keyboardVisible ?
+					<DeleteDialog
+						buttonVisibleCondition={ addAddressVisible && tempAddressData.address_id }
+						description={ 'Address' }
+						dialogVisible={ deleteAddressVisible }
+						handleCancel={ handleCancel }
+						handleDelete={ handleDelete }
+						setDialogVisible={ setDeleteAddressVisible }
+						table={ 'Address' }
+						title={ "Address" }
+					/>
+					:null
+				}
 			</View>
 		: null
 		}
@@ -733,16 +767,21 @@ export const EditContact = ({
 				</View>
 
 
-				<DeleteDialog
-					buttonVisibleCondition={ addEmailVisible && tempEmailData?.email_id }
-					description={ 'email address' }
-					dialogVisible={ deleteEmailVisible }
-					handleCancel={ handleCancel }
-					handleDelete={ handleDelete }
-					setDialogVisible={ setDeleteEmailVisible }
-					table={ 'Email' }
-					title={ 'Email' }
-				/>
+				{/* Delete */}
+				{ 
+					!keyboardVisible ?
+					<DeleteDialog
+						buttonVisibleCondition={ addEmailVisible && tempEmailData?.email_id }
+						description={ 'email address' }
+						dialogVisible={ deleteEmailVisible }
+						handleCancel={ handleCancel }
+						handleDelete={ handleDelete }
+						setDialogVisible={ setDeleteEmailVisible }
+						table={ 'Email' }
+						title={ 'Email' }
+					/>
+				: null
+				}
 			</View>
 		: null
 		}
@@ -802,16 +841,22 @@ export const EditContact = ({
 					}
 				</View>
 
-				<DeleteDialog
-					buttonVisibleCondition={ addFaxVisible && tempFaxData?.fax_number_id }
-					description={ 'fax number' }
-					dialogVisible={ deleteFaxVisible }
-					handleCancel={ handleCancel }
-					handleDelete={ handleDelete }
-					setDialogVisible={ setDeleteFaxVisible }
-					table={ 'Fax' }
-					title={ 'Fax' }
-				/>
+
+				{/* Delete */}
+				{ 
+					!keyboardVisible ?
+					<DeleteDialog
+						buttonVisibleCondition={ addFaxVisible && tempFaxData?.fax_number_id }
+						description={ 'fax number' }
+						dialogVisible={ deleteFaxVisible }
+						handleCancel={ handleCancel }
+						handleDelete={ handleDelete }
+						setDialogVisible={ setDeleteFaxVisible }
+						table={ 'Fax' }
+						title={ 'Fax' }
+					/>
+					: null
+				}
 			</View>
 		: null
 		}
@@ -871,16 +916,22 @@ export const EditContact = ({
 						}
 				</View>
 
-				<DeleteDialog
-					buttonVisibleCondition={ addPhoneVisible && tempPhoneData?.phone_number_id }
-					description={ 'phone number' }
-					dialogVisible={ deletePhoneVisible }
-					handleCancel={ handleCancel }
-					handleDelete={ handleDelete }
-					setDialogVisible={ setDeletePhoneVisible }
-					table={ 'Phone' }
-					title={ 'Phone' }
-				/>
+
+				{/* Delete */}
+				{ 
+					!keyboardVisible ?
+					<DeleteDialog
+						buttonVisibleCondition={ addPhoneVisible && tempPhoneData?.phone_number_id }
+						description={ 'phone number' }
+						dialogVisible={ deletePhoneVisible }
+						handleCancel={ handleCancel }
+						handleDelete={ handleDelete }
+						setDialogVisible={ setDeletePhoneVisible }
+						table={ 'Phone' }
+						title={ 'Phone' }
+					/>
+					: null
+				}
 			</View>
 		: null
 		}

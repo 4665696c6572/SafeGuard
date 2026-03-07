@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 import styles from "../../../styles/styles.js";
@@ -7,82 +7,84 @@ import styles from "../../../styles/styles.js";
 export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressData }) =>
 {
 	return(
-		<View>
-			<TextInput
-				accessibilityLabel='Street address'
-				accessabilityHint='Type in first line of street address.'
-				autoComplete='address-line1'
-				placeholder={ tempAddressData?.address_line_one ? tempAddressData.address_line_one : 'Street address' }
-				style={ styles.text_input }
-				textContentType='streetAddressLine1'
-				onChangeText={ ( text ) =>
-				{
-					setAddressItem( text );
-					setTempAddressData( prev => ({ ...prev, 'address_line_one': text }));
-				}}
-			/>
+		<KeyboardAvoidingView>
+			<ScrollView>
+				<TextInput
+					accessibilityLabel='Street address'
+					accessabilityHint='Type in first line of street address.'
+					autoComplete='address-line1'
+					placeholder={ tempAddressData?.address_line_one ? tempAddressData.address_line_one : 'Street address' }
+					style={ styles.text_input }
+					textContentType='streetAddressLine1'
+					onChangeText={ ( text ) =>
+					{
+						setAddressItem( text );
+						setTempAddressData( prev => ({ ...prev, 'address_line_one': text }));
+					}}
+				/>
 
-			<TextInput
-				accessibilityLabel='Address line two'
-				accessabilityHint='Type in address line two.'
-				autoComplete='address-line2'
-				onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_line_two': text }))}
-				placeholder={ tempAddressData?.address_line_two ? tempAddressData.address_line_two : 'Address line two' }
-				style={ styles.text_input }
-				textContentType='streetAddressLine2'
-			/>
+				<TextInput
+					accessibilityLabel='Address line two'
+					accessabilityHint='Type in address line two.'
+					autoComplete='address-line2'
+					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_line_two': text }))}
+					placeholder={ tempAddressData?.address_line_two ? tempAddressData.address_line_two : 'Address line two' }
+					style={ styles.text_input }
+					textContentType='streetAddressLine2'
+				/>
 
-			<TextInput
-				accessibilityLabel='City'
-				accessabilityHint='Type in city name.'
-				placeholder={ tempAddressData?.city ? tempAddressData.city : 'City' }
-				style={ styles.text_input }
-				textContentType='city'
-				onChangeText={ ( text ) =>
-				{
-					setAddressItem( text );
-					setTempAddressData( prev => ({ ...prev, 'city': text }));
-				}}
-			/>
+				<TextInput
+					accessibilityLabel='City'
+					accessabilityHint='Type in city name.'
+					placeholder={ tempAddressData?.city ? tempAddressData.city : 'City' }
+					style={ styles.text_input }
+					textContentType='city'
+					onChangeText={ ( text ) =>
+					{
+						setAddressItem( text );
+						setTempAddressData( prev => ({ ...prev, 'city': text }));
+					}}
+				/>
 
-			<TextInput
-				accessibilityLabel='State'
-				accessabilityHint='Type in state name or abbreviation.'
-				onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'state': text }))}
-				placeholder={ tempAddressData?.state ? tempAddressData.state : 'State' }
-				style={ styles.text_input }
-				textContentType='state'
-			/>
+				<TextInput
+					accessibilityLabel='State'
+					accessabilityHint='Type in state name or abbreviation.'
+					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'state': text }))}
+					placeholder={ tempAddressData?.state ? tempAddressData.state : 'State' }
+					style={ styles.text_input }
+					textContentType='state'
+				/>
 
-			<TextInput
-				accessibilityLabel='Post code'
-				accessabilityHint='Type in post code.'
-				autoComplete='postal-code'
-				keyboardType='numeric'
-				onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'post_code': text }))}
-				placeholder={ tempAddressData?.post_code ? tempAddressData.post_code : 'Post code' }
-				style={ styles.text_input }
-				textContentType='postalCode'
-			/>
+				<TextInput
+					accessibilityLabel='Post code'
+					accessabilityHint='Type in post code.'
+					autoComplete='postal-code'
+					keyboardType='numeric'
+					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'post_code': text }))}
+					placeholder={ tempAddressData?.post_code ? tempAddressData.post_code : 'Post code' }
+					style={ styles.text_input }
+					textContentType='postalCode'
+				/>
 
-			<TextInput
-				accessibilityLabel='Country'
-				accessabilityHint='Type in country name or abbreviation'
-				autoComplete='country'
-				onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'country': text }))}
-				placeholder={ tempAddressData?.country ? tempAddressData.country : 'Country' }
-				style={ styles.text_input }
-				textContentType='countryName'
-			/>
+				<TextInput
+					accessibilityLabel='Country'
+					accessabilityHint='Type in country name or abbreviation'
+					autoComplete='country'
+					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'country': text }))}
+					placeholder={ tempAddressData?.country ? tempAddressData.country : 'Country' }
+					style={ styles.text_input }
+					textContentType='countryName'
+				/>
 
-			<TextInput
-				accessibilityLabel='Note'
-				accessabilityHint='Type in address note.'
-				onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_note': text }))}
-				placeholder={ tempAddressData?.address_note ? tempAddressData.address_note : 'Note' }
-				style={ styles.text_input }
-			/>
-		</View>
+				<TextInput
+					accessibilityLabel='Note'
+					accessabilityHint='Type in address note.'
+					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_note': text }))}
+					placeholder={ tempAddressData?.address_note ? tempAddressData.address_note : 'Note' }
+					style={ styles.text_input }
+				/>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	)
 }
 
