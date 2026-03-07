@@ -1,4 +1,5 @@
 import { Checkbox } from 'expo-checkbox';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -51,6 +52,7 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 						{
 							setViewMedicationVisible( true );
 							setMedicationIndex( i );
+							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
 					>
 						<Text style={ styles.text }>{ '< >' }</Text>
@@ -59,8 +61,12 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 			)}
 
 				<TouchableOpacity
-					onPress={ ( ) => setEditMedicationVisible( true )}
 					style={ styles.data_button_size }
+					onPress={ ( ) =>
+					{
+						setEditMedicationVisible( true );
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
 				>
 					<Text style={ styles.text_button }>Add new medication</Text>
 				</TouchableOpacity>
@@ -187,6 +193,7 @@ export const ViewMedication = ({
 					{
 						setMedicationIndex( null );
 						setViewMedicationVisible( false );
+						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
@@ -282,6 +289,8 @@ export const EditMedication = ({
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{
+		NavigationBar.setVisibilityAsync( "visible" );
+
 		// If no changes have been made or user presses cancel button, close the edit Modal
 		if
 		(

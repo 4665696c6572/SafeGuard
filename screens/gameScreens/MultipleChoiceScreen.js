@@ -1,9 +1,11 @@
 import * as Haptics from 'expo-haptics';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
+
 
 import { calcAnswerOrder, checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
 import { EndLevelModal } from './components/levelEnd.js';
@@ -13,6 +15,7 @@ import updateLevelData from '../../common/game/database/updateLevelData.js';
 import useLoadLevelData from '../../common/game/hook/useLoadLevelData.js';
 
 import styles from '../../styles/styles.js';
+
 
 const flower = require( '../../assets/flower.png' );
 const frog = require( '../../assets/frog_jump_2.png' );
@@ -60,6 +63,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 			updateGameData( 'Game_Data', db, new_level, levelScore );
 			setTimeout( function( )
 			{
+
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen" );
 			}, 1200 );
@@ -97,7 +101,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: 0 } ]}>
+			<View style={[ styles.game_level_area, {  marginBottom: 0 } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -113,24 +117,27 @@ export default function MultipleChoiceScreen({ navigation, route })
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
 					<View
-						style={ [styles.game_column, { gap: cheerVisible ? 0 : '5%',  paddingBottom: 0 } ]}
+						style={[ styles.game_mc_column, { gap: cheerVisible ? 0 : '5%',  paddingBottom: 0 } ]}
 						key={ entry.question_id }
 					>
 						<View style={{ height: 100 }}>
-							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
+							<Text style={ styles.game_mc_question_text }>{ entry.question }</Text>
 						</View>
 
 						{
 							answerOrder.map(( index ) =>
-							<View key={ answerOrder[index] } style={ styles.multiple_choice_answers }>
+							<View key={ answerOrder[index] } style={ styles.game_mc_answers }>
 								<View style={ styles.game_text_container }>
-									<Text style={ styles.game_text }>{ entry.answers[ answerOrder[index] ] }</Text>
+									<Text style={ styles.game_mc_text }>{ entry.answers[ answerOrder[index] ] }</Text>
 								</View>
 							
 							<TouchableHighlight
 								key = { index }
-								style={[   styles.game_button_round ]}
-								onPress={ ( ) => handleAnswerCheck( entry.answers[0], entry.answers[ answerOrder[index] ], entry.question_id )}
+								style={[ styles.game_button_round ]}
+								onPress={ ( ) => handleAnswerCheck(
+																		entry.answers[0], entry.answers[ answerOrder[index] ],
+																		entry.question_id
+																	)}
 								underlayColor={ underlay }
 								activeOpacity={ 1 }
 							>
@@ -140,10 +147,10 @@ export default function MultipleChoiceScreen({ navigation, route })
 						)}
 					</View>
 				)}
-			</SafeAreaProvider>
+			</View>
 
 			{
-				cheerVisible?
+				cheerVisible ?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

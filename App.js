@@ -1,18 +1,18 @@
 import { SQLiteProvider } from 'expo-sqlite';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StatusBar } from 'expo-status-bar';
+import { Doctor03Icon, MedicalMaskIcon, Medicine02Icon, UserAccountIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import initializeDatabase from './database/initializeDatabase.js';
 
 import { notificationHandlerSetup, requestNotificationPermission, setNotificationChannel } from './common/home/notificationSetup.js';
 
 import HomeScreen from './screens/HomeScreen.js';
-
 import EmergencyDataScreen from './screens/userDataScreens/EmergencyDataScreen.js';
-
 import ContactScreen from './screens/userDataScreens/ContactScreen.js';
 import DoctorScreen from './screens/userDataScreens/DoctorScreen.js';
 import MedicalConditionScreen from './screens/userDataScreens/MedicalConditionScreen.js';
@@ -24,6 +24,10 @@ import MatchingScreen from './screens/gameScreens/MatchingScreen.js';
 import MultipleChoiceScreen from './screens/gameScreens/MultipleChoiceScreen.js';
 import TrueFalseScreen from './screens/gameScreens/TrueFalseScreen.js';
 
+// import LearningHomeScreen from './screens/learningScreens/LearningHomeScreen.js';
+
+
+
 
 const Stack = createNativeStackNavigator( );
 const Tab = createBottomTabNavigator( );
@@ -32,34 +36,62 @@ notificationHandlerSetup( );
 function TabNavigator( )
 {
 	return (
-		<Tab.Navigator screenOptions={{ headerShown: false }} >
+		<Tab.Navigator
+			detachInactiveScreens={true}
+			screenOptions={{
+								headerShown: false,
+								tabBarStyle:
+								{
+									backgroundColor: "#0b3e82ff",
+									paddingTop: 0,
+									height: 50,
+									marginBottom: 0
+								},
+							}}
+			>
 			<Tab.Screen
-				name='Person'
+				name='Personal'
 				component={ PersonScreen }
 				options={{
-							tabBarIcon: ({ color, size }) => (
-								<MaterialCommunityIcons name="account" size={ size } color={ color }/>
+							tabBarIcon: ({ size }) => (
+								<HugeiconsIcon
+									icon={ UserAccountIcon }
+									size={ 24 }
+									color={ '#d1dce4ff' }
+									strokeWidth={ 1.5 }
+								/>
 							),
+							tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
 				}}
 			/>
 
 			<Tab.Screen
-				name='Conditions'
+				name='Condition'
 				component={ MedicalConditionScreen }
 				options={{
-							tabBarIcon: ({ color, size }) => (
-								<MaterialCommunityIcons name="account" size={ size } color={ color }/>
+							tabBarIcon: ({ size }) => (
+								<HugeiconsIcon icon={ MedicalMaskIcon }
+									size={ 24 }
+									color={ '#d1dce4ff' }
+									strokeWidth={ 1.5 }
+								/>
 							),
-				}}			
+							tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4, }
+				}}
 			/>
 
 			<Tab.Screen
 				name='Medication'
 				component={ MedicationScreen }
 				options={{
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={ size } color={ color }/>
+					tabBarIcon: ({ size }) => (
+						<HugeiconsIcon icon={ Medicine02Icon }
+							size={ 24 }
+							color={ '#d1dce4ff' }
+							strokeWidth={ 1.5 }
+						/>
 					),
+					tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
 				}}
 			/>
 
@@ -67,9 +99,14 @@ function TabNavigator( )
 				name='Doctor'
 				component={ DoctorScreen }
 				options={{
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={ size } color={ color }/>
+					tabBarIcon: ({ size }) => (
+						<HugeiconsIcon icon={ Doctor03Icon }
+							size={ 24 }
+							color={ '#d1dce4ff' }
+							strokeWidth={ 1.5 }
+						/>
 					),
+					tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
 				}}
 			/>
 		</Tab.Navigator>
@@ -89,24 +126,30 @@ export default function App( )
 	)( );
 	}, [ ]);
 
+
 	return (
-		<SQLiteProvider databaseName='Safe.db' onInit={ initializeDatabase }>
-			<NavigationContainer>
-				<Stack.Navigator screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="Home" component={ HomeScreen }/>
+		<SafeAreaProvider>
+			<SafeAreaView style={{ flex: 1 }}>
+				<SQLiteProvider databaseName='Safe.db' onInit={ initializeDatabase }>
+					<StatusBar style="automatic" />
+					<NavigationContainer>
+						<Stack.Navigator screenOptions={{ headerShown: false }}>
+							<Stack.Screen name="Home" component={ HomeScreen }/>
 
-					<Stack.Screen name="GameScreen" component={ GameScreen }/>
-					<Stack.Screen name="MatchingScreen" component={ MatchingScreen }/>
-					<Stack.Screen name="MultipleChoiceScreen" component={ MultipleChoiceScreen }/>
-					<Stack.Screen name="TrueFalseScreen" component={ TrueFalseScreen }/>
+							<Stack.Screen name="GameScreen" component={ GameScreen }/>
+							<Stack.Screen name="MatchingScreen" component={ MatchingScreen }/>
+							<Stack.Screen name="MultipleChoiceScreen" component={ MultipleChoiceScreen }/>
+							<Stack.Screen name="TrueFalseScreen" component={ TrueFalseScreen }/>
 
-					<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>
-					<Stack.Screen name="PersonScreen" component={ TabNavigator }/>
-					<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
+							<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>
+							<Stack.Screen name="PersonScreen" component={ TabNavigator }/>
+							<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
 
-					{/* <Stack.Screen name="LearningHomeScreen" component={ LearningHomeScreen }/> */}
-				</Stack.Navigator>
-			</NavigationContainer>
-		</SQLiteProvider>
+							{/* <Stack.Screen name="LearningHomeScreen" component={ LearningHomeScreen }/> */}
+						</Stack.Navigator>
+					</NavigationContainer>
+				</SQLiteProvider>
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

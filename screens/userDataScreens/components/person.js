@@ -1,5 +1,6 @@
-import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
+import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
@@ -9,7 +10,6 @@ import { DeleteDialog } from './deleteDialog.js';
 import styles from "../../../styles/styles";
 
 const underlay_color = '#d1dce4ff';
-
 
 
 export const Person = ({ personData, screen, setEditPersonVisible, setShowDeleteButton, setTempPersonData, showEditButton }) =>
@@ -43,6 +43,7 @@ export const Person = ({ personData, screen, setEditPersonVisible, setShowDelete
 											setEditPersonVisible( true );
 											setShowDeleteButton( true );
 											setTempPersonData( personData[0] );
+											NavigationBar.setVisibilityAsync( "hidden" );
 										}}
 									>
 										<Text style={ styles.text_button }>Edit</Text>
@@ -167,6 +168,8 @@ export const EditPerson = ({
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{	
+		NavigationBar.setVisibilityAsync( "visible" );
+
 		// Don't save if changes have not been made
 		if ( JSON.stringify( personData ) === JSON.stringify( [ tempPersonData ] ) || close == true )
 		{

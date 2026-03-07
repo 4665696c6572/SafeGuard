@@ -67,7 +67,7 @@ const styles = StyleSheet.create(
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
-		marginTop: 38
+		//marginTop: 38
 	},
 	button_end:
 	{
@@ -101,8 +101,6 @@ const styles = StyleSheet.create(
 	{
 		backgroundColor: '#d1dce4ff',
 		flex: 1,
-		marginBottom: 45,
-		marginTop: 38
 	},
 	count_text:
 	{
@@ -164,8 +162,6 @@ const styles = StyleSheet.create(
 		backgroundColor: 'green',
 		flex: 1,
 		justifyContent: 'center',
-		marginBottom: 45,
-		marginTop: 38,
 		paddingLeft: '5%',
 		paddingRight: '5%'
 	},
@@ -230,14 +226,32 @@ const styles = StyleSheet.create(
 		paddingRight: 10,
 		textAlign: 'center',
 	},
-	game_column:
+	game_mc_answers:
 	{
+		alignItems: 'center',
 		flex: 1,
-		gap: '5%',
-		marginBottom: 0,
+		flexDirection: 'row',
+		gap: 10
+	},
+	game_mc_column:
+	{
+		flex: 3,
+		gap: 5,
+		justifyContent: 'space-between',
+		marginBottom: 10,
 		marginTop: 0,
-		paddingBottom: '10%',
 		paddingTop: 0
+	},
+	game_mc_question:
+	{
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start'
+	},
+	game_mc_question_text:
+	{
+		color: '#0b3e82ff',
+		fontSize: 20,
+		fontWeight: '900'
 	},
 	game_frog:
 	{
@@ -247,12 +261,13 @@ const styles = StyleSheet.create(
 	},
 	game_level_area:
 	{
+		flex: 1,
 		gap: '5%',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		marginBottom: '15%',
 		marginLeft: '5%',
 		marginRight: '5%',
-		marginTop: '5%'
+		marginTop: '10%'
 	},
 	game_lily:
 	{
@@ -279,14 +294,14 @@ const styles = StyleSheet.create(
 	{
 		flex: 1,
 		marginBottom: 0,
-		marginTop: 38
+		//marginTop: 38
 	},
-	game_text:
+	game_mc_text:
 	{
 		color: '#0b3e82ff',
 		fontSize: 18,
 		fontWeight: 'bold',
-		textAlign: 'center'
+		textAlign: 'left'
 	},
 	game_text_container:
 	{
@@ -359,24 +374,6 @@ const styles = StyleSheet.create(
 	menu_text:
 	{
 		color: '#454545'
-	},
-	multiple_choice_answers:
-	{
-		alignItems: 'center',
-		flex: 1,
-		flexDirection: 'row',
-		gap: 10
-	},
-	multiple_choice_question:
-	{
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start'
-	},
-	multiple_choice_question_text:
-	{
-		color: '#0b3e82ff',
-		fontSize: 20,
-		fontWeight: '900'
 	},
 	picker:
 	{

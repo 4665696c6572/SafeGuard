@@ -1,7 +1,7 @@
 
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect } from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
@@ -32,7 +32,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 
 
 	return (
-		<ScrollView style={[ styles.container, styles.data_container_view ]}>
+		<ScrollView style={[ styles.container, styles.data_container_view, { paddingTop: '5%'} ]}>
 			<Person
 				entityData={ emergencyData?.person }
 				nav={ ( ) => { navigation.navigate( "PersonScreen", { screen: 'EmergencyDataScreen' })}}

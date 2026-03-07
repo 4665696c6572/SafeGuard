@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 import { checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';
@@ -99,7 +99,7 @@ export default function TrueFalseScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, 
+			<View style={[ styles.game_level_area,
 									{
 										marginBottom: cheerVisible? 0 : '30%',
 										justifyContent: 'flex-end'
@@ -169,10 +169,10 @@ export default function TrueFalseScreen({ navigation, route })
 						</View>
 					</View>
 				)}
-			</SafeAreaProvider>
+			</View>
 
 			{
-				cheerVisible?
+				cheerVisible ?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

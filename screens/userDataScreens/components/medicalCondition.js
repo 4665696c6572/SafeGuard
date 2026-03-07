@@ -1,8 +1,11 @@
+import * as NavigationBar from 'expo-navigation-bar';
 import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { TextInput } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from '@react-native-picker/picker';
+
+import { DeleteDialog } from './deleteDialog.js';
 
 import styles from "../../../styles/styles.js";
 
@@ -33,6 +36,7 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 							{
 								setConditionIndex( i );
 								setViewConditionVisible( true );
+								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
 							<Text style={ styles.text }>{ '< >' }</Text>
@@ -46,8 +50,12 @@ export const MedicalCondition = ({ conditionData, setConditionIndex, setEditCond
 				<TouchableOpacity
 					accessibilityLabel='Add medical conditions button'
 					accessibilityHint={ 'Press to Add new medical condition.' }
-					onPress={ ( ) => setEditConditionVisible( true )}
 					style={ styles.data_button_size }
+					onPress={ ( ) =>
+					{
+						setEditConditionVisible( true );
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
 				>
 					<Text style={ styles.text_button }>Add new medical condition</Text>
 				</TouchableOpacity>
@@ -143,6 +151,7 @@ export const ViewMedicalCondition = ({
 					{
 						setConditionIndex( null );
 						setViewConditionVisible( false );
+						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
@@ -234,6 +243,8 @@ export const EditMedicalCondition = ({
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{
+		NavigationBar.setVisibilityAsync( "visible" );
+
 		// If no changes have been made or user presses cancel button, close the edit Modal
 		if
 		(

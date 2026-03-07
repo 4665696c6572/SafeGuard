@@ -1,4 +1,5 @@
 import { Checkbox } from 'expo-checkbox';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
@@ -27,6 +28,7 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 							{
 								setDoctorIndex( i );
 								setViewDoctorVisible( true );
+								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
 							<Text style={ styles.text }>{ '< >' }</Text>
@@ -36,8 +38,12 @@ export const Doctor = ({ doctorData, setEditDoctorVisible, setDoctorIndex, setVi
 
 
 				<TouchableOpacity
-					onPress={ ( ) => setEditDoctorVisible( true )}
 					style={ styles.data_button_size }
+					onPress={ ( ) =>
+					{
+						setEditDoctorVisible( true );
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
 				>
 					<Text style={ styles.text_button }>Add new doctor</Text>
 				</TouchableOpacity>
@@ -105,6 +111,7 @@ export const ViewDoctor = ({
 						{
 							setDoctorIndex( null );
 							setViewDoctorVisible( false );
+							NavigationBar.setVisibilityAsync( "visible" );
 						}}
 					>
 						<Text style={ styles.save_button_text }>Close</Text>
@@ -149,7 +156,6 @@ export const ViewDoctor = ({
 };
 
 
-
 // For adding or editing
 export const EditDoctor = ({
 								deleteEntry, doctorData, doctorIndex, saveEntry, setDoctorIndex,
@@ -178,7 +184,7 @@ export const EditDoctor = ({
 		let errors = {};
 
 	// Validate name field
-	if ( doctorName == '' )     errors.doctorName = 'Name is required.';
+	if ( doctorName == '' )    errors.doctorName = 'Name is required.';
 
 	setErrors( errors );
 	setIsFormValid( Object.keys( errors ).length === 0 );
@@ -201,6 +207,8 @@ export const EditDoctor = ({
 
 	const handlePress = ( close, shouldNavigate ) =>
 	{
+		NavigationBar.setVisibilityAsync( "visible" );
+
 		let prev_data = ( doctorIndex != null ) ? JSON.stringify( doctorData[doctorIndex] ) : null;
 
 		if ( prev_data === JSON.stringify( tempDoctorData ) || close == true )
@@ -239,8 +247,7 @@ export const EditDoctor = ({
 					onChangeText={ ( text ) =>
 					{
 						setDoctorName( text );
-						setTempDoctorData( prev => ({ ...prev, 'entity_name': text }));
-						setTempDoctorData( prev => ({ ...prev, 'entity_type': 'Doctor' }));
+						setTempDoctorData( prev => ({ ...prev, 'entity_name': text, 'entity_type': 'Doctor' }));
 					}}
 				/>
 
@@ -332,7 +339,7 @@ export const EditDoctor = ({
 			{
 				showValidationError ?
 				<View style={ styles.alert_row }>
-					<Text style={ styles.alert }>{ errors.doctorName }</Text>
+					<Text style={[ styles.alert, styles.text ]}>{ errors.doctorName }</Text>
 				</View>
 			: null
 			}

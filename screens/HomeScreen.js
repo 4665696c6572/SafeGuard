@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
 
 import fetchWeatherData from '../common/home/fetchWeather.js';
@@ -99,7 +99,7 @@ const HomeScreen = ({ navigation }) =>
 
 
 	return (
-		<SafeAreaProvider style={ styles.container }>
+		<View style={[ styles.container, { justifyContent: 'space-between'} ]}>
 		{ errorMessage != null ? <Text>{ errorMessage }</Text> : null }
 
 		{
@@ -155,7 +155,7 @@ const HomeScreen = ({ navigation }) =>
 			: null
 			}
 			</View>
-		</SafeAreaProvider>
+		</View>
 	)
 }
 

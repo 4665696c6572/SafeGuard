@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 import {
@@ -86,18 +86,21 @@ export default function MatchingScreen({ navigation, route })
 
 	function handleAnswerCheck( question_id, answer_id, question_row )
 	{
-		if(( roundStartIndex == questions_per_level * 0.4 && score >= 3 ))
-		{
-			setCheerVisible( true );
-			setTimeout( function( )
-			{
-				setCheerVisible( false );
-			}, 1000 );
-		}
-
 		if ( checkAnswer( question_id, answer_id ))
 		{
 			setAnsweredCorrectly( updateResultArray( answeredCorrectly, question_row ));
+			if
+			((
+				roundStartIndex == ( Math.floor( questions_per_level * 0.4 ) - 1)
+				&& levelScore >= 3 && currentNumber == 4 
+			))
+			{
+				setCheerVisible( true );
+				setTimeout( function( )
+				{
+					setCheerVisible( false );
+				}, 1000 );
+			}
 		}
 		else Haptics.selectionAsync( );
 		if ( answer_id != question_id )    return;
@@ -113,7 +116,7 @@ export default function MatchingScreen({ navigation, route })
 
 	return (
 		<View style={ styles.container }>
-			<SafeAreaProvider style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
+			<View style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -178,10 +181,10 @@ export default function MatchingScreen({ navigation, route })
 				}
 				</View>
 			)}
-			</SafeAreaProvider>
+			</View>
 
 			{
-				cheerVisible?
+				cheerVisible ?
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}

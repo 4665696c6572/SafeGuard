@@ -1,3 +1,4 @@
+import * as NavigationBar from 'expo-navigation-bar';
 import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { TextInput } from 'react-native-paper';
@@ -43,6 +44,7 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 							{
 								setViewAllergyVisible( true );
 								setAllergyIndex( i );
+								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
 						>
 							<Text style={ styles.text }>{ '< >' }</Text>
@@ -54,7 +56,11 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 			}
 
 				<TouchableOpacity
-					onPress={ ( ) => setEditAllergyVisible( true )}
+					onPress={ ( ) =>
+					{
+						setEditAllergyVisible( true );
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
 					style={ styles.data_button_size }
 				>
 					<Text style={ styles.text_button }>Add new allergy</Text>
@@ -159,6 +165,7 @@ export const ViewAllergy = ({
 					{
 						setAllergyIndex( null );
 						setViewAllergyVisible( false );
+						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
@@ -244,6 +251,7 @@ export const EditAllergy = ({
 	// Close / Save button handler for Edit modal
 	function handlePress( close )
 	{
+		NavigationBar.setVisibilityAsync( "visible" );
 		// If no changes have been made or user presses cancel button, close the edit Modal
 		if
 		(

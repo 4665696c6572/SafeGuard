@@ -43,14 +43,14 @@ export const EndLevelModal = ({ levelComplete, levelScore }) =>
 	return (
 	<Modal animationType='slide' color='#d1dce4ff' visible={ levelComplete } >
 		<View style={ styles.cheer_container }>
-			{ 
-				levelScore != 0 ? 
+			{
+				levelScore != 0 ?
 				<>
 					<Text style={ styles.score_text }>Final score</Text>
 					<Text style={ styles.score_text }>{ levelScore }</Text>
 					<Image source={ frog } style={ styles.cheer_image }/>
 				</>
-				: 
+				:
 				<Text style={ styles.score_text }>Small steps still count. Tomorrow’s another chance.</Text>
 			}
 		</View>

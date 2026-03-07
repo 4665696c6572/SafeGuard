@@ -1,6 +1,5 @@
 export default function splitData( entityData )
 {
-	console.log(entityData)
 	let address =
 	{
 		entity_id: entityData[0]?.entity_id,

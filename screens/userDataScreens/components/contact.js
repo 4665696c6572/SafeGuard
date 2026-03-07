@@ -1,3 +1,4 @@
+import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
@@ -167,6 +168,7 @@ export const ViewContact = ({
 					{
 						setViewContactVisible( false );
 						handleNavigation( );
+						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
@@ -342,7 +344,8 @@ export const EditContact = ({
 
 	function handlePress( close )
 	{
-	
+		NavigationBar.setVisibilityAsync( "visible" );
+
 		// If no changes have been made, close the edit Modal
 		if  (
 				( JSON.stringify( contactData.address ) === JSON.stringify( tempAddressData )) &&

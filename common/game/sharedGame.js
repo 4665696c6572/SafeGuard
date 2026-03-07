@@ -124,7 +124,7 @@ export function countStreakLength( streak_history )
 	let streak_length = 0;
 
 	// No streak
-	if 
+	if
 	(
 		streak_history?.[0] == undefined ||
 		differenceInCalendarDays( today, new Date( streak_history?.[0]?.date_played ) ) > 1
@@ -251,7 +251,7 @@ export function pulse( pulseAnimation )
  * Assigns level buttons.
  * future levels are a lily pad.
  * Past levels are initially a lily pad.
- * Upon completion of the category, 
+ * Upon completion of the category,
  * past levels display the category badge.
  * The current level is a frog & a lily pad
  */

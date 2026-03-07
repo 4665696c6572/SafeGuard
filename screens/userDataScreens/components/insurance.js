@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import * as NavigationBar from 'expo-navigation-bar';
 import { ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { TextInput } from 'react-native-paper';
@@ -30,6 +31,7 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 						{
 							setInsuranceIndex( i );
 							setViewInsuranceVisible( true );
+							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
 					>
 						<Text style={ styles.text }>{ '< >' }</Text>
@@ -40,8 +42,12 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 				<TouchableOpacity
 					accessibilityLabel='Add button'
 					accessibilityHint='Press to add new health insurance details.'
-					onPress={ ( ) => setEditInsuranceVisible( true )}
 					style={ styles.data_button_size }
+					onPress={ ( ) =>
+					{
+						setEditInsuranceVisible( true );
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
 				>
 					<Text style={ styles.text_button }>Add new insurance</Text>
 				</TouchableOpacity>
@@ -112,6 +118,7 @@ export const ViewInsurance = ({
 					{
 						setInsuranceIndex( null );
 						setViewInsuranceVisible( false );
+						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
@@ -224,6 +231,8 @@ export const EditInsurance = ({
 
 	const handlePress = ( close, shouldNavigate ) =>
 	{
+		NavigationBar.setVisibilityAsync("visible");
+
 		let prev_data = ( insuranceIndex != null ) ? JSON.stringify( insuranceData[insuranceIndex]) : undefined;
 
 		// If no changes have been made or user presses cancel button, close the edit Modal
@@ -261,8 +270,7 @@ export const EditInsurance = ({
 					onChangeText={( text ) =>
 					{
 						setCompanyName( text );
-						setTempInsuranceData( prev => ({ ...prev, 'entity_name': text }));
-						setTempInsuranceData( prev => ({ ...prev, 'insurance_type': 'Health' }));
+						setTempInsuranceData( prev => ({ ...prev, 'entity_name': text, 'insurance_type': 'Health' }));
 					}}
 				/>
 

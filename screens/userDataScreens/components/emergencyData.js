@@ -7,7 +7,7 @@ import styles from "../../../styles/styles";
 export const Person = ({ entityData, nav }) =>
 {
 	return (
-		<View style={{ marginVertical: 8 }}>
+		<View>
 		{
 			entityData[0]?.entity_name ?
 			<View>
@@ -67,10 +67,10 @@ export const MedicalCondition = ({ conditionData }) =>
 export const Medication = ({ doctorData, medicationData }) =>
 {
 	return (
-		<View>
+		<View style={{ marginVertical: 8 }}>
 		{
 			medicationData[0]?.medication_id ?
-			<View style={{ marginVertical: 8 }}>
+			<View>
 				<Text style={ styles.title_bar }>Medications</Text>
 				{
 					medicationData.map(( medication, i ) =>
