@@ -37,76 +37,99 @@ function TabNavigator( )
 {
 	return (
 		<Tab.Navigator
+			shifting={false}
+			labeled={true}
 			detachInactiveScreens={true}
-			screenOptions={{
-								headerShown: false,
-								tabBarStyle:
-								{
-									backgroundColor: "#0b3e82ff",
-									paddingTop: 0,
-									height: 50,
-									marginBottom: 0
-								},
-							}}
+			screenOptions=
+			{{
+				headerShown: false,
+				tabBarActiveTintColor: '#d1dce4ff',
+				tabBarInactiveTintColor: '#d1dce4ff',
+				tabBarLabelStyle: 
+				{
+					color: '#d1dce4ff',
+					fontSize: 13,
+					marginTop: -4
+				},
+				tabBarShowLabel: true,
+				tabBarStyle:
+				{
+					backgroundColor: '#0b3e82ff',
+					height: 50,
+					paddingBottom: 0,
+					paddingTop: 0
+				},
+			}}
 			>
 			<Tab.Screen
 				name='Personal'
 				component={ PersonScreen }
-				options={{
-							tabBarIcon: ({ size }) => (
-								<HugeiconsIcon
-									icon={ UserAccountIcon }
-									size={ 24 }
-									color={ '#d1dce4ff' }
-									strokeWidth={ 1.5 }
-								/>
-							),
-							tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
+				options=
+				{{
+					tabBarIcon: ({ color, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ UserAccountIcon }
+							size={ size }									
+							strokeWidth={ 1.5 }
+						/>
+					),
+					tabBarLabel:'Personal'
 				}}
 			/>
 
 			<Tab.Screen
 				name='Condition'
 				component={ MedicalConditionScreen }
-				options={{
-							tabBarIcon: ({ size }) => (
-								<HugeiconsIcon icon={ MedicalMaskIcon }
-									size={ 24 }
-									color={ '#d1dce4ff' }
-									strokeWidth={ 1.5 }
-								/>
-							),
-							tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4, }
+				options=
+				{{
+					tabBarIcon: ({ color, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ MedicalMaskIcon }
+							size={ size }	
+							strokeWidth={ 1.5 }
+						/>
+					),
+					tabBarLabel:'Condition'
 				}}
 			/>
 
 			<Tab.Screen
 				name='Medication'
 				component={ MedicationScreen }
-				options={{
-					tabBarIcon: ({ size }) => (
-						<HugeiconsIcon icon={ Medicine02Icon }
-							size={ 24 }
-							color={ '#d1dce4ff' }
+				options=
+				{{
+					tabBarIcon: ({ color, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ Medicine02Icon }
+							size={ size }	
 							strokeWidth={ 1.5 }
 						/>
 					),
-					tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
+					tabBarLabel:'Medication'
 				}}
 			/>
 
 			<Tab.Screen
 				name='Doctor'
 				component={ DoctorScreen }
-				options={{
-					tabBarIcon: ({ size }) => (
-						<HugeiconsIcon icon={ Doctor03Icon }
-							size={ 24 }
-							color={ '#d1dce4ff' }
+				options=
+				{{
+					tabBarIcon: ({ color, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ Doctor03Icon }
+							size={ size }	
 							strokeWidth={ 1.5 }
 						/>
 					),
-					tabBarLabelStyle: { color: '#d1dce4ff', fontSize: 13, marginTop: -4 }
+					tabBarLabel:'Doctor'
 				}}
 			/>
 		</Tab.Navigator>
@@ -129,9 +152,9 @@ export default function App( )
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={{ flex: 1 }}>
+			<SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
 				<SQLiteProvider databaseName='Safe.db' onInit={ initializeDatabase }>
-					<StatusBar style="automatic" />
+					{/* <StatusBar style="automatic" /> */}
 					<NavigationContainer>
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
 							<Stack.Screen name="Home" component={ HomeScreen }/>

@@ -63,10 +63,13 @@ const DoctorScreen = ({ navigation, route }) =>
 	}
 
 
-	if ( loadingDoctorData )    return <ActivityIndicator/>;
-
 	return (
 		<View style={ styles.bottom_tab_container }>
+		{
+			loadingDoctorData ?
+			<ActivityIndicator />
+		:
+			<>
 			<Doctor
 				doctorData={ doctorData }
 				setEditDoctorVisible={ setEditDoctorVisible }
@@ -99,6 +102,8 @@ const DoctorScreen = ({ navigation, route }) =>
 					tempDoctorData={ tempDoctorData }
 				/>
 			</Modal>
+			</>
+		}
 		</View>
 	);
 }

@@ -178,13 +178,13 @@ export const EditDoctor = ({
 	// sed to hide delete button when keyboard opens so it doesn't overlap form
 	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
 
-	useEffect( ( ) => 
+	useEffect( ( ) =>
 	{
-		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () =>
 		{
 			setKeyboardVisible( true );
 		});
-		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () =>
 		{
 			setKeyboardVisible( false );
 		});
@@ -355,7 +355,7 @@ export const EditDoctor = ({
 
 
 			{/* Delete */}
-			{ 
+			{
 				!keyboardVisible ?
 				<DeleteDialog
 					buttonVisibleCondition={ tempDoctorData?.entity_id }

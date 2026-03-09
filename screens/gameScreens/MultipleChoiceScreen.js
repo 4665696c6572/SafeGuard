@@ -1,9 +1,7 @@
 import * as Haptics from 'expo-haptics';
-import * as NavigationBar from 'expo-navigation-bar';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 

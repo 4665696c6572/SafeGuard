@@ -2,7 +2,6 @@ import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 import { checkAnswer, checkLevelComplete, updateLevel } from '../../common/game/sharedGame.js';

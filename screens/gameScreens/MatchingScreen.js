@@ -2,7 +2,6 @@ import * as Haptics from 'expo-haptics';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
 import {
@@ -92,7 +91,7 @@ export default function MatchingScreen({ navigation, route })
 			if
 			((
 				roundStartIndex == ( Math.floor( questions_per_level * 0.4 ) - 1)
-				&& levelScore >= 3 && currentNumber == 4 
+				&& levelScore >= 3 && currentNumber == 4
 			))
 			{
 				setCheerVisible( true );

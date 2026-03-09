@@ -73,10 +73,13 @@ const PersonScreen = ({ navigation, route }) =>
 	}
 
 
-	if ( loadingPersonData || loadingInsuranceData )    return <ActivityIndicator/>;
-
 	return (
 		<View style={ styles.bottom_tab_container }>
+		{
+			( loadingPersonData || loadingInsuranceData ) ?
+			<ActivityIndicator />
+		:
+			<>
 			<Person
 				personData={ personData }
 				setEditPersonVisible={ setEditPersonVisible }
@@ -130,6 +133,8 @@ const PersonScreen = ({ navigation, route }) =>
 					tempInsuranceData={ tempInsuranceData }
 				/>
 			</Modal>
+			</>
+		}
 		</View>
 	);
 }

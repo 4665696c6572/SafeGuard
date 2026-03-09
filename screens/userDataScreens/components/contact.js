@@ -229,13 +229,13 @@ export const EditContact = ({
 	// sed to hide delete button when keyboard opens so it doesn't overlap form
 	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
 
-	useEffect( ( ) => 
+	useEffect( ( ) =>
 	{
-		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () => 
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () =>
 		{
 			setKeyboardVisible( true );
 		});
-		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () => 
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () =>
 		{
 			setKeyboardVisible( false );
 		});
@@ -520,11 +520,11 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				{ 
+				{
 					!keyboardVisible ?
 					<DeleteDialog
 						buttonVisibleCondition=
-						{ 
+						{
 							viewNameVisible &&
 							(
 								tempAddressData?.address_id || tempEmailData?.email_id ||
@@ -604,7 +604,7 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				{ 
+				{
 					!keyboardVisible ?
 					<DeleteDialog
 						buttonVisibleCondition={ addAddressVisible && tempAddressData.address_id }
@@ -768,7 +768,7 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				{ 
+				{
 					!keyboardVisible ?
 					<DeleteDialog
 						buttonVisibleCondition={ addEmailVisible && tempEmailData?.email_id }
@@ -843,7 +843,7 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				{ 
+				{
 					!keyboardVisible ?
 					<DeleteDialog
 						buttonVisibleCondition={ addFaxVisible && tempFaxData?.fax_number_id }
@@ -918,7 +918,7 @@ export const EditContact = ({
 
 
 				{/* Delete */}
-				{ 
+				{
 					!keyboardVisible ?
 					<DeleteDialog
 						buttonVisibleCondition={ addPhoneVisible && tempPhoneData?.phone_number_id }

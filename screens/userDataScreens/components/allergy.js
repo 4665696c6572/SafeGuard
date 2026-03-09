@@ -321,7 +321,12 @@ export const EditAllergy = ({
 						<Picker.Item accessibilityLabel='menuitem' label='Mild' value='Mild' />
 						<Picker.Item accessibilityLabel='menuitem' label='Moderate' value='Moderate' />
 						<Picker.Item accessibilityLabel='menuitem' label='Severe' value='Severe' />
-						<Picker.Item accessibilityLabel='menuitem' color='#7e0404' label='Life Threatening' value='Life Threatening' />
+						<Picker.Item
+							accessibilityLabel='menuitem'
+							color='#7e0404'
+							label='Life Threatening'
+							value='Life Threatening'
+						/>
 					</Picker>
 				</View>
 

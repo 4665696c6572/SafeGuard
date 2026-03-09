@@ -63,18 +63,14 @@ const MedicalConditionScreen = ( ) =>
 	}
 
 
-	if
-	(
-		loadingAllergyData || loadingConditionData ||
-		loadingDoctorData || loadingMedicationData
-	)
-	{
-		return <ActivityIndicator/>;
-	}
-
-
 	return(
 		<View style={ styles.bottom_tab_container }>
+		{
+			( 	loadingAllergyData || loadingConditionData ||
+				loadingDoctorData || loadingMedicationData 		) ?
+				<ActivityIndicator />
+		:
+			<>
 			<ScrollView>
 				{/* Medical Condition */}
 				<MedicalCondition
@@ -150,6 +146,8 @@ const MedicalConditionScreen = ( ) =>
 					/>
 				</Modal>
 			</ScrollView>
+			</>
+		}
 		</View>
 	)
 };
