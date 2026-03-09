@@ -294,8 +294,9 @@ export const EditAllergy = ({
 				<TextInput
 					accessibilityLabel='Allergen name'
 					accessibilityHint='Type in name of allergen.'
-					style={ styles.text_input }
+					maxLength={ 100 }
 					placeholder={ tempAllergyData?.allergen ? tempAllergyData.allergen : 'Allergen name' }
+					style={ styles.text_input }
 					onChangeText={ ( text ) =>
 					{
 						setAllergenName( text );
@@ -318,11 +319,11 @@ export const EditAllergy = ({
 						}}
 					>
 						<Picker.Item color='black' enabled={ false } label='Severity' value='' />
-						<Picker.Item accessibilityLabel='menuitem' label='Mild' value='Mild' />
-						<Picker.Item accessibilityLabel='menuitem' label='Moderate' value='Moderate' />
-						<Picker.Item accessibilityLabel='menuitem' label='Severe' value='Severe' />
+						<Picker.Item accessibilityRole='menuitem' label='Mild' value='Mild' />
+						<Picker.Item accessibilityRole='menuitem' label='Moderate' value='Moderate' />
+						<Picker.Item accessibilityRole='menuitem' label='Severe' value='Severe' />
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							color='#7e0404'
 							label='Life Threatening'
 							value='Life Threatening'
@@ -379,6 +380,7 @@ export const EditAllergy = ({
 				<TextInput
 					accessibilityLabel='Allergy notes'
 					accessibilityHint='Type in allergy notes.'
+					maxLength={ 100 }
 					placeholder={ tempAllergyData?.condition_note ? tempAllergyData.condition_note : 'Notes' }
 					style={ styles.text_input }
 					onChangeText={ ( text ) =>

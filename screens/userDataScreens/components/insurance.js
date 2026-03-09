@@ -295,8 +295,9 @@ export const EditInsurance = ({
 				<TextInput
 					accessibilityLabel='Insurance company'
 					accessibilityHint='Type in name of insurance company.'
-					style={ styles.text_input }
+					maxLength={ 100 }
 					placeholder={ tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : 'Insurance company name' }
+					style={ styles.text_input }
 					onChangeText={( text ) =>
 					{
 						setCompanyName( text );
@@ -307,6 +308,7 @@ export const EditInsurance = ({
 				<TextInput
 					accessibilityLabel='Insurance policy number'
 					accessibilityHint='Type in insurance policy number.'
+					maxLength={ 100 }
 					onChangeText={( text ) => setTempInsuranceData( prev => ({ ...prev, 'policy_number': text }))}
 					placeholder={ tempInsuranceData?.policy_number ? tempInsuranceData.policy_number : 'Policy Number' }
 					style={ styles.text_input }
@@ -338,6 +340,7 @@ export const EditInsurance = ({
 					accessibilityLabel='Insurance note'
 					accessibilityHint='Type in an note about this insurance.'
 					onChangeText={( text ) => setTempInsuranceData( prev => ({ ...prev, 'insurance_note' : text }))}
+					maxLength={ 100 }
 					placeholder={ tempInsuranceData?.insurance_note ? tempInsuranceData.insurance_note : 'Notes' }
 					style={ styles.text_input }
 				/>

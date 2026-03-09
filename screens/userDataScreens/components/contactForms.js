@@ -13,6 +13,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessibilityLabel='Street address'
 					accessabilityHint='Type in first line of street address.'
 					autoComplete='address-line1'
+					maxLength={ 100 }
 					placeholder={ tempAddressData?.address_line_one ? tempAddressData.address_line_one : 'Street address' }
 					style={ styles.text_input }
 					textContentType='streetAddressLine1'
@@ -27,6 +28,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessibilityLabel='Address line two'
 					accessabilityHint='Type in address line two.'
 					autoComplete='address-line2'
+					maxLength={ 100 }
 					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_line_two': text }))}
 					placeholder={ tempAddressData?.address_line_two ? tempAddressData.address_line_two : 'Address line two' }
 					style={ styles.text_input }
@@ -36,6 +38,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='City'
 					accessabilityHint='Type in city name.'
+					maxLength={ 100 }
 					placeholder={ tempAddressData?.city ? tempAddressData.city : 'City' }
 					style={ styles.text_input }
 					textContentType='city'
@@ -49,6 +52,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='State'
 					accessabilityHint='Type in state name or abbreviation.'
+					maxLength={ 100 }
 					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'state': text }))}
 					placeholder={ tempAddressData?.state ? tempAddressData.state : 'State' }
 					style={ styles.text_input }
@@ -61,6 +65,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					autoComplete='postal-code'
 					keyboardType='numeric'
 					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'post_code': text }))}
+					maxLength={ 100 }
 					placeholder={ tempAddressData?.post_code ? tempAddressData.post_code : 'Post code' }
 					style={ styles.text_input }
 					textContentType='postalCode'
@@ -71,6 +76,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessabilityHint='Type in country name or abbreviation'
 					autoComplete='country'
 					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'country': text }))}
+					maxLength={ 100 }
 					placeholder={ tempAddressData?.country ? tempAddressData.country : 'Country' }
 					style={ styles.text_input }
 					textContentType='countryName'
@@ -80,6 +86,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessibilityLabel='Note'
 					accessabilityHint='Type in address note.'
 					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_note': text }))}
+					maxLength={ 100 }
 					placeholder={ tempAddressData?.address_note ? tempAddressData.address_note : 'Note' }
 					style={ styles.text_input }
 				/>

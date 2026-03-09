@@ -310,8 +310,9 @@ export const EditMedicalCondition = ({
 				<TextInput
 					accessibilityLabel='Condition name'
 					accessibilityHint='Type in name of medical condition.'
-					style={ styles.text_input }
+					maxLength={ 100 }
 					placeholder={ tempConditionData?.condition_name ? tempConditionData.condition_name : 'Condition Name' }
+					style={ styles.text_input }
 					onChangeText={ ( text ) =>
 					{
 						setConditionName( text );

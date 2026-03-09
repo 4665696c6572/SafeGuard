@@ -66,6 +66,8 @@ const styles = StyleSheet.create(
 	bottom_tab_container:
 	{
 		backgroundColor: '#d1dce4ff',
+		borderColor: '#0b3e82ff',
+		borderTopWidth: 5,
 		flex: 1,
 		//marginTop: 38
 	},
@@ -100,6 +102,9 @@ const styles = StyleSheet.create(
 	container:
 	{
 		backgroundColor: '#d1dce4ff',
+		borderBottomWidth: 5, // ~~~
+		borderColor: '#0b3e82ff',
+		borderTopWidth: 5,
 		flex: 1,
 	},
 	count_text:

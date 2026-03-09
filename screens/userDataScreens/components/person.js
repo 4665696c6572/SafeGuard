@@ -220,8 +220,9 @@ export const EditPerson = ({
 			<View style={{ flex: 3}}>
 				<TextInput
 					accessibilityLabel='Full user name'
-					style={ styles.text_input }
+					maxLength={ 100 }
 					placeholder={ tempPersonData?.entity_name ? tempPersonData.entity_name : 'Full Name' }
+					style={ styles.text_input }
 					onChangeText={ ( text ) =>
 					{
 						setPersonName( text );
@@ -266,17 +267,17 @@ export const EditPerson = ({
 							value=''
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='Male'
 							value='Male'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='Female'
 							value='Female'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='Prefer not to say.'
 							value='Prefer not to say.'
 						/>
@@ -286,17 +287,19 @@ export const EditPerson = ({
 				<TextInput
 					accessibilityLabel='Height'
 					accessibilityHint='Type in your height.'
-					style={ styles.text_input }
-					placeholder={ tempPersonData?.height?tempPersonData.height :'height' }
+					maxLength={ 100 }
 					onChangeText={ ( text ) => setTempPersonData( prev => ({ ...prev, 'height': text }))}
+					placeholder={ tempPersonData?.height?tempPersonData.height :'height' }
+					style={ styles.text_input }
 				/>
 
 				<TextInput
 					accessibilityLabel='Weight'
 					accessibilityHint='Type in your weight.'
-					style={ styles.text_input }
-					placeholder={ tempPersonData?.weight?tempPersonData.weight : 'weight' }
+					maxLength={ 100 }
 					onChangeText={ ( text ) => setTempPersonData( prev => ({ ...prev, 'weight': text }))}
+					placeholder={ tempPersonData?.weight?tempPersonData.weight : 'weight' }
+					style={ styles.text_input }
 				/>
 
 				<View style={ styles.picker_view }>
@@ -317,47 +320,47 @@ export const EditPerson = ({
 							value=''
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='A+'
 							value='A+'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='A-'
 							value='A-'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='B+'
 							value='B+'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='B-'
 							value='B-'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='AB+'
 							value='AB+'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='AB-'
 							value='AB-'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='O+'
 							value='O+'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='O-'
 							value='O-'
 						/>
 						<Picker.Item
-							accessibilityLabel='menuitem'
+							accessibilityRole='menuitem'
 							label='Unknown'
 							value='Unknown'
 						/>

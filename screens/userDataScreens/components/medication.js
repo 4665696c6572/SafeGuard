@@ -355,8 +355,9 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication name'
 					accessibilityHint='Type in name of medication.'
-					style={ styles.text_input }
+					maxLength={ 100 }
 					placeholder={ tempMedicationData?.medication_name ? tempMedicationData.medication_name : 'Medication name' }
+					style={ styles.text_input }
 					onChangeText={( text ) =>
 					{
 						setMedicationName( text );
@@ -367,17 +368,19 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication strength'
 					accessibilityHint='Type in strength of medication ( example: 500 or 500mg ).'
-					style={ styles.text_input }
-					placeholder={ tempMedicationData?.strength ? tempMedicationData.strength : 'Strength' }
+					maxLength={ 100 }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'strength': text }))}
+					placeholder={ tempMedicationData?.strength ? tempMedicationData.strength : 'Strength' }
+					style={ styles.text_input }
 				/>
 
 				<TextInput
 					accessibilityLabel='Medication frequency'
 					accessibilityHint='Type in dosage frequency ( example: every eight hours ).'
-					style={ styles.text_input }
-					placeholder={ tempMedicationData?.frequency ? tempMedicationData.frequency : 'Frequency' }
+					maxLength={ 100 }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'frequency': text }))}
+					placeholder={ tempMedicationData?.frequency ? tempMedicationData.frequency : 'Frequency' }
+					style={ styles.text_input }
 				/>
 
 				{/* Select existing Doctor */}
@@ -465,9 +468,10 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Notes'
 					accessibilityHint='Type in medication relevant notes.'
-					style={ styles.text_input }
-					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
+					maxLength={ 100 }
 					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
+					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
+					style={ styles.text_input }
 				/>
 
 				<View style={ styles.checkbox_row }>

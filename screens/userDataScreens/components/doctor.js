@@ -273,6 +273,7 @@ export const EditDoctor = ({
 				<TextInput
 					accessibilityLabel="Doctor's name"
 					accessibilityHint='Type in name of doctor.'
+					maxLength={ 100 }
 					placeholder={ tempDoctorData?.entity_name ? tempDoctorData.entity_name : "Doctor's name" }
 					style={ styles.text_input }
 					onChangeText={ ( text ) =>
@@ -286,6 +287,7 @@ export const EditDoctor = ({
 					accessibilityLabel='Specialty'
 					accessibilityHint="Enter doctor's specialty."
 					onChangeText={ ( text ) => setTempDoctorData( prev => ({ ...prev, 'specialty': text }))}
+					maxLength={ 100 }
 					placeholder={ tempDoctorData?.specialty ? tempDoctorData.specialty : 'Specialty' }
 					style={ styles.text_input }
 				/>
@@ -295,6 +297,7 @@ export const EditDoctor = ({
 					accessibilityHint='Type in the name of the facility that the doctor works at.'
 					style={ styles.text_input }
 					onChangeText={ ( text ) => setTempDoctorData( prev => ({ ...prev, 'facility_name': text }))}
+					maxLength={ 100 }
 					placeholder={ tempDoctorData?.facility_name ? tempDoctorData.facility_name : 'Facility name' }
 					textContentType='name'
 				/>
