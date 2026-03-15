@@ -1,3 +1,4 @@
+// Formats data for use in contact screen
 export default function splitData( entityData )
 {
 	let address =

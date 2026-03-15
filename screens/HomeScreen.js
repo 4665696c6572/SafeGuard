@@ -1,12 +1,17 @@
 import * as Location from 'expo-location';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import { useIsFocused } from '@react-navigation/native';
 
+
+import
+{
+	fetchAlertZone, fetchAlertData,
+	findHighestSeverity, scheduleAlertNotification
+}	from '../common/home/alertFunctions.js';
 import fetchWeatherData from '../common/home/fetchWeather.js';
-import { fetchAlertZone, fetchAlertData, findHighestSeverity, scheduleAlertNotification } from '../common/home/alertFunctions.js';
 import { Weather } from './components/weather.js';
 
 import styles from '../styles/styles.js';
@@ -21,9 +26,12 @@ const HomeScreen = ({ navigation }) =>
 	const [ loadingAlertData, setLoadingAlertData ] = useState( true );
 	const [ locationData, setLocationData ] = useState( );
 	const [ weatherData, setWeatherData ] = useState( );
+	const [ weatherLoaded, setWeatherLoaded ] = useState( null );
+
+	const isFocused = useIsFocused( );
 
 
-	////// Load Location \\\\\\
+	// Load location data
 	useEffect( ( ) =>
 	{
 		async function getLocation( )
@@ -41,10 +49,10 @@ const HomeScreen = ({ navigation }) =>
 			setLocationData( location_data );
 		}
 		getLocation( );
-	}, []);
+	}, [ ]);
 
 
-	////// Load Alert \\\\\\
+	// Loads alert data
 	useEffect( ( ) =>
 	{
 		async function fetchAlert( locationData )
@@ -61,7 +69,7 @@ const HomeScreen = ({ navigation }) =>
 			}
 			catch ( error )
 			{
-				console.error( error );
+				setErrorMessage( error );
 			}
 			finally
 			{
@@ -72,10 +80,17 @@ const HomeScreen = ({ navigation }) =>
 	}, [ locationData ]);
 
 
-	////// Load Weather \\\\\\
-	useEffect( ( ) =>
+	/*
+	 * Loads weather on app open, also reloads every
+	 *	30 minutes so long as the screen is focused.
+	 */
+	useEffect(( ) =>
 	{
-		if( locationData )
+		if
+		(
+			isFocused && locationData &&
+			( weatherLoaded == null || Date.now() - weatherLoaded > 1800000 )
+		)
 		{
 			async function fetchWeather( locationData )
 			{
@@ -85,22 +100,25 @@ const HomeScreen = ({ navigation }) =>
 					if( weather_data )
 					{
 						setWeatherData( weather_data );
+						setWeatherLoaded( Date.now( ) );
 					}
-					else    return
+					else    return;
 				}
 				catch ( error )
 				{
-					console.error( error );
+					setErrorMessage( error );
 				}
 			}
 			fetchWeather( locationData );
+			scheduleAlertNotification( alertData );
 		}
-	}, [ locationData ]);
+	}, [ isFocused, locationData ]);
 
 
 	return (
-		<View style={[ styles.container, { justifyContent: 'space-between'} ]}>
+		<View style={[ styles.container, { justifyContent: 'space-between' } ]}>
 		{ errorMessage != null ? <Text>{ errorMessage }</Text> : null }
+
 
 		{
 			weatherData ?
@@ -112,10 +130,11 @@ const HomeScreen = ({ navigation }) =>
 		: null
 		}
 
-			<View style={[ styles.home_container, weatherData? null : styles.home_extra_margin ]}>
+
+			<View style={[ styles.home_container, weatherData ? null : styles.home_extra_margin ]}>
 				<View style={ styles.home_row }>
 					<TouchableOpacity
-						onPress={ ( ) => { navigation.navigate("EmergencyDataScreen"); }}
+						onPress={ ( ) => { navigation.navigate( "EmergencyDataScreen" ); }}
 						style={ styles.home_button }
 					>
 						<Text style={ styles.text_button }>Emergency Information</Text>
@@ -131,10 +150,10 @@ const HomeScreen = ({ navigation }) =>
 
 				<View style={ styles.home_row }>
 					<TouchableOpacity
-						onPress={ ( ) => { navigation.navigate( "LearningHomeScreen" )}}
+						onPress={ ( ) => { navigation.navigate( "ResourceHubScreen" )}}
 						style={ styles.home_button }
 					>
-						<Text style={ styles.text_button }>Learning Center</Text>
+						<Text style={ styles.text_button }>Resource Hub</Text>
 					</TouchableOpacity>
 
 					<TouchableOpacity
@@ -146,11 +165,12 @@ const HomeScreen = ({ navigation }) =>
 				</View>
 			</View>
 
-			<View style={ styles.home_container_alert }>
+
+			<View style={ styles.contact_button }>
 			{
 				loadingAlertData == false ?
 				<TouchableOpacity onPress={( ) => { scheduleAlertNotification( alertData )}}>
-					<Text style={ styles.text_button }>Load Alert</Text>
+					<Text style={ styles.save_button_text }>Load Alert</Text>
 				</TouchableOpacity>
 			: null
 			}

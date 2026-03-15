@@ -29,25 +29,44 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 					{
 						allergy.severity == 'Life Threatening' ?
 						<View style={{ flex: 1 }}>
-							{ allergy.severity ? <Text style={[ styles.text, styles.alert ]}>{ allergy.severity } Allergy</Text> : null }
-							{ allergy.allergen ? <Text style={[ styles.text, styles.alert ]}>{ allergy.allergen }</Text> : null }
+						{
+							allergy.severity ?
+							<Text style={[ styles.text, styles.alert ]}>
+								{ allergy.severity } Allergy
+							</Text>
+						: null
+						}
+						{
+							allergy.allergen ?
+							<Text style={[ styles.text, styles.alert ]}>
+								{ allergy.allergen }
+							</Text>
+						: null
+						}
 						</View>
 						:
 						<View style={{ flex: 1 }}>
-							{ allergy.allergen ? <Text style={[ styles.text, { textAlignVertical: 'center' }]}>{ allergy.allergen }</Text> : null }
+						{
+							allergy.allergen ?
+							<Text style={[ styles.text, { textAlignVertical: 'center' }]}>
+								{ allergy.allergen }
+							</Text>
+						: null
+						}
 						</View>
 					}
 
 						<TouchableOpacity
 							accessibilityLabel='Expand button'
 							accessibilityHint='Press to view additional details.'
-							style={ styles.expand_button }
 							onPress={ ( ) =>
 							{
 								setViewAllergyVisible( true );
 								setAllergyIndex( i );
+								// navigation bar hidden in modals.
 								NavigationBar.setVisibilityAsync( "hidden" );
 							}}
+							style={ styles.expand_button }
 						>
 							<HugeiconsIcon
 								icon={ SquareArrowDiagonal01Icon }
@@ -66,6 +85,7 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 					onPress={ ( ) =>
 					{
 						setEditAllergyVisible( true );
+						// navigation bar hidden in modals.
 						NavigationBar.setVisibilityAsync( "hidden" );
 					}}
 					style={ styles.data_button_size }
@@ -80,42 +100,75 @@ export const Allergy = ({ allergyData, setAllergyIndex, setEditAllergyVisible, s
 
 
 export const ViewAllergy = ({
-								allergyData, allergyIndex, doctorData, medicationData, setAllergyIndex,
-								setEditAllergyVisible, setTempAllergyData, setViewAllergyVisible
+								allergyData, allergyIndex, closeView, doctorData,
+								medicationData, setEditAllergyVisible,
+								setTempAllergyData, setViewAllergyVisible
 							}) =>
 {
+	// If no medications are associated with this condition, don't display the medication header.
+	const [ medicationVisible, setMedicationVisible ]  = useState( false );
+
+	// Checks if medications are associated with this condition.
+	useEffect( ( ) =>
+	{
+		for ( const item of medicationData )
+		{
+			if(  item.condition_id == allergyData[allergyIndex].condition_id )
+			{
+				setMedicationVisible( true );
+			}
+		}
+	}, [ ]);
+
+
 	return (
-		<View style={ styles.data_container_view }>
+		<View style={[ styles.data_container_view, { marginTop: 38 } ]}>
 			{/* Allergen & Severity */}
-			<View>
-				{
-					allergyData[allergyIndex].severity == 'Life Threatening' ?
-					<View>
-						<Text style={[ styles.alert, { fontSize: 22 } ]}>{ allergyData[allergyIndex].severity } Allergy</Text>
-						<Text style={ styles.title_bar }>
-							{ allergyData[allergyIndex].allergen } Allergy
-						</Text>
-					</View>
-					:
-					<View>
-						<Text style={ styles.title_bar }>
-							{ allergyData[allergyIndex].allergen } Allergy
-						</Text>
-						<View style={ styles.data_section_small }>
-							<Text style={ styles.heading_text }>Allergy severity</Text>
-							<Text style={ styles.text }>{ allergyData[allergyIndex].severity }</Text>
+				<View>
+					{
+						allergyData[allergyIndex].severity == 'Life Threatening' ?
+						<View>
+							<Text style={[ styles.alert, { fontSize: 22 } ]}>
+								{ allergyData[allergyIndex].severity } Allergy
+							</Text>
+							<Text style={ styles.title_bar }>
+								{ allergyData[allergyIndex].allergen } Allergy
+							</Text>
 						</View>
-					</View>
-				}
-			</View>
+						:
+						<View>
+							<Text style={ styles.title_bar }>
+								{ allergyData[allergyIndex].allergen } Allergy
+							</Text>
+							<View style={ styles.data_section_small }>
+								{
+									allergyData[allergyIndex]?.severity ?
+									<Text style={ styles.heading_text }>Allergy severity</Text>
+								: null
+								}
+								<Text style={ styles.text }>
+									{ allergyData[allergyIndex].severity }
+								</Text>
+							</View>
+						</View>
+					}
+				</View>
+			
 
 			{/* Diagnosis Date */}
-			<View style={ styles.data_section_small }>
-				<Text style={ styles.heading_text }>Diagnosis Date</Text>
-				<Text key={ allergyData[allergyIndex].diagnosis_date } style={ styles.text }>
-					{ allergyData[allergyIndex].diagnosis_date }
-				</Text>
-			</View>
+			{
+				allergyData[allergyIndex].diagnosis_date ?
+				<View style={ styles.data_section_small }>
+					<Text style={ styles.heading_text }>Diagnosis Date</Text>
+					<Text
+						key={ allergyData[allergyIndex].diagnosis_date }
+						style={ styles.text }
+					>
+						{ allergyData[allergyIndex]?.diagnosis_date }
+					</Text>
+				</View>
+			: null
+			}
 
 			{/* Doctor */}
 			{ doctorData.map ( doctor =>
@@ -136,7 +189,10 @@ export const ViewAllergy = ({
 				allergyData[allergyIndex]?.condition_note ?
 				<View style={ styles.data_section_small }>
 					<Text style={ styles.heading_text }>Allergy notes</Text>
-					<Text key={ allergyData[allergyIndex].condition_note } style={ styles.text }>
+					<Text
+						key={ allergyData[allergyIndex].condition_note }
+						style={ styles.text }
+					>
 						{ allergyData[allergyIndex].condition_note }
 					</Text>
 				</View>
@@ -144,22 +200,26 @@ export const ViewAllergy = ({
 			}
 
 			{/* Medication(s) */}
-			<View style={ styles.data_section_small }>
-				<Text style={ styles.heading_text }>Medication(s)</Text>
-				{
-					medicationData?.map( medication =>
-					<View key={ medication.medication_id }>
+			{
+				medicationVisible ?
+				<View style={ styles.data_section_small }>
+					<Text style={ styles.heading_text }>Medication(s)</Text>
 					{
-						medication.condition_id == allergyData[allergyIndex].condition_id ?
-						<View>
-							<Text style={ styles.text }>{ medication.medication_name }</Text>
+						medicationData?.map( medication =>
+						<View key={ medication.medication_id }>
+						{
+							medication.condition_id == allergyData[allergyIndex].condition_id ?
+							<View>
+								<Text style={ styles.text }>{ medication.medication_name }</Text>
+							</View>
+							:
+							null
+						}
 						</View>
-						:
-						null
-					}
-					</View>
-				)}
-			</View>
+					)}
+				</View>
+			: null
+			}
 
 
 			{/* Close/Edit button row */}
@@ -167,13 +227,8 @@ export const ViewAllergy = ({
 				<TouchableOpacity
 					accessibilityLabel='Close button'
 					accessibilityHint='Press to close allergy details screen.'
+					onPress={ ( ) => closeView( ) }
 					style={ styles.button_end }
-					onPress={ ( ) =>
-					{
-						setAllergyIndex( null );
-						setViewAllergyVisible( false );
-						NavigationBar.setVisibilityAsync( "visible" );
-					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
 				</TouchableOpacity>
@@ -181,13 +236,13 @@ export const ViewAllergy = ({
 				<TouchableOpacity
 					accessibilityLabel='Edit button'
 					accessibilityHint='Press to edit allergy details.'
-					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditAllergyVisible( true );
 						setTempAllergyData({ ...allergyData[allergyIndex] } );
 						setViewAllergyVisible( false );
 					}}
+					style={ styles.button_end }
 				>
 					<Text style={ styles.save_button_text }>Edit</Text>
 				</TouchableOpacity>
@@ -198,10 +253,10 @@ export const ViewAllergy = ({
 
 
 
-// For adding or editing
+// For adding or editing.
 export const EditAllergy = ({
-								allergyData, allergyIndex, deleteEntry, doctorData, saveEntry, setAllergyIndex,
-								setEditAllergyVisible, setTempAllergyData, tempAllergyData
+								allergyData, allergyIndex, closeEdit, deleteEntry, doctorData,
+								saveEntry, setTempAllergyData, tempAllergyData
 							}) =>
 {
 	// Delete dialog visibility control
@@ -214,35 +269,41 @@ export const EditAllergy = ({
 
 	const handleConfirm = ( date ) =>
 	{
-		setTempAllergyData( prev => ({ ...prev, 'diagnosis_date': date.toISOString( ).slice( 0,10 )}));
+		setTempAllergyData( prev =>
+		({
+			...prev, 'diagnosis_date': date.toISOString( ).slice( 0,10 )
+		}));
 		hideDatePicker( );
 	};
 
 
-	// Form Validation ( Allergies must have an allergen name )
-	const [ allergenName, setAllergenName ] = useState( tempAllergyData?.allergen ? tempAllergyData.allergen : '' );
+	// Form Validation - Allergies must ( minimally ) have a name.
+	const [ allergenName, setAllergenName ] = useState( tempAllergyData?.allergen ?? '' );
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
+
 
 	useEffect(( ) =>
 	{
 		validateForm( );
 	}, [ allergenName ]);
 
+
 	const validateForm = ( ) =>
 	{
 		let errors = {};
 
-		// Validate name field
-		if ( allergenName == '' )    errors.allergenName = 'Allergen name is required.';
+		// Validate name field.
+		if ( allergenName.trim( ) == '' )    errors.allergenName = 'Allergen name is required.';
 
-		// Set the errors and update form validity
+		// Set the errors and update form validity.
 		setErrors( errors );
 		setIsFormValid( Object.keys( errors ).length === 0 );
 	};
 
 
+	// Delete dialog controls.
 	const handleCancel = ( ) =>
 	{
 		setDeleteAllergyVisible( false );
@@ -250,53 +311,76 @@ export const EditAllergy = ({
 
 	const handleDelete = ( ) =>
 	{
-		
 		deleteEntry( 'Allergy', tempAllergyData.condition_id );
 		setDeleteAllergyVisible( false );
 		handlePress( true );
 	};
 
-	// Close / Save button handler for Edit modal
+
+	// Close / Save button handler for Edit modal.
 	function handlePress( close )
 	{
-		NavigationBar.setVisibilityAsync( "visible" );
-		// If no changes have been made or user presses cancel button, close the edit Modal
-		if
-		(
-			JSON.stringify( allergyData[allergyIndex] ) === JSON.stringify( tempAllergyData ) ||
-			tempAllergyData == undefined || close == true
-		)
+		// Show error if user tries to save without min requirement.
+		if ( !isFormValid  && !close )
 		{
-			setAllergyIndex( null );
-			setAllergenName( '' );
-			setEditAllergyVisible( false );
-			setTempAllergyData( );
+			setShowValidationError( true );
+			setTimeout( function( )
+			{
+				setShowValidationError( false );
+			}, 900 );
 			return;
 		}
 
-		// Only triggers save( insert/update ) if min of medication name has been entered ( or already exists )
-		if ( isFormValid && close != true )
+
+		// If no changes have been made or user presses cancel button,
+		// close the edit Modal and clear any unsaved data.
+		if
+		(
+			JSON.stringify( allergyData[allergyIndex] )
+			=== JSON.stringify( tempAllergyData ) ||
+			tempAllergyData == undefined || close == true
+		)
+		{
+			closeEdit( );
+			setAllergenName( '' );
+			return;
+		}
+
+
+		// Only triggers save ( insert/update ) and reset if min of
+		// allergen name has been entered ( or already exists )
+		// and changes have been made.
+		if ( isFormValid && !close )
 		{
 			saveEntry( 'Allergy', tempAllergyData, 'condition_id' );
-			setAllergyIndex( null );
+
+			closeEdit( );
 			setAllergenName( '' );
-			setEditAllergyVisible( false );
-			setTempAllergyData( );
-			setShowValidationError( false );
 		}
-		else    setShowValidationError( true );
 	}
 
 
 	return (
-		<View style={ styles.data_container_edit }>
+		<View style={[ styles.data_container_edit,  { marginTop: 38 } ]}>
+		 {/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.validation_container }>
+					<Text style={[ styles.text_input, styles.alert ]}>
+						{ errors.allergenName }
+					</Text>
+				</View>
+				: null
+			}
 			<View style={{ flex: 3 }}>
 				<TextInput
 					accessibilityLabel='Allergen name'
 					accessibilityHint='Type in name of allergen.'
 					maxLength={ 100 }
-					placeholder={ tempAllergyData?.allergen ? tempAllergyData.allergen : 'Allergen name' }
+					multiline={ true }
+					placeholder={ 'Allergen name' }
 					style={ styles.text_input }
+					value={ tempAllergyData?.allergen ?? '' }
 					onChangeText={ ( text ) =>
 					{
 						setAllergenName( text );
@@ -311,21 +395,46 @@ export const EditAllergy = ({
 					<Picker
 						accessibilityLabel='Severity menu'
 						accessibilityHint='Select the severity of your allergy.'
-						selectedValue={ tempAllergyData?.severity ? tempAllergyData.severity : 'Severity' }
-						style={ styles.picker }
+						dropdownIconColor='#0b3e82ff'
+						dropdownIconRippleColor='#0b3e82ff'
+						mode='dropdown'
+						selectedValue={ tempAllergyData?.severity ?? 'Severity' }
+						style={ styles.picker_item }
 						onValueChange={( itemValue ) =>
 						{
 							setTempAllergyData( prev => ({ ...prev, 'severity': itemValue, }));
 						}}
 					>
-						<Picker.Item color='black' enabled={ false } label='Severity' value='' />
-						<Picker.Item accessibilityRole='menuitem' label='Mild' value='Mild' />
-						<Picker.Item accessibilityRole='menuitem' label='Moderate' value='Moderate' />
-						<Picker.Item accessibilityRole='menuitem' label='Severe' value='Severe' />
+						<Picker.Item
+							color='black'
+							enabled={ false }
+							label='Severity'
+							style={ styles.picker_item }
+							value=''
+						/>
+						<Picker.Item
+							accessibilityRole='menuitem'
+							label='Mild'
+							style={ styles.picker_item }
+							value='Mild'
+						/>
+						<Picker.Item
+							accessibilityRole='menuitem'
+							label='Moderate'
+							style={ styles.picker_item }
+							value='Moderate'
+						/>
+						<Picker.Item
+							accessibilityRole='menuitem'
+							label='Severe'
+							style={ styles.picker_item }
+							value='Severe'
+						/>
 						<Picker.Item
 							accessibilityRole='menuitem'
 							color='#7e0404'
 							label='Life Threatening'
+							style={ styles.picker_item }
 							value='Life Threatening'
 						/>
 					</Picker>
@@ -336,19 +445,34 @@ export const EditAllergy = ({
 					doctorData?.length > 0 ?
 					<View style={ styles.picker_view }>
 						<Picker
-							selectedValue={ tempAllergyData?.doctor_id ? tempAllergyData.doctor_id : 'Doctor' }
-							style={ styles.picker }
+							accessibilityLabel='Doctor menu'
+							accessibilityHint='Select a doctor.'
+							dropdownIconColor='#0b3e82ff'
+							dropdownIconRippleColor='#0b3e82ff'
+							mode='dropdown'
+							selectedValue={ tempAllergyData?.doctor_id ?? 'Doctor' }
+							style={ styles.menu_text }
 							onValueChange={ itemValue =>
 							{
-								setTempAllergyData( prev => ({ ...prev, 'doctor_id': itemValue }));
-							}}
+								setTempAllergyData( prev =>
+								({
+									...prev, 'doctor_id': itemValue
+								})
+							)}}
 							>
-							<Picker.Item label='Doctor' value='' color='black' enabled={ false }/>
+							<Picker.Item
+								color='black'
+								enabled={ false }
+								label='Doctor'
+								style={ styles.picker_item }
+								value=''
+							/>
 							{
 								doctorData.map( doctor =>
 								<Picker.Item
 									key={ doctor.entity_id }
 									label={ doctor.entity_name }
+									style={ styles.picker_item }
 									value={ doctor.entity_id }
 								/>
 							)}
@@ -366,7 +490,7 @@ export const EditAllergy = ({
 					underlayColor={ underlay_color }
 					>
 					<Text style={[ styles.text_input, styles.menu_text ]}>
-						{ tempAllergyData?.diagnosis_date ? tempAllergyData.diagnosis_date : 'Date of diagnosis' }
+						{ tempAllergyData?.diagnosis_date ?? 'Date of diagnosis' }
 					</Text>
 				</TouchableHighlight>
 
@@ -381,11 +505,16 @@ export const EditAllergy = ({
 					accessibilityLabel='Allergy notes'
 					accessibilityHint='Type in allergy notes.'
 					maxLength={ 100 }
-					placeholder={ tempAllergyData?.condition_note ? tempAllergyData.condition_note : 'Notes' }
+					multiline={ true }
+					placeholder={ 'Notes' }
 					style={ styles.text_input }
+					value={ tempAllergyData?.condition_note ?? '' }
 					onChangeText={ ( text ) =>
 					{
-						setTempAllergyData( prev => ({ ...prev, 'condition_note': text }))}
+						setTempAllergyData( prev =>
+						({
+							...prev, 'condition_note': text
+						}))}
 					}
 				/>
 
@@ -412,15 +541,6 @@ export const EditAllergy = ({
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>
 				</View>
-
-				{/* Form Validation Error */}
-				{
-					showValidationError ?
-					<View style={{ alignItems: 'center' }}>
-						<Text style={[ styles.alert, styles.text ]}>{ errors.allergenName }</Text>
-					</View>
-					: null
-				}
 			</View>
 
 

@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import selectGameData from '../database/selectGameData.js';
 
 
+// Loads non-content game data
 export default function useLoadGameData( db )
 {
 	const [ loadedData, setLoadedData ] = useState( );

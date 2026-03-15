@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 
 import selectLevelData from '../database/selectLevelData.js';
 
+
+// Loads level content data
 export default function useLoadLevelData( db, screen_name, level_category, questions_per_level )
 {
 	const [ loadedData, setLoadedData ] = useState( );

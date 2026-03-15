@@ -15,7 +15,10 @@ import styles from "../../../styles/styles.js";
 const underlay_color = '#d1dce4ff';
 
 
-export const Medication = ({ medicationData, setEditMedicationVisible, setMedicationIndex, setViewMedicationVisible }) =>
+export const Medication = ({
+								medicationData, setEditMedicationVisible,
+								setMedicationIndex, setViewMedicationVisible
+							}) =>
 {
 	return (
 		<View style={ styles.data_container_view }>
@@ -27,7 +30,9 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 					{
 						medication.is_life_sustaining == 1 ?
 						<View style={{ flex:0.9 }}>
-							<Text style={[ styles.text, styles.alert ]}>Life Sustaining Medication</Text>
+							<Text style={[ styles.text, styles.alert ]}>
+								Life Sustaining Medication
+							</Text>
 							{
 								medication?.medication_name ?
 								<Text style={[ styles.text, styles.alert ]}>
@@ -49,13 +54,14 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 					}
 
 					<TouchableOpacity
-						style={ styles.expand_button }
 						onPress={ ( ) =>
 						{
 							setViewMedicationVisible( true );
 							setMedicationIndex( i );
+							// navigation bar hidden in modals.
 							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
+						style={ styles.expand_button }
 					>
 						<HugeiconsIcon
 								icon={ SquareArrowDiagonal01Icon }
@@ -68,12 +74,13 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 			)}
 
 				<TouchableOpacity
-					style={ styles.data_button_size }
 					onPress={ ( ) =>
 					{
 						setEditMedicationVisible( true );
+						// navigation bar hidden in modals.
 						NavigationBar.setVisibilityAsync( "hidden" );
 					}}
+					style={ styles.data_button_size }
 				>
 					<Text style={ styles.text_button }>Add new medication</Text>
 				</TouchableOpacity>
@@ -84,13 +91,13 @@ export const Medication = ({ medicationData, setEditMedicationVisible, setMedica
 
 
 export const ViewMedication = ({
-									conditionData, doctorData, medicationData,
-									medicationIndex, setEditMedicationVisible, setMedicationIndex,
+									closeView, conditionData, doctorData, medicationData,
+									medicationIndex, setEditMedicationVisible,
 									setTempMedicationData, setViewMedicationVisible
 								}) =>
 {
 	return (
-		<View style={ styles.data_container_view }>
+		<View style={[ styles.data_container_view, { marginTop: 38 } ]}>
 			{
 				medicationData?.[medicationIndex].is_life_sustaining == 1 ?
 				<View>
@@ -101,7 +108,9 @@ export const ViewMedication = ({
 					</Text>
 				: null
 				}
-					<Text style={[ styles.heading_text, styles.alert ]}>Life Sustaining Medication</Text>
+					<Text style={[ styles.heading_text, styles.alert ]}>
+						Life Sustaining Medication
+					</Text>
 				</View>
 				:
 				<View>
@@ -115,12 +124,17 @@ export const ViewMedication = ({
 				</View>
 			}
 
-			<View key={ medicationData?.[medicationIndex].medication_id } style={{ justifyContent: 'space-between', gap: 1 }}>
+			<View
+				key={ medicationData?.[medicationIndex].medication_id }
+				style={{ justifyContent: 'space-between', gap: 1 }}
+			>
 				{
 					medicationData?.[medicationIndex]?.strength ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Strength</Text>
-						<Text style={ styles.text }>{ medicationData?.[medicationIndex].strength }</Text>
+						<Text style={ styles.text }>
+							{ medicationData?.[medicationIndex].strength }
+						</Text>
 					</View>
 				: null
 				}
@@ -129,7 +143,9 @@ export const ViewMedication = ({
 					medicationData?.[medicationIndex]?.frequency ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Frequency</Text>
-						<Text style={ styles.text }>{ medicationData?.[medicationIndex].frequency }</Text>
+						<Text style={ styles.text }>
+							{ medicationData?.[medicationIndex].frequency }
+						</Text>
 					</View>
 				: null
 				}
@@ -138,7 +154,9 @@ export const ViewMedication = ({
 					medicationData?.[medicationIndex]?.start_date ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Start date</Text>
-						<Text style={ styles.text }>{ medicationData?.[medicationIndex].start_date }</Text>
+						<Text style={ styles.text }>
+							{ medicationData?.[medicationIndex].start_date }
+						</Text>
 					</View>
 				: null
 				}
@@ -147,7 +165,9 @@ export const ViewMedication = ({
 					medicationData?.[medicationIndex]?.medication_note?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Note</Text>
-						<Text style={ styles.text }>{ medicationData?.[medicationIndex].medication_note }</Text>
+						<Text style={ styles.text }>
+							{ medicationData?.[medicationIndex].medication_note }
+						</Text>
 					</View>
 				: null
 				}
@@ -195,25 +215,20 @@ export const ViewMedication = ({
 			<View style={ styles.save_row }>
 				{/* Close Button */}
 				<TouchableOpacity
+					onPress={ ( ) => closeView( ) }
 					style={ styles.button_end }
-					onPress={ ( ) =>
-					{
-						setMedicationIndex( null );
-						setViewMedicationVisible( false );
-						NavigationBar.setVisibilityAsync( "visible" );
-					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditMedicationVisible( true );
 						setTempMedicationData({ ...medicationData[medicationIndex] } );
 						setViewMedicationVisible( false );
 					}}
+					style={ styles.button_end }
 				>
 					<Text style={ styles.save_button_text }>Edit</Text>
 				</TouchableOpacity>
@@ -226,9 +241,8 @@ export const ViewMedication = ({
 
 // For adding or editing
 export const EditMedication = ({
-									conditionData, deleteEntry, doctorData, medicationData,
-									medicationIndex, saveEntry, setEditMedicationVisible,
-									setMedicationIndex, setTempMedicationData, tempMedicationData
+									closeEdit, conditionData, deleteEntry, doctorData, medicationData,
+									medicationIndex, saveEntry,setTempMedicationData, tempMedicationData
 								}) =>
 {
 	const [ lifeSustaining, setLifeSustaining ] = useState
@@ -249,7 +263,10 @@ export const EditMedication = ({
 
 	const handleConfirm = ( date ) =>
 	{
-		setTempMedicationData( prev => ({ ...prev, 'start_date': date.toISOString( ).slice( 0,10 )}));
+		setTempMedicationData( prev =>
+		({
+			...prev, 'start_date': date.toISOString( ).slice( 0,10 )
+		}));
 		hideDatePicker( );
 	};
 
@@ -276,7 +293,7 @@ export const EditMedication = ({
 	}, []);
 
 
-	// Form Validation ( Must ( minimally ) have a name ).
+	// Form Validation - Medication must ( minimally ) have a name.
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ medicationName, setMedicationName ] =
@@ -295,7 +312,7 @@ export const EditMedication = ({
 		let errors = {};
 
 		// Validate name field
-		if ( medicationName == '' )    errors.medicationName = 'Medication name is required.';
+		if ( medicationName.trim( ) == '' )    errors.medicationName = 'Medication name is required.';
 
 		// Set the errors and update form validity
 		setErrors( errors );
@@ -303,11 +320,11 @@ export const EditMedication = ({
 	};
 
 
+	// Delete dialog controls.
 	const handleCancel = ( ) =>
 	{
 		setDeleteMedicationVisible( false );
 	};
-
 
 	const handleDelete = ( ) =>
 	{
@@ -317,47 +334,69 @@ export const EditMedication = ({
 	};
 
 
-	// Close / Save button handler for Edit modal
+	// Close / Save button handler for Edit modal.
 	function handlePress( close )
 	{
-		NavigationBar.setVisibilityAsync( "visible" );
-
-		// If no changes have been made or user presses cancel button, close the edit Modal
-		if
-		(
-			JSON.stringify( medicationData[medicationIndex] ) === JSON.stringify( tempMedicationData ) ||
-			tempMedicationData == undefined || close == true
-		)
+		// Show error if user tries to save without min requirement.
+		if ( !isFormValid  && !close )
 		{
-			setEditMedicationVisible( false );
-			setMedicationIndex( null );
-			setMedicationName( '' );
-			setTempMedicationData( );
+			setShowValidationError( true );
+			setTimeout( function( )
+			{
+				setShowValidationError( false );
+			}, 900 );
 			return;
 		}
 
-		// Only triggers save ( insert/update ) if min of medication name has been entered ( or already exists ).
-		if ( isFormValid )
+
+		// If no changes have been made or user presses cancel button,
+		// close the edit Modal and clear any unsaved data.
+		if
+		(
+			JSON.stringify( medicationData[medicationIndex] )
+			=== JSON.stringify( tempMedicationData ) ||
+			tempMedicationData == undefined || close == true
+		)
+		{
+			closeEdit( );
+			setMedicationName( '' );
+			return;
+		}
+
+
+		// Only triggers save ( insert/update ) and reset if min of
+		// medication name has been entered ( or already exists )
+		// and changes have been made.
+		if ( isFormValid && !close )
 		{
 			saveEntry( 'Medication', tempMedicationData,'medication_id' );
-			setEditMedicationVisible( false );
-			setMedicationIndex( null );
+
+			closeEdit( );
 			setMedicationName( '' );
-			setTempMedicationData( );
 		}
-		else    setShowValidationError( true );
 	}
 
 
 	return (
-		<View style={ styles.data_container_edit }>
+		<View style={[ styles.data_container_edit, { marginTop: 38 } ]}>
+		{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.validation_container }>
+					<Text style={[ styles.text_input, styles.alert ]}>
+						{ errors.medicationName }
+					</Text>
+				</View>
+			: null
+			}
 			<View style={{ flex: 3 }}>
 				<TextInput
 					accessibilityLabel='Medication name'
 					accessibilityHint='Type in name of medication.'
 					maxLength={ 100 }
-					placeholder={ tempMedicationData?.medication_name ? tempMedicationData.medication_name : 'Medication name' }
+					placeholder={ 'Medication name' }
 					style={ styles.text_input }
+					value={ tempMedicationData?.medication_name ?? '' }
 					onChangeText={( text ) =>
 					{
 						setMedicationName( text );
@@ -369,18 +408,24 @@ export const EditMedication = ({
 					accessibilityLabel='Medication strength'
 					accessibilityHint='Type in strength of medication ( example: 500 or 500mg ).'
 					maxLength={ 100 }
-					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'strength': text }))}
-					placeholder={ tempMedicationData?.strength ? tempMedicationData.strength : 'Strength' }
+					onChangeText={( text ) =>
+						setTempMedicationData( prev => ({ ...prev, 'strength': text }))
+					}
+					placeholder={ 'Strength' }
 					style={ styles.text_input }
+					value={ tempMedicationData?.strength ?? '' }
 				/>
 
 				<TextInput
 					accessibilityLabel='Medication frequency'
 					accessibilityHint='Type in dosage frequency ( example: every eight hours ).'
 					maxLength={ 100 }
-					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'frequency': text }))}
-					placeholder={ tempMedicationData?.frequency ? tempMedicationData.frequency : 'Frequency' }
+					onChangeText={( text ) =>
+						setTempMedicationData( prev => ({ ...prev, 'frequency': text }))
+					}
+					placeholder={ 'Frequency' }
 					style={ styles.text_input }
+					value={ tempMedicationData?.frequency ?? '' }
 				/>
 
 				{/* Select existing Doctor */}
@@ -390,8 +435,11 @@ export const EditMedication = ({
 						<Picker
 							accessibilityLabel='Doctor menu'
 							accessibilityHint='Select previously entered doctor.'
-							selectedValue={ tempMedicationData?.doctor_id ? tempMedicationData.doctor_id : 'Doctor' }
-							style={ styles.picker }
+							dropdownIconColor='#0b3e82ff'
+							dropdownIconRippleColor='#0b3e82ff'
+							mode='dropdown'
+							selectedValue={ tempMedicationData?.doctor_id ?? 'Doctor' }
+							style={ styles.menu_text }
 							onValueChange={ itemValue =>
 							{
 								setTempMedicationData( prev => ({ ...prev, 'doctor_id': itemValue }));
@@ -401,6 +449,7 @@ export const EditMedication = ({
 								color='black'
 								enabled={ false }
 								label='Doctor'
+								style={ styles.picker_item }
 								value=''
 							/>
 							{
@@ -409,6 +458,7 @@ export const EditMedication = ({
 									accessibilityLabel='menuitem'
 									key={ doctor.entity_id }
 									label={ doctor.entity_name }
+									style={ styles.picker_item }
 									value={ doctor.entity_id }
 								/>
 							)}
@@ -425,7 +475,7 @@ export const EditMedication = ({
 					underlayColor={ underlay_color }
 				>
 					<Text style={[ styles.text_input, styles.menu_text ]}>
-						{ tempMedicationData?.start_date ? tempMedicationData.start_date : 'Start date:' }
+						{ tempMedicationData?.start_date ?? 'Start date:' }
 					</Text>
 				</TouchableHighlight>
 
@@ -443,20 +493,34 @@ export const EditMedication = ({
 						<Picker
 							accessibilityLabel='Medical condition menu'
 							accessibilityHint='Select a medical condition.'
-							selectedValue={ tempMedicationData?.condition_id ? tempMedicationData.condition_id : 'Condition name' }
-							style={ styles.picker }
+							dropdownIconColor='#0b3e82ff'
+							dropdownIconRippleColor='#0b3e82ff'
+							mode='dropdown'
+							selectedValue={ tempMedicationData?.condition_id ?? 'Condition name' }
+							style={ styles.menu_text }
 							onValueChange={ itemValue =>
 							{
 								setTempMedicationData( prev => ({ ...prev, 'condition_id': itemValue }));
 							}}
 							>
-							<Picker.Item color='black' enabled={ false } label='Condition' value='' />
+							<Picker.Item
+								color='black'
+								enabled={ false }
+								label='Condition'
+								style={ styles.picker_item }
+								value='' />
 							{
 								conditionData.map( condition =>
 								<Picker.Item
 									accessibilityLabel='menuitem'
 									key={ condition.condition_id }
-									label={ condition.allergen ? 'Allergy: ' + condition.allergen : condition.condition_name }
+									label=
+									{
+										condition.allergen ?
+										'Allergy: ' + condition.allergen :
+										condition.condition_name
+									}
+									style={ styles.picker_item }
 									value={ condition.condition_id }
 								/>
 							)}
@@ -468,10 +532,14 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Notes'
 					accessibilityHint='Type in medication relevant notes.'
+					multiline={ true }
 					maxLength={ 100 }
-					onChangeText={( text ) => setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))}
-					placeholder={ tempMedicationData?.note ? tempMedicationData.note : 'Notes' }
+					onChangeText={( text ) =>
+						setTempMedicationData( prev => ({ ...prev, 'medication_note' : text }))
+					}
+					placeholder={ 'Notes' }
 					style={ styles.text_input }
+					value={ tempMedicationData?.medication_note ?? '' }
 				/>
 
 				<View style={ styles.checkbox_row }>
@@ -484,7 +552,9 @@ export const EditMedication = ({
 						onValueChange={ ( ) =>
 						{
 							setLifeSustaining( !lifeSustaining );
-							setTempMedicationData( prev => ({ ...prev, 'is_life_sustaining' : !lifeSustaining }));
+							setTempMedicationData( prev =>
+								({ ...prev, 'is_life_sustaining' : !lifeSustaining })
+							);
 						}}
 					/>
 				</View>
@@ -496,8 +566,8 @@ export const EditMedication = ({
 					<TouchableOpacity
 						accessibilityLabel='Cancel button'
 						accessibilityHint='Press to cancel adding or editing this medication.'
-						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true )}
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
@@ -506,20 +576,12 @@ export const EditMedication = ({
 					<TouchableOpacity
 						accessibilityLabel='save button'
 						accessibilityHint='Press to save medication details.'
-						style={ styles.button_end }
 						onPress={ ( ) => handlePress( ) }
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Save</Text>
 					</TouchableOpacity>
 				</View>
-			{/* Form Validation Error */}
-			{
-				showValidationError ?
-				<View style={ styles.alert_row }>
-					<Text style={[ styles.alert, styles.text ]}>{ errors.medicationName }</Text>
-				</View>
-			: null
-			}
 			</View>
 
 

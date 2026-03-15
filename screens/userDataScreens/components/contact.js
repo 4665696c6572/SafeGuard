@@ -1,6 +1,6 @@
 import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Text, TouchableOpacity, View } from 'react-native';
 
 import { AddressForm, EmailForm, FaxForm, PhoneForm } from './contactForms.js';
 import { DeleteDialog } from './deleteDialog.js';
@@ -9,12 +9,13 @@ import styles from "../../../styles/styles.js";
 
 
 export const ViewContact = ({
-								contactData, handleNavigation, params, setEditContactVisible, setTempAddressData,
-								setTempEmailData, setTempFaxData, setTempPhoneData, setViewContactVisible
+								contactData, handleNavigation, params, setEditContactVisible,
+								setTempAddressData, setTempEmailData, setTempFaxData,
+								setTempPhoneData, setViewContactVisible
 							}) =>
 {
 	return (
-		<View style={ styles.data_container_view }>
+		<View style={[ styles.data_container_view, { marginTop: 38 } ]}>
 		{
 			( contactData?.contact_name ?? params.contact_name ) ?
 			<Text style={ styles.title_bar }>
@@ -168,6 +169,7 @@ export const ViewContact = ({
 					{
 						setViewContactVisible( false );
 						handleNavigation( );
+						// navigation bar hidden in modals.
 						NavigationBar.setVisibilityAsync( "visible" );
 					}}
 				>
@@ -205,9 +207,10 @@ export const ViewContact = ({
 
 // For adding or editing
 export const EditContact = ({
-								contactData, deleteEntry, handleNavigation, params, saveEntry,
-								setEditContactVisible, setTempAddressData, setTempEmailData, setTempFaxData,
-								setTempPhoneData, tempAddressData, tempEmailData, tempFaxData, tempPhoneData
+								contactData, deleteEntry, handleNavigation, params,
+								saveEntry, setEditContactVisible, setTempAddressData,
+								setTempEmailData, setTempFaxData, setTempPhoneData,
+								tempAddressData, tempEmailData, tempFaxData, tempPhoneData
 							}) =>
 {
 	// Delete dialog visibility controls
@@ -226,16 +229,17 @@ export const EditContact = ({
 	const [ viewNameVisible, setViewNameVisible ] = useState( true );
 
 
-	// sed to hide delete button when keyboard opens so it doesn't overlap form
+	// To hide delete button when keyboard opens so it doesn't overlap form
 	const [ keyboardVisible, setKeyboardVisible ] = useState( false );
 
 	useEffect( ( ) =>
 	{
-		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () =>
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', ( ) =>
 		{
 			setKeyboardVisible( true );
 		});
-		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () =>
+
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', ( ) =>
 		{
 			setKeyboardVisible( false );
 		});
@@ -245,22 +249,29 @@ export const EditContact = ({
 			showSubscription.remove( );
 			hideSubscription.remove( );
 		};
-	}, []);
+	}, [ ]);
 
 
-	// Form Validation
-	const [ addressItem, setAddressItem ] = useState( tempAddressData?.address_line_one ?? tempAddressData?.city ?? '' );
-	const [ emailItem, setEmailItem ] = useState( tempEmailData?.email ? tempEmailData.email : '' );
-	const [ faxItem, setFaxItem ] = useState( tempFaxData?.fax_number ? tempFaxData.fax_number : '' );
-	const [ phoneItem, setPhoneItem ] = useState( tempPhoneData?.phone_number ? tempPhoneData.phone_number : '' );
-
+	// Form Validation - Address must ( minimally ) have a street address or city.
+	const [ addressItem, setAddressItem ] =
+		useState( tempAddressData?.address_line_one ?? tempAddressData?.city ?? '' );
 	const [ isAddressValid, setIsAddressValid ] = useState( false );
+
+	// Form Validation - Email must ( minimally ) have an email address.
+	const [ emailItem, setEmailItem ] = useState( tempEmailData?.email ?? '' );
 	const [ isEmailValid, setIsEmailValid ] = useState( false );
+
+	// Form Validation - Fax must ( minimally ) have a number.
+	const [ faxItem, setFaxItem ] = useState( tempFaxData?.fax_number ?? '' );
 	const [ isFaxValid, setIsFaxValid ] = useState( false );
+
+	// Form Validation - Phone must ( minimally ) have a number.
+	const [ phoneItem, setPhoneItem ] = useState( tempPhoneData?.phone_number ?? '' );
 	const [ isPhoneValid, setIsPhoneValid ] = useState( false );
 
 	const [ showValidationError, setShowValidationError ] = useState( false );
 	const [ errors, setErrors ] = useState({ });
+
 
 	useEffect(( ) =>
 	{
@@ -270,6 +281,7 @@ export const EditContact = ({
 
 	const validateForm = ( ) =>
 	{
+		// sets all to false to prevent other categories from triggering error.
 		setIsAddressValid( false );
 		setIsEmailValid( false );
 		setIsFaxValid( false );
@@ -277,22 +289,23 @@ export const EditContact = ({
 
 		let errors = { };
 
-		if ( addressItem == '' )    errors.address = 'Please enter city name or full address.';
+		if ( addressItem.trim( ) == '' )    errors.address = 'City name or full address is required.';
 		else    setIsAddressValid( true );
 
-		if ( emailItem == '' )    errors.email = 'Please enter an email address.';
+		if ( emailItem.trim( ) == '' )    errors.email = 'Email address is required.';
 		else    setIsEmailValid( true );
 
-		if ( faxItem == '' )    errors.fax = 'Please enter a fax number.';
+		if ( faxItem.trim( ) == '' )    errors.fax = 'Fax number is required.';
 		else    setIsFaxValid( true );
 
-		if ( phoneItem == '' )    errors.phone = 'Please enter a phone number.';
+		if ( phoneItem.trim( ) == '' )    errors.phone = 'Phone number is required.';
 		else    setIsPhoneValid( true );
 
 		setErrors( errors );
 	}
 
 
+	// Closes all modals.
 	function closeAll( )
 	{
 		setAddAddressVisible( false );
@@ -318,10 +331,11 @@ export const EditContact = ({
 	{
 		if ( table == 'Contact' )
 		{
-			deleteEntry( table, [
-									tempAddressData.address_id, tempEmailData.email_id,
-									tempFaxData.fax_number_id, tempPhoneData.phone_number_id
-								]);
+			deleteEntry( table,
+			[
+				tempAddressData.address_id, tempEmailData.email_id,
+				tempFaxData.fax_number_id, tempPhoneData.phone_number_id
+			]);
 			handlePress( true );	
 			setDeleteContactVisible( false );
 		}
@@ -367,9 +381,13 @@ export const EditContact = ({
 
 	function handlePress( close )
 	{
+
+		// navigation bar hidden in modals.
 		NavigationBar.setVisibilityAsync( "visible" );
 
-		// If no changes have been made, close the edit Modal
+
+		// If no changes have been made or user presses close button,
+		// close the edit Modal and clear any unsaved data.
 		if  (
 				( JSON.stringify( contactData.address ) === JSON.stringify( tempAddressData )) &&
 				( JSON.stringify( contactData.email ) === JSON.stringify( tempEmailData )) &&
@@ -383,7 +401,8 @@ export const EditContact = ({
 		}
 
 
-		// Only triggers save ( insert/update ) if min of med name has been entered / exists
+		// Only triggers save ( insert/update ) and reset if min
+		// has been entered ( or already exists ).
 		if
 		(
 			JSON.stringify( contactData.address ) !==
@@ -423,13 +442,17 @@ export const EditContact = ({
 		{
 			saveEntry( 'Phone', tempPhoneData, 'phone_number_id' );
 		}
-	
-		if ( close == true )    setEditContactVisible( false );
+
+		// close with save
+		if ( close == true )
+		{
+			setEditContactVisible( false );
+		}
 	}
 
 
 	return (
-		<View style={ styles.data_container_edit }>
+		<View style={[ styles.data_container_edit, { marginTop: 38 } ]}>
 		{/* Outer Screen */}
 		{
 			viewNameVisible ?
@@ -450,12 +473,12 @@ export const EditContact = ({
 							<TouchableOpacity
 								accessibilityLabel='Add or Edit button'
 								accessibilityHint='Press to add or edit address.'
-								style={ styles.contact_button }
 								onPress={ ( ) =>
 								{
 									setAddAddressVisible( true );
 									setViewNameVisible( false );
 								}}
+								style={ styles.contact_button }
 							>
 							{
 								( tempAddressData?.address_line_one || tempAddressData?.city ) ?
@@ -475,15 +498,16 @@ export const EditContact = ({
 							<TouchableOpacity
 								accessibilityLabel='Add or Edit button'
 								accessibilityHint='Press to add or edit contact details.'
-								style={ styles.contact_button }
 								onPress={ ( ) =>
 								{
 									setAddContactDetailsVisible( true );
 									setViewNameVisible( false );
 								}}
+								style={ styles.contact_button }
 							>
 							{
-								 tempEmailData?.email || tempFaxData?.fax_number || tempPhoneData?.phone_number ?
+								tempEmailData?.email || tempFaxData?.fax_number
+								|| tempPhoneData?.phone_number ?
 								<Text style={ styles.text_button }>Edit contact details</Text>
 							:
 								<Text style={ styles.text_button }>Add contact details</Text>
@@ -504,18 +528,6 @@ export const EditContact = ({
 							<Text style={ styles.text_button }>Close</Text>
 						</TouchableOpacity>
 					</View>
-
-				{/* Form Validation Error */}
-				{
-					showValidationError ?
-					<View
-						accessibilityLabel='Form error.'
-						style={{ alignItems: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20 }}
-					>
-						<Text style={[ styles.text, styles.alert ]}>{ errors.address }</Text>
-					</View>
-				: null
-				}
 				</View>
 
 
@@ -531,7 +543,7 @@ export const EditContact = ({
 								tempFaxData?.fax_number_id || tempPhoneData?.phone_number_id
 							)
 						}
-						description={ 'all details' }
+						description={ 'contact' }
 						dialogVisible={ deleteContactVisible }
 						handleCancel={ handleCancel }
 						handleDelete={ handleDelete }
@@ -550,6 +562,14 @@ export const EditContact = ({
 		{
 			addAddressVisible ?
 			<View style={{ flex: 1 }}>
+			{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={[ styles.validation_container, { paddingLeft: 0 } ]}>
+					<Text style={[  styles.alert, { fontSize: 17 } ]}>{ errors.address }</Text>
+				</View>
+			: null
+			}
 				<View style={{ flex: 3 }}>
 					<AddressForm
 						setAddressItem={ setAddressItem }
@@ -585,21 +605,19 @@ export const EditContact = ({
 									setAddAddressVisible( false );
 									setViewNameVisible( true );
 								}
-								else    setShowValidationError( true );
+								else
+								{
+									setShowValidationError( true );
+									setTimeout( function( )
+									{
+										setShowValidationError( false );
+									}, 2000 );
+								}
 							}}
 						>
 							<Text style={ styles.text_button }>Save address</Text>
 						</TouchableOpacity>
 					</View>
-
-					{/* Form Validation Error */}
-					{
-						showValidationError ?
-						<View style={ styles.alert_row }>
-							<Text style={[ styles.alert, styles.text ]}>{ errors.address }</Text>
-						</View>
-					: null
-					}
 				</View>
 
 
@@ -635,13 +653,13 @@ export const EditContact = ({
 					<TouchableOpacity
 						accessibilityLabel='Add or Edit button'
 						accessibilityHint='Press to add or edit phone information.'
-						style={ styles.contact_button }
 						onPress={ ( ) =>
 						{
 							setAddEmailVisible( false );
 							setAddFaxVisible( false );
 							setAddPhoneVisible( true )}
 						}
+						style={ styles.contact_button }
 					>
 					{
 						tempPhoneData?.phone_number ?
@@ -654,7 +672,6 @@ export const EditContact = ({
 					<TouchableOpacity
 						accessibilityLabel='Add or Edit button'
 						accessibilityHint='Press to add or edit fax information.'
-						style={ styles.contact_button }
 						onPress={ ( ) =>
 						{
 							setAddEmailVisible( false );
@@ -662,6 +679,7 @@ export const EditContact = ({
 							setAddPhoneVisible( false )}
 						
 						}
+						style={ styles.contact_button }
 					>
 					{
 						tempFaxData?.fax_number ?
@@ -674,13 +692,13 @@ export const EditContact = ({
 					<TouchableOpacity
 						accessibilityLabel='Add or Edit button'
 						accessibilityHint='Press to add or edit email address.'
-						style={ styles.contact_button }
 						onPress={ ( ) =>
 						{
 							setAddEmailVisible( true );
 							setAddFaxVisible( false );
 							setAddPhoneVisible( false );
 						}}
+						style={ styles.contact_button }
 					>
 					{
 						tempEmailData?.email ?
@@ -699,7 +717,8 @@ export const EditContact = ({
 								setShowValidationError( false );
 								closeAll( );
 								setErrors({ });
-							}}>
+							}}
+						>
 							<Text style={ styles.text_button }>Close</Text>
 						</TouchableOpacity>
 					</View>
@@ -716,6 +735,14 @@ export const EditContact = ({
 		{
 			addEmailVisible ?
 			<View style={{ flex: 1 }}>
+			{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.validation_container }>
+					<Text style={[ styles.text_input, styles.alert ]}>{ errors.email }</Text>
+				</View>
+			: null
+			}
 				<View style={{ flex: 3 }}>
 					<EmailForm
 						setEmailItem={ setEmailItem }
@@ -749,21 +776,19 @@ export const EditContact = ({
 									handlePress( false );
 									setAddEmailVisible( false );
 								}
-								else    setShowValidationError( true );
+								else
+								{
+									setShowValidationError( true );
+									setTimeout( function( )
+									{
+										setShowValidationError( false );
+									}, 900 );
+								}
 							}}
 						>
 							<Text style={ styles.text_button }>Save email</Text>
 						</TouchableOpacity>
 					</View>
-
-					{/* Form Validation Error */}
-					{
-						showValidationError ?
-						<View style={ styles.alert_row }>
-							<Text style={[ styles.alert, styles.text ]}>{ errors.email }</Text>
-						</View>
-					: null
-					}
 				</View>
 
 
@@ -791,6 +816,14 @@ export const EditContact = ({
 		{
 			addFaxVisible ?
 			<View style={{ flex: 1 }}>
+			{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.validation_container }>
+					<Text style={[ styles.text_input, styles.alert ]}>{ errors.fax }</Text>
+				</View>
+			: null
+			}
 				<View style={{ flex: 3 }}>
 					<FaxForm
 						setFaxItem={ setFaxItem }
@@ -824,21 +857,19 @@ export const EditContact = ({
 									handlePress( false );
 									setAddFaxVisible( false );
 								}
-								else    setShowValidationError( true );
+								else
+								{
+									setShowValidationError( true );
+									setTimeout( function( )
+									{
+										setShowValidationError( false );
+									}, 900 );
+								}
 							}}
 						>
 							<Text style={ styles.text_button }>Save fax number</Text>
 						</TouchableOpacity>
 					</View>
-
-					{/* Form Validation Error */}
-					{
-						showValidationError ?
-						<View style={ styles.alert_row }>
-							<Text style={[ styles.alert, styles.text ]}>{ errors.fax }</Text>
-						</View>
-					: null
-					}
 				</View>
 
 
@@ -866,6 +897,14 @@ export const EditContact = ({
 		{
 			addPhoneVisible ?
 			<View style={{ flex: 1 }}>
+			{/* Form Validation Error */}
+			{
+				showValidationError ?
+				<View style={ styles.validation_container }>
+					<Text style={[ styles.text_input, styles.alert ]}>{ errors.phone }</Text>
+				</View>
+			: null
+			}
 				<View style={{ flex: 3 }}>
 					<PhoneForm
 						setPhoneItem={ setPhoneItem }
@@ -899,21 +938,19 @@ export const EditContact = ({
 									handlePress( false );
 									setAddPhoneVisible( false );
 								}
-								else    setShowValidationError( true );
+								else
+								{
+									setShowValidationError( true );
+									setTimeout( function( )
+									{
+										setShowValidationError( false );
+									}, 900 );
+								}
 							}}
 						>
 							<Text style={ styles.text_button }>Save phone number</Text>
 						</TouchableOpacity>
 					</View>
-
-						{/* Form Validation Error */}
-						{
-							showValidationError ?
-							<View style={ styles.alert_row }>
-								<Text style={[ styles.alert, styles.text ]}>{ errors.phone }</Text>
-							</View>
-						: null
-						}
 				</View>
 
 

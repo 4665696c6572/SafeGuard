@@ -1,13 +1,14 @@
 /*
-*	Sets up Database on first run
-*	Includes 1 Demo Person with data
-*/
+ *	Sets up Database on first run
+ *	Includes 1 Demo Person with data
+ */
 export default async function initializeDatabase( db )
 {
 	try
 	{
 		await db.execAsync(
 		`
+			
 			DROP TABLE IF EXISTS Address;
 			DROP TABLE IF EXISTS Phone;
 			DROP TABLE IF EXISTS Email;
@@ -28,7 +29,6 @@ export default async function initializeDatabase( db )
 
 			PRAGMA foreign_keys = ON;
 			PRAGMA journal_mode = WAL;
-
 
 
 			CREATE TABLE IF NOT EXISTS    Entity
@@ -136,19 +136,14 @@ export default async function initializeDatabase( db )
 			);
 
 
-			CREATE TABLE IF NOT EXISTS    Category
-			(
-				category_id    INTEGER    PRIMARY KEY,
-				category_name    TEXT
-			);
 
-			CREATE TABLE IF NOT EXISTS    Game_Data
+
+			CREATE TABLE IF NOT EXISTS Game_Data
 			(
-				user_id    INTEGER    PRIMARY KEY,
 				current_level    TEXT    DEFAULT ( 1 )    UNIQUE,
 				score    INTEGER    DEFAULT ( 0 ),
-				last_badge    INTEGER    DEFAULT ( 0 ),
-				FOREIGN KEY ( user_id )    REFERENCES Entity( entity_id )
+				last_badge_seen    INTEGER    DEFAULT ( 0 ),
+				PRIMARY KEY ( current_level, score )
 			);
 
 			CREATE Table IF NOT EXISTS Streak_History
@@ -156,6 +151,12 @@ export default async function initializeDatabase( db )
 				streak_id     TEXT    PRIMARY KEY,
 				date_played    TEXT,
 				streak_seen    INTEGER    DEFAULT ( 0 )
+			);
+
+			CREATE TABLE IF NOT EXISTS    Category
+			(
+				category_id    INTEGER    PRIMARY KEY,
+				category_name    TEXT
 			);
 
 			CREATE TABLE IF NOT EXISTS    Matching_Data
@@ -195,7 +196,7 @@ export default async function initializeDatabase( db )
 		` );
 		// User setup
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_name, entity_type ) VALUES ( ?, ? )', [ 'Full Name', 'Person' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( user_id, current_level, score ) VALUES ( ?, ?, ? )', [ 1, 1, 0 ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Game_Data ( current_level, score ) VALUES ( ?, ? )', [ 1, 0 ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Streak_History ( streak_id, date_played, streak_seen ) VALUES ( ?, ?, ? )', [ '2026-03-02', '2026-03-02T23:00:00.000Z', 1 ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Streak_History ( streak_id, date_played, streak_seen ) VALUES ( ?, ?, ? )', [ '2026-03-03', '2026-03-03T23:00:00.000Z', 1 ]);

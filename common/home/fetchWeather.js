@@ -17,4 +17,4 @@ export default async function fetchWeatherData( location )
 	const weather_data = await result.json( );
 
 	return weather_data;
-};																		
+};

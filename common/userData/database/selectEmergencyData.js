@@ -1,5 +1,7 @@
 import splitData from "../splitData";
 
+
+// Select user input data from db.
 export default async function selectEmergencyData( db, table, condition )
 {
 	try

@@ -1,5 +1,16 @@
+// Inserts user input data into db.
 export default async function insertEmergencyData( db, table, emergencyData )
 {
+	/*
+	 *	Allows user to remove a single item in a form
+	 *	while still allowing for greater flexibility of use.
+	 *	It sets items the user backspaced or set to a space as null.
+	 */
+	for ( const [ key, value ] of Object.entries( emergencyData ))
+	{
+		if ( value == '' || value == ' ' ) emergencyData[key] = null;
+	}
+
 	const data =
 	{
 		Address:

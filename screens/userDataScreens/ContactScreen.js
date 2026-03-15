@@ -1,17 +1,17 @@
 
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Modal, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import deleteFromDB from '../../common/userData/deleteFromDB.js';
 import saveToDB from '../../common/userData/saveToDB.js';
 import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyData';
 
-
 import { EditContact, ViewContact } from './components/contact';
 
 
+// This is not a standalone screen.  Used by Insurance & Doctor.
 const ContactScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext( );
@@ -19,17 +19,20 @@ const ContactScreen = ({ navigation, route }) =>
 
 	const [ contactData, setContactData, loadingContactData, loadContactData ] = useLoadEmergencyData( db, 'Contact', params.id );
 
-	const [ editContactVisible, setEditContactVisible ] = useState( false );
-	const [ viewContactVisible, setViewContactVisible ] = useState( true );
-
+	// Temp data storage to allow for canceling mid add/edit.
 	const [ tempAddressData, setTempAddressData ] = useState( );
 	const [ tempEmailData, setTempEmailData ] = useState( );
 	const [ tempFaxData, setTempFaxData ] = useState( );
 	const [ tempPhoneData, setTempPhoneData ] = useState( );
 
+	// Modal Controls.
+	const [ editContactVisible, setEditContactVisible ] = useState( false );
+	const [ viewContactVisible, setViewContactVisible ] = useState( true );
+
 	const isFocused = useIsFocused( );
 
 
+	// Load/Reload data on screen focus.
 	useEffect(( ) =>
 	{
 		if ( isFocused )
@@ -39,29 +42,40 @@ const ContactScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
+	// Navigates back to either PersonScreen ( Insurance ) or Doctor.
 	function handleNavigation( )
 	{
 		if ( params.return )    navigation.goBack( );
 	}
 
 
+	// Saves to db & reloads data for on screen data refresh.
 	async function saveEntry( table, data, id )
 	{
 		await saveToDB( db, table, data, id, loadContactData );
 	}
 
 
+	// Deletes from db & reloads data for on screen data refresh.
 	async function deleteEntry( table, id )
 	{
 		deleteFromDB( db, table, id, loadContactData );
 	}
 
 
-	if ( loadingContactData )    return <ActivityIndicator/>;
-
 	return(
 		<View>
-			<Modal animationType='slide' visible={ viewContactVisible }>
+		{
+			loadingContactData ?
+			<ActivityIndicator/>
+		:
+			<>
+			<Modal
+				animationType='slide'
+				onRequestClose={ ( ) => setViewContactVisible( false ) }
+				transparent={ true }
+				visible={ viewContactVisible }
+			>
 				<ViewContact
 					contactData={ contactData }
 					handleNavigation={ handleNavigation }
@@ -76,7 +90,12 @@ const ContactScreen = ({ navigation, route }) =>
 			</Modal>
 
 
-			<Modal animationType='slide' visible={ editContactVisible }>
+			<Modal
+				animationType='slide'
+				transparent={ true }
+				onRequestClose={ ( ) => setEditContactVisible( false ) }
+				visible={ editContactVisible }
+			>
 				<EditContact
 					contactData={ contactData }
 					deleteEntry={ deleteEntry }
@@ -94,6 +113,8 @@ const ContactScreen = ({ navigation, route }) =>
 					tempPhoneData={ tempPhoneData }
 				/>
 			</Modal>
+			</>
+		}
 		</View>
 	)
 };

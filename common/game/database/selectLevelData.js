@@ -1,9 +1,11 @@
+// Loads game content
 export default async function selectLevelData( db, screen_name, level_category, questions_per_level )
 {
 	try
 	{
 		let level_data = await db.getAllAsync( operations[`${ screen_name }`], [ level_category, questions_per_level] );
 
+		// answers are grouped for easier order randomizing
 		if ( screen_name == 'MultipleChoiceScreen' )
 		{
 			level_data = level_data.map( function( result )
@@ -31,6 +33,7 @@ export default async function selectLevelData( db, screen_name, level_category, 
 		console.log( `Error loading ${ screen_name } data:`, error );
 	}
 };
+
 
 const operations =
 {

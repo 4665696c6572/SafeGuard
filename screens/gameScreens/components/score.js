@@ -11,9 +11,9 @@ const screen_width = Dimensions.get( 'screen' ).width;
 
 
 /*
- * Displays player score
- * Also displays badges that the player has earned.
- * Badges are only visible once earned.
+ *	Displays player score
+ *	Also displays badges that the player has earned.
+ *	Badges are only visible once earned.
 */
 export function ScoreBox ({ currentLevel, totalScore })
 {
@@ -22,8 +22,14 @@ export function ScoreBox ({ currentLevel, totalScore })
 		{
 			currentLevel >= 4 ?
 			<View style={ styles.badge_row_upper }>
-				<Image source={ water } style={ styles.badge_small }/>
-				<Image source={ storm } style={[ styles.badge_small , { opacity: currentLevel >= 7 ? 1 : 0 } ]}/>
+				<Image
+					source={ water }
+					style={ styles.badge_small }
+				/>
+				<Image
+					source={ storm }
+					style={[ styles.badge_small , { opacity: currentLevel >= 7 ? 1 : 0 } ]}
+				/>
 			</View>
 		: null
 		}
@@ -32,8 +38,12 @@ export function ScoreBox ({ currentLevel, totalScore })
 		{
 			currentLevel < 10 ?
 			<View style={{ paddingTop: 25 }}>
-				<Text style={[ styles.score_text, styles.score_text_green ]} >Score</Text>
-				<Text style={[ styles.score_text, styles.score_text_green ]} >{ totalScore } </Text>
+				<Text style={[ styles.score_text, styles.score_text_green ]} >
+					Score
+				</Text>
+				<Text style={[ styles.score_text, styles.score_text_green ]} >
+					{ totalScore }
+				</Text>
 			</View>
 		: null
 		}
@@ -48,12 +58,19 @@ export function ScoreBox ({ currentLevel, totalScore })
 				</View>
 
 				<View style={{ paddingTop: 25 }}>
-						<Text style={[ styles.score_text, styles.score_text_green ]} >Score</Text>
-						<Text style={[ styles.score_text, styles.score_text_green ]} >{ totalScore } </Text>
+						<Text style={[ styles.score_text, styles.score_text_green ]} >
+							Score
+						</Text>
+						<Text style={[ styles.score_text, styles.score_text_green ]} >
+							{ totalScore }
+						</Text>
 				</View>
 
 				<View>
-					<Image source={ health } style={[ styles.badge_small, { opacity: currentLevel >= 13 ? 1 : 0 } ]}/>
+					<Image
+						source={ health }
+						style={[ styles.badge_small, { opacity: currentLevel >= 13 ? 1 : 0 } ]}
+					/>
 				</View>
 			</View>
 		: null
@@ -64,8 +81,8 @@ export function ScoreBox ({ currentLevel, totalScore })
 
 
 /*
- * Displays a progress bar and the level's score
- * Used by game levels
+ *	Displays a progress bar and the level's score
+ *	Used by game levels
  */
 export const ProgressAndScore = ({ currentNumber, levelScore, questions_per_level }) =>
 {

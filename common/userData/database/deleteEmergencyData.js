@@ -1,3 +1,4 @@
+// Deletes user input data from db.
 export default async function deleteEmergencyData( db, table, condition )
 {
 	const operations =
@@ -63,6 +64,7 @@ export default async function deleteEmergencyData( db, table, condition )
 
 	try
 	{
+	// Can be deleted via button press or on cascade of owning entity
 		if ( table == 'Address' )
 		{
 			await db.runAsync( operations.Address, condition );
@@ -74,6 +76,7 @@ export default async function deleteEmergencyData( db, table, condition )
 			await db.runAsync( operations.Medical_Condition, condition );
 		}
 
+		// Can be deleted via button press or on cascade of owning entity
 		if ( table == 'Contact' )
 		{
 			await db.runAsync( operations.Address, condition[0] );
@@ -92,6 +95,7 @@ export default async function deleteEmergencyData( db, table, condition )
 			await db.runAsync( operations.Entity, condition );
 		}
 
+		// Can be deleted via button press or on cascade of owning entity
 		if ( table == 'Fax' )
 		{
 			await db.runAsync( operations.Phone, condition );
@@ -109,6 +113,7 @@ export default async function deleteEmergencyData( db, table, condition )
 			await db.runAsync( operations.Person_2, condition );
 		}
 
+		// Can be deleted via button press or on cascade of owning entity
 		if ( table == 'Phone' )
 		{
 			await db.runAsync( operations.Phone, condition );

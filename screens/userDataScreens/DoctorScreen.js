@@ -1,3 +1,4 @@
+import * as NavigationBar from 'expo-navigation-bar';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, View } from 'react-native';
@@ -12,6 +13,7 @@ import styles from '../../styles/styles.js';
 import { Doctor, EditDoctor, ViewDoctor } from './components/doctor';
 
 
+// Doctor information screen with modals for viewing and editing.
 const DoctorScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext( );
@@ -19,15 +21,18 @@ const DoctorScreen = ({ navigation, route }) =>
 
 	const [ doctorData, setDoctorData, loadingDoctorData, loadDoctorData ] = useLoadEmergencyData( db, 'Doctor' );
 
-	const [ editDoctorVisible, setEditDoctorVisible ] = useState( params?.visible ?? false );
-	const [ viewDoctorVisible, setViewDoctorVisible ] = useState( false );
-
+	// Temp data selection & storage to allow for canceling mid add/edit.
 	const [ doctorIndex, setDoctorIndex ] = useState( null );
 	const [ tempDoctorData, setTempDoctorData ] = useState( );
+
+	// Modal Controls.
+	const [ editDoctorVisible, setEditDoctorVisible ] = useState( params?.visible ?? false );
+	const [ viewDoctorVisible, setViewDoctorVisible ] = useState( false );
 
 	const isFocused = useIsFocused( );
 
 
+	// Load/Reload data on screen focus.
 	useEffect(( ) =>
 	{
 		if ( isFocused )
@@ -37,6 +42,11 @@ const DoctorScreen = ({ navigation, route }) =>
 	}, [ isFocused ]);
 
 
+	/*
+	 *	Saves to db.
+	 *	Additionally reloads data for on screen data refresh.
+	 *	Navigates to Contact Screen if needed.
+	 */
 	async function saveEntry( table, data, id, shouldNavigate )
 	{
 		if ( shouldNavigate )
@@ -51,15 +61,28 @@ const DoctorScreen = ({ navigation, route }) =>
 	}
 
 
+	// Deletes from db & reloads data for on screen data refresh.
 	async function deleteEntry( table, id )
 	{
 		deleteFromDB( db, table, id, loadDoctorData );
 	}
 
 
+	// Doctors can have contact details.
 	function handleNavigation( id, name, facility )
 	{
 		navigation.navigate( 'ContactScreen', { id: id, contact_name: name, facility: facility, return: true });
+	}
+
+
+	// close and reset for modals
+	function closeModal( setModalVisible )
+	{
+		// navigation bar hidden in modals.
+		NavigationBar.setVisibilityAsync( "visible" );
+		setDoctorIndex( null );
+		setModalVisible( false );
+		setTempDoctorData( );
 	}
 
 
@@ -67,7 +90,7 @@ const DoctorScreen = ({ navigation, route }) =>
 		<View style={ styles.bottom_tab_container }>
 		{
 			loadingDoctorData ?
-			<ActivityIndicator />
+			<ActivityIndicator/>
 		:
 			<>
 			<Doctor
@@ -77,8 +100,14 @@ const DoctorScreen = ({ navigation, route }) =>
 				setViewDoctorVisible={ setViewDoctorVisible }
 			/>
 
-			<Modal animationType='slide' visible={ viewDoctorVisible }>
+			<Modal
+				animationType='slide'
+				onRequestClose={ ( ) => closeModal( setViewDoctorVisible ) }
+				transparent={ true }
+				visible={ viewDoctorVisible }
+			>
 				<ViewDoctor
+					closeView={ ( ) =>  closeModal( setViewDoctorVisible ) }
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }
 					handleNavigation={ handleNavigation }
@@ -89,16 +118,19 @@ const DoctorScreen = ({ navigation, route }) =>
 				/>
 			</Modal>
 
-			<Modal animationType='slide' visible={ editDoctorVisible }>
+			<Modal
+				animationType='slide'
+				onRequestClose={ ( ) => closeModal( setEditDoctorVisible ) }
+				transparent={ true }
+				visible={ editDoctorVisible }
+			>
 				<EditDoctor
+					closeEdit={ ( ) => closeModal( setEditDoctorVisible ) }
 					deleteEntry={ deleteEntry }
 					doctorData={ doctorData }
 					doctorIndex={ doctorIndex }
 					saveEntry={ saveEntry }
-					setEditDoctorVisible={ setEditDoctorVisible }
-					setDoctorIndex={ setDoctorIndex }
 					setTempDoctorData={ setTempDoctorData }
-					setViewDoctorVisible={ setViewDoctorVisible }
 					tempDoctorData={ tempDoctorData }
 				/>
 			</Modal>

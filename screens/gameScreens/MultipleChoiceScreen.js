@@ -25,6 +25,15 @@ const questions_per_level = 10;
 const underlay = '#2f73ccff';
 
 
+/*
+ *	Multiple Choice Game.
+ *	Loads questions, shuffles answer sets ( 4 per question ),
+ *	User interacts by choosing  an answer.  If incorrect, 
+ * 	the phone vibrates.  Either way, the next question loads
+ *  and score / progress are updated.  Encouragement is displayed
+ *  dependent on score.  On finish, progress is saved to db,
+ *  user is returned to the game home.
+ */
 export default function MultipleChoiceScreen({ navigation, route })
 {
 	const db = useSQLiteContext( );
@@ -38,7 +47,12 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MultipleChoiceScreen', params?.levelCategory ?? 1, questions_per_level )
+	const [ levelData, loadingData, loadData ] =
+		useLoadLevelData(
+			db, 'MultipleChoiceScreen',
+			params?.levelCategory ?? 1,
+			questions_per_level
+		);
 
 	const isFocused = useIsFocused( );
 
@@ -54,6 +68,10 @@ export default function MultipleChoiceScreen({ navigation, route })
 
 	useEffect(( ) =>
 	{
+		/*
+		 *	If the level is complete, updates db and returns to game home.
+		 *	timeout is used to delay navigation to display end level model.
+		 */
 		if ( levelComplete )
 		{
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
@@ -61,7 +79,6 @@ export default function MultipleChoiceScreen({ navigation, route })
 			updateGameData( 'Game_Data', db, new_level, levelScore );
 			setTimeout( function( )
 			{
-
 				navigation.dispatch( StackActions.pop( ));
 				navigation.navigate( "GameScreen" );
 			}, 1200 );
@@ -69,9 +86,14 @@ export default function MultipleChoiceScreen({ navigation, route })
 	}), [ levelComplete ]
 
 
+	// Checks if answer is correct, triggers encouragement, checks if level is complete.
 	function handleAnswerCheck( correct_answer, user_answer, question_id )
 	{
-		if ( ( roundStartIndex == Math.floor( questions_per_level * 0.4 ) && levelScore >= 2 ))
+		if
+		(
+			roundStartIndex == Math.floor( questions_per_level * 0.4 )
+			&& levelScore >= 2
+		)
 		{
 			setCheerVisible( true );
 			setTimeout( function( )
@@ -91,14 +113,20 @@ export default function MultipleChoiceScreen({ navigation, route })
 		setRoundStartIndex( prev => prev + 1 );
 		updateLevelData( db, 'MultipleChoiceScreen', question_id );
 
-		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
+		if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
+		{
+			setLevelComplete( true );
+		}
 	}
 
 
-	if ( loadingData )    return <ActivityIndicator/>;
-
 	return (
 		<View style={ styles.container }>
+		{
+			loadingData ?
+			<ActivityIndicator/>
+		:
+			<>
 			<View style={[ styles.game_level_area, {  marginBottom: 0 } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
@@ -115,7 +143,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
 					<View
-						style={[ styles.game_mc_column, { gap: cheerVisible ? 0 : '5%',  paddingBottom: 0 } ]}
+						style={[ styles.game_mc_column, { gap: cheerVisible ? 0 : '5%', paddingBottom: 0 } ]}
 						key={ entry.question_id }
 					>
 						<View style={{ height: 100 }}>
@@ -126,18 +154,21 @@ export default function MultipleChoiceScreen({ navigation, route })
 							answerOrder.map(( index ) =>
 							<View key={ answerOrder[index] } style={ styles.game_mc_answers }>
 								<View style={ styles.game_text_container }>
-									<Text style={ styles.game_mc_text }>{ entry.answers[ answerOrder[index] ] }</Text>
+									<Text style={ styles.game_mc_text }>
+										{ entry.answers[ answerOrder[index] ] }
+									</Text>
 								</View>
 							
 							<TouchableHighlight
-								key = { index }
-								style={[ styles.game_button_round ]}
-								onPress={ ( ) => handleAnswerCheck(
-																		entry.answers[0], entry.answers[ answerOrder[index] ],
-																		entry.question_id
-																	)}
-								underlayColor={ underlay }
 								activeOpacity={ 1 }
+								key = { index }
+								onPress={ ( ) =>
+									handleAnswerCheck(
+										entry.answers[0], entry.answers[ answerOrder[index] ],
+										entry.question_id
+								)}
+								style={[ styles.game_button_round ]}
+								underlayColor={ underlay }
 							>
 								<Image source={ flower } style={ { height: 70, width: 70} }/>
 							</TouchableHighlight>
@@ -152,6 +183,8 @@ export default function MultipleChoiceScreen({ navigation, route })
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}
+			</>
+		}
 		</View>
 	);
 }

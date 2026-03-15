@@ -31,9 +31,9 @@ export function Decoration ({ i })
 
 
 /*
- * Populates the river with appropriately spaced level buttons
- * Also handles the end game trophy
- * */
+ *	Populates the river ( game home ) with appropriately spaced level buttons.
+ *	Also handles the end game trophy.
+ */
 export const GamePath = ({ currentLevel, handleNavigation }) =>
 {
 	return (
@@ -48,7 +48,11 @@ export const GamePath = ({ currentLevel, handleNavigation }) =>
 						<View style={ styles.river_column }>
 						{
 							Math.abs(( i % 4 ) - 1 ) == 2 ?
-							<LevelButton currentLevel={ currentLevel } i={ i } handleNavigation={ handleNavigation }/>
+							<LevelButton
+								currentLevel={ currentLevel }
+								i={ i }
+								handleNavigation={ handleNavigation }
+							/>
 						: null
 						}
 						{ Math.abs(( i % 4 ) - 1 ) == 0 ? <Decoration i={ i }/> : null }
@@ -57,7 +61,11 @@ export const GamePath = ({ currentLevel, handleNavigation }) =>
 						<View style={ styles.river_column }>
 						{
 							Math.abs(( i % 4 ) - 1 ) == 1 ?
-							<LevelButton currentLevel={ currentLevel } i={ i } handleNavigation={ handleNavigation }/>
+							<LevelButton
+								currentLevel={ currentLevel }
+								i={ i }
+								handleNavigation={ handleNavigation }
+							/>
 						: null
 						}
 						</View>
@@ -65,7 +73,11 @@ export const GamePath = ({ currentLevel, handleNavigation }) =>
 						<View style={ styles.river_column }>
 						{
 							Math.abs(( i % 4 ) - 1 ) == 0 ?
-							<LevelButton currentLevel={ currentLevel } i={ i } handleNavigation={ handleNavigation }/>
+							<LevelButton
+								currentLevel={ currentLevel }
+								i={ i }
+								handleNavigation={ handleNavigation }
+							/>
 							: null
 						}
 						{
@@ -81,9 +93,15 @@ export const GamePath = ({ currentLevel, handleNavigation }) =>
 			<View style={{ alignItems: 'center' }}>
 			{
 				currentLevel == 13 ?
-				<Image source={ trophy } style={{ height: 150, width: 150 }}/>
+				<Image
+					source={ trophy }
+					style={{ height: 150, width: 150 }}
+				/>
 			:
-				<Image source={ empty_trophy } style={{ height: 150, opacity: 0.2, width: 150 }}/>
+				<Image
+					source={ empty_trophy }
+					style={{ height: 150, opacity: 0.2, width: 150 }}
+				/>
 			}
 			</View>
 		</ScrollView>
@@ -93,18 +111,20 @@ export const GamePath = ({ currentLevel, handleNavigation }) =>
 
 
 /*
- * Sets up the decorative level selection buttons
- * As well as level navigation
+ *	Sets up the decorative level selection buttons
+ *	As well as level navigation
  */
 export function LevelButton ({ currentLevel, i, handleNavigation })
 {
 	return (
 		<TouchableHighlight style={ styles.game_button }
+			activeOpacity={ 1 }
 			disabled={ ( i + 1 ) > currentLevel ? true : false }
 			// category number, level, screen
-			onPress={ ( ) => handleNavigation( ( i + 1 ), ( i % 4 + 1 ), level_type[ i % 3 ] )}
+			onPress={ ( ) => 
+				handleNavigation( ( i + 1 ), ( i % 4 + 1 ), level_type[ i % 3 ] )
+			}
 			underlayColor={ underlay }
-			activeOpacity={ 1 }
 		>
 		{
 			currentLevel != ( i + 1 ) ?
@@ -112,7 +132,7 @@ export function LevelButton ({ currentLevel, i, handleNavigation })
 				source={ selectButtonImage( i + 1, currentLevel ) }
 				style={[
 							styles.game_lily, styles.game_lily_container,
-							{ opacity: ( i + 1 ) > currentLevel? 0.2 : 0.7 }
+							{ opacity: ( i + 1 ) > currentLevel ? 0.2 : 0.7 }
 						]}
 			/>
 		:

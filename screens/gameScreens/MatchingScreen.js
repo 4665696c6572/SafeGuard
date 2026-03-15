@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableHighlight, View } from 'react-native';
 import { StackActions, useIsFocused } from '@react-navigation/native';
 
-import {
-			calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete,
-			setResultArray, updateLevel, updateResultArray
-		} from '../../common/game/sharedGame.js';
+import
+{
+	calcAnswerOrder, checkAnswer, checkLevelComplete, checkRoundComplete,
+	setResultArray, updateLevel, updateResultArray
+} from '../../common/game/sharedGame.js';
 import { EndLevelModal } from './components/levelEnd.js';
 import { ProgressAndScore } from './components/score.js';
 import updateGameData from '../../common/game/database/updateGameData.js';
@@ -23,6 +24,17 @@ const questions_per_level = 12;
 
 const underlay = '#0b3e82ff'	
 
+
+/*
+ *	Matching Game.
+ *	Loads questions, shuffles 3 question / answer pairs,
+ *	The pairs are displayed on screen.  User interacts by
+ *	first choosing a question then an answer ( answers are
+ *	disabled until a question is selected).  If incorrect, 
+ * 	the phone vibrates.  If correct, the pair disappears
+ * 	and score / progress are updated.  On finish, progress
+ *	is saved to db, user is returned to the game home.
+ */
 export default function MatchingScreen({ navigation, route })
 {
 	const db = useSQLiteContext( );
@@ -39,7 +51,13 @@ export default function MatchingScreen({ navigation, route })
 
 	const [ cheerVisible, setCheerVisible ] = useState( false );
 
-	const [ levelData, loadingData, loadData ] = useLoadLevelData( db, 'MatchingScreen', params?.level_category ?? 1, questions_per_level );
+	const [ levelData, loadingData, loadData ] =
+		useLoadLevelData(
+			db,
+			'MatchingScreen',
+			params?.level_category ?? 1,
+			questions_per_level
+		);
 
 
 	const isFocused = useIsFocused( );
@@ -56,19 +74,27 @@ export default function MatchingScreen({ navigation, route })
 
 	useEffect( ( ) =>
 	{
+		// Checks if the round and level are complete ( round: set of 3 QA pairs ).
 		if ( checkRoundComplete( answeredCorrectly, questions_per_round ))
 		{
 			setAnsweredCorrectly( setResultArray( questions_per_round ));
 			setAnswerOrder( calcAnswerOrder( questions_per_round ));
 			setRoundStartIndex( prev => prev + questions_per_round );
 
-			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))    setLevelComplete( true );
+			if ( checkLevelComplete( roundStartIndex, questions_per_level, questions_per_round ))
+			{
+				setLevelComplete( true );
+			}
 		}
 	}, [ answeredCorrectly ] );
 
 
 	useEffect(( ) =>
 	{
+		/*
+		 *	If the level is complete, updates db and returns to game home.
+		 *	timeout is used to delay navigation to display end level model.
+		 */
 		if ( levelComplete )
 		{
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
@@ -83,6 +109,7 @@ export default function MatchingScreen({ navigation, route })
 	}), [ levelComplete ]
 
 
+	// Checks if answer is correct and triggers encouragement.
 	function handleAnswerCheck( question_id, answer_id, question_row )
 	{
 		if ( checkAnswer( question_id, answer_id ))
@@ -111,11 +138,19 @@ export default function MatchingScreen({ navigation, route })
 	}
 
 
-	if ( loadingData )    return <ActivityIndicator/>;
-
 	return (
 		<View style={ styles.container }>
-			<View style={[ styles.game_level_area, { marginBottom: cheerVisible? 0 : '15%' } ]}>
+		{
+			loadingData ?
+			<ActivityIndicator/>
+		:
+			<>
+			<View style=
+				{[
+					styles.game_level_area,
+					{ marginBottom: cheerVisible? 0 : '15%' }
+				]}
+			>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -136,20 +171,26 @@ export default function MatchingScreen({ navigation, route })
 					answeredCorrectly[i] === false ?
 
 					<TouchableHighlight
-						style=
-						{[
-							styles.game_box_small,
-							[ questionSelected === entry.question_id ? styles.game_box_selected : styles.game_box_active ]
-						]}
+						activeOpacity={ 1 }
 						onPress={ ( ) =>
 						{
 							setQuestionSelected( entry.question_id );
 							setAnswerButtonsDisabled( false );
 						}}
+						style=
+						{[
+							styles.game_box_small,
+							[
+								questionSelected === entry.question_id ?
+								styles.game_box_selected
+								: styles.game_box_active
+							]
+						]}
 						underlayColor={ underlay }
-						activeOpacity={ 1 }
 					>
-						<Text style={[ styles.game_button_text, {paddingLeft: 10, paddingRight: 10 } ]}>{ entry.question }</Text>
+						<Text style={[ styles.game_button_text, { paddingLeft: 10, paddingRight: 10 } ]}>
+							{ entry.question }
+						</Text>
 					</TouchableHighlight>
 
 					: <View style={ styles.game_box_small }/>
@@ -160,20 +201,26 @@ export default function MatchingScreen({ navigation, route })
 					answeredCorrectly[answerOrder[i]] === false ?
 
 					<TouchableHighlight
+						activeOpacity={ 1 }
+						onPress={ ( ) =>
+						{
+							handleAnswerCheck(
+								questionSelected, // question id
+								levelData[roundStartIndex + answerOrder[i]].question_id, // answer/question id
+								answerOrder[i] // answeredCorrectly index
+							);
+						}}
 						style=
 						{[
 							styles.game_box_small,
 							styles.game_box_active,
 							answerButtonsDisabled ? styles.game_box_disabled : null
 						]}
-						onPress={ ( ) =>
-						{	// question id, answer ( question ) id, answeredCorrectly index
-							handleAnswerCheck( questionSelected, levelData[roundStartIndex + answerOrder[i]].question_id, answerOrder[i] );
-						}}
 						underlayColor={ underlay }
-						activeOpacity={ 1 }
 					>
-						<Text style={ styles.game_button_text }>{ levelData[roundStartIndex + answerOrder[i]].answer }</Text>
+						<Text style={ styles.game_button_text }>
+							{ levelData[roundStartIndex + answerOrder[i]].answer }
+						</Text>
 					</TouchableHighlight>
 
 					: <View style={ styles.game_box_small }/>
@@ -187,6 +234,8 @@ export default function MatchingScreen({ navigation, route })
 				<Image source={ frog } style={ styles.cheer_image }/>
 			: null
 			}
+			</>
+		}
 		</View>
 	);
 }

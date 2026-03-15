@@ -14,13 +14,17 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessabilityHint='Type in first line of street address.'
 					autoComplete='address-line1'
 					maxLength={ 100 }
-					placeholder={ tempAddressData?.address_line_one ? tempAddressData.address_line_one : 'Street address' }
+					placeholder={ 'Street address' }
 					style={ styles.text_input }
 					textContentType='streetAddressLine1'
+					value={ tempAddressData?.address_line_one ?? '' }
 					onChangeText={ ( text ) =>
 					{
 						setAddressItem( text );
-						setTempAddressData( prev => ({ ...prev, 'address_line_one': text }));
+						setTempAddressData( prev =>
+						({
+							...prev, 'address_line_one': text }
+						));
 					}}
 				/>
 
@@ -29,19 +33,26 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessabilityHint='Type in address line two.'
 					autoComplete='address-line2'
 					maxLength={ 100 }
-					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_line_two': text }))}
-					placeholder={ tempAddressData?.address_line_two ? tempAddressData.address_line_two : 'Address line two' }
+					placeholder={ 'Address line two' }
 					style={ styles.text_input }
+					value={ tempAddressData?.address_line_two ?? '' }
 					textContentType='streetAddressLine2'
+					onChangeText={ ( text ) =>
+						setTempAddressData( prev =>
+						({
+							...prev, 'address_line_two': text
+						}))
+					}
 				/>
 
 				<TextInput
 					accessibilityLabel='City'
 					accessabilityHint='Type in city name.'
 					maxLength={ 100 }
-					placeholder={ tempAddressData?.city ? tempAddressData.city : 'City' }
+					placeholder={ 'City' }
 					style={ styles.text_input }
 					textContentType='city'
+					value={ tempAddressData?.city ?? '' }
 					onChangeText={ ( text ) =>
 					{
 						setAddressItem( text );
@@ -53,10 +64,16 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessibilityLabel='State'
 					accessabilityHint='Type in state name or abbreviation.'
 					maxLength={ 100 }
-					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'state': text }))}
-					placeholder={ tempAddressData?.state ? tempAddressData.state : 'State' }
+					placeholder={ 'State' }
 					style={ styles.text_input }
+					value={ tempAddressData?.state ?? '' }
 					textContentType='state'
+					onChangeText={ ( text ) =>
+						setTempAddressData( prev =>
+						({
+							...prev, 'state': text
+						}))
+					}
 				/>
 
 				<TextInput
@@ -64,31 +81,52 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessabilityHint='Type in post code.'
 					autoComplete='postal-code'
 					keyboardType='numeric'
-					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'post_code': text }))}
 					maxLength={ 100 }
-					placeholder={ tempAddressData?.post_code ? tempAddressData.post_code : 'Post code' }
+					placeholder={ 'Post code' }
 					style={ styles.text_input }
+					value={ tempAddressData?.post_code ?? '' }
 					textContentType='postalCode'
+					onChangeText={ ( text ) =>
+						setTempAddressData( prev =>
+						({
+							...prev, 'post_code': text
+						}))
+					}
 				/>
 
 				<TextInput
 					accessibilityLabel='Country'
 					accessabilityHint='Type in country name or abbreviation'
 					autoComplete='country'
-					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'country': text }))}
 					maxLength={ 100 }
-					placeholder={ tempAddressData?.country ? tempAddressData.country : 'Country' }
+					placeholder={ 'Country' }
 					style={ styles.text_input }
+					value={ tempAddressData?.country ?? '' }
 					textContentType='countryName'
+					onChangeText=
+					{
+						( text ) => setTempAddressData( prev =>
+						({
+							...prev, 'country': text
+						}))
+					}
 				/>
 
 				<TextInput
 					accessibilityLabel='Note'
 					accessabilityHint='Type in address note.'
-					onChangeText={ ( text ) => setTempAddressData( prev => ({ ...prev, 'address_note': text }))}
 					maxLength={ 100 }
-					placeholder={ tempAddressData?.address_note ? tempAddressData.address_note : 'Note' }
+					multiline={ true }
+					placeholder={ 'Note' }
 					style={ styles.text_input }
+					value={ tempAddressData?.address_note ?? '' }
+					onChangeText=
+					{
+						( text ) => setTempAddressData( prev =>
+						({
+							...prev, 'address_note': text
+						}))
+					}
 				/>
 			</ScrollView>
 		</KeyboardAvoidingView>
@@ -106,9 +144,10 @@ export const EmailForm = ({ setEmailItem, setTempEmailData, tempEmailData }) =>
 				autoCapitalize='none'
 				autoComplete='email'
 				keyboardType='email-address'
-				placeholder={ tempEmailData?.email ? tempEmailData.email : 'E-mail' }
+				placeholder={ 'E-mail' }
 				style={ styles.text_input }
 				textContentType='emailAddress'
+				value={ tempEmailData?.email ?? '' }
 				onChangeText={ ( text ) =>
 				{
 					setEmailItem( text );
@@ -119,9 +158,12 @@ export const EmailForm = ({ setEmailItem, setTempEmailData, tempEmailData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in email note.'
-				onChangeText={ ( text ) => setTempEmailData( prev => ({ ...prev, 'email_note': text }))}
-				placeholder={ tempEmailData?.email_note ? tempEmailData.email_note : 'E-mail note' }
+				placeholder={ 'E-mail note' }
 				style={ styles.text_input }
+				value={ tempEmailData?.email_note ?? '' }
+				onChangeText={ ( text ) =>
+					setTempEmailData( prev => ({ ...prev, 'email_note': text }))
+				}
 			/>
 		</View>
 	)
@@ -135,9 +177,10 @@ export const FaxForm = ({ setFaxItem, setTempFaxData, tempFaxData }) =>
 				accessibilityLabel='Text Input'
 				accessibilityHint='Type in fax number.'
 				keyboardType='numeric'
-				placeholder={ tempFaxData?.fax_number ? tempFaxData.fax_number : 'Fax number' }
+				placeholder={ 'Fax number' }
 				textContentType='telephoneNumber'
 				style={ styles.text_input }
+				value={ tempFaxData?.fax_number ?? '' }
 				onChangeText={ ( text ) =>
 				{
 					setFaxItem( text );
@@ -149,9 +192,12 @@ export const FaxForm = ({ setFaxItem, setTempFaxData, tempFaxData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in fax note.'
-				onChangeText={ ( text ) => setTempFaxData( prev => ({ ...prev, 'fax_note': text }))}
-				placeholder={ tempFaxData?.fax_note ? tempFaxData.fax_note : 'Fax note' }
+				placeholder={ 'Fax note' }
 				style={ styles.text_input }
+				value={ tempFaxData?.fax_note ?? '' }
+				onChangeText={ ( text ) =>
+					setTempFaxData( prev => ({ ...prev, 'fax_note': text }))
+				}
 			/>
 		</View>
 	)
@@ -166,9 +212,10 @@ export const PhoneForm = ({ setPhoneItem, setTempPhoneData, tempPhoneData }) =>
 				accessibilityLabel='Office phone number'
 				accessibilityHint='Type in office phone number.'
 				keyboardType='numeric'
-				placeholder={ tempPhoneData?.phone_number ? tempPhoneData.phone_number : 'Office phone number' }
+				placeholder={ 'Office phone number' }
 				style={ styles.text_input }
 				textContentType='telephoneNumber'
+				value={ tempPhoneData?.phone_number ?? '' }
 				onChangeText={ ( text ) =>
 				{
 					setPhoneItem( text );
@@ -180,9 +227,12 @@ export const PhoneForm = ({ setPhoneItem, setTempPhoneData, tempPhoneData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in phone note.'
-				onChangeText={ ( text ) => setTempPhoneData( prev => ({ ...prev, 'phone_number_note': text }))}
-				placeholder={ tempPhoneData?.phone_number_note ? tempPhoneData.phone_number_note : 'Phone number note' }
+				placeholder={ 'Phone number note' }
 				style={ styles.text_input }
+				value={ tempPhoneData?.phone_number_note ?? '' }
+				onChangeText={ ( text ) =>
+					setTempPhoneData( prev => ({ ...prev, 'phone_number_note': text }))
+				}
 			/>
 		</View>
 	)

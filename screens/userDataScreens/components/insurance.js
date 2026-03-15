@@ -12,7 +12,11 @@ import styles from "../../../styles/styles.js";
 
 const underlay_color = '#d1dce4ff';
 
-export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsuranceIndex, setViewInsuranceVisible }) =>
+
+export const Insurance = ({
+							insuranceData, setEditInsuranceVisible,
+							setInsuranceIndex, setViewInsuranceVisible
+						}) =>
 {
 	return (
 		<View style={[ styles.data_container_view, { flex: 2 } ]}>
@@ -22,19 +26,26 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 				insuranceData.map(( insurance, i ) =>
 				<View key={ insurance.insurance_id } style={ styles.text_list }>
 					<View style={{ flex:0.9 }}>
-							{ insurance?.entity_name ? <Text style={ styles.text }>{ insurance.entity_name }</Text> : null }
+						{
+							insurance?.entity_name ?
+							<Text style={ styles.text }>
+								{ insurance.entity_name }
+							</Text>
+						: null
+						}
 					</View>
 
 					<TouchableOpacity
-					accessibilityLabel='Expand button'
-					accessibilityHint='Press to view additional details.'
-						style={ styles.expand_button }
+						accessibilityLabel='Expand button'
+						accessibilityHint='Press to view additional details.'
 						onPress={ ( ) =>
 						{
 							setInsuranceIndex( i );
 							setViewInsuranceVisible( true );
+							// navigation bar hidden in modals.
 							NavigationBar.setVisibilityAsync( "hidden" );
 						}}
+						style={ styles.expand_button }
 					>
 						<HugeiconsIcon
 							icon={ SquareArrowDiagonal01Icon }
@@ -49,12 +60,13 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 				<TouchableOpacity
 					accessibilityLabel='Add button'
 					accessibilityHint='Press to add new health insurance details.'
-					style={ styles.data_button_size }
 					onPress={ ( ) =>
 					{
 						setEditInsuranceVisible( true );
+						// navigation bar hidden in modals.
 						NavigationBar.setVisibilityAsync( "hidden" );
 					}}
+					style={ styles.data_button_size }
 				>
 					<Text style={ styles.text_button }>Add new insurance</Text>
 				</TouchableOpacity>
@@ -65,16 +77,19 @@ export const Insurance = ({ insuranceData, setEditInsuranceVisible, setInsurance
 
 
 export const ViewInsurance = ({
-								handleNavigation, insuranceData, insuranceIndex, setEditInsuranceVisible,
-								setInsuranceIndex, setTempInsuranceData, setViewInsuranceVisible
+								closeView, handleNavigation, insuranceData, insuranceIndex,
+								setEditInsuranceVisible, setInsuranceIndex,
+								setTempInsuranceData, setViewInsuranceVisible
 							}) =>
 {
 	return (
-		<View style={ styles.data_container_view }>
+		<View style={[ styles.data_container_view, { marginTop: 38 } ]}>
 			<View style={{ flex: 3 }}>
 				{
 					insuranceData?.[insuranceIndex]?.entity_name ?
-						<Text style={ styles.title_bar }>{ insuranceData?.[insuranceIndex]?.entity_name }</Text>
+						<Text style={ styles.title_bar }>
+							{ insuranceData?.[insuranceIndex]?.entity_name }
+						</Text>
 				: null
 				}
 
@@ -82,7 +97,9 @@ export const ViewInsurance = ({
 					insuranceData?.[insuranceIndex]?.policy_number ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Policy Number</Text>
-						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].policy_number }</Text>
+						<Text style={ styles.text }>
+							{ insuranceData?.[insuranceIndex].policy_number }
+						</Text>
 					</View>
 				: null
 				}
@@ -91,7 +108,9 @@ export const ViewInsurance = ({
 					insuranceData?.[insuranceIndex]?.start_date ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Policy start date</Text>
-						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].start_date }</Text>
+						<Text style={ styles.text }>
+							{ insuranceData?.[insuranceIndex].start_date }
+						</Text>
 					</View>
 				: null
 				}
@@ -100,7 +119,9 @@ export const ViewInsurance = ({
 					insuranceData?.[insuranceIndex]?.insurance_note ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Note</Text>
-						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].insurance_note }</Text>
+						<Text style={ styles.text }>
+							{ insuranceData?.[insuranceIndex].insurance_note }
+						</Text>
 					</View>
 				: null
 				}
@@ -109,10 +130,13 @@ export const ViewInsurance = ({
 					insuranceData?.[insuranceIndex]?.phone_number ?
 					<View style={ styles.data_section_small }>
 						<Text style={ styles.heading_text }>Phone number</Text>
-						<Text style={ styles.text }>{ insuranceData?.[insuranceIndex].phone_number }</Text>
+						<Text style={ styles.text }>
+							{ insuranceData?.[insuranceIndex].phone_number }
+						</Text>
 					</View>
 				: null
 				}
+
 
 				{/* Close/View button row */}
 				<View style={ styles.save_row }>
@@ -120,13 +144,8 @@ export const ViewInsurance = ({
 				<TouchableOpacity
 					accessibilityLabel='Close button'
 					accessibilityHint='Press to close insurance details screen.'
+					onPress={ ( ) => closeView( ) }
 					style={ styles.button_end }
-					onPress={ ( ) =>
-					{
-						setInsuranceIndex( null );
-						setViewInsuranceVisible( false );
-						NavigationBar.setVisibilityAsync( "visible" );
-					}}
 				>
 					<Text style={ styles.save_button_text }>Close</Text>
 				</TouchableOpacity>
@@ -134,13 +153,13 @@ export const ViewInsurance = ({
 				<TouchableOpacity
 					accessibilityLabel='Edit button'
 					accessibilityHint='Press to edit health insurance details.'
-					style={ styles.button_end }
 					onPress={ ( ) =>
 					{
 						setEditInsuranceVisible( true );
-						setTempInsuranceData({...insuranceData[insuranceIndex] });
+						setTempInsuranceData({ ...insuranceData[insuranceIndex] });
 						setViewInsuranceVisible( false );
 					}}
+					style={ styles.button_end }
 				>
 					<Text style={ styles.save_button_text }>Edit</Text>
 				</TouchableOpacity>
@@ -155,12 +174,13 @@ export const ViewInsurance = ({
 					accessibilityHint='Press to view insurance contact details.'
 					onPress={ ( ) =>
 					{
-						handleNavigation(
-											insuranceData?.[insuranceIndex]?.insurance_id,
-											insuranceData?.[insuranceIndex]?.entity_name
-										);
-						setViewInsuranceVisible( false );
+						handleNavigation
+						(
+							insuranceData?.[insuranceIndex]?.insurance_id,
+							insuranceData?.[insuranceIndex]?.entity_name
+						);
 						setInsuranceIndex( null );
+						setViewInsuranceVisible( false );
 					}}
 				>
 					<Text style={ styles.save_button_text }>View contact details</Text>
@@ -174,9 +194,8 @@ export const ViewInsurance = ({
 
 // For adding or editing
 export const EditInsurance = ({
-								deleteEntry, insuranceData, insuranceIndex, saveEntry,
-								setEditInsuranceVisible, setInsuranceIndex,
-								setTempInsuranceData, tempInsuranceData
+								closeEdit, deleteEntry, insuranceData, insuranceIndex,
+								saveEntry, setTempInsuranceData, tempInsuranceData
 							}) =>
 {
 	// Delete dialog visibility control
@@ -187,10 +206,12 @@ export const EditInsurance = ({
 	const showDatePicker = ( ) => setDatePickerVisibility( true );
 	const hideDatePicker = ( ) => setDatePickerVisibility( false );
 
-
 	const handleConfirm = ( date ) =>
 	{
-		setTempInsuranceData( prev => ({ ...prev, 'start_date': date.toISOString( ).slice( 0,10 )}));
+		setTempInsuranceData( prev =>
+		({
+			...prev, 'start_date': date.toISOString( ).slice( 0,10 )
+		}));
 		hideDatePicker( );
 	};
 
@@ -200,11 +221,11 @@ export const EditInsurance = ({
 
 	useEffect( ( ) =>
 	{
-		const showSubscription = Keyboard.addListener( 'keyboardDidShow', () =>
+		const showSubscription = Keyboard.addListener( 'keyboardDidShow', ( ) =>
 		{
 			setKeyboardVisible( true );
 		});
-		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', () =>
+		const hideSubscription = Keyboard.addListener( 'keyboardDidHide', ( ) =>
 		{
 			setKeyboardVisible( false );
 		});
@@ -217,8 +238,9 @@ export const EditInsurance = ({
 	}, []);
 
 
-	// Form Validation
-	const [ companyName, setCompanyName ] = useState( tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : '' );
+	// Form Validation - Company must ( minimally ) have a name.
+	const [ companyName, setCompanyName ] =
+		useState( tempInsuranceData?.entity_name ?? '' );
 	const [ errors, setErrors ] = useState({ });
 	const [ isFormValid, setIsFormValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
@@ -236,20 +258,19 @@ export const EditInsurance = ({
 
 		let errors = {};
 
-		if ( companyName == '' )
-		{
-			errors.companyName = 'Please enter a company name.';
-		}
-			setErrors( errors );
-			setIsFormValid( Object.keys( errors ).length === 0 );
+		// Validate name field.
+		if ( companyName.trim( ) == '' )    errors.companyName = 'Company name is required.';
+
+		// Set the errors and update form validity.
+		setErrors( errors );
+		setIsFormValid( Object.keys( errors ).length === 0 );
 	}
 
-
+	// Delete dialog controls.
 	const handleCancel = ( ) =>
 	{
 		setDeleteInsuranceVisible( false );
 	};
-
 
 	const handleDelete = ( ) =>
 	{
@@ -259,49 +280,77 @@ export const EditInsurance = ({
 	};
 
 
+	// Close / Save button handler for Edit modal
 	const handlePress = ( close, shouldNavigate ) =>
 	{
-		NavigationBar.setVisibilityAsync("visible");
-
-		let prev_data = ( insuranceIndex != null ) ? JSON.stringify( insuranceData[insuranceIndex]) : undefined;
-
-		// If no changes have been made or user presses cancel button, close the edit Modal
-		if (( prev_data === JSON.stringify( tempInsuranceData )) || close == true )
+		// Show error if user tries to save without min requirement.
+		if ( !isFormValid && !close )
 		{
-			setInsuranceIndex( null );
+			setShowValidationError( true );
+			setTimeout( function( )
+			{
+				setShowValidationError( false );
+			}, 900 );
+			return;
+		} 	
+
+
+		/// If no changes have been made or user presses cancel button,
+		// close the edit Modal and clear any unsaved data.
+		let prev_data = insuranceIndex != null  ?
+						JSON.stringify( insuranceData[insuranceIndex] )
+						: null;
+
+		if
+		((
+			prev_data === JSON.stringify( tempInsuranceData ))
+			|| close == true
+		)
+		{
+			closeEdit( );
 			setCompanyName( '' );
-			setEditInsuranceVisible( false );
-			setTempInsuranceData( );
 			return;
 		}
 
-		// New / Edit -> Save / Next
-		if ( isFormValid )
+
+		// Only triggers save ( insert/update ) and reset if min of
+		// company name has been entered ( or already exists )
+		// and changes have been made.
+		if ( isFormValid && !close )
 		{
 			saveEntry( 'Insurance', tempInsuranceData, 'insurance_id', shouldNavigate );
 
+			closeEdit( );
 			setCompanyName( '' );
-			setEditInsuranceVisible( false );
-			setInsuranceIndex( null );
-			setTempInsuranceData( [] );
 		}
-		else    setShowValidationError( true );
 	}
 
 
 	return (
-		<View style={ styles.data_container_edit }>
+		<View style={[ styles.data_container_edit, { marginTop: 38 } ]}>
+		{/* Form Validation Error */}
+		{
+			showValidationError ?
+			<View style={ styles.validation_container }>
+				<Text style={[ styles.text_input, styles.alert ]}>{ errors.companyName }</Text>
+			</View>
+		: null
+		}
 			<View style={{ flex: 3 }}>
 				<TextInput
 					accessibilityLabel='Insurance company'
 					accessibilityHint='Type in name of insurance company.'
 					maxLength={ 100 }
-					placeholder={ tempInsuranceData?.entity_name ? tempInsuranceData.entity_name : 'Insurance company name' }
+					placeholder={ 'Insurance company name' }
 					style={ styles.text_input }
+					value={ tempInsuranceData?.entity_name ?? '' }
 					onChangeText={( text ) =>
 					{
 						setCompanyName( text );
-						setTempInsuranceData( prev => ({ ...prev, 'entity_name': text, 'insurance_type': 'Health' }));
+						setTempInsuranceData( prev =>
+						({
+							...prev, 'entity_name': text, 'insurance_type': 'Health'
+						}));
 					}}
 				/>
 
@@ -309,9 +358,12 @@ export const EditInsurance = ({
 					accessibilityLabel='Insurance policy number'
 					accessibilityHint='Type in insurance policy number.'
 					maxLength={ 100 }
-					onChangeText={( text ) => setTempInsuranceData( prev => ({ ...prev, 'policy_number': text }))}
-					placeholder={ tempInsuranceData?.policy_number ? tempInsuranceData.policy_number : 'Policy Number' }
+					onChangeText={( text ) =>
+						setTempInsuranceData( prev => ({ ...prev, 'policy_number': text }))
+					}
+					placeholder={ 'Policy Number' }
 					style={ styles.text_input }
+					value={ tempInsuranceData?.policy_number ?? '' }
 				/>
 
 
@@ -319,12 +371,12 @@ export const EditInsurance = ({
 				<TouchableHighlight
 					accessibilityLabel='Date picker'
 					accessibilityHint='Touch to open date picker for start date of insurance.'
+					onPress={ showDatePicker }
 					style={ styles.menu }
 					underlayColor={ underlay_color }
-					onPress={ showDatePicker }
 					>
 					<Text style={[ styles.text_input, styles.menu_text ]}>
-						{ tempInsuranceData?.start_date ? tempInsuranceData?.start_date : 'Policy start date' }
+						{ tempInsuranceData?.start_date ?? 'Policy start date' }
 					</Text>
 				</TouchableHighlight>
 
@@ -339,10 +391,14 @@ export const EditInsurance = ({
 				<TextInput
 					accessibilityLabel='Insurance note'
 					accessibilityHint='Type in an note about this insurance.'
-					onChangeText={( text ) => setTempInsuranceData( prev => ({ ...prev, 'insurance_note' : text }))}
+					onChangeText={( text ) =>
+						setTempInsuranceData( prev => ({ ...prev, 'insurance_note' : text }))
+					}
 					maxLength={ 100 }
-					placeholder={ tempInsuranceData?.insurance_note ? tempInsuranceData.insurance_note : 'Notes' }
+					multiline={ true }
+					placeholder={ 'Notes' }
 					style={ styles.text_input }
+					value={ tempInsuranceData?.insurance_note ?? '' }
 				/>
 
 				{/* Cancel/Save button row */}
@@ -351,8 +407,8 @@ export const EditInsurance = ({
 					<TouchableOpacity
 						accessibilityLabel='Cancel button'
 						accessibilityHint='Press to cancel adding or editing this insurance information.'
-						style={ styles.button_end }
 						onPress={ ( ) => handlePress( true, false )}
+						style={ styles.button_end }
 					>
 						<Text style={ styles.save_button_text }>Cancel</Text>
 					</TouchableOpacity>
@@ -380,15 +436,6 @@ export const EditInsurance = ({
 					: null
 					}
 				</View>
-
-				{/* Form Validation Error */}
-				{
-					showValidationError ?
-					<View style={ styles.alert_row }>
-						<Text style={[ styles.alert, styles.text ]}>{ errors.companyName }</Text>
-					</View>
-				: null
-				}
 			</View>
 
 

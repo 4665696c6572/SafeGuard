@@ -2,6 +2,22 @@ import { startOfDay } from "date-fns";
 
 let date = startOfDay( new Date( ) ).toISOString( ).slice( 0, 10 );
 
+
+// Updates last seen date for game content
+export default async function updateLevelData ( db, screen_name, question_id )
+{
+	try
+	{
+		await db.runAsync( operations[`${ screen_name }`], [ date, question_id ]);
+		console.log( `${ screen_name } data updated.` );
+	}
+	catch ( error )
+	{
+		console.log( `Error updating ${ screen_name } data:`, error );
+	}
+};
+
+
 const operations =
 {
 	TrueFalseScreen:
@@ -23,16 +39,3 @@ const operations =
 		WHERE question_id = ?;
 	`
 }
-
-export default async function updateLevelData ( db, screen_name, question_id )
-{
-	try
-	{
-		await db.runAsync( operations[`${ screen_name }`], [ date, question_id ]);
-		console.log( `${ screen_name } data updated.` );
-	}
-	catch ( error )
-	{
-		console.log( `Error updating ${ screen_name } data:`, error );
-	}
-};

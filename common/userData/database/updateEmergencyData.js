@@ -1,6 +1,16 @@
-
+// Updates user input data in db.
 export default async function updateEmergencyData( db, table, emergencyData )
 {
+	/*
+	 *	Allows user to remove a single item in a form
+	 *	while still allowing for greater flexibility of use.
+	 *	It sets items the user backspaced or set to a space as null.
+	 */
+	for ( const [ key, value ] of Object.entries( emergencyData ))
+	{
+		if ( value == '' || value == ' ' ) emergencyData[key] = null;
+	}
+
 	const data =
 	{
 		Address:
@@ -100,6 +110,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			emergencyData.phone_number_id
 		]
 	}
+
 
 	const operations =
 	{
@@ -220,6 +231,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			await db.runAsync( operations.Address, data.Address );
 		}
 
+		// Allergies are medical conditions of type Allergy.
 		if ( table == 'Allergy' )
 		{
 			await db.runAsync( operations.Medical_Condition, data.Medical_Condition );
@@ -241,6 +253,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			await db.runAsync( operations.Phone, data.Fax );
 		}
 
+		// Doctor is also an Entity.
 		if ( table == 'Doctor' )
 		{
 			await db.runAsync( operations.Entity, data.Entity );
@@ -248,6 +261,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			console.log( `${ table } data updated.` );
 		}
 
+		// Insurance is also an Entity.
 		if ( table == 'Insurance' )
 		{
 			await db.runAsync( operations.Entity, data.Entity );
@@ -264,6 +278,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			await db.runAsync( operations.Medication, data.Medication );
 		}
 
+		// Person is also an Entity.
 		if ( table == 'Person' )
 		{
 			await db.runAsync( operations.Entity, data.Entity );

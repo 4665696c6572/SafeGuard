@@ -4,11 +4,19 @@ const screen_height = Dimensions.get( 'screen' ).height;
 const screen_width = Dimensions.get( 'screen' ).width;
 const button_size = Dimensions.get( 'screen' ).width * 0.33;
 
+const blue = '#0b3e82ff';
+const blue_light = '#d1dce4ff';
+const blue_river = '#0054FF';
+const gold = '#ebb221';
+const green = '#008000';
+const green_light = '#98FB98';
+const red = '#7e0404';
+
 const styles = StyleSheet.create(
 {
 	alert:
 	{
-		color: '#7e0404',
+		color: red,
 		fontWeight: 900
 	},
 	alert_row:
@@ -18,7 +26,7 @@ const styles = StyleSheet.create(
 	},
 	badge_large:
 	{
-		borderColor: '#ebb221',
+		borderColor: gold,
 		borderRadius: 60,
 		borderWidth: 3,
 		height: 120,
@@ -26,7 +34,7 @@ const styles = StyleSheet.create(
 	},
 	badge_small:
 	{
-		borderColor: '#ebb221',
+		borderColor: gold,
 		borderRadius: 40,
 		borderWidth: 2,
 		height: 80,
@@ -42,7 +50,7 @@ const styles = StyleSheet.create(
 	{
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		flex: 1,
 		gap: 20,
 		paddingTop: 100
@@ -65,11 +73,10 @@ const styles = StyleSheet.create(
 	},
 	bottom_tab_container:
 	{
-		backgroundColor: '#d1dce4ff',
-		borderColor: '#0b3e82ff',
+		backgroundColor: blue_light,
+		borderColor: blue,
 		borderTopWidth: 5,
-		flex: 1,
-		//marginTop: 38
+		flex: 1
 	},
 	button_end:
 	{
@@ -86,7 +93,7 @@ const styles = StyleSheet.create(
 	},
 	cheer_container:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		flex: 1,
 		paddingTop: 100
 	},
@@ -101,15 +108,15 @@ const styles = StyleSheet.create(
 	},
 	container:
 	{
-		backgroundColor: '#d1dce4ff',
-		borderBottomWidth: 5, // ~~~
-		borderColor: '#0b3e82ff',
+		backgroundColor: blue_light,
+		borderBottomWidth: 5,
+		borderColor: blue,
 		borderTopWidth: 5,
-		flex: 1,
+		flex: 1
 	},
 	count_text:
 	{
-		color: '#0b3e82ff',
+		color: blue,
 		fontSize: 16,
 		fontWeight: '900',
 		textAlign: 'right'
@@ -127,7 +134,7 @@ const styles = StyleSheet.create(
 	},
 	data_container_edit:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		flex: 1,
 		paddingLeft: '4%',
 		paddingRight: '4%',
@@ -135,7 +142,7 @@ const styles = StyleSheet.create(
 	},
 	data_container_view:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		flex: 1,
 		paddingLeft: '4%',
 		paddingRight: '4%',
@@ -151,10 +158,22 @@ const styles = StyleSheet.create(
 		marginBottom: 10,
 		marginTop: 10
 	},
-	delete:
+	delete_dialog_button:
 	{
-		textAlign: 'center',
-		width: '100%'
+		color: '#000',
+		fontWeight: 900
+	},
+	delete_dialog_button_row:
+	{
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	delete_text:
+	{
+		color: 'black',
+		fontSize: 18,
+		fontWeight: 400,
+		textAlign: 'center'
 	},
 	expand_button:
 	{
@@ -164,7 +183,7 @@ const styles = StyleSheet.create(
 	},
 	game_area:
 	{
-		backgroundColor: 'green',
+		backgroundColor: green,
 		flex: 1,
 		justifyContent: 'center',
 		paddingLeft: '5%',
@@ -229,7 +248,7 @@ const styles = StyleSheet.create(
 		fontWeight: 'bold',
 		paddingLeft: 10,
 		paddingRight: 10,
-		textAlign: 'center',
+		textAlign: 'center'
 	},
 	game_mc_answers:
 	{
@@ -254,7 +273,7 @@ const styles = StyleSheet.create(
 	},
 	game_mc_question_text:
 	{
-		color: '#0b3e82ff',
+		color: blue,
 		fontSize: 20,
 		fontWeight: '900'
 	},
@@ -298,12 +317,11 @@ const styles = StyleSheet.create(
 	game_screen_container:
 	{
 		flex: 1,
-		marginBottom: 0,
-		//marginTop: 38
+		marginBottom: 0
 	},
 	game_mc_text:
 	{
-		color: '#0b3e82ff',
+		color: blue,
 		fontSize: 18,
 		fontWeight: 'bold',
 		textAlign: 'left'
@@ -326,7 +344,7 @@ const styles = StyleSheet.create(
 	},
 	home_button:
 	{
-		backgroundColor: '#0054FF',
+		backgroundColor: blue_river,
 		borderRadius: 20,
 		height: screen_width * 0.45 ,
 		width: screen_width * 0.45 ,
@@ -334,12 +352,10 @@ const styles = StyleSheet.create(
 	},
 	home_button_image:
 	{
-		
 		borderRadius: 20,
 		height: screen_width * 0.44 ,
 		marginLeft: 2,
-		width: screen_width * 0.44,
-		// justifyContent: 'center'
+		width: screen_width * 0.44
 	},
 	home_container:
 	{
@@ -355,12 +371,6 @@ const styles = StyleSheet.create(
 	{
 		height: screen_height * 0.3
 	},
-	home_container_alert:
-	{
-		height: screen_height * 0.1,
-		justifyContent: 'flex-end',
-		paddingBottom: screen_height * 0.03
-	},
 	home_row:
 	{
 		flexDirection: 'row',
@@ -370,7 +380,7 @@ const styles = StyleSheet.create(
 	},
 	menu:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		borderBottomWidth: 0.75,
 		paddingBottom: 20,
 		paddingLeft: 15,
@@ -380,13 +390,20 @@ const styles = StyleSheet.create(
 	{
 		color: '#454545'
 	},
-	picker:
+	person_row:
 	{
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		gap: 5, backgroundColor:'red'
+	},
+	picker_item:
+	{
+		backgroundColor: blue_light,
 		color: '#454545'
 	},
 	picker_view:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		borderBottomWidth: 0.75,
 		paddingLeft: 22,
 		paddingRight: 15
@@ -403,7 +420,7 @@ const styles = StyleSheet.create(
 	},
 	river:
 	{
-		backgroundColor: '#0054FF',
+		backgroundColor: blue_river,
 		borderTopLeftRadius: 50,
 		borderTopRightRadius: 50,
 		borderWidth: 0,
@@ -428,7 +445,7 @@ const styles = StyleSheet.create(
 	},
 	save_button_text:
 	{
-		color: '#0b3e82ff',
+		color: blue,
 		fontSize: 20,
 		fontWeight: '900'
 	},
@@ -445,14 +462,14 @@ const styles = StyleSheet.create(
 	},
 	score_text:
 	{
-		color: '#0054FF',
+		color: blue_river,
 		fontSize: 24,
 		fontWeight: '900',
 		textAlign: 'center'
 	},
 	score_text_green:
 	{
-		color: '#90e2ac'
+		color: green
 	},
 	streak_columns:
 	{
@@ -463,12 +480,12 @@ const styles = StyleSheet.create(
 	streak_container:
 	{
 		alignItems: 'center',
-		backgroundColor: '#0054FF'
+		backgroundColor: blue_river
 	},
 	streak_day_text:
 	{
 		fontSize: 16,
-		color: '#90e298',
+		color:green_light,
 		marginTop: 4,
 		textAlign: 'center'
 	},
@@ -479,7 +496,7 @@ const styles = StyleSheet.create(
 	},
 	streak_text:
 	{
-		color: '#90e298',
+		color:green_light,
 		fontSize: 26,
 		fontWeight: '900',
 		marginBottom: 20,
@@ -499,10 +516,11 @@ const styles = StyleSheet.create(
 	},
 	text_input:
 	{
-		backgroundColor: '#d1dce4ff',
+		backgroundColor: blue_light,
 		color: '#000',
 		fontSize: 17,
 		fontWeight: 400,
+		minHeight: 20,
 		paddingLeft: 15
 	},
 	text_list:
@@ -518,10 +536,16 @@ const styles = StyleSheet.create(
 	title_bar:
 	{
 		borderBottomWidth: 2,
-		borderColor: '#0054FF',
+		borderColor: blue_river,
 		fontSize: 22,
 		marginBottom: 10,
 		paddingBottom: 2
+	},
+	validation_container:
+	{
+		paddingBottom: 10,
+		paddingLeft: 15,
+		paddingTop: 10
 	},
 	weather_forecast:
 	{
@@ -534,21 +558,21 @@ const styles = StyleSheet.create(
 		height: 50,
 		width: 50
 	},
-	weather_temp_col:
+	weather_temp_column:
 	{
 		alignItems: 'center',
 		flex: 1/4,
-		justifyContent: 'space-between'
-	},
-	weather_temp_row:
-	{
-		flexDirection:'row',
 		justifyContent: 'space-between'
 	},
 	weather_temp_image:
 	{
 		height: 75,
 		width: 75
+	},
+	weather_temp_row:
+	{
+		flexDirection:'row',
+		justifyContent: 'space-between'
 	}
 });
 

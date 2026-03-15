@@ -5,11 +5,11 @@ const today = startOfDay( new Date( ) ).toISOString( )
 
 
 /*
- * This function uses Fisher-Yates Shuffle which is not written by me.
- * Availability: https://www.geeksforgeeks.org/javascript/how-to-shuffle-an-array-using-javascript/
+ *	This function uses Fisher-Yates Shuffle which is not written by me.
+ *	Availability: https://www.geeksforgeeks.org/javascript/how-to-shuffle-an-array-using-javascript/
  *
- * This function calculates a random order for question answers.
- * It is used by Matching and Multiple Choice.
+ *	This function calculates a random order for question answers.
+ *	It is used by Matching and Multiple Choice.
  */
 export function calcAnswerOrder ( length )
 {
@@ -36,8 +36,8 @@ export function checkAnswer( correct_answer, user_answer )
 
 
 /*
- * Checks players current level and returns the
- * appropriate badge information.
+ *	Checks players current level and returns the
+ *	appropriate badge information.
  */
 export function checkBadgeEarned ( currentLevel )
 {
@@ -95,8 +95,8 @@ export function checkRoundComplete( answeredCorrectly, questions_per_round )
 
 
 /*
- * Accepts the last date in which a level was completed in the format stored in db ( ISOString ),
- * slices and checks to see if it is today so that the streak can be marked as current.
+ *	Accepts the last date in which a level was completed in the format stored in db ( ISOString ),
+ *	slices and checks to see if it is today so that the streak can be marked as current.
  */
 export function checkStreakCurrent( last_entry )
 {
@@ -108,16 +108,16 @@ export function checkStreakCurrent( last_entry )
 
 
 /*
- * The countStreakLength function code is a modified version ( modified by me ) of code not written by me.
- * Title: DailyStreakCounter
- * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
- * Date published: Jan 18, 2025
- * Code version: unknown
- * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
+ *	The countStreakLength function code is a modified version ( modified by me ) of code not written by me.
+ *	Title: DailyStreakCounter
+ *	Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
+ *	Date published: Jan 18, 2025
+ *	Code version: unknown
+ *	Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function counts the length of the current streak.
- * Input: an array of objects in format date_played: ISOString
- * Output: integer
+ *	This function counts the length of the current streak.
+ *	Input: an array of objects in format date_played: ISOString
+ *	Output: integer
  */
 export function countStreakLength( streak_history )
 {
@@ -146,17 +146,17 @@ export function countStreakLength( streak_history )
 
 
 /*
- * The fillStreakArray function code is a modified version ( modified by me ) of code not written by me.
- * Title: DailyStreakCounter
- * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
- * Date published: Jan 18, 2025
- * Code version: unknown
- * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
+ *	The fillStreakArray function code is a modified version ( modified by me ) of code not written by me.
+ *	Title: DailyStreakCounter
+ *	Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
+ *	Date published: Jan 18, 2025
+ *	Code version: unknown
+ *	Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function returns an array of length 7 containing date and if day was completed
- * uses addDays from date-fns to include future days
- * Input: length as an integer and a date format 1970-01-01T00:00:00.000Z
- * Output: [{"day": 1970-01-01T00:00:00.000Z}, "completed": true,...
+ *	This function returns an array of length 7 containing date and if day was completed
+ *	uses addDays from date-fns to include future days
+ *	Input: length as an integer and a date format 1970-01-01T00:00:00.000Z
+ *	Output: [{"day": 1970-01-01T00:00:00.000Z}, "completed": true,...
  */
 export function fillStreakArray( streak_length, streak_start )
 {
@@ -179,16 +179,16 @@ export function fillStreakArray( streak_length, streak_start )
 
 
 /*
- * The findStreakStart function code is a modified version ( modified by me ) of code not written by me.
- * Title: DailyStreakCounter
- * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
- * Date published: Jan 18, 2025
- * Code version: unknown
- * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
+ *	The findStreakStart function code is a modified version ( modified by me ) of code not written by me.
+ *	Title: DailyStreakCounter
+ *	Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
+ *	Date published: Jan 18, 2025
+ *	Code version: unknown
+ *	Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function finds the first day of the current streak.
- * Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1}, ....
- * Output: date in format 1970-01-01T00:00:00.000Z
+ *	This function finds the first day of the current streak.
+ *	Input: [{"date_played": "1970-01-01T00:00:00.000Z", "streak_seen": 1}, ....
+ *	Output: date in format 1970-01-01T00:00:00.000Z
  */
 export function findStreakStart( streak_history )
 {
@@ -215,14 +215,14 @@ export function findStreakStart( streak_history )
 
 
 /*
- * This pulse function code is not written by me
- * Title: DailyStreakCounter
- * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
- * Date published: Jan 18, 2025
- * Code version: unknown
- * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
+ *	This pulse function code is not written by me
+ *	Title: DailyStreakCounter
+ *	Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
+ *	Date published: Jan 18, 2025
+ *	Code version: unknown
+ *	Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function produces a pulsing animation of the current days streak indicator
+ *	This function produces a pulsing animation of the current days streak indicator
  */
 export function pulse( pulseAnimation )
 {
@@ -248,12 +248,12 @@ export function pulse( pulseAnimation )
 
 
 /*
- * Assigns level buttons.
- * future levels are a lily pad.
- * Past levels are initially a lily pad.
- * Upon completion of the category,
- * past levels display the category badge.
- * The current level is a frog & a lily pad
+ *	Assigns level buttons.
+ *	future levels are a lily pad.
+ *	Past levels are initially a lily pad.
+ *	Upon completion of the category,
+ *	past levels display the category badge.
+ *	The current level is a frog & a lily pad
  */
 export function selectButtonImage( i, currentLevel )
 {
@@ -282,8 +282,8 @@ export function setResultArray( questions_per_round )
 
 
 /*
- * Checks if newly completed level should unlock the next level.
- * User completing a previously completed level should not.
+ *	Checks if newly completed level should unlock the next level.
+ *	User completing a previously completed level should not.
  */
 export function updateLevel( loaded_level, current_level )
 {
@@ -293,11 +293,11 @@ export function updateLevel( loaded_level, current_level )
 
 
 /*
- * Matching Screen is the only screen where a round has more than one question
- * accepts an array of length three ( for the three questions )
- * if none have been answered array should contain only false
- * array index of correctly answered question should update to true
- * other values should not be altered. Altered array is returned
+ *	Matching Screen is the only screen where a round has more than one question
+ *	accepts an array of length three ( for the three questions )
+ *	if none have been answered array should contain only false
+ *	array index of correctly answered question should update to true
+ *	other values should not be altered. Altered array is returned
  */
 export function updateResultArray ( answeredCorrectly, question_row )
 {

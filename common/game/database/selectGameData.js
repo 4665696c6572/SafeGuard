@@ -1,17 +1,20 @@
+// Loads non-content game data
 export default async function selectGameData ( db )
 {
 	try
 	{
+		// last_badge_seen is a badge number
 		const game_data = await db.getAllAsync(
 		`
 			SELECT
-				last_badge,
+				last_badge_seen,
 				current_level,
 				score
 			FROM Game_Data;
 		`
 		);
 
+		// streak_seen is a bool for single viewing of streak update per day
 		const streak_history = await db.getAllAsync(
 		`
 			SELECT

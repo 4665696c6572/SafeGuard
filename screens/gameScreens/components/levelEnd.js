@@ -9,9 +9,8 @@ const frog_streak = require( '../../../assets/frog_streak.png' );
 const lily_pad = require( '../../../assets/lily_pad.png' );
 
 
-/*
- * Informs user that they have earned a badge upon completion of a category
- */
+
+// Informs user that they have earned a badge upon completion of a category
 export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
 {
 	if ( !badgeInfo )    return;
@@ -22,22 +21,28 @@ export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
 
 	return (
 		<Dialog.Container visible={ badgeVisible }>
-			<Dialog.Title style={[ styles.count_text, styles.delete ]}>Congratulations!</Dialog.Title>
-			<Dialog.Description style={[ styles.count_text, styles.delete ]}>
+			<Dialog.Title style={[ styles.count_text, styles.delete_text ]}>
+				Congratulations!
+			</Dialog.Title>
+
+			<Dialog.Description style={[ styles.count_text, styles.delete_text ]}>
 				You have earned
 				{ text }{ "\n \n" }
-
 				{ <Image source={ badgeInfo?.badge } style={ styles.badge_large }/> }
 			</Dialog.Description>
-			<Dialog.Button label="Close" onPress={ ( ) => setBadgeVisible( false ) } style={ styles.count_text }/>
+
+			<Dialog.Button
+				label="Close"
+				onPress={ ( ) => setBadgeVisible( false ) }
+				style={ styles.count_text }
+			/>
 		</Dialog.Container>
 	)
 }
 
 
-/*
- * Displays an encouraging modal after a level is complete
- */
+
+// Displays an encouraging modal after a level is complete
 export const EndLevelModal = ({ levelComplete, levelScore }) =>
 {
 	return (
@@ -61,15 +66,15 @@ export const EndLevelModal = ({ levelComplete, levelScore }) =>
 
 
 /*
- * This code is a modified version ( modified by me ) of code not written by me.
- * Title: DailyStreakCounter
- * Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
- * Date published: Jan 18, 2025
- * Code version: unknown
- * Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
+ *	This code is a modified version ( modified by me ) of code not written by me.
+ *	Title: DailyStreakCounter
+ *	Author: Ofekino ( GitHub ) / Horizon @Devving_Horizon ( YouTube )
+ *	Date published: Jan 18, 2025
+ *	Code version: unknown
+ *	Availability: https://github.com/Ofekino/DailyStreakCounter / https://www.youtube.com/watch?v=5CFdSkA17Sw
  *
- * This function produces streak indicators for a period of seven days.
- * The streak display resets once full.
+ *	This function produces streak indicators for a period of seven days.
+ *	The streak display resets once full.
  */
 export function Streak ({ index, item, pulseAnimation, streakLength })
 {
