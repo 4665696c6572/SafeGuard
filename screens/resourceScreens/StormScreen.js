@@ -15,7 +15,7 @@ const StormScreen = ( ) =>
 				<Card style={ styles.resource_card_outer }>
 					<Card style={ styles.resource_card_upper }>
 						<Card.Content>
-							<Text style={ styles.resource_title }>Storms & Tornados</Text>
+							<Text style={ styles.resource_title }>Storm & Tornado</Text>
 							<Text style={[ styles.text, styles.resource_text ]}>
 								Severe storms can bring lightning, hail, powerful winds,
 								heavy rain, flash flooding, and even tornadoes.
