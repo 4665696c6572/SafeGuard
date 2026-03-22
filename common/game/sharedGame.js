@@ -17,6 +17,7 @@ export function calcAnswerOrder ( length )
 	for ( let i = array.length - 1; i > 0; i-- )
 	{
 		const j = Math.floor( Math.random( ) * ( i + 1 ));
+
 		const temp = array[i];
 
 		array[i] = array[j];
@@ -202,7 +203,6 @@ export function findStreakStart( streak_history )
 
 	for ( let i = 0; i < streak_history.length - 1; i++ )
 	{
-		
 		const previous_day = new Date( streak_history[ i + 1 ].date_played );
 		const current_day = new Date( streak_history[ i ].date_played );
 
@@ -264,7 +264,6 @@ export function selectButtonImage( i, currentLevel )
 	const temp = require( '../../assets/badge_temp.png' );
 	const water = require( '../../assets/badge_water.png' );
 
-
 	if ( i < currentLevel && currentLevel >= 4 && i < 4 )    return water;
 	else if ( i < currentLevel && currentLevel >= 7 && i >= 4 && i < 7 )    return storm;
 	else if ( i < currentLevel && currentLevel >= 10 && i >= 7 && i < 10 )    return temp;
@@ -303,3 +302,23 @@ export function updateResultArray ( answeredCorrectly, question_row )
 {
 	return answeredCorrectly.with( question_row, true );
 }
+
+
+/*
+*	Image - Badges ( health, storm, temp, & water)
+*	Title: Disaster damage elements set
+*	Author: macrovector
+*	Availability: https://www.freepik.com/free-vector/disaster-damage-elements-set_9387099.htm
+*
+*
+*	Image - Frogs
+*	Title: Playful Green Frog Stickers Collection
+*	Author: easy-peasy.ai
+*	Availability: https://easy-peasy.ai/ai-image-generator/images/colorful-green-frog-stickers-collection-messaging-app
+*
+*
+*	Image - Lily Pad
+*	Title: Lily Pad
+*	Author: Alison Feiler ( me )
+*	Availability: n/a
+*/

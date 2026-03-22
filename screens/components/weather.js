@@ -21,7 +21,7 @@ export const Weather = ({ weatherData }) =>
 			weatherData &&
 			<View>
 				<View style={ styles.weather_temp_row }>
-					
+
 					{
 						weatherData?.list?.[0].main.temp_min ?
 						<View style={ styles.weather_temp_column }>
@@ -57,7 +57,7 @@ export const Weather = ({ weatherData }) =>
 						</View>
 					: null
 					}
-					
+
 
 					{
 						weatherData?.list[0].main.humidity != null ?
@@ -79,7 +79,7 @@ export const Weather = ({ weatherData }) =>
 					weatherData.list[i].weather[0].description != null ?
 					<View key={ i }>
 						<View style={ styles.weather_forecast }>
-							<Image 
+							<Image
 								source={{ uri: icon + weatherData.list[i].weather[0].icon + ".png" }}
 								style={ styles.weather_image }
 							/>
@@ -101,3 +101,29 @@ export const Weather = ({ weatherData }) =>
 		</View>
 	);
 };
+
+
+/*
+ *	Image - Humidity
+ *	Title: Humidity free icon
+ *	Author: freepik
+ *	Availability: https://www.flaticon.com/free-icon/humidity_8923690
+ *
+ *
+ *	Image - High Temp
+ *	Title: High Temperature free icon
+ *	Author: smashingstocks
+ *	Availability: https://www.flaticon.com/free-icon/high-temperature_6218295
+ *
+ *
+ *	Image - Low Temp
+ *	Title: Temperature free icon
+ *	Author: nawicon
+ *	Availability: https://www.flaticon.com/free-icon/temperature_2322701
+ *
+ *
+ *	Image - Temp
+ *	Title: temp mix
+ *	Author: nawicon / smashingstocks
+ *	Availability: https://www.flaticon.com/free-icon/temperature_2322701 & https://www.flaticon.com/free-icon/high-temperature_6218295
+ */

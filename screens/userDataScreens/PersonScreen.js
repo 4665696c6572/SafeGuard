@@ -18,13 +18,12 @@ import { EditPerson, Person } from './components/person.js';
 const PersonScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext( );
-	const params = route?.params;
 
 	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Health' );
 	const [ personData, setPersonData, loadingPersonData, loadPersonData ] = useLoadEmergencyData( db, 'Person' );
 
 	// Temp data selection & storage to allow for canceling mid add/edit.
-	const [ insuranceIndex, setInsuranceIndex ] = useState( params?.condition ? params.condition : null );
+	const [ insuranceIndex, setInsuranceIndex ] = useState( null );
 	const [ tempInsuranceData, setTempInsuranceData ] = useState( );
 
 	// Modal Controls.

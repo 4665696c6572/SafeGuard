@@ -256,7 +256,7 @@ export default async function insertEmergencyData( db, table, emergencyData )
 			if ( result.changes != 0 )     return result.lastInsertRowId;
 		}
 
-		
+
 		if ( table == "Person" )
 		{
 			const result = await db.runAsync( operations.Entity, data.Entity );

@@ -336,7 +336,7 @@ export const EditContact = ({
 				tempAddressData.address_id, tempEmailData.email_id,
 				tempFaxData.fax_number_id, tempPhoneData.phone_number_id
 			]);
-			handlePress( true );	
+			handlePress( true );
 			setDeleteContactVisible( false );
 		}
 
@@ -414,7 +414,7 @@ export const EditContact = ({
 		}
 
 		if
-		( 	
+		( 
 			JSON.stringify( contactData.email ) !==
 			JSON.stringify( tempEmailData ) &&
 			tempEmailData != { } && isEmailValid
@@ -677,7 +677,6 @@ export const EditContact = ({
 							setAddEmailVisible( false );
 							setAddFaxVisible( true );
 							setAddPhoneVisible( false )}
-						
 						}
 						style={ styles.contact_button }
 					>
@@ -723,7 +722,6 @@ export const EditContact = ({
 						</TouchableOpacity>
 					</View>
 				</View>
-				
 			: null
 			}
 			</View>

@@ -1,10 +1,8 @@
 import * as Location from 'expo-location';
-import * as NavigationBar from 'expo-navigation-bar';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-
 
 import
 {
@@ -16,6 +14,11 @@ import { Weather } from './components/weather.js';
 
 import styles from '../styles/styles.js';
 
+const books = require( '../assets/books.png' );
+const chart = require( '../assets/chart.png' );
+const emergency = require( '../assets/emergency.png' );
+const frog_game = require( '../assets/frog_game.png' );
+const flood = require( '../assets/flood.png' );
 
 const HomeScreen = ({ navigation }) =>
 {
@@ -43,7 +46,7 @@ const HomeScreen = ({ navigation }) =>
 				return;
 			}
 
-			let location_data = await Location.getCurrentPositionAsync({});
+			let location_data = await Location.getCurrentPositionAsync({ });
 
 			console.log( 'location loaded.' );
 			setLocationData( location_data );
@@ -60,10 +63,13 @@ const HomeScreen = ({ navigation }) =>
 			try
 			{
 				const alert_zone = await fetchAlertZone( locationData );
-				const alert_data = await fetchAlertData( alert_zone );
-				if ( alert_data )
+				if ( alert_zone != null )
 				{
-					setAlertData( findHighestSeverity( alert_data ));
+					const alert_data = await fetchAlertData( alert_zone );
+					if ( alert_data )
+					{
+						setAlertData( findHighestSeverity( alert_data ));
+					}
 				}
 				else    return;
 			}
@@ -81,7 +87,7 @@ const HomeScreen = ({ navigation }) =>
 
 
 	/*
-	 * Loads weather on app open, also reloads every
+	 *	Loads weather on app open, also reloads every
 	 *	30 minutes so long as the screen is focused.
 	 */
 	useEffect(( ) =>
@@ -127,40 +133,92 @@ const HomeScreen = ({ navigation }) =>
 				weatherData={ weatherData }
 			/>
 			</View>
-		: null
+		:
+			<View style={ styles.home_header_container }>
+				<Text style={ styles.home_header_text }>SafeGuard</Text>
+				<Image source={ flood } style={ styles.home_header_image }/>
+			</View>
 		}
 
 
-			<View style={[ styles.home_container, weatherData ? null : styles.home_extra_margin ]}>
+			<View style={ styles.home_container }>
 				<View style={ styles.home_row }>
 					<TouchableOpacity
 						onPress={ ( ) => { navigation.navigate( "EmergencyDataScreen" ); }}
-						style={ styles.home_button }
+						style={[ styles.home_button, { overflow: 'hidden' } ]}
 					>
-						<Text style={ styles.text_button }>Emergency Information</Text>
+						<ImageBackground
+							imageStyle={ styles.home_button_image }
+							source={ emergency }
+							style={ styles.home_button_image_2 }
+						>
+							<View style={{ alignItems: 'center',  gap: 100,  flex: 1}}>
+							<Text
+								style={[ 
+									styles.home_button_text, { marginTop: -3, width: '100%' } ]}>Emergency
+							</Text>
+							<Text
+								style={[ 
+									styles.home_button_text, { marginTop: 3, width: '100%' } ]} >Information
+							</Text>
+							</View>
+						</ImageBackground>
 					</TouchableOpacity>
 
 					<TouchableOpacity
-						onPress={ ( ) => { navigation.navigate( "PersonScreen" )}}
+						onPress={ ( ) => { navigation.navigate( "TabNavigator", { screen: 'PersonScreen'} )}}
 						style={ styles.home_button }
 					>
-						<Text style={ styles.text_button }>User data</Text>
+						<ImageBackground
+							imageStyle={ styles.home_button_image }
+							source={ chart }
+							style={ styles.home_button_image_2 }
+						>
+							<View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flex: 1}}>
+							<Text style={[ styles.home_button_text, { marginBottom: 7, width: '100%' } ]}>
+								Data Hub
+							</Text>
+							</View>
+						</ImageBackground>
 					</TouchableOpacity>
 				</View>
 
 				<View style={ styles.home_row }>
 					<TouchableOpacity
-						onPress={ ( ) => { navigation.navigate( "ResourceHubScreen" )}}
+						onPress={ ( ) =>
+						{
+							navigation.navigate( "ResourceTabNavigator", { screen: "WaterScreen" } )}
+						}
 						style={ styles.home_button }
 					>
-						<Text style={ styles.text_button }>Resource Hub</Text>
+						<ImageBackground
+							imageStyle={ styles.home_button_image }
+							source={ books }
+							style={ styles.home_button_image_2 }
+						>
+							<View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flex: 1}}>
+							<Text style={[ styles.home_button_text, { marginBottom: 7, width: '100%' } ]}>
+								Resources
+							</Text>
+							</View>
+						</ImageBackground>
 					</TouchableOpacity>
 
 					<TouchableOpacity
 						onPress={ ( ) => { navigation.navigate( "GameScreen", { score: 0 })}}
 						style={ styles.home_button }
 					>
-						<Text style={ styles.text_button }>Game</Text>
+						<ImageBackground
+							imageStyle={ styles.home_button_image }
+							source={ frog_game }
+							style={ styles.home_button_image_2 }
+						>
+							<View style={{ alignItems: 'center',  flex: 1}}>
+							<Text style={[ styles.home_button_text, { marginTop: 5, width: '100%' } ]}>
+								Games
+							</Text>
+							</View>
+						</ImageBackground>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -180,3 +238,29 @@ const HomeScreen = ({ navigation }) =>
 }
 
 export default HomeScreen;
+
+
+/*
+ *	Image - Books
+ *	Title: Books
+ *	Author: PandannaImagen
+ *	Availability: https://pixabay.com/vectors/books-stack-of-books-reading-study-7448036/
+ *
+ *
+ *	Image - Chart
+ *	Title: Prognosis Icon
+ *	Author: mcmurryjulie
+ *	Availability: https://pixabay.com/vectors/prognosis-icon-patient-chart-2803190/
+ *
+ *
+ *	Image - Emergency
+ *	Title: Medic
+ *	Author: WaldhoerSolutions
+ *	Availability: https://pixabay.com/illustrations/medic-help-first-aid-rescue-1553191/
+ *
+ *
+ *	Image - Frog_Game
+ *	Title: Organic Flat Frog Illustration
+ *	Author: Freepik
+ *	Availability: https://www.freepik.com/free-vector/organic-flat-frog-illustration_13861891.htm
+ */

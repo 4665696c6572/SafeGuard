@@ -214,10 +214,12 @@ export default async function selectEmergencyData( db, table, condition )
 					height,
 					weight,
 					blood_type
-				FROM Entity, Person
-				WHERE person_id = ?
-				AND entity_id = ?;`,
-				[ 1, 1 ]
+				FROM Entity
+				LEFT JOIN Person
+				ON entity_id = person_id
+				WHERE entity_id = ?
+				AND entity_type = ?;`,
+				[ 1, 'Person' ]
 			);
 		}
 

@@ -6,7 +6,7 @@ export default async function fetchWeatherData( location )
 {
 	if ( !location )
 	{
-		console.log( 'location failed' );
+		console.log( 'Location failed' );
 		return;
 	}
 

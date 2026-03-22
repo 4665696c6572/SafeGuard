@@ -274,7 +274,7 @@ export const EditDoctor = ({
 		)
 		{
 			closeEdit( );
-			setDoctorName( '' );			
+			setDoctorName( '' );
 			return;
 		}
 
@@ -306,6 +306,7 @@ export const EditDoctor = ({
 				<TextInput
 					accessibilityLabel="Doctor's name"
 					accessibilityHint='Type in name of doctor.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ "Doctor's name" }
 					style={ styles.text_input }
@@ -320,6 +321,7 @@ export const EditDoctor = ({
 				<TextInput
 					accessibilityLabel='Specialty'
 					accessibilityHint="Enter doctor's specialty."
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'Specialty' }
 					style={ styles.text_input }
@@ -332,6 +334,7 @@ export const EditDoctor = ({
 				<TextInput
 					accessibilityLabel='Facility name'
 					accessibilityHint='Type in the name of the facility that the doctor works at.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'Facility name' }
 					style={ styles.text_input }

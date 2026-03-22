@@ -16,7 +16,7 @@ export const useNotification = ( ) =>
 {
 	const context = useContext( NotificationContext );
 
-	if (context === undefined)
+	if ( context === undefined )
 	{
 		throw new Error(
 			"useNotification must be used within a NotificationProvider"
@@ -63,7 +63,7 @@ export const NotificationProvider = ({ children }) =>
 		const responseListener =
 		Notifications.addNotificationResponseReceivedListener( ( response ) =>
 		{
-			// console.log( "🔔 Notification Response: ", response );
+			console.log( "Notification Response: ", response );
 		});
 
 		return () =>
@@ -77,7 +77,7 @@ export const NotificationProvider = ({ children }) =>
 		<NotificationContext.Provider
 			value={{ devicePushToken, error, expoPushToken, notification }}
 		>
-		{ children }
+			{ children }
 		</NotificationContext.Provider>
 	);
 };

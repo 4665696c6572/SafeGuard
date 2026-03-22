@@ -393,6 +393,7 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication name'
 					accessibilityHint='Type in name of medication.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'Medication name' }
 					style={ styles.text_input }
@@ -407,6 +408,7 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication strength'
 					accessibilityHint='Type in strength of medication ( example: 500 or 500mg ).'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					onChangeText={( text ) =>
 						setTempMedicationData( prev => ({ ...prev, 'strength': text }))
@@ -419,6 +421,7 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Medication frequency'
 					accessibilityHint='Type in dosage frequency ( example: every eight hours ).'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					onChangeText={( text ) =>
 						setTempMedicationData( prev => ({ ...prev, 'frequency': text }))
@@ -532,6 +535,7 @@ export const EditMedication = ({
 				<TextInput
 					accessibilityLabel='Notes'
 					accessibilityHint='Type in medication relevant notes.'
+					activeUnderlineColor='#0b3e82ff'
 					multiline={ true }
 					maxLength={ 100 }
 					onChangeText={( text ) =>

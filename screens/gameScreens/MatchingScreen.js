@@ -22,7 +22,7 @@ const frog = require( '../../assets/frog_jump_2.png' );
 const questions_per_round = 3;
 const questions_per_level = 12;
 
-const underlay = '#0b3e82ff'	
+const underlay = '#0b3e82ff'
 
 
 /*
@@ -30,9 +30,9 @@ const underlay = '#0b3e82ff'
  *	Loads questions, shuffles 3 question / answer pairs,
  *	The pairs are displayed on screen.  User interacts by
  *	first choosing a question then an answer ( answers are
- *	disabled until a question is selected).  If incorrect, 
- * 	the phone vibrates.  If correct, the pair disappears
- * 	and score / progress are updated.  On finish, progress
+ *	disabled until a question is selected).  If incorrect,
+ *	the phone vibrates.  If correct, the pair disappears
+ *	and score / progress are updated.  On finish, progress
  *	is saved to db, user is returned to the game home.
  */
 export default function MatchingScreen({ navigation, route })
@@ -55,7 +55,7 @@ export default function MatchingScreen({ navigation, route })
 		useLoadLevelData(
 			db,
 			'MatchingScreen',
-			params?.level_category ?? 1,
+			params?.levelCategory ?? 1,
 			questions_per_level
 		);
 
@@ -239,3 +239,11 @@ export default function MatchingScreen({ navigation, route })
 		</View>
 	);
 }
+
+
+/*
+ *	Image - Frogs
+ *	Title: Playful Green Frog Stickers Collection
+ *	Author: easy-peasy.ai
+ *	Availability: https://easy-peasy.ai/ai-image-generator/images/colorful-green-frog-stickers-collection-messaging-app
+ */

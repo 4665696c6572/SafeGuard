@@ -30,7 +30,7 @@ export const MedicalCondition = ({
 					conditionData.map(( condition, i ) =>
 					<View key={ condition.condition_id } style={ styles.text_list }>
 						<View style={{ flex:0.9 }}>
-							<Text style={ styles.text }> { condition.condition_name }</Text>
+							<Text style={ styles.text }>{ condition.condition_name }</Text>
 						</View>
 
 						<TouchableOpacity
@@ -196,7 +196,6 @@ export const ViewMedicalCondition = ({
 						setViewConditionVisible( false );
 					}}
 					style={ styles.button_end }
-					
 				>
 					<Text style={ styles.save_button_text }>Edit</Text>
 				</TouchableOpacity>
@@ -209,7 +208,7 @@ export const ViewMedicalCondition = ({
 
 // For adding or editing
 export const EditMedicalCondition = ({
-										closeEdit, conditionData, conditionIndex, deleteEntry, 
+										closeEdit, conditionData, conditionIndex, deleteEntry,
 										doctorData, saveEntry, setTempConditionData, tempConditionData
 									}) =>
 {
@@ -312,7 +311,7 @@ export const EditMedicalCondition = ({
 			return;
 		}
 
- 
+
 		// If no changes have been made or user presses cancel button,
 		// close the edit Modal and clear any unsaved data.
 		if
@@ -358,6 +357,7 @@ export const EditMedicalCondition = ({
 				<TextInput
 					accessibilityLabel='Condition name'
 					accessibilityHint='Type in name of medical condition.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					multiline={ true }
 					placeholder={ 'Condition Name' }
@@ -413,7 +413,7 @@ export const EditMedicalCondition = ({
 					</View>
 					: null
 				}
-				
+
 
 				{/* Date of Diagnosis */}
 					<TouchableHighlight
@@ -438,7 +438,8 @@ export const EditMedicalCondition = ({
 				{/* Condition notes */}
 				<TextInput
 					accessibilityLabel='Condition notes'
-					accessibilityHint='Type in medical condition notes.'					
+					accessibilityHint='Type in medical condition notes.'
+					activeUnderlineColor='#0b3e82ff'
 					multiline={ true }
 					placeholder={ 'Notes' }
 					style={ styles.text_input }

@@ -19,10 +19,7 @@ import styles from '../../styles/styles.js';
 
 let streak_start;
 
-/*
- *	Game Home
- *	
- */
+
 const GameScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext( );
@@ -30,9 +27,10 @@ const GameScreen = ({ navigation }) =>
 	const [ gameData, loadingData, loadData ] = useLoadGameData( db );
 	const [ streakLength, setStreakLength ] = useState( 0 );
 	const [ streakVisible, setStreakVisible ] = useState( false );
-	const [ badgeVisible, setBadgeVisible ] = useState( true );
+	const [ badgeDialogVisible, setBadgeDialogVisible ] = useState( false );
 	const [ badgeInfo, setBadgeInfo ] = useState( null );
 
+	// Used for streak
 	const pulseAnimation = useRef( new Animated.Value( 1.0 )).current;
 
 	const isFocused = useIsFocused( );
@@ -55,7 +53,7 @@ const GameScreen = ({ navigation }) =>
 
 			/*
 			 *	Check if badge has been earned and not yet viewed.
-			 *  It updates the db and displays the badge received dialog.
+			 *	It updates the db and displays the badge received dialog.
 			 *	Also sets badge info so that the badge may be viewed.
 			 */
 			const result = checkBadgeEarned( gameData?.game_data[0]?.current_level ?? 0 )
@@ -67,7 +65,7 @@ const GameScreen = ({ navigation }) =>
 			)
 			{
 				setBadgeInfo( result );
-				setBadgeVisible( true );
+				setBadgeDialogVisible( true );
 				updateGameData( 'Badge', db, gameData?.game_data[0]?.current_level );
 			}
 
@@ -161,7 +159,7 @@ const GameScreen = ({ navigation }) =>
 			: null
 			}
 
-
+				{/* ScoreBox displays score and badges, Game path displays playable levels */}
 				<View style={[ styles.game_area, { marginTop: 0 }]}>
 					<ScoreBox
 						currentLevel={ gameData?.game_data[0]?.current_level ?? 1 }
@@ -172,11 +170,11 @@ const GameScreen = ({ navigation }) =>
 						handleNavigation={ handleNavigation }
 					/>
 					{
-						badgeVisible ?
+						badgeDialogVisible ?
 						<BadgeDialog
 							badgeInfo={ badgeInfo }
-							badgeVisible={ badgeVisible }
-							setBadgeVisible={ setBadgeVisible }
+							badgeDialogVisible={ badgeDialogVisible }
+							setBadgeDialogVisible={ setBadgeDialogVisible }
 						/>
 					: null
 					}

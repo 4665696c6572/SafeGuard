@@ -11,7 +11,7 @@ const lily_pad = require( '../../../assets/lily_pad.png' );
 
 
 // Informs user that they have earned a badge upon completion of a category
-export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
+export const BadgeDialog = ({ badgeInfo, badgeDialogVisible, setBadgeDialogVisible }) =>
 {
 	if ( !badgeInfo )    return;
 
@@ -20,7 +20,7 @@ export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
 	else    text = ' a badge!';
 
 	return (
-		<Dialog.Container visible={ badgeVisible }>
+		<Dialog.Container visible={ badgeDialogVisible }>
 			<Dialog.Title style={[ styles.count_text, styles.delete_text ]}>
 				Congratulations!
 			</Dialog.Title>
@@ -33,7 +33,7 @@ export const BadgeDialog = ({ badgeInfo, badgeVisible, setBadgeVisible }) =>
 
 			<Dialog.Button
 				label="Close"
-				onPress={ ( ) => setBadgeVisible( false ) }
+				onPress={ ( ) => setBadgeDialogVisible( false ) }
 				style={ styles.count_text }
 			/>
 		</Dialog.Container>
@@ -96,3 +96,17 @@ export function Streak ({ index, item, pulseAnimation, streakLength })
 		</View>
 	);
 }
+
+
+/*
+ *	Image - Frogs
+ *	Title: Playful Green Frog Stickers Collection
+ *	Author: easy-peasy.ai
+ *	Availability: https://easy-peasy.ai/ai-image-generator/images/colorful-green-frog-stickers-collection-messaging-app
+ *
+ *
+ *	Image - Lily Pad
+ *	Title: Lily Pad
+ *	Author: Alison Feiler ( me )
+ *	Availability: n/a
+ */

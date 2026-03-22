@@ -56,7 +56,7 @@ const MedicationScreen = ({ route }) =>
 	// Deletes from db & reloads data for on screen data refresh.
 	async function deleteEntry( table, id )
 	{
-		deleteFromDB( db, table, id, loadMedicationData );		
+		deleteFromDB( db, table, id, loadMedicationData );
 	}
 
 

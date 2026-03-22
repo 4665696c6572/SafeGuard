@@ -12,6 +12,7 @@ import { Allergy, HealthInsurance, MedicalCondition, Medication, Person } from '
 
 
 // Displays summary of each type of data for quick access in an emergency.
+// Doctor excluded as the category is less about the patient.
 const EmergencyDataScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext( );
@@ -21,7 +22,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 	const isFocused = useIsFocused( );
 
 
-	useEffect(( ) =>
+	useEffect( ( ) =>
 	{
 		if ( isFocused )
 		{
@@ -30,50 +31,74 @@ const EmergencyDataScreen = ({ navigation }) =>
 	}, [ isFocused ]);
 
 
+	function handleNavigation( screen )
+	{
+		navigation.pop( );
+		navigation.navigate( "TabNavigator", { screen: screen })
+	}
+
+
 	return (
-		<ScrollView style={[ styles.container, styles.data_container_view, { marginTop: 0, paddingTop: '5%' } ]}>
+		<ScrollView 
+			style={[ styles.container, styles.data_container_view,
+			{ marginTop: 0, paddingTop: '5%' } ]}
+		>
 		{
 			loadingData ?
 			<ActivityIndicator/>
 		:
-			<View style={{ paddingBottom: 30 }}>
-			<Person
-				entityData={ emergencyData?.person }
-				nav={ ( ) => { navigation.navigate( "PersonScreen", { screen: 'EmergencyDataScreen' })}}
-			/>
+			<>
+			{
+				(
+					emergencyData?.person?.[0]?.entity_name == null &&
+					emergencyData?.allergy.length  == 0 &&
+					emergencyData?.doctor.length  == 0 &&
+					emergencyData?.insurance.length  == 0 &&
+					emergencyData?.medical_condition.length  == 0 &&
+					emergencyData?.medication.length == 0
+				) ?
+				<View style={[ styles.contact_button, { paddingTop: 40 }  ]}>
+					<Text style={[ styles.heading_text, { paddingBottom: 20 } ]}>No Details available</Text>
+					<TouchableOpacity
+						accessibilityLabel='Navigation Button'
+						accessibilityHint='Press to add emergency details.'
+						onPress={ ( ) => handleNavigation( 'Person' ) }
+					>
+						<Text style={ styles.save_button_text }>Add Emergency details</Text>
+					</TouchableOpacity>
+				</View>
+			:
 
-			<Allergy
-				doctorData={ emergencyData?.doctor }
-				allergyData={ emergencyData?.allergy }
-			/>
+				<View style={{ paddingBottom: 30 }}>
+					<Person
+						entityData={ emergencyData?.person }
+						nav={ ( ) => handleNavigation( 'Person' ) }
+					/>
 
-			<MedicalCondition
-				conditionData={ emergencyData?.medical_condition }
-			/>
+					<Allergy
+						doctorData={ emergencyData?.doctor }
+						allergyData={ emergencyData?.allergy }
+						nav={ ( ) => handleNavigation( 'Condition' ) }
+					/>
 
-			<Medication
-				doctorData={ emergencyData?.doctor }
-				medicationData={ emergencyData?.medication }
-			/>
+					<MedicalCondition
+						conditionData={ emergencyData?.medical_condition }
+						nav={ ( ) => handleNavigation( 'Condition' ) }
+					/>
 
-			<HealthInsurance
-				insuranceData={ emergencyData?.insurance }
-			/>
+					<Medication
+						doctorData={ emergencyData?.doctor }
+						medicationData={ emergencyData?.medication }
+						nav={ ( ) => handleNavigation( 'Medication' ) }
+					/>
 
-			<View style={ styles.contact_button }>
-				<TouchableOpacity
-					accessibilityLabel='Navigation Button'
-					accessibilityHint='Press to view more details.'
-					onPress={ ( ) =>
-					{
-						navigation.pop( );
-						navigation.navigate( "PersonScreen");
-					}}
-				>
-					<Text style={ styles.save_button_text }>View full details</Text>
-				</TouchableOpacity>
-			</View>
-			</View>
+					<HealthInsurance
+						insuranceData={ emergencyData?.insurance }
+						nav={ ( ) => handleNavigation( 'Person' ) }
+					/>
+				</View>
+			}
+			</>
 		}
 		</ScrollView>
 	);

@@ -1,6 +1,10 @@
 import * as Notifications from "expo-notifications";
 import { SQLiteProvider } from 'expo-sqlite';
-import { Doctor03Icon, MedicalMaskIcon, Medicine02Icon, UserAccountIcon } from '@hugeicons/core-free-icons'
+import 
+{
+	Doctor03Icon, HealthIcon, MedicalMaskIcon, Medicine02Icon,
+	TemperatureIcon, Tornado02Icon, TsunamiIcon, UserAccountIcon
+} from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,9 +12,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import initializeDatabase from './database/initializeDatabase.js';
 
-
-import {  NotificationProvider } from "./common/home/context/NotificationContext.js";
-
+import { NotificationProvider } from "./common/home/context/NotificationContext.js";
 
 import HomeScreen from './screens/HomeScreen.js';
 import EmergencyDataScreen from './screens/userDataScreens/EmergencyDataScreen.js';
@@ -25,11 +27,15 @@ import MatchingScreen from './screens/gameScreens/MatchingScreen.js';
 import MultipleChoiceScreen from './screens/gameScreens/MultipleChoiceScreen.js';
 import TrueFalseScreen from './screens/gameScreens/TrueFalseScreen.js';
 
-
+import WaterScreen from "./screens/resourceScreens/WaterScreen.js";
+import StormScreen from "./screens/resourceScreens/StormScreen.js";
+import TempScreen from "./screens/resourceScreens/TempScreen.js";
+import HealthScreen from "./screens/resourceScreens/HealthScreen.js";
 
 
 const Stack = createNativeStackNavigator( );
 const Tab = createBottomTabNavigator( );
+const ResourceTab = createBottomTabNavigator( );
 
 Notifications.setNotificationHandler(
 {
@@ -53,11 +59,10 @@ function TabNavigator( )
 			screenOptions=
 			{{
 				headerShown: false,
-				tabBarActiveTintColor: '#d1dce4ff',
-				tabBarInactiveTintColor: '#d1dce4ff',
+				tabBarActiveTintColor: 'rgb(255, 255, 255)',
+				tabBarInactiveTintColor: '#97a0b2',
 				tabBarLabelStyle:
 				{
-					color: '#d1dce4ff',
 					fontSize: 13,
 					marginTop: -4
 				},
@@ -70,7 +75,7 @@ function TabNavigator( )
 					paddingTop: 0
 				},
 			}}
-			shifting={false}
+			shifting={ false }
 		>
 
 			<Tab.Screen
@@ -78,16 +83,16 @@ function TabNavigator( )
 				component={ PersonScreen }
 				options=
 				{{
-					tabBarIcon: ({ color, size }) =>
+					tabBarIcon: ({ color, focused, size }) =>
 					(
 						<HugeiconsIcon
 							color={ color }
 							icon={ UserAccountIcon }
-							size={ size }									
+							size={ focused ? 28 : size }
 							strokeWidth={ 1.5 }
 						/>
 					),
-					tabBarLabel:'Personal'
+					tabBarLabel:'Personal',
 				}}
 			/>
 
@@ -96,12 +101,12 @@ function TabNavigator( )
 				component={ MedicalConditionScreen }
 				options=
 				{{
-					tabBarIcon: ({ color, size }) =>
+					tabBarIcon: ({ color, focused, size }) =>
 					(
 						<HugeiconsIcon
 							color={ color }
 							icon={ MedicalMaskIcon }
-							size={ size }	
+							size={ focused ? 28 : size }
 							strokeWidth={ 1.5 }
 						/>
 					),
@@ -114,12 +119,12 @@ function TabNavigator( )
 				component={ MedicationScreen }
 				options=
 				{{
-					tabBarIcon: ({ color, size }) =>
+					tabBarIcon: ({ color, focused, size }) =>
 					(
 						<HugeiconsIcon
 							color={ color }
 							icon={ Medicine02Icon }
-							size={ size }	
+							size={ focused ? 28 : size }
 							strokeWidth={ 1.5 }
 						/>
 					),
@@ -132,12 +137,12 @@ function TabNavigator( )
 				component={ DoctorScreen }
 				options=
 				{{
-					tabBarIcon: ({ color, size }) =>
+					tabBarIcon: ({ color, focused, size }) =>
 					(
 						<HugeiconsIcon
 							color={ color }
 							icon={ Doctor03Icon }
-							size={ size }	
+							size={ focused ? 28 : size }
 							strokeWidth={ 1.5 }
 						/>
 					),
@@ -148,6 +153,106 @@ function TabNavigator( )
 	)
 }
 
+
+function ResourceTabNavigator( )
+{
+	return (
+		<ResourceTab.Navigator
+			detachInactiveScreens={ true }
+			initialRouteName={ 'WaterScreen' }
+			labeled={ true }
+			screenOptions=
+			{{
+				headerShown: false,
+				tabBarShowLabel: false,
+				tabBarActiveTintColor: '#6cffff',
+				tabBarInactiveTintColor: '#97a0b2',
+				tabBarIconStyle:
+				{
+					size: 80,
+				},
+				tabBarStyle:
+				{
+					backgroundColor: '#0b3e82ff',
+					height: 50,
+					paddingBottom: 0,
+					paddingTop: 5
+
+				},
+			}}
+			shifting={ false }
+		>
+
+			<ResourceTab.Screen
+				name='WaterScreen'
+				component={ WaterScreen }
+				options=
+				{{
+					tabBarIcon: ({ color, focused, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ TsunamiIcon }
+							size={ focused ? 28 : size }
+							strokeWidth={ 1.5 }
+						/>
+					),
+				}}
+			/>
+
+			<ResourceTab.Screen
+				name='StormScreen'
+				component={ StormScreen }
+				options=
+				{{
+					tabBarIcon: ({ color, focused, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ Tornado02Icon }
+							size={ focused ? 28 : size }
+							strokeWidth={ 1.5 }
+						/>
+					),
+				}}
+			/>
+
+			<ResourceTab.Screen
+				name='TempScreen'
+				component={ TempScreen }
+				options=
+				{{
+					tabBarIcon: ({ color, focused, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ TemperatureIcon }
+							size={ focused ? 28 : size }
+							strokeWidth={ 1.5 }
+						/>
+					),
+				}}
+			/>
+
+			<ResourceTab.Screen
+				name='HealthScreen'
+				component={ HealthScreen }
+				options=
+				{{
+					tabBarIcon: ({ color, focused, size }) =>
+					(
+						<HugeiconsIcon
+							color={ color }
+							icon={ HealthIcon }
+							size={ focused ? 28 : size }
+							strokeWidth={ 1.5 }
+						/>
+					),
+				}}
+			/>
+		</ResourceTab.Navigator>
+	)
+}
 
 export default function App( )
 {
@@ -165,8 +270,10 @@ export default function App( )
 								<Stack.Screen name="TrueFalseScreen" component={ TrueFalseScreen }/>
 
 								<Stack.Screen name="EmergencyDataScreen" component={ EmergencyDataScreen }/>
-								<Stack.Screen name="PersonScreen" component={ TabNavigator }/>
+								<Stack.Screen name="TabNavigator" component={ TabNavigator }/>
 								<Stack.Screen name="ContactScreen" component={ ContactScreen }/>
+
+								<Stack.Screen name="ResourceTabNavigator" component={ ResourceTabNavigator }/>
 							</Stack.Navigator>
 						</NavigationContainer>
 					</SQLiteProvider>

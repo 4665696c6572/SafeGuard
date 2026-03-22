@@ -8,10 +8,11 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 {
 	return(
 		<KeyboardAvoidingView>
-			<ScrollView>
+			<ScrollView  keyboardDismissMode='on-drag'>
 				<TextInput
 					accessibilityLabel='Street address'
 					accessabilityHint='Type in first line of street address.'
+					activeUnderlineColor='#0b3e82ff'
 					autoComplete='address-line1'
 					maxLength={ 100 }
 					placeholder={ 'Street address' }
@@ -31,6 +32,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='Address line two'
 					accessabilityHint='Type in address line two.'
+					activeUnderlineColor='#0b3e82ff'
 					autoComplete='address-line2'
 					maxLength={ 100 }
 					placeholder={ 'Address line two' }
@@ -48,6 +50,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='City'
 					accessabilityHint='Type in city name.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'City' }
 					style={ styles.text_input }
@@ -64,6 +67,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 					accessibilityLabel='State'
 					accessabilityHint='Type in state name or abbreviation.'
 					maxLength={ 100 }
+					activeUnderlineColor='#0b3e82ff'
 					placeholder={ 'State' }
 					style={ styles.text_input }
 					value={ tempAddressData?.state ?? '' }
@@ -79,6 +83,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='Post code'
 					accessabilityHint='Type in post code.'
+					activeUnderlineColor='#0b3e82ff'
 					autoComplete='postal-code'
 					keyboardType='numeric'
 					maxLength={ 100 }
@@ -97,6 +102,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='Country'
 					accessabilityHint='Type in country name or abbreviation'
+					activeUnderlineColor='#0b3e82ff'
 					autoComplete='country'
 					maxLength={ 100 }
 					placeholder={ 'Country' }
@@ -115,6 +121,7 @@ export const AddressForm = ({ setAddressItem, setTempAddressData, tempAddressDat
 				<TextInput
 					accessibilityLabel='Note'
 					accessabilityHint='Type in address note.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					multiline={ true }
 					placeholder={ 'Note' }
@@ -141,6 +148,7 @@ export const EmailForm = ({ setEmailItem, setTempEmailData, tempEmailData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in email address.'
+				activeUnderlineColor='#0b3e82ff'
 				autoCapitalize='none'
 				autoComplete='email'
 				keyboardType='email-address'
@@ -158,6 +166,7 @@ export const EmailForm = ({ setEmailItem, setTempEmailData, tempEmailData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in email note.'
+				activeUnderlineColor='#0b3e82ff'
 				placeholder={ 'E-mail note' }
 				style={ styles.text_input }
 				value={ tempEmailData?.email_note ?? '' }
@@ -176,6 +185,7 @@ export const FaxForm = ({ setFaxItem, setTempFaxData, tempFaxData }) =>
 			<TextInput
 				accessibilityLabel='Text Input'
 				accessibilityHint='Type in fax number.'
+				activeUnderlineColor='#0b3e82ff'
 				keyboardType='numeric'
 				placeholder={ 'Fax number' }
 				textContentType='telephoneNumber'
@@ -192,6 +202,7 @@ export const FaxForm = ({ setFaxItem, setTempFaxData, tempFaxData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in fax note.'
+				activeUnderlineColor='#0b3e82ff'
 				placeholder={ 'Fax note' }
 				style={ styles.text_input }
 				value={ tempFaxData?.fax_note ?? '' }
@@ -211,6 +222,7 @@ export const PhoneForm = ({ setPhoneItem, setTempPhoneData, tempPhoneData }) =>
 			<TextInput
 				accessibilityLabel='Office phone number'
 				accessibilityHint='Type in office phone number.'
+				activeUnderlineColor='#0b3e82ff'
 				keyboardType='numeric'
 				placeholder={ 'Office phone number' }
 				style={ styles.text_input }
@@ -227,6 +239,7 @@ export const PhoneForm = ({ setPhoneItem, setTempPhoneData, tempPhoneData }) =>
 			<TextInput
 				accessibilityLabel='Text input'
 				accessibilityHint='Type in phone note.'
+				activeUnderlineColor='#0b3e82ff'
 				placeholder={ 'Phone number note' }
 				style={ styles.text_input }
 				value={ tempPhoneData?.phone_number_note ?? '' }

@@ -11,7 +11,7 @@ import useLoadEmergencyData from '../../common/userData/hook/useLoadEmergencyDat
 import { EditContact, ViewContact } from './components/contact';
 
 
-// This is not a standalone screen.  Used by Insurance & Doctor.
+// This is not a standalone screen.  It is used by Insurance & Doctor.
 const ContactScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext( );

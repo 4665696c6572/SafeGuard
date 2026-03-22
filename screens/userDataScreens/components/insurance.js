@@ -238,33 +238,43 @@ export const EditInsurance = ({
 	}, []);
 
 
-	// Form Validation - Company must ( minimally ) have a name.
+	// Form Validation - Insurance must ( minimally ) have a name & policy number.
 	const [ companyName, setCompanyName ] =
 		useState( tempInsuranceData?.entity_name ?? '' );
+
+	const [ policyNumber, setPolicyNumber ] =
+		useState( tempInsuranceData?.entity_name ?? '' );
+
 	const [ errors, setErrors ] = useState({ });
-	const [ isFormValid, setIsFormValid ] = useState( false );
+	const [ isCompanyNameValid, setIsCompanyNameValid ] = useState( false );
+	const [ isPolicyNumberValid, setIsPolicyNumberValid ] = useState( false );
 	const [ showValidationError, setShowValidationError ] = useState( false );
 
 
 	useEffect(( ) =>
 	{
 		validateForm( );
-	}, [ companyName ]);
+	}, [ companyName, policyNumber ]);
 
 
 	const validateForm = ( ) =>
 	{
-		setIsFormValid( false );
+		setIsCompanyNameValid( false );
+		setIsPolicyNumberValid( false );
 
 		let errors = {};
 
 		// Validate name field.
 		if ( companyName.trim( ) == '' )    errors.companyName = 'Company name is required.';
+		else setIsCompanyNameValid( true );
 
-		// Set the errors and update form validity.
+		// Validate policy number field.
+		if ( policyNumber.trim( ) == '' )    errors.policyNumber = 'Policy number is required.';
+		else setIsPolicyNumberValid( true );
+
 		setErrors( errors );
-		setIsFormValid( Object.keys( errors ).length === 0 );
 	}
+
 
 	// Delete dialog controls.
 	const handleCancel = ( ) =>
@@ -284,7 +294,7 @@ export const EditInsurance = ({
 	const handlePress = ( close, shouldNavigate ) =>
 	{
 		// Show error if user tries to save without min requirement.
-		if ( !isFormValid && !close )
+		if ( ( !isCompanyNameValid || !isPolicyNumberValid ) && !close )
 		{
 			setShowValidationError( true );
 			setTimeout( function( )
@@ -292,7 +302,7 @@ export const EditInsurance = ({
 				setShowValidationError( false );
 			}, 900 );
 			return;
-		} 	
+		} 
 
 
 		/// If no changes have been made or user presses cancel button,
@@ -309,30 +319,46 @@ export const EditInsurance = ({
 		{
 			closeEdit( );
 			setCompanyName( '' );
+			setPolicyNumber( '' );
 			return;
 		}
 
 
 		// Only triggers save ( insert/update ) and reset if min of
-		// company name has been entered ( or already exists )
-		// and changes have been made.
-		if ( isFormValid && !close )
+		// company name & policy number has been entered
+		// ( or already exists ) and changes have been made.
+		if ( isCompanyNameValid && isPolicyNumberValid && !close )
 		{
 			saveEntry( 'Insurance', tempInsuranceData, 'insurance_id', shouldNavigate );
 
 			closeEdit( );
 			setCompanyName( '' );
+			setPolicyNumber( '' );
 		}
 	}
 
 
 	return (
 		<View style={[ styles.data_container_edit, { marginTop: 38 } ]}>
-		{/* Form Validation Error */}
+		{/* Form Validation Error(s) */}
 		{
 			showValidationError ?
 			<View style={ styles.validation_container }>
-				<Text style={[ styles.text_input, styles.alert ]}>{ errors.companyName }</Text>
+				{
+					errors.companyName ?
+					<Text style={[ styles.text_input, styles.alert ]}>
+						{ errors.companyName }
+					</Text>
+				: null
+				}
+
+				{
+					errors.policyNumber ?
+					<Text style={[ styles.text_input, styles.alert ]}>
+						{ errors.policyNumber }
+					</Text>
+				: null
+				}
 			</View>
 		: null
 		}
@@ -340,6 +366,7 @@ export const EditInsurance = ({
 				<TextInput
 					accessibilityLabel='Insurance company'
 					accessibilityHint='Type in name of insurance company.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'Insurance company name' }
 					style={ styles.text_input }
@@ -357,10 +384,13 @@ export const EditInsurance = ({
 				<TextInput
 					accessibilityLabel='Insurance policy number'
 					accessibilityHint='Type in insurance policy number.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					onChangeText={( text ) =>
+					{
+						setPolicyNumber( text );
 						setTempInsuranceData( prev => ({ ...prev, 'policy_number': text }))
-					}
+					}}
 					placeholder={ 'Policy Number' }
 					style={ styles.text_input }
 					value={ tempInsuranceData?.policy_number ?? '' }
@@ -371,6 +401,7 @@ export const EditInsurance = ({
 				<TouchableHighlight
 					accessibilityLabel='Date picker'
 					accessibilityHint='Touch to open date picker for start date of insurance.'
+					activeUnderlineColor='#0b3e82ff'
 					onPress={ showDatePicker }
 					style={ styles.menu }
 					underlayColor={ underlay_color }

@@ -153,7 +153,6 @@ export const ViewAllergy = ({
 						</View>
 					}
 				</View>
-			
 
 			{/* Diagnosis Date */}
 			{
@@ -376,6 +375,7 @@ export const EditAllergy = ({
 				<TextInput
 					accessibilityLabel='Allergen name'
 					accessibilityHint='Type in name of allergen.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					multiline={ true }
 					placeholder={ 'Allergen name' }
@@ -504,6 +504,7 @@ export const EditAllergy = ({
 				<TextInput
 					accessibilityLabel='Allergy notes'
 					accessibilityHint='Type in allergy notes.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					multiline={ true }
 					placeholder={ 'Notes' }

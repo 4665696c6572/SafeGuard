@@ -23,11 +23,11 @@ const underlay = '#0b3e82ff';
 
 /*
  *	True or False Game.
- *	Loads questions and displays with true or false.  If incorrect, 
- * 	the phone vibrates.  Either way, the next question loads
- *  and score / progress are updated.  Encouragement is displayed
- *  dependent on score.  On finish, progress is saved to db,
- *  user is returned to the game home.
+ *	Loads questions and displays with true or false.  If incorrect,
+ *	the phone vibrates.  Either way, the next question loads
+ *	and score / progress are updated.  Encouragement is displayed
+ *	dependent on score.  On finish, progress is saved to db,
+ *	user is returned to the game home.
  */
 export default function TrueFalseScreen({ navigation, route })
 {
@@ -47,13 +47,13 @@ export default function TrueFalseScreen({ navigation, route })
 		useLoadLevelData(
 			db,
 			'TrueFalseScreen',
-			params?.level_category ?? 1,
+			params?.levelCategory ?? 1,
 			questions_per_level
 		);
 
 
 	const isFocused = useIsFocused( );
-	
+
 	useEffect(( ) =>
 	{
 		if ( isFocused )
@@ -69,7 +69,7 @@ export default function TrueFalseScreen({ navigation, route })
 		 *	If the level is complete, updates db and returns to game home.
 		 *	timeout is used to delay navigation to display end level model.
 		 */
-		if ( levelComplete ) 
+		if ( levelComplete )
 		{
 			const new_level = updateLevel( params?.loadedLevel, params?.currentLevel );
 
@@ -144,18 +144,22 @@ export default function TrueFalseScreen({ navigation, route })
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
 					<View
-						style={ [styles.game_column, { justifyContent: 'space-between' }]}
+						style={ [ styles.game_column, { justifyContent: 'space-between' }]}
 						key={ entry.question_id }
 					>
-						<View style={[
-										styles.game_box_large,
-										styles.multiple_choice_question,
-										{ height: cheerVisible ? '73%' : '70%'}
-									]}>
-							<Text style={ styles.multiple_choice_question_text }>{ entry.question }</Text>
+						<View style=
+						{[
+							styles.game_box_large,
+							styles.game_question,
+							{
+								height: cheerVisible ? '73%' : '70%',
+								paddingTop: 50
+							}
+						]}>
+							<Text style={[ styles.game_question_text, { textAlign: 'center' } ]}>{ entry.question }</Text>
 						</View>
 
-						<View style={[ styles.game_row, { alignItems: 'flex-end' }]}>
+						<View style={ styles.game_row }>
 							<TouchableHighlight
 								activeOpacity={ 1 }
 								onPress={ ( ) =>
@@ -209,3 +213,11 @@ export default function TrueFalseScreen({ navigation, route })
 		</View>
 	);
 }
+
+
+/*
+ *	Image - Frog
+ *	Title: Playful Green Frog Stickers Collection
+ *	Author: easy-peasy.ai
+ *	Availability: https://easy-peasy.ai/ai-image-generator/images/colorful-green-frog-stickers-collection-messaging-app
+ */

@@ -1,5 +1,11 @@
 import * as Notifications from 'expo-notifications';
 
+/*
+ *	Takes latitude and Longitude from location data
+ *	and requests the zone from the api.
+ *	If user is outside of covered area ( US )
+ *	no zone is returned.
+ */
 // Zone ID 2 letter state, the letter Z, 3 number zone example: FLZ050 Florida Zone 050
 export async function fetchAlertZone( location )
 {
@@ -8,43 +14,61 @@ export async function fetchAlertZone( location )
 	// ______________________________________________________________________
 
 	// ____ US ____
-	// const lat = location.coords.latitude; // ~~~~~~ in US ~~~~~~
-	// const lon = location.coords.longitude; // ~~~~~~ in US ~~~~~~
+	// const lat = location?.coords?.latitude; // Use while located in the US
+	// const lon = location?.coords?.longitude;
 
 	// ____ Non-US ____
-
-	const lat = 28.078072; // Palm Harbor, Florida
+	const lat = 28.078072; // for demonstration: Palm Harbor, Florida
 	const lon = -82.763710;
 
-	const url_zone = `https://api.weather.gov/points/${ lat },${ lon }`;
-	const result_zone = await fetch( url_zone );
-	const zone = ( await result_zone.json( ))?.properties?.forecastZone.slice( -6 );
-	return zone;
+	try
+	{
+		const url_zone = `https://api.weather.gov/points/${ lat },${ lon }`;
+		const result_zone = await fetch( url_zone );
+		const zone = ( await result_zone.json( ))?.properties?.forecastZone.slice( -6 );
+		return zone;
+	}
+	catch ( error )
+	{
+		return null;
+	}
 }
 
 
+/*
+ *	Takes zone data and fetches alert data
+ *	and parses it to JSON.
+ */
 export async function fetchAlertData( zone )
 {
-	// const url_alert = `https://api.weather.gov/alerts/active?zone=${ zone }`;
-
-	// By State is only for demonstration ( zone may not have any active alerts )
-	const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State /area/FL
-
-	const result_alert = await fetch( url_alert );
-
-	if ( !result_alert )
+	try
 	{
-		return false;
+		// const url_alert = `https://api.weather.gov/alerts/active?zone=${ zone }`;
+
+		// By State is only for demonstration.
+		// This is set up because zones frequently have no active alerts.
+		const url_alert =`https://api.weather.gov/alerts/active/area/FL`; // State /area/FL
+
+		const result_alert = await fetch( url_alert );
+		if ( result_alert.ok )
+		{
+			const alert_data = await result_alert.json( );
+			return alert_data;
+		}
+		else    return null;
 	}
-
-	const alert_data = await result_alert.json( );
-
-	return alert_data;
+	catch ( error )
+	{
+		return null;
+	}
 }
 
 
-
-
+/*
+ *	Takes alert data and locates the first
+ *	( should there be more than one )
+ *	highest priority alert.
+ */
 export function findHighestSeverity( alert_data )
 {
 	if ( alert_data?.features?.length == 0 )    return null;
@@ -69,6 +93,7 @@ export function findHighestSeverity( alert_data )
 }
 
 
+// Schedules a notification
 export async function scheduleAlertNotification( alertData )
 {
 	await Notifications.scheduleNotificationAsync (

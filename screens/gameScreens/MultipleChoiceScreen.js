@@ -28,11 +28,11 @@ const underlay = '#2f73ccff';
 /*
  *	Multiple Choice Game.
  *	Loads questions, shuffles answer sets ( 4 per question ),
- *	User interacts by choosing  an answer.  If incorrect, 
- * 	the phone vibrates.  Either way, the next question loads
- *  and score / progress are updated.  Encouragement is displayed
- *  dependent on score.  On finish, progress is saved to db,
- *  user is returned to the game home.
+ *	User interacts by choosing an answer.  If incorrect,
+ *	the phone vibrates.  Either way, the next question loads
+ *	and score / progress are updated.  Encouragement is displayed
+ *	dependent on score.  On finish, progress is saved to db,
+ *	user is returned to the game home.
  */
 export default function MultipleChoiceScreen({ navigation, route })
 {
@@ -127,7 +127,7 @@ export default function MultipleChoiceScreen({ navigation, route })
 			<ActivityIndicator/>
 		:
 			<>
-			<View style={[ styles.game_level_area, {  marginBottom: 0 } ]}>
+			<View style={[ styles.game_level_area, { marginBottom: 0 } ]}>
 				<EndLevelModal
 					levelComplete={ levelComplete }
 					levelScore={ levelScore }
@@ -143,22 +143,22 @@ export default function MultipleChoiceScreen({ navigation, route })
 				{
 					levelData.slice( roundStartIndex, roundStartIndex + 1 ).map(( entry, i ) =>
 					<View
-						style={[ styles.game_mc_column, { gap: cheerVisible ? 0 : '5%', paddingBottom: 0 } ]}
+						style={[ styles.game_column, { gap: cheerVisible ? 0 : '5%', paddingBottom: 0 } ]}
 						key={ entry.question_id }
 					>
 						<View style={{ height: 100 }}>
-							<Text style={ styles.game_mc_question_text }>{ entry.question }</Text>
+							<Text style={[ styles.game_question_text, {  paddingLeft: 10, paddingRight: 10} ]}>{ entry.question }</Text>
 						</View>
 
 						{
 							answerOrder.map(( index ) =>
-							<View key={ answerOrder[index] } style={ styles.game_mc_answers }>
+							<View key={ answerOrder[index] } style={ styles.game_answer_row }>
 								<View style={ styles.game_text_container }>
-									<Text style={ styles.game_mc_text }>
+									<Text style={ styles.game_answer_text }>
 										{ entry.answers[ answerOrder[index] ] }
 									</Text>
 								</View>
-							
+
 							<TouchableHighlight
 								activeOpacity={ 1 }
 								key = { index }
@@ -188,3 +188,17 @@ export default function MultipleChoiceScreen({ navigation, route })
 		</View>
 	);
 }
+
+
+/*
+ *	Image - Flower
+ *	Title: Diwali element illustration
+ *	Author: freepik
+ *	Availability: https://www.freepik.com/free-psd/diwali-element-illustration_320730997.htm
+ *
+ *
+ *	Image - Frog
+ *	Title: Playful Green Frog Stickers Collection
+ *	Author: easy-peasy.ai
+ *	Availability: https://easy-peasy.ai/ai-image-generator/images/colorful-green-frog-stickers-collection-messaging-app
+ */

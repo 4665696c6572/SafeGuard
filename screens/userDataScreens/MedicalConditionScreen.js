@@ -99,7 +99,6 @@ const MedicalConditionScreen = ( ) =>
 				<ActivityIndicator/>
 		:
 			<>
-			
 			<ScrollView>
 				{/* Medical Condition */}
 				<MedicalCondition

@@ -4,14 +4,14 @@ import updateEmergencyData from '../../common/userData/database/updateEmergencyD
 /*
  *	If an ID exists the data is updated, if not it is inserted in the database.
  *	If the ID is needed for the following screen ( contact screen ) then it is
- *	returned.  Data refresh is also called. 
+ *	returned.  Data refresh is also called.
  */
 export default async function saveToDB( db, table, data, id, loadData, shouldNavigate )
 {
 	let new_id;
 
 	if ( data?.[id] )
-	{	
+	{
 		await updateEmergencyData( db, table, data );
 	}
 	else

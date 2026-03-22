@@ -94,7 +94,7 @@ export const ProgressAndScore = ({ currentNumber, levelScore, questions_per_leve
 						borderColor='#DBE2E9'
 						borderRadius={ 5 }
 						color='#66a1efff'
-						height= '20'
+						height='20'
 						progress={( ( currentNumber - 1 ) / questions_per_level )}
 						unfilledColor='#bacfeaff'
 						width={ screen_width * 0.6 }
@@ -113,3 +113,11 @@ export const ProgressAndScore = ({ currentNumber, levelScore, questions_per_leve
 	</View>
 	)
 }
+
+
+/*
+ *	Image - Badges ( health, storm, temp, & water)
+ *	Title: Disaster damage elements set
+ *	Author: macrovector
+ *	Availability: https://www.freepik.com/free-vector/disaster-damage-elements-set_9387099.htm
+ */

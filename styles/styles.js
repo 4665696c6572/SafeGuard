@@ -4,7 +4,7 @@ const screen_height = Dimensions.get( 'screen' ).height;
 const screen_width = Dimensions.get( 'screen' ).width;
 const button_size = Dimensions.get( 'screen' ).width * 0.33;
 
-const blue = '#0b3e82ff';
+const blue_dark = '#0b3e82ff';
 const blue_light = '#d1dce4ff';
 const blue_river = '#0054FF';
 const gold = '#ebb221';
@@ -19,10 +19,11 @@ const styles = StyleSheet.create(
 		color: red,
 		fontWeight: 900
 	},
-	alert_row:
+	badge_container:
 	{
-		alignItems: 'center',
-		paddingTop: 20
+		flexDirection: 'column',
+		marginBottom: 30,
+		marginTop: 10
 	},
 	badge_large:
 	{
@@ -39,21 +40,6 @@ const styles = StyleSheet.create(
 		borderWidth: 2,
 		height: 80,
 		width: 80
-	},
-	badge_container:
-	{
-		flexDirection: 'column',
-		marginBottom: 30,
-		marginTop: 10
-	},
-	badge_modal_container:
-	{
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: blue_light,
-		flex: 1,
-		gap: 20,
-		paddingTop: 100
 	},
 	badge_row_lower:
 	{
@@ -74,7 +60,7 @@ const styles = StyleSheet.create(
 	bottom_tab_container:
 	{
 		backgroundColor: blue_light,
-		borderColor: blue,
+		borderColor: blue_dark,
 		borderTopWidth: 5,
 		flex: 1
 	},
@@ -104,19 +90,19 @@ const styles = StyleSheet.create(
 	contact_button:
 	{
 		alignItems: 'center',
-		paddingBottom: 25
+		paddingBottom: 45
 	},
 	container:
 	{
 		backgroundColor: blue_light,
 		borderBottomWidth: 5,
-		borderColor: blue,
+		borderColor: blue_dark,
 		borderTopWidth: 5,
 		flex: 1
 	},
 	count_text:
 	{
-		color: blue,
+		color: blue_dark,
 		fontSize: 16,
 		fontWeight: '900',
 		textAlign: 'right'
@@ -180,6 +166,20 @@ const styles = StyleSheet.create(
 		alignItems: 'flex-end',
 		fontSize: 18,
 		marginRight: 5
+	},
+	game_answer_row:
+	{
+		alignItems: 'center',
+		flex: 1,
+		flexDirection: 'row',
+		gap: 10
+	},
+	game_answer_text:
+	{
+		color: blue_dark,
+		fontSize: 18,
+		fontWeight: 'bold',
+		textAlign: 'left'
 	},
 	game_area:
 	{
@@ -250,14 +250,7 @@ const styles = StyleSheet.create(
 		paddingRight: 10,
 		textAlign: 'center'
 	},
-	game_mc_answers:
-	{
-		alignItems: 'center',
-		flex: 1,
-		flexDirection: 'row',
-		gap: 10
-	},
-	game_mc_column:
+	game_column:
 	{
 		flex: 3,
 		gap: 5,
@@ -265,17 +258,6 @@ const styles = StyleSheet.create(
 		marginBottom: 10,
 		marginTop: 0,
 		paddingTop: 0
-	},
-	game_mc_question:
-	{
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start'
-	},
-	game_mc_question_text:
-	{
-		color: blue,
-		fontSize: 20,
-		fontWeight: '900'
 	},
 	game_frog:
 	{
@@ -304,6 +286,18 @@ const styles = StyleSheet.create(
 		height: 80,
 		width: 80
 	},
+	game_question:
+	{
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start'
+	},
+	game_question_text:
+	{
+		color: blue_dark,
+		fontSize: 20,
+		fontWeight: '900',
+		lineHeight: 30,
+	},
 	game_row:
 	{
 		flex: 1,
@@ -318,13 +312,6 @@ const styles = StyleSheet.create(
 	{
 		flex: 1,
 		marginBottom: 0
-	},
-	game_mc_text:
-	{
-		color: blue,
-		fontSize: 18,
-		fontWeight: 'bold',
-		textAlign: 'left'
 	},
 	game_text_container:
 	{
@@ -344,7 +331,7 @@ const styles = StyleSheet.create(
 	},
 	home_button:
 	{
-		backgroundColor: blue_river,
+		backgroundColor:  '#2f73ccff',
 		borderRadius: 20,
 		height: screen_width * 0.45 ,
 		width: screen_width * 0.45 ,
@@ -357,19 +344,50 @@ const styles = StyleSheet.create(
 		marginLeft: 2,
 		width: screen_width * 0.44
 	},
+	home_button_image_2:
+	{
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center',
+		marginTop: 2
+	},
+	home_button_text:
+	{
+		color: '#9d0d85',
+		fontSize: 20,
+		fontWeight: '900'
+	},
 	home_container:
 	{
 		gap: screen_width * 0.05,
 		height: screen_height * 0.5,
 		paddingTop: screen_height * 0.035
 	},
-	home_extra_margin:
-	{
-		marginTop: 100
-	},
 	home_container_weather:
 	{
 		height: screen_height * 0.3
+	},
+	home_header_container:
+	{
+		alignItems: 'center',
+		flexDirection: 'column',
+		gap: 10,
+		marginTop: 25
+	},
+	home_header_image:
+	{
+		alignSelf: 'center',
+		borderColor: '#0b3e82ff',
+		borderWidth: 2,
+		borderRadius: 10,
+		height: ( screen_width * 0.92 ) * 0.5,
+		width: screen_width * 0.92
+	},
+	home_header_text:
+	{
+		color:'#0b3e82ff',
+		fontSize: 26,
+		fontWeight: '900'
 	},
 	home_row:
 	{
@@ -389,12 +407,6 @@ const styles = StyleSheet.create(
 	menu_text:
 	{
 		color: '#454545'
-	},
-	person_row:
-	{
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		gap: 5, backgroundColor:'red'
 	},
 	picker_item:
 	{
@@ -417,6 +429,87 @@ const styles = StyleSheet.create(
 		flexDirection: 'row',
 		height: 25,
 		justifyContent: 'space-between'
+	},
+	resource_card_lower:
+	{
+		backgroundColor: '#d1dce4ff',
+		marginBottom: 25,
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 40,
+		paddingBottom: 10,
+		paddingTop: 10
+	},
+	resource_card_outer:
+	{
+		backgroundColor: 'rgb(235, 238, 233)',
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 5
+	},
+	resource_card_upper:
+	{
+		backgroundColor: '#d1dce4ff',
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 40
+	},
+	resource_column:
+	{
+		gap: 8,
+		paddingBottom: 10,
+		paddingTop: 8
+	},
+	resource_container:
+	{
+		backgroundColor: 'rgb(187, 187, 187)',
+		borderBottomWidth: 0,
+		borderColor: blue_dark,
+		borderTopWidth: 5,
+		flex: 1
+	},
+	resource_link:
+	{
+		color: blue_river,
+		fontSize: 16,
+		textDecorationLine: 'underline'
+	},
+	resource_row:
+	{
+		flexDirection: 'row',
+		gap: 8,
+		paddingBottom: 5,
+		paddingTop: 5
+	},
+	resource_term:
+	{
+		borderBottomWidth: 0.5,
+		borderColor: '#000000',
+		fontSize: 18,
+		marginBottom: 10,
+		marginLeft: 20,
+		marginRight: 20,
+		paddingBottom: 2,
+		textAlign:  'center'
+	},
+	resource_text:
+	{
+		paddingBottom: 20,
+		paddingTop: 20,
+		textAlign: 'center'
+	},
+	resource_title:
+	{
+		borderBottomWidth: 2,
+		borderColor: '#0054FF',
+		color: '#034ee4',
+		fontSize: 22,
+		fontWeight: 900,
+		marginBottom: 10,
+		marginLeft: 5,
+		marginRight: 5,
+		paddingBottom: 2,
+		textAlign:  'center',
 	},
 	river:
 	{
@@ -445,7 +538,7 @@ const styles = StyleSheet.create(
 	},
 	save_button_text:
 	{
-		color: blue,
+		color: blue_dark,
 		fontSize: 20,
 		fontWeight: '900'
 	},
@@ -456,10 +549,6 @@ const styles = StyleSheet.create(
 		justifyContent: 'space-between',
 		marginTop: 20
 	},
-	score:
-	{
-		alignContent: 'center'
-	},
 	score_text:
 	{
 		color: blue_river,
@@ -469,7 +558,7 @@ const styles = StyleSheet.create(
 	},
 	score_text_green:
 	{
-		color: green
+		color: green_light
 	},
 	streak_columns:
 	{

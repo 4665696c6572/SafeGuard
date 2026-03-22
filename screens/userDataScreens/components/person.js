@@ -13,7 +13,7 @@ const underlay_color = '#d1dce4ff';
 
 
 export const Person = ({
-							personData, screen, setEditPersonVisible, setShowDeleteButton,
+							personData, setEditPersonVisible, setShowDeleteButton,
 							setTempPersonData, showEditButton
 						}) =>
 {
@@ -86,26 +86,21 @@ export const Person = ({
 					))
 				}
 				</View>
-				:
-				<View>
-				{
-					screen == 'EmergencyDataScreen' ? null :
-					<TouchableOpacity
-						accessibilityLabel='Add information button'
-						accessibilityHint='Press to add user information.'
-						onPress={ ( ) =>
-						{
-							setEditPersonVisible( true )
-							setTempPersonData( personData[0] );
-							// navigation bar hidden in modals.
-							NavigationBar.setVisibilityAsync( "hidden" );
-						}}
-						style={ styles.data_button_size }
-					>
-						<Text style={ styles.text_button }>Add information</Text>
-					</TouchableOpacity>
-				}
-				</View>
+			:
+				<TouchableOpacity
+					accessibilityLabel='Add information button'
+					accessibilityHint='Press to add user information.'
+					onPress={ ( ) =>
+					{
+						setEditPersonVisible( true )
+						setTempPersonData( personData[0] );
+						// navigation bar hidden in modals.
+						NavigationBar.setVisibilityAsync( "hidden" );
+					}}
+					style={ styles.data_button_size }
+				>
+					<Text style={ styles.text_button }>Add information</Text>
+				</TouchableOpacity>
 			}
 			</View>
 	);
@@ -248,7 +243,9 @@ export const EditPerson = ({
 		}
 			<View style={{ flex: 3}}>
 				<TextInput
-					accessibilityLabel='Full user name'
+					accessibilityLabel='Full name'
+					accessibilityHint='Enter your full name'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'Full Name' }
 					style={ styles.text_input }
@@ -280,6 +277,7 @@ export const EditPerson = ({
 					mode='date'
 					onConfirm={ handleConfirm }
 					onCancel={ hideDatePicker }
+					style={{ color: 'red'}}
 				/>
 
 				<View style={ styles.picker_view }>
@@ -289,7 +287,6 @@ export const EditPerson = ({
 						dropdownIconColor='#0b3e82ff'
 						dropdownIconRippleColor='#0b3e82ff'
 						mode='dropdown'
-						
 						style={ styles.menu_text }
 						selectedValue={ tempPersonData?.sex ? tempPersonData.sex : 'Sex' }
 						onValueChange={( itemValue ) =>
@@ -328,6 +325,7 @@ export const EditPerson = ({
 				<TextInput
 					accessibilityLabel='Height'
 					accessibilityHint='Type in your height.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'height' }
 					style={ styles.text_input }
@@ -340,6 +338,7 @@ export const EditPerson = ({
 				<TextInput
 					accessibilityLabel='Weight'
 					accessibilityHint='Type in your weight.'
+					activeUnderlineColor='#0b3e82ff'
 					maxLength={ 100 }
 					placeholder={ 'weight' }
 					style={ styles.text_input }
