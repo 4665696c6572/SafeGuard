@@ -9,7 +9,7 @@ export default async function initializeDatabase( db )
 		await db.execAsync(
 		`
 			PRAGMA foreign_keys = ON;
-1			PRAGMA journal_mode = WAL;
+			PRAGMA journal_mode = WAL;
 
 			CREATE TABLE IF NOT EXISTS    Entity
 			(
