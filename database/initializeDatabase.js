@@ -78,7 +78,6 @@ export default async function initializeDatabase( db )
 				policy_number    TEXT,
 				start_date    TEXT,
 				insurance_note    TEXT,
-				insurance_type    TEXT    CHECK ( insurance_type IN ( 'Health', 'Home', 'Auto', 'Life', 'Other' )),
 				FOREIGN KEY ( insurance_id )    REFERENCES Entity( entity_id )    ON DELETE CASCADE
 			);
 
@@ -221,14 +220,14 @@ export default async function initializeDatabase( db )
 		await db.runAsync( 'INSERT OR IGNORE INTO Medication ( medication_id, doctor_id, condition_id, medication_name, strength, frequency, start_date, is_life_sustaining ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )', [ 3, 3, 4, 'Allegra', '180 mg', '1 tablet every 24 hours', '2015-01-03', 0 ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_id, entity_name, entity_type ) VALUES ( ?, ?, ? )', [ 4, 'ABC Insurance', 'Business' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 4, '1789', 'Health' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number ) VALUES ( ?, ? )', [ 4, '1789' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Address ( address_id, entity_id, address_line_one, address_line_two, city, State, post_code, country, address_note ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )', [ 3, 4, '23 Main Street', 'Unit 1', 'Lemont', 'IL', '60439', 'USA', 'Office location' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Email ( email_id, entity_id, Email, email_note ) VALUES ( ?, ?, ?, ? )', [ 3, 4, 'abc@email.com', 'email note' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( phone_number_id, entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ?, ? )', [ 3, 4, '1 (800) 555-2222', 'Fax', 'Fax' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( phone_number_id, entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ?, ? )', [ 4, 4, '1 (800) 555-1111', 'Office', 'Office number' ]);
 
 		await db.runAsync( 'INSERT OR IGNORE INTO Entity ( entity_id, entity_name, entity_type ) VALUES ( ?, ?, ? )', [ 5, 'DEF Insurance', 'Business' ]);
-		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number, insurance_type ) VALUES ( ?, ?, ? )', [ 5, 'A13989', 'Health' ]);
+		await db.runAsync( 'INSERT OR IGNORE INTO Insurance ( insurance_id, policy_number ) VALUES ( ?, ? )', [ 5, 'A13989' ]);
 		await db.runAsync( 'INSERT OR IGNORE INTO Phone ( phone_number_id, entity_id, phone_number, number_type, phone_number_note ) Values ( ?, ?, ?, ?, ? )', [ 5, 5, '1 (800) 555-4444', 'Office', 'Office number' ]);
 
 		console.log( "Database initialized" );

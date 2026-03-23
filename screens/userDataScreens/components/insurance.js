@@ -126,17 +126,6 @@ export const ViewInsurance = ({
 				: null
 				}
 
-				{
-					insuranceData?.[insuranceIndex]?.phone_number ?
-					<View style={ styles.data_section_small }>
-						<Text style={ styles.heading_text }>Phone number</Text>
-						<Text style={ styles.text }>
-							{ insuranceData?.[insuranceIndex].phone_number }
-						</Text>
-					</View>
-				: null
-				}
-
 
 				{/* Close/View button row */}
 				<View style={ styles.save_row }>
@@ -376,7 +365,7 @@ export const EditInsurance = ({
 						setCompanyName( text );
 						setTempInsuranceData( prev =>
 						({
-							...prev, 'entity_name': text, 'insurance_type': 'Health'
+							...prev, 'entity_name': text
 						}));
 					}}
 				/>

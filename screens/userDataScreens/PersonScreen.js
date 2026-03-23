@@ -19,7 +19,7 @@ const PersonScreen = ({ navigation, route }) =>
 {
 	const db = useSQLiteContext( );
 
-	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance', 'Health' );
+	const [ insuranceData, setInsuranceData, loadingInsuranceData, loadInsuranceData ] = useLoadEmergencyData( db, 'Insurance' );
 	const [ personData, setPersonData, loadingPersonData, loadPersonData ] = useLoadEmergencyData( db, 'Person' );
 
 	// Temp data selection & storage to allow for canceling mid add/edit.

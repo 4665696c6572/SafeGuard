@@ -17,7 +17,7 @@ const EmergencyDataScreen = ({ navigation }) =>
 {
 	const db = useSQLiteContext( );
 
-	const [ emergencyData, setEmergencyData, loadingData, loadEmergencyData ] = useLoadEmergencyData( db, 'All', 'Health' );
+	const [ emergencyData, setEmergencyData, loadingData, loadEmergencyData ] = useLoadEmergencyData( db, 'All' );
 
 	const isFocused = useIsFocused( );
 

@@ -63,8 +63,7 @@ export default async function insertEmergencyData( db, table, emergencyData )
 		[
 			emergencyData?.policy_number ? emergencyData?.policy_number : null,
 			emergencyData?.start_date ? emergencyData?.start_date : null,
-			emergencyData?.insurance_note ? emergencyData?.insurance_note : null,
-			emergencyData.insurance_type
+			emergencyData?.insurance_note ? emergencyData?.insurance_note : null
 		],
 
 		Medical_Condition:
@@ -157,8 +156,8 @@ export default async function insertEmergencyData( db, table, emergencyData )
 		Insurance:
 		`
 			INSERT OR IGNORE INTO Insurance
-			( insurance_Id, policy_number, start_date, insurance_note, insurance_type )
-			VALUES ( ?, ?, ?, ?, ? );
+			( insurance_Id, policy_number, start_date, insurance_note )
+			VALUES ( ?, ?, ?, ? );
 		`,
 
 		Medical_Condition:

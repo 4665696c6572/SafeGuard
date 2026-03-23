@@ -66,7 +66,6 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			emergencyData.policy_number,
 			emergencyData.start_date,
 			emergencyData.insurance_note,
-			emergencyData.insurance_type,
 			emergencyData.insurance_id
 		],
 
@@ -169,8 +168,7 @@ export default async function updateEmergencyData( db, table, emergencyData )
 			SET
 				policy_number = ?,
 				start_date = ?,
-				insurance_note = ?,
-				insurance_type = ?
+				insurance_note = ?
 			WHERE insurance_id = ?;
 		`,
 

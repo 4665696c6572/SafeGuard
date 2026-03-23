@@ -116,20 +116,11 @@ export default async function selectEmergencyData( db, table, condition )
 					Entity.entity_name AS entity_name,
 					policy_number,
 					start_date,
-					insurance_note,
-					insurance_type,
-					Office.phone_number_id AS phone_number_id,
-					Office.phone_number AS phone_number,
-					Office.phone_number_note AS phone_number_note
+					insurance_note
 				FROM Insurance
 				LEFT JOIN Entity on Entity.entity_id = Insurance.insurance_id
-				LEFT JOIN Phone AS Office
-					ON Office.entity_id = insurance_id
-					AND Office.number_type = 'Office'
-				WHERE insurance_type = ?
 				GROUP BY insurance_id
-				ORDER BY entity_name`,
-				[ condition ]
+				ORDER BY entity_name;`
 			);
 		}
 
