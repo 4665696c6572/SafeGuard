@@ -48,7 +48,7 @@ export const ViewContact = ({
 
 				{
 					contactData?.address?.address_line_two ?
-					<Text style={ styles.text }> { contactData?.address?.address_line_two }</Text>
+					<Text style={ styles.text }>{ contactData?.address?.address_line_two }</Text>
 				: null
 				}
 
