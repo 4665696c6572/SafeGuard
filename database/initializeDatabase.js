@@ -58,7 +58,7 @@ export default async function initializeDatabase( db )
 				strength    TEXT,
 				frequency    TEXT,
 				start_date    TEXT,
-				is_life_sustaining    Integer     NOT NULL,
+				is_life_sustaining    Integer,
 				medication_note    TEXT,
 				FOREIGN KEY ( condition_id )    REFERENCES Medical_Condition( condition_id )    ON DELETE SET NULL,
 				FOREIGN KEY ( doctor_id )    REFERENCES Entity( entity_id )    ON DELETE SET NULL
